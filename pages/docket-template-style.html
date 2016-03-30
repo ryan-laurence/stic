@@ -1,0 +1,315 @@
+<div class="panel panel-default">
+	<div class="panel-body">
+		<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+			<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+			<ul>
+				<li>Messages enclosed in curly brackets {Data.CompanyName} are data fields which values are retrieved from the database.</li>
+				<li>Messages enclosed in double quotes "Company Name:" are custom defined fields and printed directly.</li>
+			</ul>
+		</div>
+		<form class="form-horizontal no-margin-left">
+			<div class="form-group" style="margin-left: 0px;">
+				<label class="control-label col-sm-2 no-padding-left" for="selectDocketType" style="text-align: left; width: 100px;">Docket Type</label>
+				<div class="col-sm-2 no-padding-left" style="width: 150px;">
+					<select class="form-control" id="select-docket-type">
+						<option value="A1" selected>A1</option>
+						<option value="A2">A2</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-top: 15px">
+			<div class="btn-group pull-right" role="group">
+				<button type="button" class="btn btn-primary" data-btn="btnSaveDWL"><i class="fa fa-floppy-o" aria-hidden="true"></i> Save</button>
+			</div>
+			<div class="btn-group pull-right no-padding-left form-inline" role="group" style="width: 200px">			
+				<div class="input-group">
+					<span class="input-group-addon"><strong>Docket Length</strong></span>
+					<input type="text" class="form-control" id="docket-length" value="3500">
+				</div>				
+			</div>
+			<div class="btn-group pull-right no-padding-left form-inline" role="group" style="width: 200px">			
+				<div class="input-group">
+					<span class="input-group-addon"><strong>Docket Width</strong></span>
+					<input type="text" class="form-control" id="docket-width" value="1500">
+				</div>				
+			</div>
+			<div class="btn-group pull-left" role="group">
+				<button type="button" class="btn btn-primary" id="tools-new-style" data-btn="btnNewStyle"><i class="fa fa-plus" aria-hidden="true"></i> New</button>
+			</div>
+			<div class="btn-group pull-left" role="group">
+				<button type="button" class="btn btn-success disabled" id="tools-edit-style" data-btn="btnEditStyle"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+			</div>
+			<div class="btn-group pull-left" role="group">
+				<button type="button" class="btn btn-danger disabled" id="tools-delete-style" data-btn="btnDelStyle"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+			</div>
+		</div>
+		<table class="display compact" id="table-data">
+			<thead>
+				<tr>
+					<th class="text-left">Template ID</th>
+					<th class="text-left">Row</th>
+					<th class="text-left">Column</th>
+					<th class="text-left">Message</th>
+					<th class="text-left">Font Size</th>
+					<th class="text-left">Uppercase</th>
+					<th class="text-left">Underline</th>
+					<th class="text-left">Data Source</th>
+					<th class="text-left">Docket Type</th>
+					<th class="text-left">Data Field ID</th>
+				</tr>
+			</thead>
+			<tbody>		
+			</tbody>
+		</table>		
+	</div>
+</div>
+<script>
+	$(function() {
+		// Default
+		var styles = {
+			// DT Buttons
+			btns: ['btnEditStyle', 'btnDelStyle'],
+			// DT Buttons
+			buttonTools: ['tools-edit-style', 'tools-delete-style'],
+			// DT Columns
+			dtCols: [
+				{ "data": "dt_id", "visible": false },
+				{ "data": "dt_row" },
+				{ "data": "dt_column" },
+				{ "data": "dt_message" },
+				{ "data": "dt_font_size" },
+				{ "data": "dt_font_uppercase" },
+				{ "data": "dt_font_underline" },
+				{ "data": "dt_source", "visible": false },
+				{ "data": "dt_type", "visible": false },
+				{ "data": "dt_field", "visible": false }
+			],			
+			// DT Ajax Options
+			dtAjx: { 
+				'dataSrc': DS_DOCKET_STYLES,
+				'url': WS_LIST_DOCKET_STYLES + '&type=A1'
+			},			
+			// Custom Message Render
+			dtMsgRender: function(data, type, row) {
+				return row.dt_source === 'data' ? '{' + data + '}' : '"' + data + '"';
+			},			
+			// New Message Form
+			msgNewForm: {
+				title: '<i class="fa fa-plus"></i> New Docket Message',
+				content: $('<div></div>').load(PG_DOCKET_STYLES_FORM)
+				
+			},			
+			// Edit Message Form
+			msgEditForm: {
+				title: '<i class="fa fa-pencil"></i> Edit Docket Message',
+				content: $('<div></div>').load(PG_DOCKET_STYLES_FORM)
+				
+			},			
+			// Submit Form Action
+			msgSubmitForm: function() {
+				var wsURL = '',
+					postString = '',
+					JSONString = '',
+					JSONObject = {};					
+					
+				$.each($('input[data-field], select[data-field]'), function(idx, elem) {
+					var input = $(elem), 									
+						inputType = input.attr('type'),
+						inputField = input.attr('data-field'),						
+						selSource = $('select[data-field="dt_source"] option:selected'),
+						selMessage = $('select[data-field="dt_message"] option:selected');						
+						
+					if (inputType == 'checkbox') 
+						postString = '{"' + inputField + '":"' + (input.prop('checked') ? '1' : '0') + '"}';
+					else if (inputField == 'dt_field')
+						postString = '{"dt_field":"' + (selSource.val() === 'data' ? selMessage.val() : '0') + '"}';
+					else if (inputField == 'dt_message')
+						postString = '{"dt_message":"' + (selSource.val() === 'data' ? selMessage.text() : input.val()) + '"}';
+					else 
+						postString = '{"' + inputField + '":"' + input.val() + '"}';
+					
+					$.extend(JSONObject, $.parseJSON(postString)); 
+				});	
+				
+				JSONString = 'docketTemplateInfo=' + JSON.stringify(JSONObject);				
+				wsURL = $('input[data-field="dt_id"]').val() != '' ? WS_UPDATE_DOCKET_STYLES : WS_INSERT_DOCKET_STYLES;
+				
+				$.post(wsURL, JSONString, function(data, status) {
+					BootstrapDialog.closeAll();	
+					STIC.DocketStyle.destroyMsgField();	
+					dtDocketStyles.ajax.reload();						
+					STIC.disableButtons(styles.btns);	
+					
+					BootstrapDialog.alert({
+						title: MSG_INFO_TITLE,
+						message: 'Docket Message was updated succesfully.',	
+						type: BootstrapDialog.TYPE_PRIMARY,
+						callback: function(result) {
+							BootstrapDialog.closeAll();								
+						}
+					});				
+				});
+			}
+		};
+	
+		// DT Initial
+		var dtDocketStyles = $('#table-data')
+			.DataTable({	
+				'info': true,
+				'paging': true,
+				'ordering': false,
+				'searching': false,
+				'processing': true,
+				'lengthChange': false,	
+				'ajax': styles.dtAjx,				
+				'columns': styles.dtCols,							
+				'columnDefs': [{
+					'targets': 3,
+					'render': styles.dtMsgRender
+				}]			
+			});
+		
+		// DT Row Click Event
+		$('#table-data tbody').on('click', 'tr', function() {
+			_fnTableRowSelection(dtDocketStyles, this, styles.buttonTools);
+		});
+
+		// Select Docket Type
+		$('#select-docket-type').on('change', function() {			
+			dtDocketStyles.ajax.url(WS_LIST_DOCKET_STYLES + '&type=' + $(this).val()).load();
+		});
+		
+		// Add Docket Style
+		$('button[data-btn="btnNewStyle"]').on('click', function() {
+			BootstrapDialog.show({
+				closable: false,
+				title: styles.msgNewForm.title,
+				message: styles.msgNewForm.content,
+				onshown: function(dialogRef) {
+					$('input[data-field]').val('');
+					$('select[data-field]').val('');
+					$('select[data-field="dt_source"]').val('data');
+					$('input[type="checkbox"]').prop('checked', false);
+					var input = $('input[data-field="dt_type"]');
+					$(input).val($('#select-docket-type').val());	
+					STIC.DocketStyle.destroyMsgField();	
+					STIC.DocketStyle.toggleMsgField({			
+						JSONUrl: WS_LIST_DOCKET_FIELDS + '&available=' + $(input).val(),
+						JSONData: 'report-list',
+						dataSrc: 'data',
+						defaultVal: ''
+					});
+				},
+				buttons: [{
+					label: 'Save Changes',
+					cssClass: 'btn-primary',
+					icon: 'fa fa-floppy-o',
+					action: styles.msgSubmitForm
+				}, {
+					label: 'Cancel',
+					icon: 'fa fa-ban',
+					action: function(dialogItself) {
+						BootstrapDialog.closeAll();
+						STIC.DocketStyle.destroyMsgField();		
+						dtDocketStyles.ajax.reload();
+						STIC.disableButtons(styles.btns);										
+					}
+				}]
+			});
+		});
+		
+		// Edit Docket Style
+		$('button[data-btn="btnEditStyle"]').on('click', function() {
+			BootstrapDialog.show({
+				closable: false,
+				title: styles.msgEditForm.title,
+				message: styles.msgEditForm.content,
+				onshown: function(dialogRef) {
+					var content = dialogRef.getModalBody(),
+						row = dtDocketStyles.row('.selected').data(),
+						msgVal = row.dt_source === 'data' ? row.dt_field : row.dt_message;	
+					STIC.DocketStyle.toggleMsgField({			
+						JSONUrl: WS_LIST_DOCKET_FIELDS + '&available=' + row.dt_type,
+						JSONData: 'report-list',
+						dataSrc: row.dt_source,
+						defaultVal: msgVal
+					});
+					$('input[data-field="dt_id"]').val(row.dt_id);
+					$('input[data-field="dt_row"]').val(row.dt_row);
+					$('input[data-field="dt_type"]').val(row.dt_type);
+					$('input[data-field="dt_field"]').val(row.dt_field);	
+					$('input[data-field="dt_column"]').val(row.dt_column);
+					$('select[data-field="dt_source"]').val(row.dt_source);
+					$('input[data-field="dt_font_size"]').val(row.dt_font_size);					
+					$('input[data-field="dt_font_uppercase"]').prop('checked', row.dt_font_uppercase == 'Yes' ? true : false);
+					$('input[data-field="dt_font_underline"]').prop('checked', row.dt_font_underline == 'Yes' ? true : false);						
+				},
+				buttons: [{
+					label: 'Save Changes',
+					cssClass: 'btn-primary',
+					icon: 'fa fa-floppy-o',
+					action: styles.msgSubmitForm
+				}, {
+					label: 'Cancel',
+					icon: 'fa fa-ban',
+					action: function(dialogItself) {
+						BootstrapDialog.closeAll();
+						STIC.DocketStyle.destroyMsgField();	
+						dtDocketStyles.ajax.reload();
+						STIC.disableButtons(styles.btns);																	
+					}
+				}]
+			});
+		});
+		
+		// Delete Docket Message
+		$('button[data-btn="btnDelStyle"]').on('click', function() {		
+			BootstrapDialog.confirm({
+				title: '<i class="fa fa-question-circle"></i> Confirm Deletion',
+				message: 'This will delete the selected record. Press OK to continue.',		
+				type: BootstrapDialog.TYPE_DANGER,
+				callback: function(result) {
+					if (result) {						
+						$.ajax({
+							method: 'POST',
+							url: WS_DELETE_DOCKET_STYLES,
+							data: { dtID: dtDocketStyles.row('.selected').data().dt_id }
+						}).done(function(a) {							
+							dtDocketStyles.ajax.reload();						
+							STIC.disableButtons(styles.btns);
+							BootstrapDialog.alert({
+								title: MSG_INFO_TITLE,
+								message: 'Record was deleted successfully.',
+								type: BootstrapDialog.TYPE_PRIMARY,
+								callback: function() {
+									BootstrapDialog.closeAll();									
+								}
+							});
+						}).fail(function() {
+							dtDocketStyles.ajax.reload();						
+							STIC.disableButtons(styles.btns);
+							BootstrapDialog.alert({
+								title: 'Error',
+								message: 'Unable to delete record.',
+								type: BootstrapDialog.TYPE_DANGER,
+								callback: function() {
+									BootstrapDialog.closeAll();									
+								}
+							});
+						});				
+					} 
+				}
+			});
+		});		
+
+		// Save Docket Width & Length
+		$('button[data-btn="btnSaveDWL"]').on('click', function() {
+			BootstrapDialog.alert({
+				title: MSG_INFO_TITLE,
+				message: 'Save docket width and docket length.',
+				type: BootstrapDialog.TYPE_DANGER
+			});
+		});		
+	});
+</script>

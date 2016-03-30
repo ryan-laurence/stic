@@ -1,0 +1,109 @@
+<form class="form-horizontal well no-margin-bottom">
+	<div class="row">
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="bridge-code">Bridge Code</label>
+				<input type="text" class="form-control" data-field="bridge_code" value="PL1">
+			</div>
+			<div class="form-group">
+				<label for="curr-dock-no">Current Docket No.</label>
+				<input type="text" class="form-control" data-field="current_docket_number" value="4">
+			</div>
+			<div class="form-group">
+				<label for="min-truck-weight">Min. Truck Weight</label>
+				<input type="text" class="form-control" data-field="minimum_truck_weight" value="0">
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="form-group">
+				<label for="delay-timer">Delay Timer (seconds)</label>
+				<input type="text" class="form-control" data-field="delay_time_second" value="3">
+			</div>
+			<div class="form-group">
+				<label for="def-unit">Default Unit</label>
+				<select class="form-control" data-field="weight_unit">
+					<option value="kg" selected>kilogram</option>
+					<option value="g">gram</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="zero-range">Zero Range</label>
+				<input type="text" class="form-control" data-field="zero_range" value="2">
+			</div>
+		</div>
+	</div>
+	<input type="hidden" data-field="id">
+	<input type="hidden" data-field="port_baudrate">
+	<input type="hidden" data-field="contact_person">
+	<input type="hidden" data-field="company_name">
+	<input type="hidden" data-field="company_address">
+	<div class="row">
+		<div class="form-group">
+			<div class="col-md-12">
+				<div class="footer-line-divider "></div>
+			</div>
+		</div>
+	</div>					
+	<div class="row">
+		<div class="form-group no-margin-bottom">
+			<div class="col-md-12">
+				<button class="btn btn-primary" type="button" id="save-config"><i class="fa fa-floppy-o"></i> Save</button>
+				<button class="btn btn-default" type="button" id="reset-config"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>							
+</form>	
+<script>
+	$(function() {
+		// Pre Load Values
+		function loadWeighIn() {
+			$.get(WS_LIST_CONFIG_COMPANY, function(data) { 
+				$.each(data.response, function(a, b) {
+					if (a == 'company-list') {
+						$.each(b, function(c, d) {		
+							$.each(d, function(e, f) {	
+								if (e == 'weight_unit')
+									$('select[data-field="' + e + '"]').val(f);
+								else
+									$('input[data-field="' + e + '"]').val(f);								
+							});							
+						});
+					}
+				});		
+			});		
+		}		
+		loadWeighIn();
+	
+		// Save
+		$('#save-config').on('click', function() {
+			BootstrapDialog.confirm({
+				title: MSG_TITLE_CONFIRM_SAVE,
+				message: MSG_CONFIRM_SAVE_CONFIG_WEIGHIN,			
+				callback: function(result) {
+					if (result) {
+						var jsonString = '',
+							jsonObject = {};							
+						$.each($('input[data-field], select[data-field]'), function(index, formElement) {
+							var postString = '{"' + $(formElement).attr('data-field') + '":"' + $(formElement).val() + '"}';
+							$.extend(jsonObject, $.parseJSON(postString)); 
+						});
+						jsonString = 'companyInfo=' + JSON.stringify(jsonObject);
+						$.post(WS_UPDATE_CONFIG_COMPANY, jsonString, function(data, status){
+							BootstrapDialog.alert({
+								title: MSG_INFO_TITLE,
+								message: 'Weigh In settings were updated successfully.',	
+								type: BootstrapDialog.TYPE_PRIMARY
+							});
+							loadWeighIn();
+						});
+					} 
+				}
+			});
+		});
+		
+		// Reset
+		$('#reset-config').on('click', function() {
+			loadWeighIn();
+		});
+	});
+</script>

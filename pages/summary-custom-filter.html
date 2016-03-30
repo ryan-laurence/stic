@@ -1,0 +1,35 @@
+<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">			
+	<div class="btn-group pull-left form-inline" role="group">			
+		<div class='input-group'>
+			<span class="input-group-addon"><i class="fa fa-filter" aria-hidden="true"></i> <strong>Filter By</strong></span>
+			<select class="selectpicker form-control" id="report" data-width="150px">
+				<option value="docket_no" data-report-title="Docket Report" selected>Docket No.</option>
+				<option value="truck_code" data-report-title="Truck Report">Truck</option>
+				<option value="prod_id" data-report-title="Product Report">Product</option>
+				<option value="user_id" data-report-title="User Report">User</option>
+				<option value="cust_id" data-report-title="Customer Report">Customer</option>
+			</select>
+		</div>
+	</div>
+	<div class="btn-group pull-left form-inline" role="group">			
+		<div class='input-group'>
+			<select class="selectpicker form-control" id="filter" title=" " data-field="docket_no" data-live-search="true" data-size="5" data-width="200px">
+				<option value="0001">0001</option>
+				<option value="0002">0002</option>
+				<option value="0003">0003</option>
+				<option value="0004">0004</option>
+				<option value="0005">0005</option>
+				<option value="0006">0006</option>
+			</select>
+		</div>
+	</div>
+	<div class="btn-group pull-left" role="group">
+		<button type="button" class="btn btn-primary disabled" data-btn="btnSrchRpt"><i class="fa fa-search" aria-hidden="true"></i> Search</button>
+	</div>
+</div>
+<script>
+	$(function () {	
+		$('#report').selectpicker();
+		$('#filter').selectpicker();
+	});
+</script>

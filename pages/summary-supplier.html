@@ -1,0 +1,37 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-table"></i> Supplier Summary
+	</div>
+	<div class="panel-body">
+		<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+			<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>		
+			<ul>
+				<li>Choose the starting and ending date with time period that you needed for the summary report to be generated.</li>
+				<li>Click the "Print" button to have a printed copy of the summary report.</li>
+			</ul>
+		</div>
+		<table class="display compact" id="table-summary">
+			<thead>
+				<tr>
+					<th class="text-left">Supplier Name</th>
+					<th class="text-left">Product Name</th>
+					<th class="text-left">Net Weight</th>
+					<th class="text-left">Unit</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function () {
+		loadSummaryReport({		
+			showTotal: true,
+			ds: DEFAULT_DS_REPORTS,
+			cd: CD_SUMMARY_SUPPLIER,
+			ws: WS_SUMMARY_SUPPLIER,
+			title: REPORT_TITLE_SUPPLIER
+		});
+	});
+</script>

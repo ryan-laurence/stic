@@ -1,0 +1,40 @@
+<script>
+	$(function() {
+		var first_tab = $('#tab-others > li:first-child');
+		var all_tabs = $('li[data-toggle="tab-others"]');
+	
+		$(all_tabs).click(function(e) {
+			var source = $(this).attr('data-url');
+			var target = $(this).attr('data-target');
+			$.get(source, function(data) {
+				$(target).html(data);
+			});
+			$(all_tabs).removeClass('active');
+			$(this).addClass('active');
+		});
+		
+		/*var def_source = $(first_tab).attr('data-url');
+		var def_target = $(first_tab).attr('data-target');		
+		$.get(def_source, function(data) {
+			$(def_target).html(data);
+		});
+		$(all_tabs).removeClass('active');
+		$(first_tab).addClass('active');*/
+	});
+</script>
+
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<span class="glyphicon glyphicon-list-cog"></span> Others
+	</div>
+	<div class="panel-body">
+		<ul class="nav nav-tabs" id="tab-others">
+			<li data-target="#tab-others-content" data-toggle="tab-others" data-url="pages/others-select-com.html" data-page-name="others-select-com"><a href="#" >Select Com</a></li>
+			<li data-target="#tab-others-content" data-toggle="tab-others" data-url="pages/others-system-config.html"><a href="#">System Config</a></li>
+			<li data-target="#tab-others-content" data-toggle="tab-others" data-url="pages/others-calibration.html"><a href="#">Calibration</a></li>
+			<li data-target="#tab-others-content" data-toggle="tab-others" data-url="pages/others-backup.html"><a href="#">Backup</a></li>
+			<li data-target="#tab-others-content" data-toggle="tab-others" data-url="pages/others-restore.html"><a href="#">Restore</a></li>
+		</ul>
+	</div>
+	<div id="tab-others-content" style="padding-left: 15px; padding-right: 15px"></div>
+</div>

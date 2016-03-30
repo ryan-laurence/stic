@@ -1,0 +1,52 @@
+<script>
+	$(function() {	
+		var ds_list = DS_TRUCK_LIST;
+		var ws_list = WS_TRUCK_LIST;
+		var ws_insert = WS_TRUCK_INSERT;
+		var ws_update = WS_TRUCK_UPDATE;		
+		var ws_delete = WS_TRUCK_DELETE;
+		
+		var dt_domId = 'table-truck';
+		var dt_recId = 'truck_id';
+		var dt_fields = [ 'truck_id', 'truck_code' ];
+		var dt_tools = ['tool-select'];		
+		
+		// Data Table
+		var t_trucks_picker = _fnSetDataTable(dt_domId, ws_list, ds_list, CD_TRUCK_LIST, 10);
+	
+		// Table Tools
+		$('#' + dt_domId + '_wrapper div.toolbar').html(
+			'<div class="toolbar-group">' +
+				'<button id="tool-select" class="disabled"><i class="icon-floppy"></i> Pick Selected</button>' +
+			'</div>'
+		);	
+		$('#' + dt_domId + '_wrapper div.toolbar').css('float', 'left');
+		$('#' + dt_domId + '_wrapper div.toolbar').addClass('fg-red');
+		
+		// Row Click Event
+		$('#' + dt_domId + ' tbody').on( 'click', 'tr', function () {		
+			_fnTableRowSelection(t_trucks_picker, this, false, dt_tools);		
+		});
+		
+		// Insert
+		$("#tool-select").on('click', function() {
+			$('#truck_id').val(t_trucks_picker.row('.selected').data().truck_id);
+			$('#truck_code').val(t_trucks_picker.row('.selected').data().truck_code);
+			$.Dialog.close();
+		});			
+	});
+</script>
+<div class="panel no-border">
+	<div class="panel-content">
+		<table class="display compact" id="table-truck">
+			<thead>
+				<tr>
+					<th class="text-left">Truck ID</th>
+					<th class="text-left">Truck Code</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>

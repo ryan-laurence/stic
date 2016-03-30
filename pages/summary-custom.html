@@ -1,0 +1,182 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-table"></i> Custom Summary
+	</div>
+	<div class="panel-body">
+		<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+			<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>	
+			<ul>
+				<li>Choose the type of report from the "Filter By" dropdown menu to generate the needed summary report.</li>
+				<li>Click the "Print" button to have a printed copy of the summary report.</li>
+			</ul>
+		</div>
+		<table class="display compact" id="table-summary">
+			<thead>
+				<tr>
+					<th class="text-left">Docket No.</th>
+					<th class="text-left">Product Name</th>
+					<th class="text-left">Customer Name</th>
+					<th class="text-left">Truck Code</th>
+					<th class="text-left">User</th>
+					<th class="text-left">Weight In</th>
+					<th class="text-left">Weight Out</th>
+					<th class="text-left">Net Weight</th>
+					<th class="text-left">Unit</th>
+					<th class="text-left">Comp.(%)</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script>
+	$(function () {	
+		// DT options
+		var dtCols = CD_SUMMARY_CUSTOM_DOCKET,
+			dtAjx = { 'dataSrc': DEFAULT_DS_REPORTS, 
+				'url': WS_SUMMARY_CUSTOM_DOCKET };
+				
+		// DT Initial
+		var dtSummary = $('#table-summary')
+			.DataTable({	
+				'dom': '<"toolbar">BRlfrtip',
+				'ordering': false,
+				'searching': false,
+				'processing': true,
+				'lengthChange': false,
+				'pageLength': 10,
+				'ajax': dtAjx,				
+				'columns': dtCols,
+				colReorder: {
+					order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+				},
+				buttons: [{
+					extend: 'print',
+					enabled: false,
+					className: 'btn-primary',
+					title: $('#report option:selected').attr('data-report-title'),
+					message: 'From: 03/30/2016 3:40 PM <br />To: 03/30/2016 3:40 PM',		
+					text: '<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print',
+					customize: dtPrintCustom
+				}]
+			});			
+
+		$('div.toolbar').css('float', 'left');
+		$('div.dt-buttons').css('float', 'left');
+		$('div.dt-buttons').css('padding-left', '5px');
+		
+		$('div.toolbar').load('pages/summary-custom-filter.html', 
+			function(response, status, xhr) {		
+				// Change Filter & Search Field Values
+				$('#report').on('change', function() {
+					var ordering = [],
+						report = $(this).val();			
+					dtSummary.colReorder.reset();			
+					if (report == 'docket_no') {
+						ordering = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+					} else if (report == 'truck_code') {
+						ordering = [3, 0, 1, 2, 4, 5, 6, 7, 8, 9];
+					} else if (report == 'prod_id') {
+						ordering = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9];
+					} else if (report == 'user_id') {
+						ordering = [4, 0, 1, 2, 3, 5, 6, 7, 8, 9];
+					} else if (report == 'cust_id') {
+						ordering = [2, 0, 1, 3, 4, 5, 6, 7, 8, 9];
+					} else {
+						ordering = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+					}			
+					loadValues(report);
+					dtSummary.colReorder.order(ordering);
+				});
+				
+				// Search Field
+				$('#filter').on('change', function() {
+					$('button[data-btn="btnSrchRpt"]').removeClass('disabled');
+					dtSummary.button(0).enable();
+				})
+				
+				// Search Action
+				$('button[data-btn="btnSrchRpt"]').on('click', function() {
+					var postString = '{"' + $('#filter').attr('data-field') + '":"' + $('#filter').val() + '"}';			
+					BootstrapDialog.alert({
+						title: 'Call Web Service',
+						message: 'POST: ' + JSON.stringify($.parseJSON(postString)),
+						type: BootstrapDialog.TYPE_DANGER,
+						callback: function() {
+							BootstrapDialog.closeAll();									
+						}
+					});		
+				});
+			});
+		
+		// Reload Button
+		function dtBtnReload(e, dt, button, config) {
+			dt.ajax.reload();
+		}
+		
+		// Customize Print Preview
+		function dtPrintCustom(win) {
+			var title = $('#report option:selected').attr('data-report-title') 
+				+ ' - ' + $('#filter option:selected').val();		
+			$(win.document.body)
+				.css('background', 'transparent')
+				.css('font-weight', 'normal')
+				.css('font-family', '"Trebuchet MS", Helvetica, sans-serif');				
+			$(win.document.body).find('h1')								
+				.css('font-size', '16pt')
+				.css('text-align', 'center')
+				.html(title);							
+			$(win.document.body).find('div')							
+				.css('font-size', '11pt')
+				.css('text-align', 'left')
+				.css('margin', '20px 0px 15px 0px');						
+			$(win.document.body).find('table')
+				.removeClass('display')
+				.removeClass('compact');							
+			$(win.document.body).find('table th')
+				.css('font-size', '11pt')
+				.css('text-align', 'left')
+				.css('padding-left', '0px');							
+			$(win.document.body).find('table td')							
+				.css('font-size', '10pt')
+				.css('text-align', 'left')
+				.css('padding-left', '0px')
+				.css('padding-top', '10px')
+				.css('padding-bottom', '10px')
+				.css('font-weight', 'normal');							
+			//console.log($(win.document.body).html());
+		}
+		
+		// Pre Load sample values
+		function loadValues(type) {
+			var options = [],
+				loadThis = [],
+				users = ['admin', 'weigher', 'company', 'guest'],
+				dockets = ['000001', '000002', '000003', '000004', '000005', '000006', '000007'],
+				trucks = ['AAA 1111', 'AAA 2222', 'AAA 3333', 'BBB 1234', 'BBB 4567', 'CCC 1234', 'DDD 1234'],
+				products = ['Product 01', 'Product 02', 'Product 03', 'Product 04', 'Product 05', 'Product 06', 'Product 07'],				
+				customers = ['Customer 01', 'Customer 02', 'Customer 03', 'Customer 04', 'Customer 05', 'Customer 06', 'Customer 07'];				
+			if (type == 'docket_no') {
+				loadThis = dockets;
+			} else if (type == 'truck_code') {
+				loadThis = trucks;
+			} else if (type == 'prod_id') {
+				loadThis = products;
+			} else if (type == 'user_id') {
+				loadThis = users;
+			} else if (type == 'cust_id') {
+				loadThis = customers;
+			} else {
+				loadThis = dockets;
+			}		
+			$.each(loadThis, function(idx, val) {
+				options.push('<option value="' + val + '">' + val + '</option>');
+			});			
+			$('#filter').empty();			
+			$('#filter').append(options.join(''));
+			$('#filter').selectpicker('refresh');
+			$('#filter').attr('data-field', type);
+		}
+	});
+</script>

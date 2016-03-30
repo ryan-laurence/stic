@@ -1,0 +1,92 @@
+<form class="form-horizontal well no-margin-bottom">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="form-group">
+				<label for="contact-person">Contact Person</label>
+				<input type="text" class="form-control" data-field="contact_person" value="Juan Dela Cruz">
+			</div>
+			<div class="form-group">
+				<label for="company-name">Company Name</label>
+				<input type="text" class="form-control" data-field="company_name" value="Scaletech International Corporation">
+			</div>
+			<div class="form-group">
+				<label for="address">Address</label>
+				<input type="text" class="form-control" data-field="company_address" value="3050 F. Bautista St. Bo. Ugong, Valenzuela City">
+			</div>
+		</div>
+	</div>
+	<input type="hidden" data-field="id">
+	<input type="hidden" data-field="delay_time_second">
+	<input type="hidden" data-field="minimum_truck_weight">
+	<input type="hidden" data-field="zero_range">
+	<input type="hidden" data-field="bridge_code">
+	<input type="hidden" data-field="current_docket_number">
+	<input type="hidden" data-field="port_baudrate">
+	<input type="hidden" data-field="weight_unit">
+	<div class="row">
+		<div class="form-group">
+			<div class="col-md-12">
+				<div class="footer-line-divider "></div>
+			</div>
+		</div>
+	</div>					
+	<div class="row">
+		<div class="form-group no-margin-bottom">
+			<div class="col-md-12">
+				<button class="btn btn-primary" type="button" id="save-config"><i class="fa fa-floppy-o"></i> Save</button>
+				<button class="btn btn-default" type="button" id="reset-config"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>							
+</form>	
+<script>
+	$(function() {
+		// Pre Load Values
+		function loadCompanyDetails() {
+			$.get(WS_LIST_CONFIG_COMPANY, function(data) { 
+				$.each(data.response, function(a, b) {
+					if (a == 'company-list') {
+						$.each(b, function(c, d) {		
+							$.each(d, function(e, f) {	
+								$('input[data-field="' + e + '"]').val(f);
+							});							
+						});
+					}
+				});		
+			});		
+		}		
+		loadCompanyDetails();
+
+		// Save
+		$('#save-config').on('click', function() {
+			BootstrapDialog.confirm({
+				title: MSG_TITLE_CONFIRM_SAVE,
+				message: MSG_CONFIRM_SAVE_CONFIG_COMPANY,			
+				callback: function(result) {
+					if (result) {
+						var jsonString = '',
+							jsonObject = {};							
+						$.each($('input[data-field]'), function(index, formElement) {
+							var postString = '{"' + $(formElement).attr('data-field') + '":"' + $(formElement).val() + '"}';
+							$.extend(jsonObject, $.parseJSON(postString)); 
+						});
+						jsonString = 'companyInfo=' + JSON.stringify(jsonObject);
+						$.post(WS_UPDATE_CONFIG_COMPANY, jsonString, function(data, status){
+							BootstrapDialog.alert({
+								title: MSG_INFO_TITLE,
+								message: 'Company Details were updated successfully.',	
+								type: BootstrapDialog.TYPE_PRIMARY
+							});
+							loadCompanyDetails();
+						});
+					} 
+				}
+			});
+		});
+		
+		// Reset
+		$('#reset-config').on('click', function() {
+			loadCompanyDetails();
+		});
+	});
+</script>

@@ -1,0 +1,69 @@
+<script>
+	$(function() {
+		// Initialize
+		var truckIn = new EditData(
+			'table-data',
+			CD_CHECK_TRUCK_CODE_LIST,
+			DEFAULT_DATASOURCE,
+			WS_CHECK_TRUCK_CODE_LIST,
+			'',
+			'',
+			WS_FIRST_WEIGHING_DELETE,
+			['tools-delete'],
+			[]
+		);
+
+		// ID & Fields
+		var data_holder = 'weightId';
+		var dt_record_id = 'wr_id';
+		var dt_tools = ['tools-delete'];
+
+		// Data Table
+		truckIn.setDataTable();
+		var dt = truckIn.tableObject;
+
+		// Data Table > Row Click Event
+		$('#' + truckIn.tableDomId + ' tbody').on( 'click', 'tr', function () {
+			truckIn.setTableRowClickEvent(this);
+		});
+
+		// Tools > Delete Button
+		$('#tools-delete').on('click', function() {
+			STIC.showSystemMessage('confirm-delete', MSG_TITLE, MSG_CONFIRM_DELETE)
+		});
+
+		// Tools > Delete > Confirm Delete
+		$('#confirm-modal #confirm-delete').on('click', function() {
+			var recordId = dt.row('.selected').data().wr_id;
+			truckIn.deleteRecord(recordId, 'weightId', 'confirm-modal');
+		});
+	});
+</script>
+
+<!-- Truck In Report Screen -->
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-truck"></i> Truck In Report
+	</div>
+	<div class="panel-body">
+		<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+			<div class="btn-group" role="group" aria-label="First group">
+				<button type="button" class="btn btn-danger disabled" id="tools-delete"><span class="glyphicon glyphicon-trash" aria-hidden="true"></span> Delete</button>
+			</div>
+		</div>
+		<table class="display compact" id="table-data">
+			<thead>
+				<tr>
+					<th class="text-left">WR ID</th>
+					<th class="text-left">Truck Code</th>
+					<th class="text-left">Date In</th>
+					<th class="text-left">Time In</th>
+					<th class="text-left">Weight In</th>
+					<th class="text-left">Unit</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>

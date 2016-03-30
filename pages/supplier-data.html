@@ -1,0 +1,144 @@
+<script>
+	$(function() {
+		// Initialize
+		var supplier = new EditData(
+			'table-data',
+			CD_SUPPLIER_LIST,
+			DS_SUPPLIER_LIST,
+			WS_SUPPLIER_LIST,
+			WS_SUPPLIER_INSERT,
+			WS_SUPPLIER_UPDATE,
+			WS_SUPPLIER_DELETE,
+			['tools-edit', 'tools-delete'],
+			['supp_id', 'supp_code', 'supp_name']
+		);
+
+		// Data Table
+		supplier.setDataTable();
+		var dt = supplier.tableObject;
+
+		// Data Table > Row Click Event
+		$('#' + supplier.tableDomId + ' tbody').on( 'click', 'tr', function () {
+			supplier.setTableRowClickEvent(this);
+		});
+
+		// Tools > New Button
+		$('#tools-new').on('click', function() {
+			$('#new-form-modal').modal('show');
+		});
+
+		// Tools > New > Save Changes
+		$('#new-form-modal #save-changes').on('click', function() {
+			supplier.insertRecord('new-form-modal', 'suppInfo');
+		});
+
+		// Tools > Edit Button
+		$('#tools-edit').on('click', function() {
+			supplier.loadRowData('edit-form-modal');
+		});
+
+		// Tools > Edit > Save Changes
+		$('#edit-form-modal #save-changes').on('click', function() {
+			supplier.updateRecord('edit-form-modal', 'suppInfo');
+		});
+
+		// Tools > Delete Button
+		$('#tools-delete').on('click', function() {
+			STIC.showSystemMessage('confirm-delete', MSG_TITLE, MSG_CONFIRM_DELETE)
+		});
+
+		// Tools > Delete > Confirm Delete
+		$('#confirm-modal #confirm-delete').on('click', function() {
+			var recordId = dt.row('.selected').data().supp_id;
+			supplier.deleteRecord(recordId, 'supp_id', 'confirm-modal');
+		});
+	});
+</script>
+
+<!-- Supplier Data Screen -->
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-pencil-square-o"></i> Supplier Data
+	</div>
+	<div class="panel-body">
+		<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+			<div class="btn-group" role="group" aria-label="First group">
+				<button type="button" class="btn btn-primary" id="tools-new"><i class="fa fa-plus" aria-hidden="true"></i> New</button>
+			</div>
+			<div class="btn-group" role="group" aria-label="Second group">
+				<button type="button" class="btn btn-success disabled" id="tools-edit"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+			</div>
+			<div class="btn-group" role="group" aria-label="Third group">
+				<button type="button" class="btn btn-danger disabled" id="tools-delete"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+			</div>
+		</div>
+		<table class="display compact" id="table-data">
+			<thead>
+				<tr>
+					<th class="text-left">Supplier ID</th>
+					<th class="text-left">Supplier Code</th>
+					<th class="text-left">Supplier Name</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<!-- New Supplier Form -->
+<div class="modal fade" id="new-form-modal" tabindex="-1" role="dialog" aria-labelledby="newFormModal" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><i class="fa fa-plus" aria-hidden="true"></i> New Supplier</h4>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label>Supplier Code</label>
+						<input type="text" class="form-control" id="supp_code" placeholder="Enter Supplier Code">
+					</div>
+					<div class="form-group">
+						<label>Supplier Name</label>
+						<input type="text" class="form-control" id="supp_name" placeholder="Enter Supplier Name">
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="save-changes">Save Changes</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Edit Supplier Form -->
+<div class="modal fade" id="edit-form-modal" tabindex="-1" role="dialog" aria-labelledby="editFormModal" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title"><i class="fa fa-pencil" aria-hidden="true"></i> Edit Supplier</h4>
+			</div>
+			<div class="modal-body">
+				<form>
+					<div class="form-group">
+						<label>Supplier Code</label>
+						<input type="text" class="form-control" id="supp_code">
+					</div>
+					<div class="form-group">
+						<label>Supplier Name</label>
+						<input type="text" class="form-control" id="supp_name">
+					</div>
+					<input type="hidden" id="supp_id">
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" id="save-changes">Save Changes</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>

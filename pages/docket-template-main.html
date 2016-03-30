@@ -1,0 +1,34 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-file-text-o"></i> Docket Template
+	</div>
+	<div class="panel-body">
+		<ul class="nav nav-tabs" id="tab-docket" style="margin-bottom: 15px;">
+			<li data-target="#tab-docket-content" data-toggle="tab-docket" data-url="pages/docket-template-style.html"><a href="#" ><i class="fa fa-th-list"></i> Docket Style</a></li>
+			<li data-target="#tab-docket-content" data-toggle="tab-docket" data-url="pages/docket-template-fields.html"><a href="#"><i class="fa fa-database"></i> Data Fields</a></li>
+		</ul>
+		<div id="tab-docket-content"></div>
+	</div>	
+</div>
+<script>
+	$(function() {
+		var first_tab = $('#tab-docket > li:first-child'),
+			all_tabs = $('#tab-docket > li[data-toggle="tab-docket"]');
+
+		$(all_tabs).click(function(e) {
+			var source = $(this).attr('data-url'),
+				target = $(this).attr('data-target');
+			$.get(source, function(data) {
+				$(target).html(data);			
+			});
+			$(all_tabs).removeClass('active');
+			$(all_tabs).children('a')
+				.removeClass('make-bold');
+			$(this).addClass('active');
+			$(this).children('a')
+				.addClass('make-bold');
+		});
+	
+		$(first_tab).trigger('click');
+	});
+</script>
