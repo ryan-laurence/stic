@@ -1,0 +1,15 @@
+{
+	"response": {
+		"statuscode": "0",
+		"type": "SUCCESS",
+		"message": "Successfully read Reader Scale Data.",
+		"readData-list": {
+			"data": [
+				"read-status1": "stable",
+				"read-status2": "gross",
+				"read-unitType": "kg",
+				"read-weight": "+ 1280"
+			]
+		}
+	}
+}

@@ -1,0 +1,16 @@
+{
+  "response":{
+    "statuscode":"0",
+    "type":"SUCCESS",
+    "message":"Successfully fetched Truck Record",
+    "record-list":{
+      "record":[
+        {
+          "truck_code":"AAA 1234",
+          "weight_in_reading":"1000",
+          "weight_unit":"kg"
+        }
+      ]
+    }
+  }
+}

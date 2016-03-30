@@ -1,0 +1,141 @@
+{
+  "response": {
+    "statuscode": "0",
+	"type": "SUCCESS",
+	"message": "Successfully fetched Docket Styles",
+	"report-list": {
+	  "report": [
+	    {
+		  "dt_id": "1",
+		  "dt_row": "3",
+		  "dt_column": "4",
+		  "dt_message": "Data.CompanyName",
+		  "dt_font_size": "12",
+		  "dt_font_uppercase": "1",
+		  "dt_font_underline": "1",
+		  "dt_source": "data"
+	    },
+		{
+		  "dt_id": "2",
+		  "dt_row": "6",
+		  "dt_column": "4",
+		  "dt_message": "Data.CompanyAddress",
+		  "dt_font_size": "10",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "data"
+	    },
+		{
+		  "dt_id": "3",
+		  "dt_row": "7",
+		  "dt_column": "11",
+		  "dt_message": "Data.ContactPerson",
+		  "dt_font_size": "12",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "data"
+	    },
+		{
+		  "dt_id": "4",
+		  "dt_row": "9",
+		  "dt_column": "3",
+		  "dt_message": "Truck Code:",
+		  "dt_font_size": "12",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "custom"
+	    },
+		{
+		  "dt_id": "5",
+		  "dt_row": "9",
+		  "dt_column": "20",
+		  "dt_message": "Data.TruckCode",
+		  "dt_font_size": "12",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "data"
+	    },
+		{
+		  "dt_id": "6",
+		  "dt_row": "14",
+		  "dt_column": "3",
+		  "dt_message": "Time In:",
+		  "dt_font_size": "10",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "custom"
+	    },
+		{
+		  "dt_id": "7",
+		  "dt_row": "14",
+		  "dt_column": "20",
+		  "dt_message": "Data.WeighInTime",
+		  "dt_font_size": "10",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "data"
+	    },
+		{
+		  "dt_id": "8",
+		  "dt_row": "16",
+		  "dt_column": "3",
+		  "dt_message": "Date In:",
+		  "dt_font_size": "10",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "custom"
+	    },
+		{
+		  "dt_id": "9",
+		  "dt_row": "16",
+		  "dt_column": "20",
+		  "dt_message": "Data.WeighInDate",
+		  "dt_font_size": "10",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "data"
+	    },
+		{
+		  "dt_id": "10",
+		  "dt_row": "20",
+		  "dt_column": "3",
+		  "dt_message": "Inbound Weight",
+		  "dt_font_size": "10",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "custom"
+	    },
+		{
+		  "dt_id": "11",
+		  "dt_row": "20",
+		  "dt_column": "23",
+		  "dt_message": "Data.TruckInWeight",
+		  "dt_font_size": "10",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "data"
+	    },
+		{
+		  "dt_id": "12",
+		  "dt_row": "77",
+		  "dt_column": "1",
+		  "dt_message": "Service By:",
+		  "dt_font_size": "10",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "custom"
+	    },
+		{
+		  "dt_id": "13",
+		  "dt_row": "79",
+		  "dt_column": "2",
+		  "dt_message": "Scale Tech International Corp.",
+		  "dt_font_size": "12",
+		  "dt_font_uppercase": "0",
+		  "dt_font_underline": "0",
+		  "dt_source": "custom"
+	    }
+	  ]
+    }
+  }
+}

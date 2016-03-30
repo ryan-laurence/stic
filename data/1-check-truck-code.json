@@ -1,0 +1,10 @@
+{
+  "response":{
+    "statuscode":"0",
+    "type":"FAILED",
+    "message":"Successfully fetched Truck Record",
+    "record-list":{
+      "record":""
+    }
+  }
+}

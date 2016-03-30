@@ -1,0 +1,137 @@
+{
+  "response": {
+    "statuscode": "0",
+	"type": "SUCCESS",
+	"message": "Successfully fetched Docket Fields",
+	"report-list": {
+	  "report": [
+	    {
+		  "df_id": "1",
+		  "df_alias": "Data.CustomerCode",
+		  "df_src_field": "cust_code",
+		  "df_src_table": "customers",
+		  "df_length": "10",
+		  "df_format": "-",
+		  "df_type": "varchar"
+	    },
+		{
+		  "df_id": "2",
+		  "df_alias": "Data.CustomerName",
+		  "df_src_field": "cust_name",
+		  "df_src_table": "customers",
+		  "df_length": "40",
+		  "df_format": "-",
+		  "df_type": "varchar"
+	    },
+		{
+		  "df_id": "3",
+		  "df_alias": "Data.ProductCode",
+		  "df_src_field": "prod_code",
+		  "df_src_table": "products",
+		  "df_length": "10",
+		  "df_format": "-",
+		  "df_type": "varchar"
+	    },
+		{
+		  "df_id": "4",
+		  "df_alias": "Data.ProductName",
+		  "df_src_field": "prod_name",
+		  "df_src_table": "products",
+		  "df_length": "40",
+		  "df_format": "-",
+		  "df_type": "varchar"
+	    },
+		{
+		  "df_id": "5",
+		  "df_alias": "Data.TruckCode",
+		  "df_src_field": "truck_code",
+		  "df_src_table": "weight_readings",
+		  "df_length": "10",
+		  "df_format": "-",
+		  "df_type": "varchar"
+	    },
+		{
+		  "df_id": "6",
+		  "df_alias": "Data.WeighInTime",
+		  "df_src_field": "weight_in_date",
+		  "df_src_table": "weight_readings",
+		  "df_length": "8",
+		  "df_format": "hh:mm:ss",
+		  "df_type": "time"
+	    },
+		{
+		  "df_id": "7",
+		  "df_alias": "Data.WeighInDate",
+		  "df_src_field": "weight_in_date",
+		  "df_src_table": "weight_readings",
+		  "df_length": "10",
+		  "df_format": "yyyy-mm-dd",
+		  "df_type": "date"
+	    },
+		{
+		  "df_id": "8",
+		  "df_alias": "Data.WeighOutTime",
+		  "df_src_field": "weight_out_date",
+		  "df_src_table": "weight_readings",
+		  "df_length": "8",
+		  "df_format": "hh:mm:ss",
+		  "df_type": "time"
+	    },
+		{
+		  "df_id": "9",
+		  "df_alias": "Data.WeighOutDate",
+		  "df_src_field": "weight_out_date",
+		  "df_src_table": "weight_readings",
+		  "df_length": "10",
+		  "df_format": "yyyy-mm-dd",
+		  "df_type": "date"
+	    },
+		{
+		  "df_id": "10",
+		  "df_alias": "Data.UserName",
+		  "df_src_field": "user_name",
+		  "df_src_table": "users",
+		  "df_length": "8",
+		  "df_format": "-",
+		  "df_type": "varchar"
+	    },
+		{
+		  "df_id": "11",
+		  "df_alias": "Data.CompanyName",
+		  "df_src_field": "company_name",
+		  "df_src_table": "company",
+		  "df_length": "50",
+		  "df_format": "-",
+		  "df_type": "varchar"
+	    },
+		{
+		  "df_id": "12",
+		  "df_alias": "Data.CompanyAddress",
+		  "df_src_field": "company_address",
+		  "df_src_table": "company",
+		  "df_length": "150",
+		  "df_format": "-",
+		  "df_type": "varchar"
+	    },
+		{
+		  "df_id": "13",
+		  "df_alias": "Data.ContactPerson",
+		  "df_src_field": "contact_person",
+		  "df_src_table": "company",
+		  "df_length": "50",
+		  "df_format": "-",
+		  "df_type": "varchar"
+	    },
+		{
+		  "df_id": "14",
+		  "df_alias": "Data.TruckInWeight",
+		  "df_src_field": "weight_in_reading",
+		  "df_src_table": "weight_readings",
+		  "df_length": "7",
+		  "df_format": "-",
+		  "df_type": "numeric"
+	    }
+	  ]
+    }
+  }
+}

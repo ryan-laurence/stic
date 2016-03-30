@@ -1,0 +1,83 @@
+{
+  "response": {
+    "statuscode": "0",
+	"type": "SUCCESS",
+	"message": "Successfully fetched Reprint Count Summary",
+	"report-list": {
+	  "report": [
+	    {
+		  "reprint_date": "04/14/2015",
+		  "docket_no": "1001",
+		  "reprint_count": "10",
+		  "user_name": "admin"
+	    },
+		 {
+		  "reprint_date": "04/14/2015",
+		  "docket_no": "3221",
+		  "reprint_count": "15",
+		  "user_name": "admin"
+	    },
+		{
+		  "reprint_date": "04/15/2015",
+		  "docket_no": "2342",
+		  "reprint_count": "7",
+		  "user_name": "admin"
+	    },
+		{
+		  "reprint_date": "04/16/2015",
+		  "docket_no": "1567",
+		  "reprint_count": "4",
+		  "user_name": "admin"
+	    },
+		{
+		  "reprint_date": "04/17/2015",
+		  "docket_no": "6754",
+		  "reprint_count": "9",
+		  "user_name": "admin"
+	    },
+		{
+		  "reprint_date": "04/17/2015",
+		  "docket_no": "8876",
+		  "reprint_count": "19",
+		  "user_name": "admin"
+	    },
+		{
+		  "reprint_date": "04/18/2015",
+		  "docket_no": "0987",
+		  "reprint_count": "29",
+		  "user_name": "admin"
+	    },
+		{
+		  "reprint_date": "04/19/2015",
+		  "docket_no": "4876",
+		  "reprint_count": "16",
+		  "user_name": "admin"
+	    },
+		{
+		  "reprint_date": "04/22/2015",
+		  "docket_no": "4322",
+		  "reprint_count": "12",
+		  "user_name": "admin"
+	    },
+		{
+		  "reprint_date": "04/25/2015",
+		  "docket_no": "6786",
+		  "reprint_count": "23",
+		  "user_name": "admin"
+	    },
+		{
+		  "reprint_date": "04/25/2015",
+		  "docket_no": "6543",
+		  "reprint_count": "12",
+		  "user_name": "admin"
+	    },
+		{
+		  "reprint_date": "04/26/2015",
+		  "docket_no": "9876",
+		  "reprint_count": "14",
+		  "user_name": "admin"
+	    }
+	  ]
+    }
+  }
+}

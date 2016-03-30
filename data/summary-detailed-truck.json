@@ -1,0 +1,111 @@
+{
+  "response": {
+    "statuscode": "0",
+	"type": "SUCCESS",
+	"message": "Successfully fetched Detailed Truck Summary",
+	"report-list": {
+	  "report": [
+	    {
+		  "truck_code": "AAA 1234",
+		  "date_in": "04/14/2015",
+		  "time_in": "01:00:00 AM",
+		  "date_out": "04/14/2015",
+		  "time_out": "01:50:00 AM",
+		  "net_weight": "5000",
+		  "weight_unit": "kg",
+		  "user_name": "admin"
+	    },
+		{
+		  "truck_code": "BBB 1234",
+		  "date_in": "04/14/2015",
+		  "time_in": "02:00:00 AM",
+		  "date_out": "04/14/2015",
+		  "time_out": "02:50:00 AM",
+		  "net_weight": "6500",
+		  "weight_unit": "kg",
+		  "user_name": "admin"
+	    },
+		{
+		  "truck_code": "CCC 1234",
+		  "date_in": "04/14/2015",
+		  "time_in": "03:00:00 AM",
+		  "date_out": "04/14/2015",
+		  "time_out": "03:50:00 AM",
+		  "net_weight": "4500",
+		  "weight_unit": "kg",
+		  "user_name": "admin"
+	    },
+		{
+		  "truck_code": "DDD 1234",
+		  "date_in": "04/14/2015",
+		  "time_in": "04:00:00 AM",
+		  "date_out": "04/14/2015",
+		  "time_out": "04:50:00 AM",
+		  "net_weight": "8500",
+		  "weight_unit": "kg",
+		  "user_name": "admin"
+	    },
+		{
+		  "truck_code": "EEE 1234",
+		  "date_in": "04/14/2015",
+		  "time_in": "05:00:00 AM",
+		  "date_out": "04/14/2015",
+		  "time_out": "05:50:00 AM",
+		  "net_weight": "3500",
+		  "weight_unit": "kg",
+		  "user_name": "admin"
+	    },
+		{
+		  "truck_code": "FFF 1234",
+		  "date_in": "04/17/2015",
+		  "time_in": "06:00:00 AM",
+		  "date_out": "04/17/2015",
+		  "time_out": "08:50:00 AM",
+		  "net_weight": "2399",
+		  "weight_unit": "kg",
+		  "user_name": "admin"
+	    },
+		{
+		  "truck_code": "GGG 1234",
+		  "date_in": "04/21/2015",
+		  "time_in": "08:00:00 AM",
+		  "date_out": "04/21/2015",
+		  "time_out": "08:50:00 AM",
+		  "net_weight": "9000",
+		  "weight_unit": "kg",
+		  "user_name": "admin"
+	    },
+		{
+		  "truck_code": "HHH 1234",
+		  "date_in": "04/27/2015",
+		  "time_in": "08:00:00 AM",
+		  "date_out": "04/27/2015",
+		  "time_out": "08:50:00 AM",
+		  "net_weight": "10234",
+		  "weight_unit": "kg",
+		  "user_name": "admin"
+	    },
+		{
+		  "truck_code": "III 1234",
+		  "date_in": "04/28/2015",
+		  "time_in": "10:00:00 AM",
+		  "date_out": "04/28/2015",
+		  "time_out": "12:50:00 AM",
+		  "net_weight": "13000",
+		  "weight_unit": "kg",
+		  "user_name": "admin"
+	    },
+		{
+		  "truck_code": "JJJ 1234",
+		  "date_in": "04/29/2015",
+		  "time_in": "07:00:00 AM",
+		  "date_out": "04/29/2015",
+		  "time_out": "9:50:00 AM",
+		  "net_weight": "23000",
+		  "weight_unit": "kg",
+		  "user_name": "admin"
+	    }
+	  ]
+    }
+  }
+}

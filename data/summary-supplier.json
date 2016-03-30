@@ -1,0 +1,91 @@
+{
+  "response": {
+    "statuscode": "0",
+	"type": "SUCCESS",
+	"message": "Successfully fetched Supplier Summary",
+	"report-list": {
+	  "report": [
+	    {
+		  "supp_code": "S001",
+		  "supp_name": "Supplier 001",
+		  "prod_code": "P001",
+		  "prod_name": "Product 001",
+		  "net_weight": "5000",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "supp_code": "S002",
+		  "supp_name": "Supplier 002",
+		  "prod_code": "P001",
+		  "prod_name": "Product 001",
+		  "net_weight": "6500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "supp_code": "S003",
+		  "supp_name": "Supplier 003",
+		  "prod_code": "P002",
+		  "prod_name": "Product 002",
+		  "net_weight": "4500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "supp_code": "S004",
+		  "supp_name": "Supplier 004",
+		  "prod_code": "P003",
+		  "prod_name": "Product 003",
+		  "net_weight": "8500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "supp_code": "S005",
+		  "supp_name": "Supplier 005",
+		  "prod_code": "P004",
+		  "prod_name": "Product 004",
+		  "net_weight": "3500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "supp_code": "S006",
+		  "supp_name": "Supplier 006",
+		  "prod_code": "P004",
+		  "prod_name": "Product 004",
+		  "net_weight": "3500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "supp_code": "S007",
+		  "supp_name": "Supplier 007",
+		  "prod_code": "P004",
+		  "prod_name": "Product 004",
+		  "net_weight": "3500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "supp_code": "S008",
+		  "supp_name": "Supplier 008",
+		  "prod_code": "P004",
+		  "prod_name": "Product 004",
+		  "net_weight": "3500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "supp_code": "S009",
+		  "supp_name": "Supplier 009",
+		  "prod_code": "P004",
+		  "prod_name": "Product 004",
+		  "net_weight": "3500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "supp_code": "S010",
+		  "supp_name": "Supplier 010",
+		  "prod_code": "P004",
+		  "prod_name": "Product 004",
+		  "net_weight": "3500",
+		  "weight_unit": "kg"
+	    }		
+	  ]
+    }
+  }
+}

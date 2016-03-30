@@ -1,0 +1,71 @@
+{
+  "response": {
+    "statuscode": "0",
+	"type": "SUCCESS",
+	"message": "Successfully fetched Product Summary",
+	"report-list": {
+	  "report": [
+	    {
+		  "prod_code": "P001",
+		  "prod_name": "Product 001",
+		  "net_weight": "5000",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "prod_code": "P002",
+		  "prod_name": "Product 002",
+		  "net_weight": "6500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "prod_code": "P003",
+		  "prod_name": "Product 003",
+		  "net_weight": "4500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "prod_code": "P004",
+		  "prod_name": "Product 004",
+		  "net_weight": "8500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "prod_code": "P005",
+		  "prod_name": "Product 005",
+		  "net_weight": "3500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "prod_code": "P006",
+		  "prod_name": "Product 006",
+		  "net_weight": "2122",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "prod_code": "P007",
+		  "prod_name": "Product 007",
+		  "net_weight": "6543",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "prod_code": "P008",
+		  "prod_name": "Product 008",
+		  "net_weight": "3223",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "prod_code": "P009",
+		  "prod_name": "Product 009",
+		  "net_weight": "1232",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "prod_code": "P010",
+		  "prod_name": "Product 010",
+		  "net_weight": "7865",
+		  "weight_unit": "kg"
+	    }
+	  ]
+    }
+  }
+}

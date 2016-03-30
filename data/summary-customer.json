@@ -1,0 +1,71 @@
+{
+  "response": {
+    "statuscode": "0",
+	"type": "SUCCESS",
+	"message": "Successfully fetched Customer Summary",
+	"report-list": {
+	  "report": [
+	    {
+		  "cust_code": "C001",
+		  "cust_name": "Customer 001",
+		  "net_weight": "5000",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "cust_code": "C002",
+		  "cust_name": "Customer 002",
+		  "net_weight": "6500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "cust_code": "C003",
+		  "cust_name": "Customer 003",
+		  "net_weight": "4500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "cust_code": "C004",
+		  "cust_name": "Customer 004",
+		  "net_weight": "8500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "cust_code": "C005",
+		  "cust_name": "Customer 005",
+		  "net_weight": "3500",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "cust_code": "C006",
+		  "cust_name": "Customer 006",
+		  "net_weight": "1112",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "cust_code": "C007",
+		  "cust_name": "Customer 007",
+		  "net_weight": "2678",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "cust_code": "C008",
+		  "cust_name": "Customer 008",
+		  "net_weight": "8765",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "cust_code": "C009",
+		  "cust_name": "Customer 009",
+		  "net_weight": "9999",
+		  "weight_unit": "kg"
+	    },
+		{
+		  "cust_code": "C010",
+		  "cust_name": "Customer 010",
+		  "net_weight": "7655",
+		  "weight_unit": "kg"
+	    }
+	  ]
+    }
+  }
+}
