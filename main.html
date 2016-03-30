@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Weighing System 2.0</title>
+    <!-- Bootstrap core CSS -->
+	<link rel="stylesheet" href="css/bootstrap.css" />	
+	<link rel="stylesheet" href="css/bootstrap-select.min.css" />
+	<link rel="stylesheet" href="css/bootstrap-dialog.min.css" />	
+	<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+	 <!-- Font Awesome CSS -->
+	<link rel="stylesheet" href="css/font-awesome.min.css" />
+	<!-- JQuery DataTable styles -->	
+	<link rel="stylesheet" href="css/dataTables.css" />
+	<link rel="stylesheet" href="css/dataTables.colReorder.min.css" />	
+	<link rel="stylesheet" href="css/dataTables.buttons.css" />
+	<link rel="stylesheet" href="css/bootstrap.buttons.css" />   
+	<!-- Custom styles -->
+  </head>
+  <body _style="background: #f2f2f2">
+		<nav class="navbar navbar-inverse">
+			<div class="container">
+				<div id="navbar" class="collapse navbar-collapse">
+					<ul class="nav navbar-nav">
+						<li><a href="#" id="link-weighing"><i class="fa fa-balance-scale"></i> Weighing</a></li>
+						<li><a href="#" id="link-truck-in"><i class="fa fa-truck"></i> Truck In</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-pencil-square-o"></i> Edit Data <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#" id="link-supplier-data">Supplier Data</a></li>
+								<li><a href="#" id="link-category-data">Category Data</a></li>
+								<li><a href="#" id="link-customer-data">Customer Data</a></li>
+								<li><a href="#" id="link-truck-data">Truck Data</a></li>
+								<li><a href="#" id="link-user-data">User Data</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-table"></i> Summary <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#" data-page-name="summary-supplier">Supplier Summary</a></li>
+								<li><a href="#" data-page-name="summary-customer">Customer Summary</a></li>
+								<li><a href="#" data-page-name="summary-destination">Destination Summary</a></li>
+								<li><a href="#" data-page-name="summary-product">Product Summary</a></li>
+								<li><a href="#" data-page-name="summary-reprint-count">Reprint Count</a></li>
+								<li class="divider"></li>
+								<li><a href="#" data-page-name="summary-truck">Truck Summary</a></li>
+								<li><a href="#" data-page-name="summary-detailed-truck">Detailed Truck Summary</a></li>
+								<li class="divider"></li>
+								<li><a href="#" data-page-name="summary-custom">Custom Report</a></li>
+								<li class="divider"></li>
+								<li><a href="#" data-page-name="_event-log">Event Log</a></li>
+								<li><a href="#" data-page-name="erase-data">Erase Data</a></li>
+							</ul>
+						</li>
+						<li><a href="#" data-page-name="docket-template-main"><i class="fa fa-file-text-o"></i> Docket</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cog"></i> Others <span class="caret"></span></a>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="#" data-page-name="others-select-com">Select Com</a></li>
+								<li><a href="#" data-page-name="others-system-config">System Config</a></li>
+								<li><a href="#" data-page-name="others-calibration">Calibration</a></li>
+								<li><a href="#" data-page-name="others-backup-data">Backup Data</a></li>
+								<li><a href="#" data-page-name="others-restore-data">Restore Data</a></li>
+							</ul>
+						</li>
+					</ul>
+					<ul class="nav navbar-nav navbar-right">
+						<li><a href="#" id="link-user"><i class="fa fa-user"></i> User: <span id="current-user" style="font-weight: bold">Admin</span></a></li>
+						<li><a href="#" id="link-exit"><i class="fa fa-sign-out"></i> Logout</a></li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		<div class="container" id="main-wrapper"></div>	
+		<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="alertModal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="alert-title"></h4>
+					</div>
+					<div class="modal-body">
+						<div class="alert alert-success alert-dismissible" role="alert" id="alert-message"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Close</button>
+					</div>
+				</div>
+			</div>
+		</div>		
+		<div class="modal fade" id="confirm-save-modal" tabindex="-1" role="dialog" aria-labelledby="confirmSaveModal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="confirm-save-title"></h4>
+					</div>
+					<div class="modal-body">
+						<div class="alert alert-warning" role="alert" id="confirm-save-message"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" id="confirm-save"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Yes</button>
+						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> No</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="info-modal" tabindex="-1" role="dialog" aria-labelledby="infoModal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="info-title"></h4>
+					</div>
+					<div class="modal-body">
+						<div class="alert alert-info" role="alert" id="info-message"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> OK</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="error-modal" tabindex="-1" role="dialog" aria-labelledby="errorModal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="error-title"></h4>
+					</div>
+					<div class="modal-body">
+						<div class="alert  alert-danger" role="alert" id="error-message"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> OK</button>
+					</div>
+				</div>
+			</div>
+		</div>		
+		<!-- Success Modal -->
+		<div class="modal fade" id="success-modal" tabindex="-1" role="dialog" aria-labelledby="successModal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="success-title"></h4>
+					</div>
+					<div class="modal-body">
+						<div class="alert alert-success" role="alert" id="success-message"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Close</button>
+					</div>
+				</div>
+			</div>
+		</div>		
+		<!-- Confirm Delete Modal -->
+		<div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="confirmModal" aria-hidden="true">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="confirm-title"></h4>
+					</div>
+					<div class="modal-body">
+						<div class="alert alert-danger" role="alert" id="confirm-message"></div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-danger" id="confirm-delete"><span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Yes</button>
+						<button type="button" class="btn btn-primary" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> No</button>
+					</div>
+				</div>
+			</div>
+		</div>		
+		<script src="js/jquery/jquery.min.js"></script>
+		<script src="js/jquery/jquery.widget.min.js"></script>
+		<script src="js/jquery/jquery.dataTables.js"></script>
+		<script src="js/jquery/dataTables.colReorder.min.js"></script>		
+		<script src="js/jquery/dataTables.buttons.min.js"></script>		
+		<script src="js/jquery/buttons.print.min.js"></script>		
+		<script src="js/jquery/buttons.bootstrap.min.js"></script>
+
+		<script type="text/javascript" src="js/moment.min.js"></script>
+		<script type="text/javascript" src="js/transition.js"></script>
+		<script type="text/javascript" src="js/collapse.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>		
+		<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-select.min.js"></script>	
+		<script type="text/javascript" src="js/jquery.formatDateTime.min.js"></script>
+		<script type="text/javascript" src="js/jquery.MyDigitClock.js"></script>
+		<script type="text/javascript" src="js/stic-constants.js"></script>
+		<script type="text/javascript" src="js/stic-functions.js"></script>
+		<script type="text/javascript" src="js/edit-data.js"></script>
+		<script src="js/scaletech-functions.js"></script>
+		<script type="text/javascript">
+			$(function () { 	
+				// Check Cookies				
+				if (readCookie('userid') === null) {
+					window.location = DEFAULT_ROOT;
+				} else {
+					var sUserName = '', userId = '';
+					sUserName = readCookie('username');
+					userId = readCookie('userid');
+					notFoundContextSave(userId, sUserName);
+					$('#current-user').text(sUserName);
+				}
+				
+				// Menu Actions
+				$('#link-weighing').click(function() { $('#main-wrapper').load('pages/weighing.html'); });
+				$('#link-truck-in').click(function() { $('#main-wrapper').load('pages/truck-in.html'); });				
+				$('#link-supplier-data').click(function() { $('#main-wrapper').load('pages/supplier-data.html'); });
+				$('#link-category-data').click(function() { $('#main-wrapper').load('pages/category-data.html'); });
+				$('#link-customer-data').click(function() { $('#main-wrapper').load('pages/customer-data.html'); });
+				$('#link-truck-data').click(function() { $('#main-wrapper').load('pages/truck-data.html'); });
+				$('#link-user-data').click(function() { $('#main-wrapper').load('pages/user-data.html'); });				
+				
+				// New Page Call Function!
+				$('[data-page-name]').on('click', function() { 
+					STIC.loadPage({ 'page_name': $(this).attr('data-page-name') });
+				});
+				
+				// Custom Call for un-developed pages
+				$('[data-page-name="others-calibration"], [data-page-name="erase-data"], [data-page-name="_event-log"]').on('click', function() {
+					var page = $(this).attr('data-page-name');
+					BootstrapDialog.alert({
+						title: '<i class="fa fa-info-circle"></i> System Info',
+						message: 'Sorry, the page [' + page + '] is not yet available.'
+					});
+				});
+				
+				// Logout
+				$('#link-exit').click(function() {	
+					BootstrapDialog.confirm({
+						title: '<i class="fa fa-sign-out"></i> Confirm Logout',
+						message: 'Are you sure you want to logout?',			
+						callback: function(result) {
+							if (result) {
+								logout();
+							} 
+						}
+					});
+				});
+			});
+		</script>	
+	</body>
+</html>
