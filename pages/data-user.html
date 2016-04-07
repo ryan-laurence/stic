@@ -1,0 +1,40 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-pencil-square-o"></i> User Data
+	</div>
+	<div class="panel-body">
+		<table class="display compact" id="table-data">
+			<thead>
+				<tr>
+					<th class="text-left">User ID</th>
+					<th class="text-left">Role ID</th>
+					<th class="text-left">UR ID</th>
+					<th class="text-left">User Name</th>
+					<th class="text-left">Role</th>
+					<th class="text-left">Date Modified</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript" src="js/stic-data-user.js"></script>
+<script>
+	$(function() {
+		loadEditData({
+			pk_id: 'user_id',
+			root_node: 'userInfo',
+			report_title: 'User Data',
+			form_id: '#dataUserForm',
+			frm_html: FORM_USER_DATA,
+			dt_btns_all: true,
+			dt_cd: CD_USER_LIST,
+			dt_ds: DS_USER_LIST,
+			ws_list: WS_USER_LIST,
+			ws_insert: WS_USER_INSERT,
+			ws_update: WS_USER_UPDATE,
+			ws_delete: WS_USER_DELETE
+		});
+	});
+</script>

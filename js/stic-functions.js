@@ -15,27 +15,13 @@ function getCurrentDate() {
 	return new Date().format("yyyy-mm-dd");;
 }
 
-function getFirstDayOfMonth() {
+function getFirstDayOfMonth() {	
 	var newDate = new Date();
-	var dd='01';
-	var yy=newDate.getFullYear();
+	var dd = '01';
+	var yy = newDate.getFullYear();	
 	var curDate = newDate.format("yyyy-mm-dd");
-	curDate = curDate.substring(0,curDate.length -2) +dd;
+	curDate = curDate.substring(0, curDate.length - 2) + dd;	
 	return curDate;
-}
-
-function createDataTableObject(tableId, dt_columns, ds_list, url, oTableTools) {
-	$(document).ready(function() {
-		$(tableId).DataTable( {
-			dom: 'T<"clear">lfrtip',
-			columns: dt_columns,
-			sAjaxSource: url,
-			sAjaxDataProp: ds_list,
-			pagingType: "full_numbers",
-			tableTools: oTableTools
-		});
-	});
-	
 }
 
 // Clear Form Values
@@ -51,8 +37,6 @@ function _fnClearFormValues(fields, buttons) {
 		});	
 	}
 }
-
-
 
 // Set Data Table
 function _fnSetDataTable(tableId, dataURL, dataSrc, colDef, pageLen, forceNull) {
@@ -73,8 +57,9 @@ function _fnSetDataTable(tableId, dataURL, dataSrc, colDef, pageLen, forceNull) 
 
 	if (forceNull) {
 		t = $('#' + tableId).DataTable({
-			"dom": 'lfrtip',
-			"lengthChange": true,
+			"dom": 'frtip',
+			ordering: true,
+			"lengthChange": false,
 			"pageLength": pageLen,
 			"processing": true,
 			"data": [],
@@ -82,8 +67,9 @@ function _fnSetDataTable(tableId, dataURL, dataSrc, colDef, pageLen, forceNull) 
 		});
 	} else if (status != 'FAILED') {
 		t = $('#' + tableId).DataTable({
-			"dom": 'lfrtip',
-			"lengthChange": true,
+			"dom": 'frtip',
+			ordering: true,
+			"lengthChange": false,
 			"pageLength": pageLen,
 			"processing": true,
 			"ajax": { 
@@ -94,8 +80,9 @@ function _fnSetDataTable(tableId, dataURL, dataSrc, colDef, pageLen, forceNull) 
 		});
 	} else {
 		t = $('#' + tableId).DataTable({
-			"dom": 'lfrtip',
-			"lengthChange": true,
+			"dom": 'frtip',
+			ordering: true,
+			"lengthChange": false,
 			"pageLength": pageLen,
 			"processing": true,
 			"data": [],
@@ -106,36 +93,28 @@ function _fnSetDataTable(tableId, dataURL, dataSrc, colDef, pageLen, forceNull) 
 	return t;
 }
 
-// Set Data Table for Reports
-function _fnSetReportTable(tableId, dataURL, dataSrc, colDef, pageLen) {
-	var t;
-	pageLen = pageLen || 5;	
-	t = $('#' + tableId).DataTable({
-		'ordering': false,
-		'searching': false,
-		'processing': true,
-		'lengthChange': false,
-		'pageLength': pageLen,
-		'ajax': { 'url': dataURL, 'dataSrc': dataSrc },
-		'dom': 'lfrtip',
-		'columns': colDef 
-	});
-	return t;		
-}
-
 // Custom Table
 function _fnSetCustomTable(tableId, dataURL, dataSrc, colDef) { 
-	var t;
-	t = $('#' + tableId).DataTable({
-		"processing": true,
-		"searching": true,
-		"lengthChange": true,
-		"pageLength": 5,
-		"ajax": { "url": dataURL, "dataSrc": dataSrc },
-		"dom": 'lfrtip',
-		"columns": colDef 
-	});
-	return t;
+	return $('#' + tableId)
+		.DataTable({
+			dom: 'rtip',
+			pageLength: 5,
+			ordering: true,
+			searching: false,
+			processing: true,
+			lengthChange: false,
+			columns: colDef,
+			ajax: { 
+				url: dataURL, 
+				dataSrc: function(json) {
+					var ds = dataSrc.split('.'),
+						rec = json[ds[0]][ds[1]][ds[2]];
+					console.log('DT Ajax JSON Array? ' + $.isArray(rec));
+					console.log('DT JSON: ' + JSON.stringify(rec));					
+					return ($.isArray(rc) === true ? rec :(rec !== '' ? [rec] : []));
+				} 
+			}
+		});
 }
 
 // Table Row Selection Event
@@ -159,81 +138,11 @@ function _fnTableRowSelection(tableObject, rowObject, tableTools) {
 	}		
 }
 
-	
-
 // Show Alert Modal
 function _fnShowAlertModal(options) {
 	$('#alert-modal #alert-title').html(options.title);
 	$('#alert-modal #alert-message').html(options.content);				
 	$('#alert-modal').modal('show');
-}
-
-// Show Confirm Modal
-function _fnShowConfirmModal(options) {
-	$('#confirm-modal #confirm-title').html(options.title);
-	$('#confirm-modal #confirm-message').html(options.content);				
-	$('#confirm-modal').modal('show');
-}
-
-// Show Information Modal
-function _fnShowInfoModal(options) {
-	$('#info-modal #info-title').html(options.title);
-	$('#info-modal #info-message').html(options.content);	
-	$('#info-modal #info-message').addClass('alert-' + options.alertType);
-	$('#info-modal').modal('show');
-}
-
-// System Message Modal
-function _fnMessageModal(options) {
-	var title = ((typeof options.title != 'undefined') ? options.title : MSG_TITLE);
-	var status = ((typeof options.status != 'undefined') ? options.status : MSG_STATUS);
-	switch(status) {
-		case 'success':
-			$('#success-modal #success-title').html(title);
-			$('#success-modal #success-message').html(options.content);	
-			$('#success-modal').modal('show');
-			break;
-		case 'error':
-			var message = MSG_ERROR_ICON + ' ' + options.content;
-			$('#error-modal #error-title').html(title);
-			$('#error-modal #error-message').html(message);	
-			$('#error-modal').modal('show');
-			break;
-		case 'confirm-save':
-			var message = MSG_WARNING_ICON + ' ' + options.content;
-			$('#confirm-save-modal #confirm-save-title').html(title);
-			$('#confirm-save-modal #confirm-save-message').html(message);	
-			$('#confirm-save-modal').modal('show');
-			break;
-		case 'info':
-			$('#info-modal #info-title').html(options.title);
-			$('#info-modal #info-message').html(options.content);	
-			$('#info-modal').modal('show');
-			break;
-		case 'confirm-default':
-			var message = MSG_WARNING_ICON + ' ' + options.content;
-			$('#confirm-modal #confirm-title').html(title);
-			$('#confirm-modal #confirm-message').html(message);				
-			$('#confirm-modal').modal('show');
-			break;
-	}
-}
-
-// Web Service Error Modal
-function _fnShowServiceErrorModal(options) {
-	var message = '<strong>Error!</strong> Please check the following web service.'
-		+ '<div>&nbsp;</div>'
-		+ '<div><strong>URL</strong></div>'	
-		+ '<div>' + options.url + '</div>'	
-	if (typeof options.params != 'undefined' && options.params != '') {
-		message = message 
-			+ '<div>&nbsp;</div>'
-			+ '<div><strong>Params</strong></div>'
-			+ '<div>' + options.params + '</div>';
-	}
-	$('#error-modal #error-title').html('Web Service Error');
-	$('#error-modal #error-message').html(message);	
-	$('#error-modal').modal('show');
 }
 
 // Common Function for saving data
@@ -254,58 +163,16 @@ function _fnSaveFormData(options) {
 		o_table.ajax.reload();
 		o_modal.modal('hide');
 		_fnClearFormValues(options.fields, options.tools);
-		_fnShowAlertModal({ title: options.alertTitle, content: options.alertContent });
+		//_fnShowAlertModal({ title: options.alertTitle, content: options.alertContent });
+		BootstrapDialog.alert({
+			title: options.alertTitle,
+			message: options.alertContent,
+			type: BootstrapDialog.TYPE_PRIMARY,
+			callback: function(result) {
+				BootstrapDialog.closeAll();
+			}
+		});
 	});
-}
-
-// Weighing Input Control
-function _fnWeighingInputControl(options) {		
-	switch(options.status) {
-		case 'FAILED':
-			// Buttons
-			$('#first-weighing').removeClass('disabled'); 								
-			$('#second-weighing').addClass('disabled');	
-			$('#cancel-weighing').removeClass('disabled');
-			$('#reprint-docket').removeClass('disabled');
-			// Input Fields
-			$('input[data-stage*="second"]').prop('disabled', true);
-			$('input[data-stage*="second"]').prop('readonly', false);
-			$('input[data-stage*="first"]').prop('disabled', false);
-			$('input[data-stage*="first"]').prop('readonly', true);
-			$('input[type="hidden"]').val('');
-			$('input[data-type="varchar"]').val('');
-			$('input[data-type="float"]').val('0.00');	
-			$('#user_id').val('1');
-			break;
-		case 'SUCCESS':
-			// Buttons
-			$('#first-weighing').addClass('disabled'); 					
-			$('#second-weighing').removeClass('disabled');	
-			$('#cancel-weighing').removeClass('disabled');
-			$('#reprint-docket').removeClass('disabled');
-			// Input Fields
-			$('input[data-stage*="second"]').prop('disabled', false);
-			$('input[data-stage*="second"]').prop('readonly', true);
-			$('input[data-stage*="first"]').prop('disabled', false);
-			$('input[data-stage*="first"]').prop('readonly', true);
-			$('input[data-action="enable"]').prop('disabled', false);
-			$('input[data-action="enable"]').prop('readonly', false);
-			break;
-		case 'RESET':
-			$('#truck_code').val('');
-			$('input[type="hidden"]').val('');
-			$('input[data-type="varchar"]').val('');
-			$('input[data-type="float"]').val('0.00');					
-			$('input[data-stage*="second"]').prop('disabled', true);
-			$('input[data-stage*="second"]').prop('readonly', false);
-			$('input[data-stage*="first"]').prop('disabled', true);
-			$('input[data-stage*="first"]').prop('readonly', false);
-			$('button[data-type="button"]').addClass('disabled');	
-			$('#user_id').val('1');
-			break;
-		default:
-			alert('Error: Unknown Response Type!');
-	}
 }
 
 var STIC = {
@@ -455,6 +322,59 @@ var STIC = {
 				});
 			}
 		}
+	},
+	
+	// Form Validation
+	FormValidation: function(options) {
+		var errors = 0,
+			elems = $(options.formId).find('input[data-field]');
+		console.log('Start Form Validation for: ' + options.formId);
+		$.each(elems, function(idx, elem) {
+			var input = $(elem).val(),
+				div = $(elem).parent(),
+				hidden = $(elem).attr('type'),
+				span = $(div).children('span'),
+				small = $(div).children('small'),				
+				notempty = $(elem).attr('data-fv-notempty'),
+				notempty_msg = $(elem).attr('data-fv-notempty-msg'),				
+				stringlength = $(elem).attr('data-fv-stringlength'),
+				stringlength_max = parseInt($(elem).attr('data-fv-stringlength-max')),
+				stringlength_msg = $(elem).attr('data-fv-stringlength-msg');
+			
+			console.log('Checking ' + $(elem).attr('data-field') + ' : ' + input);
+			
+			span.remove();
+			small.remove();
+			div.removeClass('has-error has-feedback');
+			
+			// Check if Empty
+			if (notempty == 'true') {				
+				if (input == '') {	
+					errors++;
+					div.addClass('has-error has-feedback');
+					//div.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+					div.append('<small class="help-block">' + notempty_msg + '</small>');
+				} else {
+					div.addClass('has-success has-feedback');					
+					//div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+				}
+			} 
+			
+			// Check Input Length
+			if (stringlength == 'true') {
+				if (input.length > stringlength_max) {
+					errors++;
+					div.addClass('has-error has-feedback');
+					//div.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+					div.append('<small class="help-block">' + stringlength_msg + '</small>');
+				} else {
+					div.addClass('has-success has-feedback');					
+					//div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+				}
+			}
+		});					
+		console.log('End Form Validation for: ' + options.formId);
+		return errors > 0 ? false : true;
 	}
 }
 
@@ -473,35 +393,53 @@ function getXMLData(objXML, sFindTag) {
 function loadSummaryReport(params) {
 	// Default Date
 	var today = new Date(),
-		defString = 'YYYY-MM-DD',				
+		defString = 'YYYY-MM-DD HH:mm:ss',				
 		defEnd = moment(today).format(defString),
-		defStart = moment(today).subtract(1, 'days').format(defString),
-		defWsURL = params.ws + '&dateFrom=' + defStart + '&dateTo=' + defEnd;	
-		
+		//defStart = moment(today).subtract(1, 'days').format(defString),
+		defStart = moment().startOf('month').format(defString),
+		defWsURL = params.ws + 'dateFrom=' + defStart + '&dateTo=' + defEnd;	
+		console.log('datetime: ' + defWsURL);
+	
 	// DT Initial
 	var dtSummary = $('#table-summary')
 		.DataTable({						
 			pageLength: 10,
-			ordering: false,
+			ordering: true,
 			searching: false,
 			processing: true,
 			lengthChange: false,					
 			columns: params.cd,
 			dom: '<"dt-toolbar">B<"dt-total">Rrtip',
-			ajax: { 'url': defWsURL, 'dataSrc': params.ds },				
+			ajax: { 
+				url: defWsURL, 
+				dataSrc: function(json) {
+					var ds = params.ds.split('.'),
+						rec = json[ds[0]][ds[1]][ds[2]];				
+					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+				}  
+			},				
 			buttons: [{						
 				name: 'print',
-				extend: 'print',
+				extend: 'print',				
 				enabled: false,
-				title: params.title,
-				className: 'btn-primary',						
+				autoPrint: true,
+				title: params.title,	
+				className: 'btn-primary',				
 				customize: dtPrintCustom,
 				text: '<i class="glyphicon glyphicon-print" aria-hidden="true"></i> Print'						
+			}, {						
+				name: 'reload',
+				text: '<i class="fa fa-refresh"></i> Refresh',						
+				className: 'btn-primary',
+				action: function(e, dt, node, config) {
+					dt.ajax.reload();
+				}	
 			}]
 		})
 		.on('draw.dt', function (e, settings, data) {
-			if (dtSummary.data().length > 0) 
-				dtSummary.button('print:name').enable();
+			dtSummary.data().length > 0 ? 
+				dtSummary.button('print:name').enable() :
+				dtSummary.button('print:name').disable();
 		});	
 		
 	// Load Toolbar Elements
@@ -521,7 +459,8 @@ function loadSummaryReport(params) {
 			dp2.datetimepicker();	
 			
 			// Set Default Date
-			dp1.data('DateTimePicker').date(moment(today).subtract(1, 'days'));
+			//dp1.data('DateTimePicker').date(moment(today).subtract(1, 'days'));
+			dp1.data('DateTimePicker').date(moment().startOf('month'));
 			dp2.data('DateTimePicker').date(moment(today));
 			
 			// Set Min & Max dates
@@ -536,7 +475,7 @@ function loadSummaryReport(params) {
 			btnToolSearch.on('click', function() {
 				var end = moment(new Date(inEndDt.val())).format(defString),
 					start = moment(new Date(inStartDt.val())).format(defString),
-					wsURL = params.ws + '&dateFrom=' + start + '&dateTo=' + end;							
+					wsURL = params.ws + 'dateFrom=' + start + '&dateTo=' + end;							
 				dtSummary.ajax.url(wsURL).load();	
 			});	
 		});
@@ -574,4 +513,35 @@ function loadSummaryReport(params) {
 			.css('font-weight', 'normal');							
 		//console.log($(win.document.body).html());
 	}
+}
+
+// Create DT for Picker
+function initDT_Picker(options) {
+	var dt,
+		dtCd = options.cd,
+		dtDs = options.ds,
+		dtWs = options.ws,
+		dtDomId = options.domId,
+		dtOd = (typeof options.od != 'undefined' ? options.od : false)
+		dtPl = (typeof options.pl != 'undefined' ? options.pl : DEFAULT_PAGE_LENGTH);	
+		
+		dt = $('#' + dtDomId)
+			.DataTable({						
+				pageLength: dtPl,
+				ordering: dtOd,
+				searching: true,
+				processing: true,
+				lengthChange: false,					
+				columns: dtCd,
+				dom: 'frtip',
+				ajax: { 
+					url: dtWs, 
+					dataSrc: function(json) {
+						var ds = dtDs.split('.'),
+							rec = json[ds[0]][ds[1]][ds[2]];
+						return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+					}  
+				}
+			});				
+		return dt;
 }

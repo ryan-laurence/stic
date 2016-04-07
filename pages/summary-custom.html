@@ -33,15 +33,19 @@
 <script>
 	$(function () {	
 		// DT options
-		var dtCols = CD_SUMMARY_CUSTOM_DOCKET,
-			dtAjx = { 'dataSrc': DEFAULT_DS_REPORTS, 
-				'url': WS_SUMMARY_CUSTOM_DOCKET };
+		var dtCols = CD_SUMMARY_CUSTOM_DOCKET,			
+			dtAjx = { 'url': WS_SUMMARY_CUSTOM_DOCKET, 
+				'dataSrc': function(json) {
+					var ds = DEFAULT_DS_REPORTS.split('.'),
+						rec = json[ds[0]][ds[1]][ds[2]];				
+					return ($.isArray(rec) === true ? rec :(rec !== '' ? [rec] : []));
+				}};
 				
 		// DT Initial
 		var dtSummary = $('#table-summary')
 			.DataTable({	
 				'dom': '<"toolbar">BRlfrtip',
-				'ordering': false,
+				'ordering': true,
 				'searching': false,
 				'processing': true,
 				'lengthChange': false,
@@ -52,73 +56,67 @@
 					order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 				},
 				buttons: [{
+					name: 'print',
 					extend: 'print',
-					enabled: false,
-					className: 'btn-primary',
-					title: $('#report option:selected').attr('data-report-title'),
-					message: 'From: 03/30/2016 3:40 PM <br />To: 03/30/2016 3:40 PM',		
+					enabled: false,					
+					autoPrint: true,
+					className: 'btn-primary',	
 					text: '<span class="glyphicon glyphicon-print" aria-hidden="true"></span> Print',
 					customize: dtPrintCustom
+				}, {						
+					name: 'reload',
+					text: '<i class="fa fa-refresh"></i> Refresh',						
+					className: 'btn-primary',
+					action: function(e, dt, node, config) {
+						dt.ajax.reload();
+					}	
 				}]
-			});			
+			})
+			.on('draw.dt', function (e, settings, data) {
+				if (dtSummary.data().length > 0) 
+					dtSummary.button('print:name').enable();
+				else
+					dtSummary.button('print:name').disable();
+			});	
 
 		$('div.toolbar').css('float', 'left');
 		$('div.dt-buttons').css('float', 'left');
 		$('div.dt-buttons').css('padding-left', '5px');
-		
+
 		$('div.toolbar').load('pages/summary-custom-filter.html', 
 			function(response, status, xhr) {		
-				// Change Filter & Search Field Values
-				$('#report').on('change', function() {
-					var ordering = [],
-						report = $(this).val();			
-					dtSummary.colReorder.reset();			
-					if (report == 'docket_no') {
-						ordering = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-					} else if (report == 'truck_code') {
-						ordering = [3, 0, 1, 2, 4, 5, 6, 7, 8, 9];
-					} else if (report == 'prod_id') {
-						ordering = [1, 0, 2, 3, 4, 5, 6, 7, 8, 9];
-					} else if (report == 'user_id') {
-						ordering = [4, 0, 1, 2, 3, 5, 6, 7, 8, 9];
-					} else if (report == 'cust_id') {
-						ordering = [2, 0, 1, 3, 4, 5, 6, 7, 8, 9];
-					} else {
-						ordering = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-					}			
-					loadValues(report);
-					dtSummary.colReorder.order(ordering);
+				var ordering = [];
+				ordering.push([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
+				ordering.push([3, 0, 1, 2, 4, 5, 6, 7, 8, 9]);
+				ordering.push([1, 0, 2, 3, 4, 5, 6, 7, 8, 9]);
+				ordering.push([4, 0, 1, 2, 3, 5, 6, 7, 8, 9]);
+				ordering.push([2, 0, 1, 3, 4, 5, 6, 7, 8, 9]);
+				
+				// Change ordering based on filter
+				$('#report-filter').on('change', function() {	
+					dtSummary.colReorder.reset();	
+					dtSummary.colReorder.order(ordering[$('#report-filter option:selected').attr('data-index')]);
 				});
-				
-				// Search Field
-				$('#filter').on('change', function() {
-					$('button[data-btn="btnSrchRpt"]').removeClass('disabled');
-					dtSummary.button(0).enable();
-				})
-				
+		
 				// Search Action
-				$('button[data-btn="btnSrchRpt"]').on('click', function() {
-					var postString = '{"' + $('#filter').attr('data-field') + '":"' + $('#filter').val() + '"}';			
-					BootstrapDialog.alert({
-						title: 'Call Web Service',
-						message: 'POST: ' + JSON.stringify($.parseJSON(postString)),
-						type: BootstrapDialog.TYPE_DANGER,
-						callback: function() {
-							BootstrapDialog.closeAll();									
-						}
-					});		
+				$('button[data-btn="btnSrchRpt"]').on('click', function() {						
+					if ($('#report-query').val() == '') {
+						dtSummary.ajax.url(WS_SUMMARY_CUSTOM_DOCKET).load();
+						dtSummary.colReorder.reset();
+						$('#report-filter').selectpicker('refresh');
+						$('#report-filter').selectpicker('val', 'docket_no');
+					} else {
+						dtSummary.ajax.url(WS_SUMMARY_CUSTOM_DOCKET + 
+							'fieldName=' + $('#report-filter').val() + 
+							'&fieldId=' + $('#report-query').val())
+						.load();
+					}
 				});
 			});
 		
-		// Reload Button
-		function dtBtnReload(e, dt, button, config) {
-			dt.ajax.reload();
-		}
-		
 		// Customize Print Preview
-		function dtPrintCustom(win) {
-			var title = $('#report option:selected').attr('data-report-title') 
-				+ ' - ' + $('#filter option:selected').val();		
+		function dtPrintCustom(win) {	
+			var title = 'Weighing Record';
 			$(win.document.body)
 				.css('background', 'transparent')
 				.css('font-weight', 'normal')
@@ -145,38 +143,6 @@
 				.css('padding-top', '10px')
 				.css('padding-bottom', '10px')
 				.css('font-weight', 'normal');							
-			//console.log($(win.document.body).html());
-		}
-		
-		// Pre Load sample values
-		function loadValues(type) {
-			var options = [],
-				loadThis = [],
-				users = ['admin', 'weigher', 'company', 'guest'],
-				dockets = ['000001', '000002', '000003', '000004', '000005', '000006', '000007'],
-				trucks = ['AAA 1111', 'AAA 2222', 'AAA 3333', 'BBB 1234', 'BBB 4567', 'CCC 1234', 'DDD 1234'],
-				products = ['Product 01', 'Product 02', 'Product 03', 'Product 04', 'Product 05', 'Product 06', 'Product 07'],				
-				customers = ['Customer 01', 'Customer 02', 'Customer 03', 'Customer 04', 'Customer 05', 'Customer 06', 'Customer 07'];				
-			if (type == 'docket_no') {
-				loadThis = dockets;
-			} else if (type == 'truck_code') {
-				loadThis = trucks;
-			} else if (type == 'prod_id') {
-				loadThis = products;
-			} else if (type == 'user_id') {
-				loadThis = users;
-			} else if (type == 'cust_id') {
-				loadThis = customers;
-			} else {
-				loadThis = dockets;
-			}		
-			$.each(loadThis, function(idx, val) {
-				options.push('<option value="' + val + '">' + val + '</option>');
-			});			
-			$('#filter').empty();			
-			$('#filter').append(options.join(''));
-			$('#filter').selectpicker('refresh');
-			$('#filter').attr('data-field', type);
 		}
 	});
 </script>

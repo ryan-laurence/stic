@@ -5,6 +5,7 @@
 		<link rel="stylesheet" href="css/bootstrap.css" />
 		<link rel="stylesheet" href="css/bootstrap-login.css" />
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/bootstrap-dialog.css" />	
 	</head>
 	<body class="login-page">
 		<div class="container">		
@@ -42,6 +43,7 @@
 		<script src="js/jquery/jquery.min.js"></script>
 		<script src="js/jquery/jquery.widget.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>
 		<script type="text/javascript" src="js/stic-constants.js"></script>
 		<script type="text/javascript" src="js/stic-functions.js"></script>
 		
@@ -59,11 +61,14 @@
 				$("#loginbtn").click(function() {
 					var username = $('#username').val();
 					var password = $('#password').val();
-					if (username == '' || password == '') {						
+					if (username == '' || password == '') {	
 						$('#username').val('');
 						$('#password').val('');
-						alert('Username or Password must not be empty!');
-						window.location = DEFAULT_ROOT;
+						BootstrapDialog.alert({
+							title: MSG_ERROR_TITLE,
+							message: 'Username or Password must not be empty!',
+							type: BootstrapDialog.TYPE_DANGER
+						});
 					} else {
 						$.ajax({
 							type: 'POST',
@@ -82,8 +87,11 @@
 								if (sData === 'FAILED') {									
 									$('#username').val('');
 									$('#password').val('');
-									alert('Invalid Credentials! Please try again!');
-									window.location = DEFAULT_ROOT;
+									BootstrapDialog.alert({
+										title: MSG_ERROR_TITLE,
+										message: 'Invalid Credentials! Please try again!',
+										type: BootstrapDialog.TYPE_DANGER
+									});
 								} else {
 									//alert(oXml);
 								};

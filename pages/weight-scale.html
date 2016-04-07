@@ -1,0 +1,874 @@
+<script type="text/javascript" src="js/stic-weight-scale.js"></script>
+<script>
+	$(function() { 			
+		// Digital Clock
+		$('#clock-timer').MyDigitClock({
+			bAmPm: true,
+			fontSize: 22, 			
+			fontColor: '#FFF', 
+			background: '#000',
+			fontWeight: 'normal', 
+			bShowHeartBeat: false,
+			fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif"
+		}); 
+	
+		/**********************************************************************************************************************************************/
+	
+		// Initialize Data Tables
+		var dtTDP = $('#table-truck-data').DataTable();
+		var dtPDP = $('#table-product-data').DataTable();
+		var dtCDP = $('#table-customer-data').DataTable();
+		var dtSDP = $('#table-supplier-data').DataTable();
+		var dtDDP = $('#table-destination-data').DataTable();
+		var dtADDP = $('#table-destination-data-all').DataTable();
+		
+		/**********************************************************************************************************************************************/
+		
+		// Truck > On Change Event
+		$('#truck_code').on('change', function() { 
+			var params = 'truckCode=' + $(this).val(); 
+			var result = $.post(WS_CHECK_TRUCK_CODE_LIST, params);			
+			result.done(function(data) {
+				toggleWeightScaleFields({ 
+					status: data.response.type 
+				});
+			});			
+			result.fail(function() {
+				BootstrapDialog.alert({
+					title: MSG_WS_ERROR_TITLE,
+					message: MSG_WS_ERROR_INFO,
+					type: BootstrapDialog.TYPE_DANGER,
+					callback: function() {
+						BootstrapDialog.closeAll();									
+					}
+				});
+			});			
+		});
+		
+		// Truck > Open Picker
+		$('#search-truck-data').on('click', function() {
+			dtTDP.destroy();
+			dtTDP = initDT_Picker({
+				od: true,
+				domId: 'table-truck-data',				
+				ds: DEFAULT_DATASOURCE,
+				cd: CD_CHECK_TRUCK_CODE_LIST,
+				ws: WS_CHECK_TRUCK_CODE_LIST
+			});
+			$('#truck-data-modal').modal('show');
+		});		
+		
+		// Truck > Picker > Row Click Event
+		$('#table-truck-data tbody').on( 'click', 'tr', function () {
+			if (dtTDP.row(this).data().truck_id != '') {
+				_fnTableRowSelection(dtTDP, this, ['truck-data-modal #select-item']);
+			}
+		});
+		
+		// Truck > Picker > Select Item
+		$('#truck-data-modal #select-item').on('click', function() {
+			var selected_row = dtTDP.row('.selected');
+			toggleWeightScaleFields({ status: 'SECOND_WEIGHT_IN' });
+			$('#wr_id').val(selected_row.data().wr_id);
+			$('#truck_code').val(selected_row.data().truck_code);
+			$('#weight_unit').text(selected_row.data().weight_unit);
+			$('#weight_in_reading').val(selected_row.data().weight_in_reading);
+			$('#weight_in_date').val(selected_row.data().date_in + ' ' + selected_row.data().time_in);
+			$('#truck-data-modal').modal('hide');			
+		});
+		
+		// Truck > New Item
+		$('#new-truck-data').on('click', function() {
+			showNewModalForm({
+				root_node: 'truckInfo',
+				data_type: 'Truck Data',
+				status: 'FIRST_WEIGHT_IN',
+				form_id: '#dataTruckForm',
+				frm_html: FORM_TRUCK_DATA,
+				ws_insert: WS_TRUCK_INSERT
+			});
+		});
+
+		/**********************************************************************************************************************************************/
+		
+		// Customer > Open Picker
+		$('#search-customer-data').on('click', function() {
+			if ($('#truck_code').val() != '') {
+				dtCDP.destroy();
+				dtCDP = initDT_Picker({
+					domId: 'table-customer-data',
+					ds: DS_CUSTOMER_LIST,
+					cd: CD_CUSTOMER_LIST,
+					ws: WS_CUSTOMER_LIST
+				});
+				$('#customer-data-modal').modal('show');
+			} else {
+				BootstrapDialog.alert({
+					title: MSG_WEIGHT_INPUT_ERROR_TITLE,
+					message: MSG_SEARCH_CUSTOMER_ERROR_1,
+					type: BootstrapDialog.TYPE_DANGER,
+					callback: function() {
+						BootstrapDialog.closeAll();									
+					}
+				});
+			}			
+		});			
+		
+		// Customer > Picker > Row Click Event
+		$('#table-customer-data tbody').on( 'click', 'tr', function () {
+			if (dtCDP.row(this).data().cust_id != '') {
+				_fnTableRowSelection(dtCDP, this, ['customer-data-modal #select-item']);
+			}
+		});
+		
+		// Customer > Picker > Select Item
+		$('#customer-data-modal #select-item').on('click', function() {
+			var selected_row = dtCDP.row('.selected');
+			$('#cust_id').val(selected_row.data().cust_id);
+			$('#cust_code').val(selected_row.data().cust_code);
+			$('#cust_name').val(selected_row.data().cust_name);
+			$('#customer-data-modal').modal('hide');	
+		});
+		
+		// Customer > New Item
+		$('#new-customer-data').on('click', function() {
+			showNewModalForm({
+				root_node: 'custInfo',
+				data_type: 'Customer Data',
+				status: 'SECOND_WEIGHT_IN',
+				form_id: '#dataCustomerForm',
+				frm_html: FORM_CUSTOMER_DATA,
+				ws_insert: WS_CUSTOMER_INSERT
+			});
+		});
+		
+		/**********************************************************************************************************************************************/
+		
+		// Destination > Open Picker
+		$('#search-destination-data').on('click', function() {
+			if ($('#cust_code').val() != '') {
+				dtDDP.destroy();
+				dtDDP = initDT_Picker({
+					domId: 'table-destination-data',
+					ds: DS_CUSTDEST_LIST,
+					cd: CD_CUSTDEST_LIST,
+					ws: WS_CUSTDEST_LIST + 'cust_id=' +  $('#cust_id').val()
+				});
+				$('#destination-data-modal').modal('show');
+			} else {
+				BootstrapDialog.alert({
+					title: MSG_WEIGHT_INPUT_ERROR_TITLE,
+					message: MSG_SEARCH_DESTINATION_ERROR_1,
+					type: BootstrapDialog.TYPE_DANGER,
+					callback: function() {
+						BootstrapDialog.closeAll();									
+					}
+				});
+			}			
+		});		
+
+		// Destination > Picker > Row Click Event
+		$('#table-destination-data tbody').on( 'click', 'tr', function () {
+			if (dtDDP.row(this).data().dest_id != '') {
+				_fnTableRowSelection(dtDDP, this, ['destination-data-modal #select-item']);
+			}
+		});
+		
+		// Destination > Picker > Select Item
+		$('#destination-data-modal #select-item').on('click', function() {
+			var selected_row = dtDDP.row('.selected');
+			$('#dest_id').val(selected_row.data().dest_id);
+			$('#dest_zipcode').val(selected_row.data().dest_zipcode);
+			$('#dest_location').val(selected_row.data().dest_name + ', ' + selected_row.data().dest_location);
+			$('#destination-data-modal').modal('hide');			
+		});
+		
+		// Destination > New Item
+		$('#new-destination-data').on('click', function() {
+			if ($('#cust_code').val() != '') {
+				dtADDP.destroy();
+				dtADDP = initDT_Picker({
+					domId: 'table-destination-data-all',
+					ds: DS_DESTINATION_LIST,
+					cd: CD_DESTINATION_LIST,
+					ws: WS_DESTINATION_LIST + $('#cust_id').val()
+				});
+				$('#destination-data-all-modal').modal('show');			
+			} else {
+				BootstrapDialog.alert({
+					title: MSG_WEIGHT_INPUT_ERROR_TITLE,
+					message: MSG_SEARCH_DESTINATION_ERROR_1,
+					type: BootstrapDialog.TYPE_DANGER,
+					callback: function() {
+						BootstrapDialog.closeAll();									
+					}
+				});
+			}			
+		});			
+		
+		// Destination > New Item > Row Click Event
+		$('#table-destination-data-all tbody').on( 'click', 'tr', function () {
+			if (dtADDP.row(this).data().dest_id != '') {
+				_fnTableRowSelection(dtADDP, this, ['destination-data-all-modal #select-item']);
+			}
+		});
+		
+		// Destination > New Item > Select Item
+		$('#destination-data-all-modal #select-item').on('click', function() {
+			var cust_id = $('#cust_id').val(),
+				selected_row = dtADDP.row('.selected'),
+				dest_id = selected_row.data().dest_id,
+				post_data = 'custDestInfo={ "cust_id": ' + cust_id + ', "dest_id": ' + dest_id + '}';
+			$('#dest_id').val(dest_id);
+			$('#dest_zipcode').val(selected_row.data().dest_zipcode);
+			$('#dest_location').val(selected_row.data().dest_name + ', ' + selected_row.data().dest_location);
+			$('#destination-data-all-modal').modal('hide');
+			$.post(WS_CUSTDEST_INSERT, post_data, 
+				function(data, status) {
+					console.log(data.response.type);
+					if (data.response.type == 'SUCCESS') {
+						BootstrapDialog.closeAll();	
+						BootstrapDialog.alert({
+							title: MSG_ADD_REC_TITLE,
+							message: MSG_ADD_REC_INFO,	
+							type: BootstrapDialog.TYPE_PRIMARY,
+							callback: function(result) {
+								BootstrapDialog.closeAll();
+							}
+						});		
+					} else {
+						BootstrapDialog.alert({
+							title: MSG_WS_ERROR_TITLE,
+							message: MSG_WS_ERROR_INFO,
+							type: BootstrapDialog.TYPE_DANGER,
+							callback: function() {
+								BootstrapDialog.closeAll();									
+							}
+						});
+					}
+				});			
+		});
+
+		/**********************************************************************************************************************************************/
+		
+		// Product > Open Picker
+		$('#search-product-data').on('click', function() {
+			if ($('#cust_code').val() != '') {
+				dtPDP.destroy();
+				dtPDP = initDT_Picker({
+					domId: 'table-product-data',
+					ds: DS_CUSTPROD_LIST,
+					cd: CD_CUSTPROD_LIST,
+					ws: WS_CUSTPROD_LIST + 'cust_id=' +  $('#cust_id').val()
+				});
+				$('#product-data-modal').modal('show');
+			} else {
+				BootstrapDialog.alert({
+					title: MSG_WEIGHT_INPUT_ERROR_TITLE,
+					message: MSG_SEARCH_PRODUCT_ERROR_1,
+					type: BootstrapDialog.TYPE_DANGER,
+					callback: function() {
+						BootstrapDialog.closeAll();									
+					}
+				});
+			}			
+		});			
+		
+		// Product > Picker > Row Click Event
+		$('#table-product-data tbody').on( 'click', 'tr', function () {
+			if (dtPDP.row(this).data().prod_id != '') {
+				_fnTableRowSelection(dtPDP, this, ['product-data-modal #select-item']);
+			}
+		});
+		
+		// Product > Picker > Select Item
+		$('#product-data-modal #select-item').on('click', function() {
+			var selected_row = dtPDP.row('.selected');
+			$('#prod_id').val(selected_row.data().prod_id);
+			$('#prod_code').val(selected_row.data().prod_code);
+			$('#prod_name').val(selected_row.data().prod_name);
+			$('#unit_price').val(selected_row.data().unit_price);
+			$('#product-data-modal').modal('hide');			
+		});
+		
+		// Product > New Item
+		$('#new-product-data').on('click', function() {
+			showNewModalForm({
+				root_node: 'prodInfo',
+				data_type: 'Product Data',
+				status: 'SECOND_WEIGHT_IN',
+				form_id: '#dataProductForm',
+				frm_html: FORM_CUST_PRODUCT_DATA,
+				ws_insert: WS_CUST_PRODUCT_INSERT,
+				data: { cust_id: $('#cust_id').val() }
+			});
+		});
+		
+		/**********************************************************************************************************************************************/
+		
+		// Supplier > Open Picker
+		$('#search-supplier-data').on('click', function() {
+			if ($('#truck_code').val() != '') {
+				dtSDP.destroy();
+				dtSDP = initDT_Picker({
+					domId: 'table-supplier-data',
+					ds: DS_SUPPLIER_LIST,
+					cd: CD_SUPPLIER_LIST,
+					ws: WS_SUPPLIER_LIST
+				});
+				$('#supplier-data-modal').modal('show');
+			} else {
+				BootstrapDialog.alert({
+					title: MSG_WEIGHT_INPUT_ERROR_TITLE,
+					message: MSG_SEARCH_CUSTOMER_ERROR_1,
+					type: BootstrapDialog.TYPE_DANGER,
+					callback: function() {
+						BootstrapDialog.closeAll();									
+					}
+				});
+			}			
+		});		
+
+		// Supplier > Picker > Row Click Event
+		$('#table-supplier-data tbody').on( 'click', 'tr', function () {
+			if (dtSDP.row(this).data().supp_id != '') {
+				_fnTableRowSelection(dtSDP, this, ['supplier-data-modal #select-item']);
+			}
+		});		
+		
+		// Supplier > Picker > Select Item
+		$('#supplier-data-modal #select-item').on('click', function() {
+			var selected_row = dtSDP.row('.selected');
+			$('#supp_id').val(selected_row.data().supp_id);
+			$('#supp_code').val(selected_row.data().supp_code);
+			$('#supp_name').val(selected_row.data().supp_name);
+			$('#supplier-data-modal').modal('hide');			
+		});
+		
+		// Supplier > New Item
+		$('#new-supplier-data').on('click', function() {
+			showNewModalForm({
+				root_node: 'suppInfo',
+				data_type: 'Supplier Data',
+				status: 'SECOND_WEIGHT_IN',
+				form_id: '#dataSupplierForm',
+				frm_html: FORM_SUPPLIER_DATA,
+				ws_insert: WS_SUPPLIER_INSERT
+			});
+		});
+		
+		/**********************************************************************************************************************************************/
+		
+		// First Weighing Button > Show Confirm Modal
+		$('#first-weighing').on('click', function() {
+			BootstrapDialog.confirm({
+				title: MSG_TITLE_CONFIRM_FIRST_WEIGHT,
+				message: MSG_FIRST_WEIGHING_CONFIRM,
+				type: BootstrapDialog.TYPE_DANGER,
+				callback: function(result) {
+					if (result) {
+						var params = 'weightReadingInfo={' 
+							+ '"weight_count":"1", ' 
+							+ '"weight_status":"PENDING", ' 
+							+ '"user_id": ' + readCookie('userid') + ', '
+							+ '"truck_code":"' + $('#truck_code').val() + '", ' 
+							+ '"weight_unit":"' + $('#weight_unit').text() + '", ' 
+							+ '"weight_in_reading":"' + $('#weight_in_reading').val() + '", ' 
+							+ '"weight_in_date":"' + $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()) + '", ' 
+							+ '"date_modified":"' + $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()) + '"}';
+						console.log('First Weight In: ' + params);
+						var result = $.post(WS_FIRST_WEIGHING_INSERT, params);	
+						result.done(function(data) {
+							BootstrapDialog.alert({
+								title: MSG_INFO_TITLE,
+								message: MSG_FIRST_WEIGHING_SUCCESS,
+								type: BootstrapDialog.TYPE_PRIMARY,
+								callback: function() {
+									BootstrapDialog.closeAll();									
+								}
+							});
+							toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+						});			
+						result.fail(function() {
+							BootstrapDialog.alert({
+								title: MSG_WS_ERROR_TITLE,
+								message: MSG_WS_ERROR_INFO,
+								type: BootstrapDialog.TYPE_DANGER,
+								callback: function() {
+									BootstrapDialog.closeAll();									
+								}
+							});
+						});	
+					}
+				}
+			});
+		});
+		
+		/**********************************************************************************************************************************************/
+		
+		// Second Weighing Button > Show Confirm Modal
+		$('#second-weighing').on('click', function() {
+			var errorMessage = '';
+			var inputFields = [
+				{ label: 'inputTruckCode', name: 'Truck Code', field: 'truck_code' },
+				{ label: 'inputCustomerCode', name: 'Customer Code', field: 'cust_id' },
+				{ label: 'inputDestinationCode', name: 'Destination Code', field: 'dest_id' },
+				{ label: 'inputProductCode', name: 'Product Code', field: 'prod_id' },
+				{ label: 'inputSupplierCode', name: 'Supplier Code', field: 'supp_id' }
+			];
+			
+			$.each(inputFields, function(index, input) {
+				if ($('#' + input.field).val() == '') {
+					errorMessage = errorMessage + '<li>' + input.name + '</li>';
+					$('label[for="' + input.label + '"]').css('color', 'red');
+				}
+			});	
+
+			if (errorMessage != '') {
+				var message = '<ul>' + errorMessage + '</ul>';
+				BootstrapDialog.alert({
+					title: MSG_WEIGHT_INPUT_ERROR_TITLE,
+					message: 'The following fields are required. Please make sure all details are provided.<div>&nbsp;</div>' + message,
+					type: BootstrapDialog.TYPE_DANGER,
+					callback: function() {
+						BootstrapDialog.closeAll();									
+					}
+				});
+			} else {
+				BootstrapDialog.confirm({
+					title: MSG_TITLE_CONFIRM_SECOND_WEIGHT,
+					message: MSG_SECOND_WEIGHING_CONFIRM,
+					type: BootstrapDialog.TYPE_DANGER,
+					callback: function(result) {
+						if (result) {
+							var params = 'weightReadingInfo={' 
+								+ '"wr_id": "' + $('#wr_id').val() + '", '
+								+ '"truck_code": "' + $('#truck_code').val() + '", '
+								+ '"cust_id": ' + $('#cust_id').val() + ', '
+								+ '"dest_id": ' + $('#dest_id').val() + ', '
+								+ '"prod_id": ' + $('#prod_id').val() + ', '
+								+ '"supp_id": ' + $('#supp_id').val() + ', '
+								+ '"user_id": ' + readCookie('userid') + ', '
+								+ '"unit_price": ' + $('#unit_price').val() + ', '
+								+ '"total_price": ' + $('#total_price').val() + ', '
+								+ '"remarks": "' + $('#remarks').val() + '", '
+								+ '"weight_in_reading": ' + $('#weight_in_reading').val() + ', '
+								+ '"weight_out_reading": ' + $('#weight_out_reading').val() + ', '
+								+ '"compensation": ' + $('#compensation').val() + ', '
+								+ '"net_weight": ' + $('#net_weight').val() + ', '
+								+ '"weight_unit": "' + $('#weight_unit').text() + '", '
+								+ '"weight_in_date": "' + $.formatDateTime('yy-mm-dd hh:ii:ss', new Date($('#weight_in_date').val())) + '", '
+								+ '"weight_out_date": "' + $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()) + '", '
+								+ '"weight_count": 2, '
+								+ '"weight_status": "DONE"}';
+							console.log('2nd Weight In: ' + params);
+							var result = $.post(WS_SECOND_WEIGHING_UPDATE, params);	
+							result.done(function(data) {
+								BootstrapDialog.alert({
+									title: MSG_INFO_TITLE,
+									message: 'Second Weighing completed.',
+									type: BootstrapDialog.TYPE_PRIMARY,
+									callback: function() {
+										BootstrapDialog.closeAll();									
+									}
+								});
+								toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+							});			
+							result.fail(function() {
+								BootstrapDialog.alert({
+									title: MSG_WS_ERROR_TITLE,
+									message: MSG_WS_ERROR_INFO,
+									type: BootstrapDialog.TYPE_DANGER,
+									callback: function() {
+										BootstrapDialog.closeAll();									
+									}
+								});
+							});
+						}
+					}
+				});		
+			}
+		});
+		
+		/**********************************************************************************************************************************************/
+		
+		// Cancel Weighing Button Click Event
+		$('#cancel-weighing').on('click', function() {
+			toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+		});
+		
+		/**********************************************************************************************************************************************/
+		
+		// Reprint Docket Button Click Event
+		$('#reprint-docket').on('click', function() {
+			BootstrapDialog.alert({
+				title: MSG_INFO_TITLE,
+				message: 'Call Print Docket API',
+				type: BootstrapDialog.TYPE_DANGER
+			});
+		});
+	});
+	/*
+	var scaleReaderUrl = '/scaletech/services/ScaleReaderInfoServices/readScaleReading?response=application/json';
+	$(document).ready(function() {
+		// Read Reading Scale.
+		var intervalId = setInterval(function() {
+			$.ajax({
+				//url: 'data/scale-reader.json'
+				url: scaleReaderUrl
+				,type: 'GET'
+				,dataType: 'json'
+				,success: function(data,tx) {
+					var netWg = data['response']['readData-list']['readdata']['read-weight'];
+					var st = data['response']['readData-list']['readdata']['read-status1'];
+					var gs = data['response']['readData-list']['readdata']['read-status2'];
+					var unit = data['response']['readData-list']['readdata']['read-unitType'];
+					
+					console.log(data['response']['readData-list']['readdata']['read-weight']);
+					$('#weighing-scale').text(netWg);
+					$('#unit-type').text(unit);
+					$('#read-status1').text(st);
+				}
+			});
+
+		}, 1000); // every 1sec
+		console.log('intervalId: '+ intervalId);
+		
+		$('#cancel-weighing').on('click', function() {
+			clearInterval(intervalId);
+			window.location.replace("http://127.0.0.1:8080/scaletech/");
+		});
+	});
+	*/
+</script>
+<style>
+	.no-padding-left {
+		padding-left: 0px !important;
+	}
+</style>
+<div class="panel panel-primary" style="width: 990px !important; margin-left: auto; margin-right: auto">
+	<div class="panel-heading" style="text-align: left">
+		<i class="fa fa-balance-scale"></i> Weighing
+	</div>
+	<div class="panel-body">
+		<div class="form-horizontal">
+			<div class="form-group" style="margin-bottom: 0px;">
+				<div class="col-lg-4 no-padding-left">
+					<div id="clock-timer" style="padding: 8px; width: 150px; text-align: center"></div>
+				</div>
+				<div class="col-lg-8" style="margin-bottom: 0px;">
+					<div id="weighing-scale" style="border:1px solid #000; width:400px; text-align:right; font-size:62px; padding:20px 40px 20px 0px; background:#222; color:#fff; float:left">
+						+  0.00
+					</div>
+					<div style="float:left; margin-top:20px; margin-left:10px; font-weight:bold;">
+						<h1><span id="weight_unit">kg</span><small id="read-status1" style="margin-left: 10px">stable</small></h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div style="margin: 15px 0px 15px 0px; border-top: 1px solid #CCC"></div>
+		<div class="container well no-margin-bottom no-margin-right" style="width: auto; padding: 10px">
+			<div class="form-horizontal no-margin-bottom" style="width: 750px; float: left;" id="weight-scale-form">
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Truck</label>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-default" id="new-truck-data"><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-default" id="search-truck-data"><i class="fa fa-search"></i></button>
+					</div>
+					<div class="btn-group" role="group" style="width: 150px">
+						<input type="text" class="form-control" id="truck_code" data-type="varchar" data-stage="first" disabled>
+					</div>
+				</div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Customer</label>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-default disabled" id="new-customer-data"><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-default disabled" id="search-customer-data"><i class="fa fa-search"></i></button>
+					</div>
+					<div class="btn-group" role="group" style="width: 150px">
+						<input type="text" class="form-control" id="cust_code" data-type="varchar" data-stage="second" disabled>
+					</div>
+					<div class="btn-group" role="group" style="width: 365px">
+						<input type="text" class="form-control" id="cust_name" data-type="varchar" data-stage="second" disabled>
+					</div>
+				</div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Destination</label>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-default disabled" id="new-destination-data"><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-default disabled" id="search-destination-data"><i class="fa fa-search"></i></button>
+					</div>
+					<div class="btn-group" role="group" style="width: 150px">
+						<input type="text" class="form-control" id="dest_zipcode" data-type="varchar" data-stage="second" disabled>
+					</div>
+					<div class="btn-group" role="group" style="width: 365px">
+						<input type="text" class="form-control" id="dest_location" data-type="varchar" data-stage="second" disabled>
+					</div>
+				</div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Product</label>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-default disabled" id="new-product-data"><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-default disabled" id="search-product-data"><i class="fa fa-search"></i></button>
+					</div>
+					<div class="btn-group" role="group" style="width: 150px">
+						<input type="text" class="form-control" id="prod_code" data-type="varchar" data-stage="second" disabled>
+					</div>
+					<div class="btn-group" role="group" style="width: 365px">
+						<input type="text" class="form-control" id="prod_name" data-type="varchar" data-stage="second" disabled>
+					</div>
+				</div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Supplier</label>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-default disabled" id="new-supplier-data"><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-default disabled" id="search-supplier-data"><i class="fa fa-search"></i></button>
+					</div>
+					<div class="btn-group" role="group" style="width: 150px">
+						<input type="text" class="form-control" id="supp_code" data-type="varchar" data-stage="second" disabled>
+					</div>
+					<div class="btn-group" role="group" style="width: 365px">
+						<input type="text" class="form-control" id="supp_name" data-type="varchar" data-stage="second" disabled>
+					</div>
+				</div>
+				<div style="margin: 10px 15px 15px 0px; border-top: 1px solid #CCC"></div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">User</label>
+					</div>
+					<div class="btn-group" role="group">
+						<input type="text" class="form-control" id="user_name" style="width: 120px" value="admin" data-stage="first second" disabled>
+					</div>
+					<div class="btn-group" role="group">
+						<label for="inputUnitPrice" class="col-sm-2 control-label" style="width:100px; text-align:right">Unit Price</label>
+					</div>
+					<div class="btn-group" role="group">
+						<input type="text" class="form-control" id="unit_price" style="width: 125px" value="0.00" data-type="float" data-stage="second" data-action="enable" disabled>
+					</div>
+					<div class="btn-group" role="group">
+						<label for="inputTotalPrice" class="col-sm-2 control-label" style="width:110px; text-align:right">Total Price</label>
+					</div>
+					<div class="btn-group" role="group">
+						<input type="text" class="form-control" id="total_price" style="width: 125px" value="0.00" data-type="float" data-stage="second" disabled>
+					</div>
+				</div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Remarks</label>
+					</div>
+					<div class="btn-group" role="group" style="width: 600px">
+						<input type="text" class="form-control" id="remarks" placeholder="Enter Remarks here..." data-type="varchar" data-stage="second" data-action="enable" disabled>
+					</div>
+				</div>
+				<div style="margin: 10px 15px 8px 0px; border-top: 1px solid #CCC"></div>
+				<div class="form-group no-margin-bottom">
+					<div class="col-sm-2 no-padding-left" style="margin-left: 20px; width: 175px">
+						<label for="inputTruckInWeight" class="control-label">Truck In Weight</label>
+						<input type="text" class="form-control" id="weight_in_reading" value="0.00" data-type="float" data-stage="first second" disabled>
+					</div>
+					<div class="col-sm-2 no-padding-left" style="width: 175px">
+						<label for="inputTruckOutWeight" class="control-label">Truck Out Weight</label>
+						<input type="text" class="form-control" id="weight_out_reading" value="0.00" data-type="float" data-stage="second" disabled>
+					</div>
+					<div class="col-sm-2 no-padding-left" style="width: 175px">
+						<label for="inputTruckOutWeight" class="control-label">Compensation(%)</label>
+						<input type="text" class="form-control col-sm-1" id="compensation" value="0.00" data-type="float" data-stage="second" data-action="enable" disabled>
+					</div>
+					<div class="col-sm-2 no-padding-left" style="width: 175px">
+						<label for="inputNetWeight" class="control-label">Net Weight</label>
+						<input type="text" class="form-control" id="net_weight" value="0.00" data-type="float" data-stage="second" disabled>
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal no-margin-bottom" style="width: 180px; float: right;">
+				<button id="first-weighing" class="btn btn-primary btn-lg disabled" data-type="button"><i class="fa fa-angle-right fa-3x"></i><p>First Weighing</p></button>
+				<button id="second-weighing" class="btn btn-primary btn-lg disabled" data-type="button"><i class="fa fa-angle-double-right fa-3x"></i><p>Second Weighing</p></button>
+				<button id="cancel-weighing" class="btn btn-primary btn-lg disabled" data-type="button"><i class="fa fa-ban fa-3x"></i><p>Cancel</p></button>
+				<button id="reprint-docket" class="btn btn-primary btn-lg disabled no-margin-bottom" data-type="button"><i class="glyphicon glyphicon-print fa-3x"></i><p>Re-print Docket</p></button>
+			</div>
+		</div>
+	</div>
+</div>
+<input type="hidden" data-stage="second" id="wr_id">
+<input type="hidden" data-stage="second" id="cust_id">
+<input type="hidden" data-stage="second" id="dest_id">
+<input type="hidden" data-stage="second" id="prod_id">
+<input type="hidden" data-stage="second" id="supp_id">
+<input type="hidden" data-stage="second" id="weight_in_date">
+<div class="modal fade bootstrap-dialog type-primary" id="truck-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-truck"></i> Select Truck Data
+			</div>
+			<div class="modal-body">
+				<table class="display compact" id="table-truck-data" style="width: 100%">
+					<thead>
+						<tr>
+							<th class="text-left">ID</th>
+							<th class="text-left">Truck Code</th>
+							<th class="text-left">Date In</th>
+							<th class="text-left">Time In</th>
+							<th class="text-left">Weight In</th>
+							<th class="text-left">Unit</th>
+							<th class="text-left">User</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">  
+				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="customer-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-users"></i> Select Customer Data
+			</div>
+			<div class="modal-body">
+				<table class="display compact" id="table-customer-data" style="width: 100%">
+					<thead>
+						<tr>
+							<th class="text-left">Customer ID</th>
+							<th class="text-left">Customer Code</th>
+							<th class="text-left">Customer Name</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="destination-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-map-marker"></i> Select Destination Data
+			</div>
+			<div class="modal-body">
+				<table class="display compact" id="table-destination-data" style="width: 100%">
+					<thead>
+						<tr>
+							<th class="text-left">CD ID</th>
+							<th class="text-left">Customer ID</th>
+							<th class="text-left">Destination ID</th>
+							<th class="text-left">Zip Code</th>
+							<th class="text-left">Name</th>
+							<th class="text-left">Location</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="destination-data-all-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-map-marker"></i> New Destination Data
+			</div>
+			<div class="modal-body">
+				<table class="display compact" id="table-destination-data-all" style="width: 100%">
+					<thead>
+						<tr>
+							<th class="text-left">Destination ID</th>
+							<th class="text-left">Zip Code</th>
+							<th class="text-left">Name</th>
+							<th class="text-left">Location</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-floppy-o"></i> Save</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="product-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-product-hunt"></i> Select Product Data
+			</div>
+			<div class="modal-body">
+				<table class="display compact" id="table-product-data" style="width: 100%">
+					<thead>
+						<tr>
+							<th class="text-left">CP ID</th>
+							<th class="text-left">Customer ID</th>
+							<th class="text-left">Product ID</th>
+							<th class="text-left">Product Code</th>
+							<th class="text-left">Product Name</th>
+							<th class="text-left">Unit Price</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="supplier-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-users"></i> Select Supplier Data
+			</div>
+			<div class="modal-body">
+				<table class="display compact" id="table-supplier-data" style="width: 100%">
+					<thead>
+						<tr>
+							<th class="text-left">Supplier ID</th>
+							<th class="text-left">Supplier Code</th>
+							<th class="text-left">Supplier Name</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>

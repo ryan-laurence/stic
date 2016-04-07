@@ -1,0 +1,37 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-pencil-square-o"></i> Category Data
+	</div>
+	<div class="panel-body">
+		<table class="display compact" id="table-data">
+			<thead>
+				<tr>
+					<th class="text-left">Category ID</th>
+					<th class="text-left">Category Code</th>
+					<th class="text-left">Category Name</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript" src="js/stic-data.js"></script>
+<script>
+	$(function() {
+		loadEditData({
+			pk_id: 'cat_id',
+			root_node: 'cateInfo',
+			report_title: 'Category Data',
+			form_id: '#dataCategoryForm',
+			frm_html: FORM_CATEGORY_DATA,
+			dt_btns_all: true,
+			dt_cd: CD_CATEGORY_LIST,
+			dt_ds: DS_CATEGORY_LIST,
+			ws_list: WS_CATEGORY_LIST,
+			ws_insert: WS_CATEGORY_INSERT,
+			ws_update: WS_CATEGORY_UPDATE,
+			ws_delete: WS_CATEGORY_DELETE
+		});
+	});
+</script>

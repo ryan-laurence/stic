@@ -53,19 +53,19 @@
 		var dt_docket_fields = $('#table-data').DataTable({	
 			'info': true,
 			'paging': true,
-			'ordering': false,
+			'ordering': true,
 			'searching': false,
 			'lengthChange': false,
 			'columns': cd_fields,
 			'ajax': { 
-				'url': WS_LIST_DOCKET_FIELDS + '&available=A1', 
+				'url': WS_LIST_DOCKET_FIELDS + 'available=A1', 
 				'dataSrc': DEFAULT_DS_REPORTS 
 			}			
 		});
 		
 		// Select Docket Type
 		$('#select-docket-type').on('change', function() {		
-			dt_docket_fields.ajax.url(WS_LIST_DOCKET_FIELDS + '&available=' + $(this).val()).load();
+			dt_docket_fields.ajax.url(WS_LIST_DOCKET_FIELDS + 'available=' + $(this).val()).load();
 		});
 	});
 </script>

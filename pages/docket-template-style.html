@@ -36,12 +36,9 @@
 			</div>
 			<div class="btn-group pull-left" role="group">
 				<button type="button" class="btn btn-primary" id="tools-new-style" data-btn="btnNewStyle"><i class="fa fa-plus" aria-hidden="true"></i> New</button>
-			</div>
-			<div class="btn-group pull-left" role="group">
-				<button type="button" class="btn btn-success disabled" id="tools-edit-style" data-btn="btnEditStyle"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
-			</div>
-			<div class="btn-group pull-left" role="group">
-				<button type="button" class="btn btn-danger disabled" id="tools-delete-style" data-btn="btnDelStyle"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+				<button type="button" class="btn btn-primary disabled" id="tools-edit-style" data-btn="btnEditStyle"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+				<button type="button" class="btn btn-primary disabled" id="tools-delete-style" data-btn="btnDelStyle"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+				<button type="button" class="btn btn-primary" id="tools-reload-style" data-btn="btnRelStyle"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
 			</div>
 		</div>
 		<table class="display compact" id="table-data">
@@ -158,7 +155,7 @@
 			.DataTable({	
 				'info': true,
 				'paging': true,
-				'ordering': false,
+				'ordering': true,
 				'searching': false,
 				'processing': true,
 				'lengthChange': false,	
@@ -177,7 +174,7 @@
 
 		// Select Docket Type
 		$('#select-docket-type').on('change', function() {			
-			dtDocketStyles.ajax.url(WS_LIST_DOCKET_STYLES + '&type=' + $(this).val()).load();
+			dtDocketStyles.ajax.url(WS_LIST_DOCKET_STYLES + 'type=' + $(this).val()).load();
 		});
 		
 		// Add Docket Style
@@ -195,20 +192,21 @@
 					$(input).val($('#select-docket-type').val());	
 					STIC.DocketStyle.destroyMsgField();	
 					STIC.DocketStyle.toggleMsgField({			
-						JSONUrl: WS_LIST_DOCKET_FIELDS + '&available=' + $(input).val(),
+						JSONUrl: WS_LIST_DOCKET_FIELDS + 'available=' + $(input).val(),
 						JSONData: 'report-list',
 						dataSrc: 'data',
 						defaultVal: ''
 					});
 				},
 				buttons: [{
-					label: 'Save Changes',
-					cssClass: 'btn-primary',
+					label: 'Save',
 					icon: 'fa fa-floppy-o',
+					cssClass: 'btn-primary',
 					action: styles.msgSubmitForm
 				}, {
 					label: 'Cancel',
 					icon: 'fa fa-ban',
+					cssClass: 'btn-primary',
 					action: function(dialogItself) {
 						BootstrapDialog.closeAll();
 						STIC.DocketStyle.destroyMsgField();		
@@ -230,7 +228,7 @@
 						row = dtDocketStyles.row('.selected').data(),
 						msgVal = row.dt_source === 'data' ? row.dt_field : row.dt_message;	
 					STIC.DocketStyle.toggleMsgField({			
-						JSONUrl: WS_LIST_DOCKET_FIELDS + '&available=' + row.dt_type,
+						JSONUrl: WS_LIST_DOCKET_FIELDS + 'available=' + row.dt_type,
 						JSONData: 'report-list',
 						dataSrc: row.dt_source,
 						defaultVal: msgVal
@@ -246,13 +244,14 @@
 					$('input[data-field="dt_font_underline"]').prop('checked', row.dt_font_underline == 'Yes' ? true : false);						
 				},
 				buttons: [{
-					label: 'Save Changes',
-					cssClass: 'btn-primary',
+					label: 'Save',
 					icon: 'fa fa-floppy-o',
+					cssClass: 'btn-primary',
 					action: styles.msgSubmitForm
 				}, {
 					label: 'Cancel',
 					icon: 'fa fa-ban',
+					cssClass: 'btn-primary',
 					action: function(dialogItself) {
 						BootstrapDialog.closeAll();
 						STIC.DocketStyle.destroyMsgField();	
@@ -302,6 +301,11 @@
 				}
 			});
 		});		
+		
+		// Refresh Table
+		$('button[data-btn="btnRelStyle"]').on('click', function() {
+			dtDocketStyles.ajax.reload();
+		});
 
 		// Save Docket Width & Length
 		$('button[data-btn="btnSaveDWL"]').on('click', function() {

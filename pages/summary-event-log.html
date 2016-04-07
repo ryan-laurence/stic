@@ -1,10 +1,10 @@
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<i class="fa fa-table"></i> Reprint Count Summary
+		<i class="fa fa-table"></i> Event Log
 	</div>
 	<div class="panel-body">
 		<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
-			<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+			<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>		
 			<ul>
 				<li>Choose the starting and ending date with time period that you needed for the summary report to be generated.</li>
 				<li>Click the "Print" button to have a printed copy of the summary report.</li>
@@ -13,10 +13,11 @@
 		<table class="display compact" id="table-summary">
 			<thead>
 				<tr>
-					<th class="text-left">Date</th>
-					<th class="text-left">Docket No.</th>
-					<th class="text-left">No. of Copy</th>
-					<th class="text-left">User</th>
+					<th class="text-left">ID</th>
+					<th class="text-left">User ID</th>
+					<th class="text-left">Record Time Stamp</th>
+					<th class="text-left">Activity</th>
+					<th class="text-left">User Name</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -28,10 +29,10 @@
 	$(function () {
 		loadSummaryReport({		
 			showTotal: false,
-			ds: DEFAULT_DS_REPORTS,
-			cd: CD_SUMMARY_REPRINT_COUNT,
-			ws: WS_SUMMARY_REPRINT_COUNT,
-			title: REPORT_TITLE_REPRINT_COUNT
+			ds: DS_EVENT_LOG_LIST,
+			cd: CD_EVENT_LOG_LIST,
+			ws: WS_EVENT_LOG_LIST,
+			title: REPORT_TITLE_EVENT_LOG
 		});
 	});
 </script>

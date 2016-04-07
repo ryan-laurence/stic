@@ -1,0 +1,37 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-pencil-square-o"></i> Supplier Data
+	</div>
+	<div class="panel-body">
+		<table class="display compact" id="table-data">
+			<thead>
+				<tr>
+					<th class="text-left">Supplier ID</th>
+					<th class="text-left">Supplier Code</th>
+					<th class="text-left">Supplier Name</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript" src="js/stic-data.js"></script>
+<script>
+	$(function() {
+		loadEditData({
+			pk_id: 'supp_id',
+			root_node: 'suppInfo',
+			report_title: 'Supplier Data',
+			form_id: '#dataSupplierForm',
+			frm_html: FORM_SUPPLIER_DATA,
+			dt_btns_all: true,
+			dt_cd: CD_SUPPLIER_LIST,
+			dt_ds: DS_SUPPLIER_LIST,
+			ws_list: WS_SUPPLIER_LIST,
+			ws_insert: WS_SUPPLIER_INSERT,
+			ws_update: WS_SUPPLIER_UPDATE,
+			ws_delete: WS_SUPPLIER_DELETE
+		});
+	});
+</script>
