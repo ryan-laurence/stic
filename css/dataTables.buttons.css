@@ -168,6 +168,11 @@ div.dt-buttons {
 div.dt-buttons.buttons-right {
   float: right;
 }
+div.dt-buttons a.disabled,
+div.dt-buttons a.disabled:hover,
+div.dt-buttons a.disabled:active {
+  cursor: not-allowed;
+}
 
 div.dt-button-collection {
   position: absolute;

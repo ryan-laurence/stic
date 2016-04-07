@@ -1,0 +1,10 @@
+{
+  "response": {
+    "statuscode": "0",
+	"type": "SUCCESS",
+	"message": "Successfully fetched Docket Fields",
+	"custProducts-list": {
+	  "customerProduct": []
+    }
+  }
+}
