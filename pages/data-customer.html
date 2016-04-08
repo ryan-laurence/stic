@@ -17,7 +17,14 @@
 				dom: '<"dt-toolbar">frtip',
 				pageLength: 5,
 				columns: CD_CUSTPROD_LIST,
-				ajax: { url: DEFAULT_ROOT + 'data/data-product-empty.json', dataSrc: DS_CUSTPROD_LIST }
+				ajax: { 
+					url: DEFAULT_ROOT + 'data/data-product-empty.json', 
+					dataSrc: function(json) {
+						var ds =DS_CUSTPROD_LIST.split('.'),
+							rec = json[ds[0]][ds[1]][ds[2]];				
+						return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+					}  
+				}
 			})
 			.on('draw.dt', function (e, settings, data) {
 				_fnClearFormValues({}, customer_products_tools);
@@ -32,7 +39,14 @@
 				dom: '<"dt-toolbar">frtip',
 				pageLength: 5,
 				columns: CD_CUSTDEST_LIST,
-				ajax: { url: DEFAULT_ROOT + 'data/data-destination-empty.json', dataSrc: DS_CUSTDEST_LIST }			
+				ajax: { 
+					url: DEFAULT_ROOT + 'data/data-destination-empty.json', 
+					dataSrc: function(json) {
+						var ds =DS_CUSTDEST_LIST.split('.'),
+							rec = json[ds[0]][ds[1]][ds[2]];				
+						return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+					}   
+				}			
 			})
 			.on('draw.dt', function (e, settings, data) {				
 				_fnClearFormValues({}, customer_destinations_tools);

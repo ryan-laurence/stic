@@ -43,6 +43,7 @@ function loadEditData(params) {
 					title: _modalNewTitle,
 					message: _modalFrmContent,
 					onshown: _btnNewOnShown,
+					onhidden: btnOnHidden,
 					buttons: [_modalBtnSave, _modalBtnCancel]
 				});
 			}			
@@ -58,6 +59,7 @@ function loadEditData(params) {
 					title: _modalEditTitle,
 					message: _modalFrmContent,
 					onshown: _btnEditOnShown,
+					onhidden: btnOnHidden,
 					buttons: [_modalBtnSave, _modalBtnCancel]
 				});
 			}			
@@ -107,6 +109,16 @@ function loadEditData(params) {
 			modalBody.find('input[data-field="' + name + '"]').val(value);
 			modalBody.find('select[data-field="' + name + '"]').val(value);
 		});
+	}
+	
+	// Trigger on Modal OnHidden
+	function btnOnHidden(dialogRef) {
+		dt.ajax.reload();		
+		dt.button('edit:name').disable();
+		dt.button('delete:name').disable();
+		$(params.form_id).find('input[data-field]').val('');
+		$(params.form_id).find('select[data-field]').val('');
+		STIC.FormValidation({ formId: params.form_id, clearHelpBlocks: true });
 	}
 	
 	// New & Edit Button Action 

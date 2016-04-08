@@ -228,14 +228,14 @@
 					console.log(data.response.type);
 					if (data.response.type == 'SUCCESS') {
 						BootstrapDialog.closeAll();	
-						BootstrapDialog.alert({
+						/*BootstrapDialog.alert({
 							title: MSG_ADD_REC_TITLE,
 							message: MSG_ADD_REC_INFO,	
 							type: BootstrapDialog.TYPE_PRIMARY,
 							callback: function(result) {
 								BootstrapDialog.closeAll();
 							}
-						});		
+						});*/		
 					} else {
 						BootstrapDialog.alert({
 							title: MSG_WS_ERROR_TITLE,
@@ -712,6 +712,14 @@
 				<i class="fa fa-truck"></i> Select Truck Data
 			</div>
 			<div class="modal-body">
+				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<ul>
+						<li>Records listed here are Truck Codes available for Second Weighing only.</li>
+						<li>To add a Truck Code for First Weighing, use the Weighing Scale form.</li>
+						<li>To remove a Truck Code from Second Weighing, go to the Truck In report page.</li>
+					</ul>
+				</div>
 				<table class="display compact" id="table-truck-data" style="width: 100%">
 					<thead>
 						<tr>
@@ -742,6 +750,13 @@
 				<i class="fa fa-users"></i> Select Customer Data
 			</div>
 			<div class="modal-body">
+				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<ul>
+						<li>Records listed here are Customer Details which are already available in the system.</li>
+						<li>To add new Customer Details, use the Weighing Scale form.</li>
+					</ul>
+				</div>
 				<table class="display compact" id="table-customer-data" style="width: 100%">
 					<thead>
 						<tr>
@@ -768,6 +783,13 @@
 				<i class="fa fa-map-marker"></i> Select Destination Data
 			</div>
 			<div class="modal-body">
+				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<ul>
+						<li>Records listed here are Destination Details which are already assigned to the selected Customer Detail.</li>
+						<li>To assign new Destination Details to the selected Customer Detail, use the Weighing Scale form.</li>
+					</ul>
+				</div>
 				<table class="display compact" id="table-destination-data" style="width: 100%">
 					<thead>
 						<tr>
@@ -797,6 +819,13 @@
 				<i class="fa fa-map-marker"></i> New Destination Data
 			</div>
 			<div class="modal-body">
+				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<ul>
+						<li>Records listed here are Destination Details which are not yet assigned to the selected Customer Detail.</li>
+						<li>To assign new Destination Details to the selected Customer Detail, select a record below.</li>
+					</ul>
+				</div>
 				<table class="display compact" id="table-destination-data-all" style="width: 100%">
 					<thead>
 						<tr>
@@ -824,6 +853,13 @@
 				<i class="fa fa-product-hunt"></i> Select Product Data
 			</div>
 			<div class="modal-body">
+				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<ul>
+						<li>Records listed here are Product Details which are already assigned to the selected Customer Detail.</li>
+						<li>To assign new Product Details to the selected Customer Detail, use the Weighing Scale form.</li>
+					</ul>
+				</div>
 				<table class="display compact" id="table-product-data" style="width: 100%">
 					<thead>
 						<tr>
@@ -853,6 +889,13 @@
 				<i class="fa fa-users"></i> Select Supplier Data
 			</div>
 			<div class="modal-body">
+				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<ul>
+						<li>Records listed here are Supplier Details which are already available in the system.</li>
+						<li>To add new Supplier Details, use the Weighing Scale form.</li>
+					</ul>
+				</div>
 				<table class="display compact" id="table-supplier-data" style="width: 100%">
 					<thead>
 						<tr>

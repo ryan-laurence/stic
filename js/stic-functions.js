@@ -276,7 +276,7 @@ var STIC = {
 			var _container = params.container,
 				_defaultVal = params.defaultVal;
 			_container.append('<input type="text" class="form-control" value="' + 
-				_defaultVal + '" data-field="dt_message">');
+				_defaultVal + '" data-field="dt_message" data-fv-notempty="true" data-fv-notempty-msg="Message is required.">');				
 		},
 		newMsgSelectField: function(params) {			
 			var _JSONUrl = params.JSONUrl,
@@ -295,7 +295,7 @@ var STIC = {
 					}
 				});		
 				_container.append('<select class="selectpicker form-control" title="-"' + 
-					' data-field="dt_message" data-live-search="true" data-size="5">' + 
+					' data-field="dt_message" data-fv-notempty="true" data-fv-notempty-msg="Message is required." data-live-search="true" data-size="5">' + 
 					options.join('') + '</select>');
 				$('select[data-field="dt_message"]').selectpicker('refresh');
 				$('select[data-field="dt_message"]').selectpicker('val', _defaultVal);
@@ -326,55 +326,82 @@ var STIC = {
 	
 	// Form Validation
 	FormValidation: function(options) {
-		var errors = 0,
-			elems = $(options.formId).find('input[data-field]');
-		console.log('Start Form Validation for: ' + options.formId);
-		$.each(elems, function(idx, elem) {
-			var input = $(elem).val(),
-				div = $(elem).parent(),
-				hidden = $(elem).attr('type'),
-				span = $(div).children('span'),
-				small = $(div).children('small'),				
-				notempty = $(elem).attr('data-fv-notempty'),
-				notempty_msg = $(elem).attr('data-fv-notempty-msg'),				
-				stringlength = $(elem).attr('data-fv-stringlength'),
-				stringlength_max = parseInt($(elem).attr('data-fv-stringlength-max')),
-				stringlength_msg = $(elem).attr('data-fv-stringlength-msg');
-			
-			console.log('Checking ' + $(elem).attr('data-field') + ' : ' + input);
-			
-			span.remove();
-			small.remove();
-			div.removeClass('has-error has-feedback');
-			
-			// Check if Empty
-			if (notempty == 'true') {				
-				if (input == '') {	
-					errors++;
-					div.addClass('has-error has-feedback');
-					//div.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
-					div.append('<small class="help-block">' + notempty_msg + '</small>');
-				} else {
-					div.addClass('has-success has-feedback');					
-					//div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+		var clearHelpBlocks = (typeof options.clearHelpBlocks != 'undefined' ? options.clearHelpBlocks : false);
+		if (clearHelpBlocks) {
+			var elems = $(options.formId).find('input[data-field], select[data-field]');
+			$.each(elems, function(idx, elem) {
+				var div = $(elem).parent(),
+					span = $(div).children('span'),
+					small = $(div).children('small');
+				var div2 = $('label[for="' + $(elem).attr('data-field') + '"]').parent();
+				span.remove();
+				small.remove();
+				div.removeClass('has-error has-feedback');	
+				div.removeClass('has-success has-feedback');	
+				div2.removeClass('has-error has-feedback');
+				div2.removeClass('has-success has-feedback');
+				console.log('Removed Help Block for: ' + $(elem).attr('data-field'));
+			});
+			return true;
+		} else {
+			var errors = 0,
+				elems = $(options.formId).find('input[data-field], select[data-field]');
+			//console.log('Start Form Validation for: ' + options.formId);
+			$.each(elems, function(idx, elem) {
+				var input = $(elem).val(),
+					div = $(elem).parent(),
+					hidden = $(elem).attr('type'),
+					span = $(div).children('span'),
+					small = $(div).children('small'),				
+					notempty = $(elem).attr('data-fv-notempty'),
+					notempty_msg = $(elem).attr('data-fv-notempty-msg'),				
+					stringlength = $(elem).attr('data-fv-stringlength'),
+					stringlength_max = parseInt($(elem).attr('data-fv-stringlength-max')),
+					stringlength_msg = $(elem).attr('data-fv-stringlength-msg');
+				
+				//console.log('Checking ' + $(elem).attr('data-field') + ' : ' + input);
+				//console.log($('label[for="' + $(elem).attr('data-field') + '"]').parent());
+				
+				var div2 = $('label[for="' + $(elem).attr('data-field') + '"]').parent();
+				
+				span.remove();
+				small.remove();
+				div.removeClass('has-error has-feedback');
+				div2.removeClass('has-error has-feedback');
+				
+				// Check if Empty
+				if (notempty == 'true') {				
+					if (input == '') {	
+						errors++;
+						div.addClass('has-error has-feedback');
+						div2.addClass('has-error has-feedback');
+						//div.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+						div.append('<small class="help-block">' + notempty_msg + '</small>');
+					} else {
+						div.addClass('has-success has-feedback');			
+						div2.addClass('has-success has-feedback');			
+						//div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+					}
+				} 
+				
+				// Check Input Length
+				if (stringlength == 'true') {
+					if (input.length > stringlength_max) {
+						errors++;
+						div.addClass('has-error has-feedback');
+						div2.addClass('has-error has-feedback');
+						//div.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+						div.append('<small class="help-block">' + stringlength_msg + '</small>');
+					} else {
+						div.addClass('has-success has-feedback');			
+						div2.addClass('has-success has-feedback');							
+						//div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+					}
 				}
-			} 
-			
-			// Check Input Length
-			if (stringlength == 'true') {
-				if (input.length > stringlength_max) {
-					errors++;
-					div.addClass('has-error has-feedback');
-					//div.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-					div.append('<small class="help-block">' + stringlength_msg + '</small>');
-				} else {
-					div.addClass('has-success has-feedback');					
-					//div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-				}
-			}
-		});					
-		console.log('End Form Validation for: ' + options.formId);
-		return errors > 0 ? false : true;
+			});					
+			//console.log('End Form Validation for: ' + options.formId);
+			return errors > 0 ? false : true;
+		}
 	}
 }
 

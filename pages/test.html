@@ -9,25 +9,25 @@
 	<script type="text/javascript">
 		var data = [
 			{
-				"text": "Weighing",
-				"id": "1",
-				"parentid": "0"
+				"mod_id": "1",
+				"mod_parent": "0",
+				"mod_label": "Weighing"
 			}, {
-				"id": "2",
-				"parentid": "0",
-				"text": "Truck In"
+				"mod_id": "2",
+				"mod_parent": "0",
+				"mod_label": "Truck In"
 			}, {
-				"id": "3",
-				"parentid": "0",
-				"text": "Edit Data"
+				"mod_id": "3",
+				"mod_parent": "0",
+				"mod_label": "Edit Data"
 			}, {
-				"id": "4",
-				"parentid": "3",
-				"text": "Supplier Data"
+				"mod_id": "4",
+				"mod_parent": "3",
+				"mod_label": "Supplier Data"
 			}, {
-				"id": "5",
-				"parentid": "3",
-				"text": "Category Data"
+				"mod_id": "5",
+				"mod_parent": "3",
+				"mod_label": "Category Data"
 			}
 		];
 			
@@ -37,9 +37,9 @@
 			// build hierarchical source.
 			for (i = 0; i < data.length; i++) {
 				var item = data[i];
-				var label = item["text"];
-				var parentid = item["parentid"];
-				var id = item["id"];
+				var label = item["mod_label"];
+				var parentid = item["mod_parent"];
+				var id = item["mod_id"];
 
 				if (items[parentid]) {
 					var item = { parentid: parentid, label: label, item: item };
@@ -53,18 +53,17 @@
 					items[id] = { parentid: parentid, label: label, item: item };
 					source[id] = items[id];
 				}
-				console.log(source);
 			}
 			
 			return source;
 		}
 		var source = builddata();
-
+		console.log(source);
 		var buildUL = function (parent, items) {
 			$.each(items, function () {
 				if (this.label) {
 					// create LI element and append it to the parent element.
-					var li = $("<li>" + this.label + "</li>");
+					var li = $('<li><input type="checkbox" data-id="">'  + this.label + '</li>');
 					li.appendTo(parent);
 					// if there are sub items, call the buildUL function.
 					if (this.items && this.items.length > 0) {

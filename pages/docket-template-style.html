@@ -105,48 +105,53 @@
 			},			
 			// Submit Form Action
 			msgSubmitForm: function() {
-				var wsURL = '',
-					postString = '',
-					JSONString = '',
-					JSONObject = {};					
-					
-				$.each($('input[data-field], select[data-field]'), function(idx, elem) {
-					var input = $(elem), 									
-						inputType = input.attr('type'),
-						inputField = input.attr('data-field'),						
-						selSource = $('select[data-field="dt_source"] option:selected'),
-						selMessage = $('select[data-field="dt_message"] option:selected');						
-						
-					if (inputType == 'checkbox') 
-						postString = '{"' + inputField + '":"' + (input.prop('checked') ? '1' : '0') + '"}';
-					else if (inputField == 'dt_field')
-						postString = '{"dt_field":"' + (selSource.val() === 'data' ? selMessage.val() : '0') + '"}';
-					else if (inputField == 'dt_message')
-						postString = '{"dt_message":"' + (selSource.val() === 'data' ? selMessage.text() : input.val()) + '"}';
-					else 
-						postString = '{"' + inputField + '":"' + input.val() + '"}';
-					
-					$.extend(JSONObject, $.parseJSON(postString)); 
-				});	
-				
-				JSONString = 'docketTemplateInfo=' + JSON.stringify(JSONObject);				
-				wsURL = $('input[data-field="dt_id"]').val() != '' ? WS_UPDATE_DOCKET_STYLES : WS_INSERT_DOCKET_STYLES;
-				
-				$.post(wsURL, JSONString, function(data, status) {
-					BootstrapDialog.closeAll();	
-					STIC.DocketStyle.destroyMsgField();	
-					dtDocketStyles.ajax.reload();						
-					STIC.disableButtons(styles.btns);	
-					
-					BootstrapDialog.alert({
-						title: MSG_INFO_TITLE,
-						message: 'Docket Message was updated succesfully.',	
-						type: BootstrapDialog.TYPE_PRIMARY,
-						callback: function(result) {
-							BootstrapDialog.closeAll();								
-						}
-					});				
+				var isValid = STIC.FormValidation({
+					formId: '#docketStylesForm'
 				});
+				if (isValid) {
+					var wsURL = '',
+						postString = '',
+						JSONString = '',
+						JSONObject = {};					
+						
+					$.each($('input[data-field], select[data-field]'), function(idx, elem) {
+						var input = $(elem), 									
+							inputType = input.attr('type'),
+							inputField = input.attr('data-field'),						
+							selSource = $('select[data-field="dt_source"] option:selected'),
+							selMessage = $('select[data-field="dt_message"] option:selected');						
+							
+						if (inputType == 'checkbox') 
+							postString = '{"' + inputField + '":"' + (input.prop('checked') ? '1' : '0') + '"}';
+						else if (inputField == 'dt_field')
+							postString = '{"dt_field":"' + (selSource.val() === 'data' ? selMessage.val() : '0') + '"}';
+						else if (inputField == 'dt_message')
+							postString = '{"dt_message":"' + (selSource.val() === 'data' ? selMessage.text() : input.val()) + '"}';
+						else 
+							postString = '{"' + inputField + '":"' + input.val() + '"}';
+						
+						$.extend(JSONObject, $.parseJSON(postString)); 
+					});	
+					
+					JSONString = 'docketTemplateInfo=' + JSON.stringify(JSONObject);				
+					wsURL = $('input[data-field="dt_id"]').val() != '' ? WS_UPDATE_DOCKET_STYLES : WS_INSERT_DOCKET_STYLES;
+					
+					$.post(wsURL, JSONString, function(data, status) {
+						BootstrapDialog.closeAll();	
+						STIC.DocketStyle.destroyMsgField();	
+						dtDocketStyles.ajax.reload();						
+						STIC.disableButtons(styles.btns);	
+						
+						BootstrapDialog.alert({
+							title: MSG_INFO_TITLE,
+							message: 'Docket Message was updated succesfully.',	
+							type: BootstrapDialog.TYPE_PRIMARY,
+							callback: function(result) {
+								BootstrapDialog.closeAll();								
+							}
+						});				
+					});
+				}
 			}
 		};
 	
@@ -190,13 +195,24 @@
 					$('input[type="checkbox"]').prop('checked', false);
 					var input = $('input[data-field="dt_type"]');
 					$(input).val($('#select-docket-type').val());	
-					STIC.DocketStyle.destroyMsgField();	
+					//STIC.DocketStyle.destroyMsgField();						
 					STIC.DocketStyle.toggleMsgField({			
 						JSONUrl: WS_LIST_DOCKET_FIELDS + 'available=' + $(input).val(),
 						JSONData: 'report-list',
 						dataSrc: 'data',
 						defaultVal: ''
-					});
+					})
+					.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
+				},
+				onhidden: function(dialogRef) {
+					$('input[data-field]').val('');
+					$('select[data-field]').val('');
+					$('select[data-field="dt_source"]').val('data');
+					$('input[type="checkbox"]').prop('checked', false);
+					var input = $('input[data-field="dt_type"]');
+					$(input).val($('#select-docket-type').val());					
+					STIC.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
+					STIC.DocketStyle.destroyMsgField();	
 				},
 				buttons: [{
 					label: 'Save',
@@ -209,7 +225,7 @@
 					cssClass: 'btn-primary',
 					action: function(dialogItself) {
 						BootstrapDialog.closeAll();
-						STIC.DocketStyle.destroyMsgField();		
+						//STIC.DocketStyle.destroyMsgField();		
 						dtDocketStyles.ajax.reload();
 						STIC.disableButtons(styles.btns);										
 					}
@@ -227,12 +243,6 @@
 					var content = dialogRef.getModalBody(),
 						row = dtDocketStyles.row('.selected').data(),
 						msgVal = row.dt_source === 'data' ? row.dt_field : row.dt_message;	
-					STIC.DocketStyle.toggleMsgField({			
-						JSONUrl: WS_LIST_DOCKET_FIELDS + 'available=' + row.dt_type,
-						JSONData: 'report-list',
-						dataSrc: row.dt_source,
-						defaultVal: msgVal
-					});
 					$('input[data-field="dt_id"]').val(row.dt_id);
 					$('input[data-field="dt_row"]').val(row.dt_row);
 					$('input[data-field="dt_type"]').val(row.dt_type);
@@ -242,6 +252,23 @@
 					$('input[data-field="dt_font_size"]').val(row.dt_font_size);					
 					$('input[data-field="dt_font_uppercase"]').prop('checked', row.dt_font_uppercase == 'Yes' ? true : false);
 					$('input[data-field="dt_font_underline"]').prop('checked', row.dt_font_underline == 'Yes' ? true : false);						
+					STIC.DocketStyle.toggleMsgField({			
+						JSONUrl: WS_LIST_DOCKET_FIELDS + 'available=' + row.dt_type,
+						JSONData: 'report-list',
+						dataSrc: row.dt_source,
+						defaultVal: msgVal
+					})
+					.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
+				},
+				onhidden: function(dialogRef) {
+					$('input[data-field]').val('');
+					$('select[data-field]').val('');
+					$('select[data-field="dt_source"]').val('data');
+					$('input[type="checkbox"]').prop('checked', false);
+					var input = $('input[data-field="dt_type"]');
+					$(input).val($('#select-docket-type').val());						
+					STIC.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
+					STIC.DocketStyle.destroyMsgField();	
 				},
 				buttons: [{
 					label: 'Save',
@@ -254,7 +281,7 @@
 					cssClass: 'btn-primary',
 					action: function(dialogItself) {
 						BootstrapDialog.closeAll();
-						STIC.DocketStyle.destroyMsgField();	
+						//STIC.DocketStyle.destroyMsgField();	
 						dtDocketStyles.ajax.reload();
 						STIC.disableButtons(styles.btns);																	
 					}

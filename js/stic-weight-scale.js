@@ -63,7 +63,9 @@ function showNewModalForm(params) {
 				else if (params.root_node == 'suppInfo')
 					$('#supp_id').val(result.response.newId);
 				BootstrapDialog.closeAll();	
-				BootstrapDialog.alert({
+				if (params.status == 'FIRST_WEIGHT_IN')
+					toggleWeightScaleFields({ status: params.status });
+				/*BootstrapDialog.alert({
 					title: MSG_ADD_REC_TITLE,
 					message: MSG_ADD_REC_INFO,	
 					type: BootstrapDialog.TYPE_PRIMARY,
@@ -72,7 +74,7 @@ function showNewModalForm(params) {
 						if (params.status == 'FIRST_WEIGHT_IN')
 							toggleWeightScaleFields({ status: params.status });
 					}
-				});				
+				});*/				
 			});
 		}
 	}
