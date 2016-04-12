@@ -3,12 +3,20 @@
 		<i class="fa fa-pencil-square-o"></i> Supplier Data
 	</div>
 	<div class="panel-body">
+		<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+			<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+			<ul>
+				<li>All Supplier Details listed here will be available for selection in the Weighing Scale form.</li>
+				<li>Use this page to manage Supplier Details that were added through the Weighing Scale form.</li>
+			</ul>
+		</div>
 		<table class="display compact" id="table-data">
 			<thead>
 				<tr>
 					<th class="text-left">Supplier ID</th>
 					<th class="text-left">Supplier Code</th>
 					<th class="text-left">Supplier Name</th>
+					<th class="text-left">Date Modified</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -20,18 +28,18 @@
 <script>
 	$(function() {
 		loadEditData({
-			pk_id: 'supp_id',
-			root_node: 'suppInfo',
-			report_title: 'Supplier Data',
-			form_id: '#dataSupplierForm',
-			frm_html: FORM_SUPPLIER_DATA,
-			dt_btns_all: true,
-			dt_cd: CD_SUPPLIER_LIST,
-			dt_ds: DS_SUPPLIER_LIST,
-			ws_list: WS_SUPPLIER_LIST,
-			ws_insert: WS_SUPPLIER_INSERT,
-			ws_update: WS_SUPPLIER_UPDATE,
-			ws_delete: WS_SUPPLIER_DELETE
+			pkey: 'supp_id',
+			objectId: 'suppInfo',
+			modTitle: 'Supplier Data',
+			formId: '#dataSupplierForm',
+			formSrc: FORM_SUPPLIER_DATA,
+			showAllBtns: true,
+			cd: CD_SUPPLIER_LIST,
+			ds: DS_SUPPLIER_LIST,
+			wsList: WS_SUPPLIER_LIST,
+			wsInsert: WS_SUPPLIER_INSERT,
+			wsUpdate: WS_SUPPLIER_UPDATE,
+			wsDelete: WS_SUPPLIER_DELETE		
 		});
 	});
 </script>

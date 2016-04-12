@@ -71,8 +71,8 @@
 			buttonTools: ['tools-edit-style', 'tools-delete-style'],
 			// DT Columns
 			dtCols: [
-				{ "data": "dt_id", "visible": false },
-				{ "data": "dt_row" },
+				{ "data": "dt_id", "visible": false, orderable: false },
+				{ "data": "dt_row",  },
 				{ "data": "dt_column" },
 				{ "data": "dt_message" },
 				{ "data": "dt_font_size" },
@@ -84,7 +84,11 @@
 			],			
 			// DT Ajax Options
 			dtAjx: { 
-				'dataSrc': DS_DOCKET_STYLES,
+				'dataSrc': function(json) {
+					var ds = DS_DOCKET_STYLES.split('.'),
+						rec = json[ds[0]][ds[1]][ds[2]];
+					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+				},
 				'url': WS_LIST_DOCKET_STYLES + '&type=A1'
 			},			
 			// Custom Message Render
@@ -171,6 +175,12 @@
 					'render': styles.dtMsgRender
 				}]			
 			});
+		
+		// DT Default Sorting
+		dtDocketStyles
+			.column('0:visible')
+			.order('asc')
+			.draw();  
 		
 		// DT Row Click Event
 		$('#table-data tbody').on('click', 'tr', function() {

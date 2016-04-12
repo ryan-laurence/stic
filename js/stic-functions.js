@@ -33,7 +33,6 @@ function _fnClearFormValues(fields, buttons) {
 	if (buttons.length > 0) {
 		$.each(buttons, function(index, buttonId) {
 			$('#' + buttonId).addClass('disabled');
-			(CONSOLE_LOG ? console.log('Disabled: ' + buttonId) : '');
 		});	
 	}
 }
@@ -147,32 +146,35 @@ function _fnShowAlertModal(options) {
 
 // Common Function for saving data
 function _fnSaveFormData(options) {
-	var string = '';
-	var data_json = '';
-	var o_table = options.table;
-	var o_modal = $('#' + options.modalId);	
-	$.each(options.fields, function(index, field_name) {
-		var field_value = o_modal.find('.modal-body #' + field_name).val();
-		if (typeof field_value != 'undefined') {
-			if (string != '') string = string + ', ';
-			string = string + '"' + field_name + '": "' + field_value + '"';
-		}
-	});
-	data_json = options.holder + '={' + string + '}';
-	$.post(options.url, data_json, function(data, status){
-		o_table.ajax.reload();
-		o_modal.modal('hide');
-		_fnClearFormValues(options.fields, options.tools);
-		//_fnShowAlertModal({ title: options.alertTitle, content: options.alertContent });
-		BootstrapDialog.alert({
-			title: options.alertTitle,
-			message: options.alertContent,
-			type: BootstrapDialog.TYPE_PRIMARY,
-			callback: function(result) {
-				BootstrapDialog.closeAll();
+	var isValid = STIC.FormValidation({ formId: options.formId });
+	console.log(isValid);
+	if (isValid) {
+		var string = '';
+		var data_json = '';
+		var o_table = options.table;
+		var o_modal = $('#' + options.modalId);	
+		$.each(options.fields, function(index, field_name) {
+			var field_value = o_modal.find('.modal-body #' + field_name).val();
+			if (typeof field_value != 'undefined') {
+				if (string != '') string = string + ', ';
+				string = string + '"' + field_name + '": "' + field_value + '"';
 			}
 		});
-	});
+		data_json = options.holder + '={' + string + '}';
+		$.post(options.url, data_json, function(data, status){
+			o_table.ajax.reload();
+			o_modal.modal('hide');
+			_fnClearFormValues(options.fields, options.tools);
+			BootstrapDialog.alert({
+				title: options.alertTitle,
+				message: options.alertContent,
+				type: BootstrapDialog.TYPE_PRIMARY,
+				callback: function(result) {
+					BootstrapDialog.closeAll();
+				}
+			});
+		});
+	}
 }
 
 var STIC = {
@@ -375,33 +377,81 @@ var STIC = {
 						errors++;
 						div.addClass('has-error has-feedback');
 						div2.addClass('has-error has-feedback');
-						//div.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+						if (!$(elem).is('select'))
+							div.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
 						div.append('<small class="help-block">' + notempty_msg + '</small>');
 					} else {
 						div.addClass('has-success has-feedback');			
-						div2.addClass('has-success has-feedback');			
-						//div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+						div2.addClass('has-success has-feedback');	
+						if (!$(elem).is('select'))
+							div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
 					}
 				} 
 				
 				// Check Input Length
-				if (stringlength == 'true') {
+				else if (stringlength == 'true') {
 					if (input.length > stringlength_max) {
 						errors++;
 						div.addClass('has-error has-feedback');
 						div2.addClass('has-error has-feedback');
-						//div.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+						if (!$(elem).is('select'))
+							div.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
 						div.append('<small class="help-block">' + stringlength_msg + '</small>');
 					} else {
 						div.addClass('has-success has-feedback');			
 						div2.addClass('has-success has-feedback');							
-						//div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+						if (!$(elem).is('select'))
+							div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
 					}
 				}
 			});					
 			//console.log('End Form Validation for: ' + options.formId);
 			return errors > 0 ? false : true;
 		}
+	},
+	
+	// Default AJAX Post
+	postData: function(params) {
+		var errorTitle = MSG_WS_ERROR_TITLE,
+			errorMessage = MSG_WS_ERROR_INFO;		
+	
+		$.post(params.url, params.data)
+			.done(function(result, status) {
+				BootstrapDialog.closeAll();
+				(typeof params.dt !== 'undefined' 
+					? params.dt.ajax.reload() : '')
+				
+				var response = result.response;
+				if (response.type == 'SUCCESS') {
+					BootstrapDialog.alert({
+						type: 'type-primary',
+						title: params.title,
+						message: params.message,
+						callback: function(result) {
+							BootstrapDialog.closeAll();
+						}
+					});
+				} else {
+					BootstrapDialog.alert({
+						type: 'type-danger',
+						title: errorTitle,
+						message: errorMessage,
+						callback: function() {
+							BootstrapDialog.closeAll();
+						}
+					});
+				}
+			})
+			.fail(function() {
+				BootstrapDialog.alert({
+					type: 'type-danger',
+					title: errorTitle,
+					message: errorMessage,
+					callback: function() {
+						BootstrapDialog.closeAll();
+					}
+				});
+			});
 	}
 }
 
@@ -433,7 +483,7 @@ function loadSummaryReport(params) {
 			pageLength: 10,
 			ordering: true,
 			searching: false,
-			processing: true,
+			processing: false,
 			lengthChange: false,					
 			columns: params.cd,
 			dom: '<"dt-toolbar">B<"dt-total">Rrtip',
@@ -468,6 +518,9 @@ function loadSummaryReport(params) {
 				dtSummary.button('print:name').enable() :
 				dtSummary.button('print:name').disable();
 		});	
+		
+	// DT Default Sorting
+	dtSummary.column('0:visible').order('asc').draw();  
 		
 	// Load Toolbar Elements
 	$('div.dt-toolbar').css('float', 'left');
@@ -549,15 +602,14 @@ function initDT_Picker(options) {
 		dtDs = options.ds,
 		dtWs = options.ws,
 		dtDomId = options.domId,
-		dtOd = (typeof options.od != 'undefined' ? options.od : false)
-		dtPl = (typeof options.pl != 'undefined' ? options.pl : DEFAULT_PAGE_LENGTH);	
-		
+		dtOd = (typeof options.od != 'undefined' ? options.od : true)
+		dtPl = (typeof options.pl != 'undefined' ? options.pl : DEFAULT_PAGE_LENGTH);			
 		dt = $('#' + dtDomId)
 			.DataTable({						
 				pageLength: dtPl,
 				ordering: dtOd,
 				searching: true,
-				processing: true,
+				processing: false,
 				lengthChange: false,					
 				columns: dtCd,
 				dom: 'frtip',
@@ -565,10 +617,109 @@ function initDT_Picker(options) {
 					url: dtWs, 
 					dataSrc: function(json) {
 						var ds = dtDs.split('.'),
-							rec = json[ds[0]][ds[1]][ds[2]];
+							rec = json[ds[0]][ds[1]][ds[2]]; 
 						return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
 					}  
 				}
-			});				
+			});
+		dt.column('0:visible').order('asc').draw();  
 		return dt;
 }
+
+/*****************************************************************
+	Plan to my cookies
+	Method: createCookie(name,value,days)
+			createCookie(name,value,0)
+			readCookie(name)
+			eraseCookie(name)
+ */
+
+/*
+ * createCookie('ppkcookie','testcookie',7)
+ * 7days - active, 0 - close browser remove, less than 0 after opening a browser it will erase automatic
+ */
+function createCookie(name, value, days) {
+	if (days) {
+		var date = new Date();
+		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+		var expires = '; expires=' + date.toGMTString();
+	}
+	else var expires = '';
+	document.cookie = name + '=' + value + expires + '; path=/';
+}
+
+/*
+	var x = readCookie('ppkcookie1')
+	if (x) {
+		[do something with x]
+	}
+ */
+function readCookie(name) {
+	var nameEQ = name + '=';
+	var ca = document.cookie.split(';');
+	for(var i = 0; i < ca.length; i++) {
+		var c = ca[i];
+		while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
+	}
+	return null;
+}
+
+/*
+ * eraseCookie('ppkcookie')
+ */ 
+function eraseCookie(name) {
+	createCookie(name, '', -1);
+}
+
+function logout() {
+	removeToContext()
+	eraseCookie('username');
+	eraseCookie('userid');
+	eraseCookie('roleid');
+	window.location = DEFAULT_ROOT;
+};
+
+function notFoundContextSave(sUserId, sUserName) {
+	$.ajax({
+		type: 'POST',
+		url: '/scaletech/services/UserInfoServices/checkIfUserIsAuthentication',
+		data: {
+			userId: sUserId, 
+			userName: sUserName
+		},
+		success: function(oXml, textStatus, jqXHR) {
+			var sData = getXMLData(oXml, 'type');
+			if (sData === 'SUCCESS') {
+				// do nothing
+			} else {
+				logout();
+			};
+		},
+		error: function(jqXHR, textStatus, errorThrown) {
+			console.log('jqXHR: ' + jqXHR + ', textStatus: ' + textStatus + ', errorThrown: ' + errorThrown);
+		}
+	});
+};
+
+function removeToContext() {
+	$.ajax({
+		type: 'POST',
+		url: '/scaletech/services/UserInfoServices/removeUser',
+		data: {
+			user_name: readCookie('username')
+		},
+		success: function(oXml) {
+			var sData = getXMLData(oXml, 'type'); 
+			if (sData === 'SUCCESS') {
+				return true;
+			} else {
+				console.log(oXml);
+			}
+		},
+		error: function() {
+			alert('error on logout...');
+		}
+	});
+	return false;;
+};

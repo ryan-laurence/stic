@@ -1,34 +1,58 @@
-<form class="form-horizontal well no-margin-bottom">
+<form class="form-horizontal well no-margin-bottom" id="dataConfigWeightInForm">
 	<div class="row">
 		<div class="col-md-6">
 			<div class="form-group">
-				<label class="control-label" for="bridge-code">Bridge Code</label>
-				<input type="text" class="form-control" data-field="bridge_code" value="PL1">
+				<label class="control-label" for="bridge_code">Bridge Code</label>
+				<input type="text" class="form-control" 
+					data-field="bridge_code"
+					data-fv-notempty="true"
+					data-fv-notempty-msg="Bridge Code is required."
+					data-fv-stringlength="true"
+					data-fv-stringlength-max="10"
+					data-fv-stringlength-msg="Bridge Code must be less than 10 characters.">
 			</div>
 			<div class="form-group">
-				<label class="control-label" for="curr-dock-no">Current Docket No.</label>
-				<input type="text" class="form-control" data-field="current_docket_number" value="4">
+				<label class="control-label" for="current_docket_number">Current Docket No.</label>
+				<input type="text" class="form-control" 
+					data-field="current_docket_number"
+					data-fv-notempty="true"
+					data-fv-notempty-msg="Current Docket No. is required."
+					data-fv-stringlength="true"
+					data-fv-stringlength-max="6"
+					data-fv-stringlength-msg="Current Docket No. must be less than 6 digits.">
 			</div>
 			<div class="form-group">
-				<label class="control-label" for="min-truck-weight">Min. Truck Weight</label>
-				<input type="text" class="form-control" data-field="minimum_truck_weight" value="0">
+				<label class="control-label" for="minimum_truck_weight">Min. Truck Weight</label>
+				<input type="text" class="form-control" 
+					data-field="minimum_truck_weight"
+					data-fv-notempty="true"
+					data-fv-notempty-msg="Min. Truck Weight is required.">
 			</div>
 		</div>
 		<div class="col-md-6">
 			<div class="form-group">
-				<label class="control-label" for="delay-timer">Delay Timer (seconds)</label>
-				<input type="text" class="form-control" data-field="delay_time_second" value="3">
+				<label class="control-label" for="delay_time_second">Delay Timer (seconds)</label>
+				<input type="text" class="form-control" 
+					data-field="delay_time_second"
+					data-fv-notempty="true"
+					data-fv-notempty-msg="Delay Timer is required.">
 			</div>
 			<div class="form-group">
-				<label class="control-label" for="def-unit">Default Unit</label>
-				<select class="form-control" data-field="weight_unit">
+				<label class="control-label" for="weight_unit">Default Unit</label>
+				<select class="form-control" 
+					data-field="weight_unit"
+					data-fv-notempty="true"
+					data-fv-notempty-msg="Default Unit is required.">
 					<option value="kg" selected>kilogram</option>
 					<option value="g">gram</option>
 				</select>
 			</div>
 			<div class="form-group">
-				<label class="control-label" for="zero-range">Zero Range</label>
-				<input type="text" class="form-control" data-field="zero_range" value="2">
+				<label class="control-label" for="zero_range">Zero Range</label>
+				<input type="text" class="form-control" 
+					data-field="zero_range"
+					data-fv-notempty="true"
+					data-fv-notempty-msg="Zero Range is required.">
 			</div>
 		</div>
 	</div>
@@ -76,33 +100,46 @@
 	
 		// Save
 		$('#save-config').on('click', function() {
-			BootstrapDialog.confirm({
-				title: MSG_TITLE_CONFIRM_SAVE,
-				message: MSG_CONFIRM_SAVE_CONFIG_WEIGHIN,			
-				callback: function(result) {
-					if (result) {
-						var jsonString = '',
-							jsonObject = {};							
-						$.each($('input[data-field], select[data-field]'), function(index, formElement) {
-							var postString = '{"' + $(formElement).attr('data-field') + '":"' + $(formElement).val() + '"}';
-							$.extend(jsonObject, $.parseJSON(postString)); 
-						});
-						jsonString = 'companyInfo=' + JSON.stringify(jsonObject);
-						$.post(WS_UPDATE_CONFIG_COMPANY, jsonString, function(data, status){
-							BootstrapDialog.alert({
-								title: MSG_INFO_TITLE,
-								message: 'Weigh In settings were updated successfully.',	
-								type: BootstrapDialog.TYPE_PRIMARY
+			var isValid = STIC.FormValidation({ 
+				formId: '#dataConfigWeightInForm' 
+			});		
+			if (isValid) {
+				BootstrapDialog.confirm({
+					title: MSG_TITLE_CONFIRM_SAVE,
+					message: MSG_CONFIRM_SAVE_CONFIG_WEIGHIN,			
+					callback: function(result) {
+						if (result) {
+							var jsonString = '',
+								jsonObject = {};							
+							$.each($('input[data-field], select[data-field]'), function(index, formElement) {
+								var postString = '{"' + $(formElement).attr('data-field') + '":"' + $(formElement).val() + '"}';
+								$.extend(jsonObject, $.parseJSON(postString)); 
 							});
-							loadWeighIn();
-						});
-					} 
-				}
-			});
+							jsonString = 'companyInfo=' + JSON.stringify(jsonObject);
+							$.post(WS_UPDATE_CONFIG_COMPANY, jsonString, function(data, status){
+								BootstrapDialog.alert({
+									title: MSG_INFO_TITLE,
+									message: 'Weigh In settings were updated successfully.',	
+									type: BootstrapDialog.TYPE_PRIMARY
+								});
+								loadWeighIn();
+							});
+						}
+						STIC.FormValidation({ 
+							clearHelpBlocks: true,
+							formId: '#dataConfigWeightInForm'
+						});		
+					}
+				});
+			}
 		});
 		
 		// Reset
 		$('#reset-config').on('click', function() {
+			STIC.FormValidation({ 
+				clearHelpBlocks: true,
+				formId: '#dataConfigWeightInForm'
+			});		
 			loadWeighIn();
 		});
 	});

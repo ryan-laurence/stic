@@ -10,7 +10,7 @@ var DEFAULT_DATASOURCE = 'response.record-list.record';
 
 // Weighing Screen
 var CD_CHECK_TRUCK_CODE_LIST = [
-	{ data: 'wr_id', visible: false, searchable: false },
+	{ data: 'wr_id', visible: false, searchable: false, orderable: false },
 	{ data: 'truck_code' },
 	{ data: 'date_in' },
 	{ data: 'time_in' },
@@ -28,8 +28,9 @@ var WS_CUST_PRODUCT_INSERT = '/scaletech/services/ProductsInfoServices/addProduc
 // Supplier Data
 var CD_SUPPLIER_LIST = [
 	{ data: 'supp_id', visible: false, searchable: false },
-	{ data: 'supp_code' },
-	{ data: 'supp_name' }
+	{ data: 'supp_code', width: '30%' },
+	{ data: 'supp_name', width: '40%' },
+	{ data: 'date_modified', width: '30%' }
 ];
 var FORM_SUPPLIER_DATA = 'pages/data-supplier-form.html';
 var DS_SUPPLIER_LIST = 'response.suppliers-list.supplier';
@@ -41,8 +42,9 @@ var WS_SUPPLIER_DELETE = '/scaletech/services/SuppliersInfoServices/updateSuppli
 // Category Data
 var CD_CATEGORY_LIST = [
 	{ data: 'cat_id', visible: false, searchable: false },
-	{ data: 'cat_code' },
-	{ data: 'cat_name' }
+	{ data: 'cat_code', width: '30%' },
+	{ data: 'cat_name', width: '40%' },
+	{ data: 'date_modified', width: '30%' }
 ];
 var FORM_CATEGORY_DATA = 'pages/data-category-form.html';
 var DS_CATEGORY_LIST = 'response.categories-list.cateory';
@@ -54,8 +56,9 @@ var WS_CATEGORY_DELETE = '/scaletech/services/CategoriesInfoService/updateCatego
 // Customer Data
 var CD_CUSTOMER_LIST = [
 	{ data: 'cust_id', visible: false, searchable: false },
-	{ data: 'cust_code' },
-	{ data: 'cust_name' }
+	{ data: 'cust_code', width: '30%' },
+	{ data: 'cust_name', width: '40%' },
+	{ data: 'date_modified', width: '30%' }
 ];
 var FORM_CUSTOMER_DATA = 'pages/data-customer-form.html';
 var DS_CUSTOMER_LIST = 'response.customers-list.customer';
@@ -72,7 +75,7 @@ var CD_DESTINATION_LIST = [
 	{ data: 'dest_location' }
 ];
 var DS_DESTINATION_LIST = 'response.destinations-list.destination';
-var WS_DESTINATION_LIST = '/scaletech/services/DestinationsInfoServices/getAllDestinationsNotInCustDestList?response=application/json&cust_id=';
+var WS_DESTINATION_LIST = '/scaletech/services/DestinationsInfoServices/getAllDestinationsNotInCustDestList?response=application/json&';
 
 // Product Data
 var CD_PRODUCT_LIST = [
@@ -96,6 +99,7 @@ var CD_CUSTDEST_LIST = [
 	{ data: 'dest_name' },
 	{ data: 'dest_location' }
 ];
+var PICKER_CUSTDEST_DATA = 'pages/data-customer-destination-picker.html';
 var DS_CUSTDEST_LIST = 'response.custDest-list.customerDestination';
 var WS_CUSTDEST_LIST = '/scaletech/services/CustDestInfoServices/getAllCustDestList?response=application/json&';
 var WS_CUSTDEST_INSERT = '/scaletech/services/CustDestInfoServices/addCustDest?response=application/json&';
@@ -110,6 +114,7 @@ var CD_CUSTPROD_LIST = [
 	{ data: 'prod_name' },
 	{ data: 'unit_price' }
 ];
+var PICKER_CUSTPROD_DATA = 'pages/data-customer-product-picker.html';
 var DS_CUSTPROD_LIST = 'response.custProducts-list.customerProduct';
 var WS_CUSTPROD_LIST = '/scaletech/services/CustProductsInfoServices/getAllCustProdList?response=application/json&';
 var WS_CUSTPROD_INSERT = '/scaletech/services/CustProductsInfoServices/addCustProd?response=application/json&';
@@ -136,7 +141,7 @@ var CD_USER_LIST = [
 	{ data: 'role_name' },
 	{ data: 'date_modified' }
 ];
-var FORM_USER_DATA = 'pages/data-user-form.html';
+var FORM_USER_DATA = 'pages/others-user-details-form.html';
 var FORM_CHANGE_PASS_DATA = 'pages/user-change-pass-form.html';
 var DS_USER_LIST = 'response.users-list.user';
 var WS_USER_LIST = '/scaletech/services/UserInfoServices/getAllUserList?response=application/json&';
@@ -265,6 +270,22 @@ var WS_LIST_CONFIG_COMPANY = '/scaletech/services/CompanyInfoServices/getAllComp
 var WS_UPDATE_CONFIG_COMPANY = '/scaletech/services/CompanyInfoServices/updateCompany?response=application/json&id=1&';
 var WS_LIST_CONFIG_DOCKET = '/scaletech/services/PrinterConfigurationInfoServices/getAllPrintersList?response=application/json&printerId=1&';
 var WS_UPDATE_CONFIG_DOCKET = '/scaletech/services/PrinterConfigurationInfoServices/updatePrinter?response=application/json&id=1&';
+
+// Roles
+var CD_ROLES_LIST = [
+	{ data: 'role_id', visible: false, searchable: false },
+	{ data: 'role_name' },
+	{ data: 'date_modified' }
+];
+var FORM_ROLES_DATA = 'pages/others-role-details-form.html';
+var WS_ROLES_LIST = '/scaletech/services/RolesInfoServices/getAllRolesList?response=application/json&';
+var WS_ROLES_INSERT = '/scaletech/services/RolesInfoServices/addRoles?response=application/json&';
+var WS_ROLES_UPDATE = '/scaletech/services/RolesInfoServices/updateRoles?response=application/json&';
+var WS_ROLES_DELETE = '/scaletech/services/RolesInfoServices/updateRolesByIsDeleted?response=application/json&isDeleted=0&';
+
+// Role Modules
+var WS_ROLE_MODULES_LIST = '/scaletech/services/ModulesInfoServices/getAllModulesList?response=application/json&';
+var WS_UI_MODULES_LIST = '/scaletech/services/RoleModulesInfoService/getAllRoleModulesList?response=application/json&isDeleted=0&';
 
 // ******************************************************************************************************************************************************8
 

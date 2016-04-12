@@ -1,312 +1,24 @@
-<script>
-	$(function() {
-		var customer_data_holder = 'custInfo';
-		var customer_fields = [ 'cust_id', 'cust_code', 'cust_name' ];
-
-		var customer_products_tools = ['tools-remove-product'];
-		var customer_destinations_tools = ['tools-remove-destination'];
-		var customer_tools = ['tools-edit', 'tools-delete', 'tools-add-destination', 'tools-add-product'];
-
-		// Data Tables
-		var t_customer_products = $('#table-product')
-			.DataTable({ 
-				ordering: true,
-				searching: false,
-				processing: true,
-				lengthChange: false,
-				dom: '<"dt-toolbar">frtip',
-				pageLength: 5,
-				columns: CD_CUSTPROD_LIST,
-				ajax: { 
-					url: DEFAULT_ROOT + 'data/data-product-empty.json', 
-					dataSrc: function(json) {
-						var ds =DS_CUSTPROD_LIST.split('.'),
-							rec = json[ds[0]][ds[1]][ds[2]];				
-						return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
-					}  
-				}
-			})
-			.on('draw.dt', function (e, settings, data) {
-				_fnClearFormValues({}, customer_products_tools);
-				t_customer_products.$('tr.selected').removeClass('selected');
-			});	
-		var t_customer_destinations = $('#table-destination')
-			.DataTable({ 
-				ordering: true,
-				searching: false,
-				processing: true,
-				lengthChange: false,
-				dom: '<"dt-toolbar">frtip',
-				pageLength: 5,
-				columns: CD_CUSTDEST_LIST,
-				ajax: { 
-					url: DEFAULT_ROOT + 'data/data-destination-empty.json', 
-					dataSrc: function(json) {
-						var ds =DS_CUSTDEST_LIST.split('.'),
-							rec = json[ds[0]][ds[1]][ds[2]];				
-						return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
-					}   
-				}			
-			})
-			.on('draw.dt', function (e, settings, data) {				
-				_fnClearFormValues({}, customer_destinations_tools);
-				t_customer_destinations.$('tr.selected').removeClass('selected');
-			});	
-		var t_customer = $('#table-customer')
-			.DataTable({ 
-				ordering: true,
-				searching: false,
-				processing: true,
-				lengthChange: false,
-				dom: '<"dt-toolbar">frtip',
-				pageLength: 5,
-				columns: CD_CUSTOMER_LIST ,
-				ajax: { url: WS_CUSTOMER_LIST, dataSrc: DS_CUSTOMER_LIST }
-			})
-			.on('draw.dt', function (e, settings, data) {
-				t_customer_products.clear().draw();	
-				t_customer_destinations.clear().draw();
-				_fnClearFormValues(customer_fields, customer_tools);
-				t_customer.$('tr.selected').removeClass('selected');
-				$('#destTitle').html('<i class="fa fa-map-marker"></i> <strong>Destination Data</strong>');
-				$('#prodTitle').html('<i class="fa fa-product-hunt"></i> <strong>Product Data</strong>');
-			});	
-			
-		// Customer > Data Table > Row Click Event
-		$('#table-customer tbody').on( 'click', 'tr', function () {
-			var customer_id = t_customer.row(this).data().cust_id;
-			var customer_code = t_customer.row(this).data().cust_code;
-			var customer_name = t_customer.row(this).data().cust_name;
-
-			var customer_destinations_url = WS_CUSTDEST_LIST + 'cust_id=' + customer_id;
-			var customer_products_url = WS_CUSTPROD_LIST + 'cust_id=' + customer_id;
-
-			// Re-initialize data tables based on selected customer
-			if ($(this).hasClass('selected')) {
-				t_customer_products.clear().draw();
-				t_customer_destinations.clear().draw();
-
-				// Set Panel Title based on Customer
-				$('#destTitle').html('<i class="fa fa-map-marker"></i> <strong>Destination Data</strong>');
-				$('#prodTitle').html('<i class="fa fa-product-hunt"></i> <strong>Product Data</strong>');
-			} else {
-				t_customer_products.ajax.url(customer_products_url).load();
-				t_customer_destinations.ajax.url(customer_destinations_url).load();
-
-				// Set Panel Title based on Customer
-				$('#destTitle').html('<i class="fa fa-map-marker"></i> <strong>Destination Data</strong> > ' + customer_code + ' ' + customer_name);
-				$('#prodTitle').html('<i class="fa fa-product-hunt"></i> <strong>Product Data</strong> > ' + customer_code + ' ' + customer_name);
-			}
-
-			// Set Row Click Event
-			_fnTableRowSelection(t_customer, this, customer_tools);
-		});
-
-		// Destination > Data Table > Row Click Event
-		$('#table-destination tbody').on( 'click', 'tr', function () {
-			if (t_customer_destinations.row(this).data().cd_id != '') {
-				_fnTableRowSelection(t_customer_destinations, this, customer_destinations_tools);
-			}
-		});
-
-		// Product > Data Table > Row Click Event
-		$('#table-product tbody').on( 'click', 'tr', function () {
-			if (t_customer_products.row(this).data().cp_id != '') {
-				_fnTableRowSelection(t_customer_products, this, customer_products_tools);
-			}
-		});
-
-		// Customer > Tools > New Button
-		$('#tools-new').on('click', function() {
-			$('#new-form-modal').modal('show');
-		});
-
-		// Customer > Tools > Edit Button
-		$('#tools-edit').on('click', function() {
-			$('#edit-form-modal').on('show.bs.modal', function (event) {
-				var modal = $(this)
-				$.each(t_customer.row('.selected').data(), function(field_name, field_value) {
-					modal.find('.modal-body #' + field_name).val(field_value);
-				});
-			});
-			$('#edit-form-modal').modal('show');
-		});
-
-		// Customer > Tools > Delete Button
-		$('#tools-delete').on('click', function() {
-			BootstrapDialog.confirm({
-				title: MSG_TITLE_CONFIRM_DELETE,
-				message: MSG_CONFIRM_DELETE_RECORD,		
-				type: BootstrapDialog.TYPE_DANGER,
-				callback: function(result) {
-					if (result) {
-						$.ajax({
-							method: "GET",
-							url: WS_CUSTOMER_DELETE + 'cust_id=' + t_customer.row('.selected').data().cust_id,
-						}).done(function(msg) {
-							t_customer.row('.selected').remove().draw(false);
-							t_customer.ajax.reload();
-							_fnClearFormValues(customer_fields, customer_tools);
-							BootstrapDialog.alert({
-								title: MSG_INFO_TITLE,
-								message: MSG_DEL_REC_INFO,
-								type: BootstrapDialog.TYPE_PRIMARY,
-								callback: function() {
-									BootstrapDialog.closeAll();
-								}
-							});
-						});
-					} else {
-						t_customer.ajax.reload();
-						_fnClearFormValues(customer_fields, customer_tools);
-					}
-					t_customer_products.clear().draw();	
-					t_customer_destinations.clear().draw();
-					$('#destTitle').html('<i class="fa fa-map-marker"></i> <strong>Destination Data</strong>');
-					$('#prodTitle').html('<i class="fa fa-product-hunt"></i> <strong>Product Data</strong>');
-				}
-			});
-		});
-
-		// Customer > Tools > New > Save Changes
-		$('#new-form-modal #save-changes').on('click', function() {
-			_fnSaveFormData({
-				table: t_customer,
-				url: WS_CUSTOMER_INSERT,
-				tools: customer_tools,
-				fields: customer_fields,
-				holder: customer_data_holder,
-				modalId: 'new-form-modal',
-				alertTitle: MSG_ADD_REC_TITLE,
-				alertContent: MSG_ADD_REC_INFO
-			});
-		});
-
-		// Customer > Tools > Edit > Save Changes
-		$('#edit-form-modal #save-changes').on('click', function() {
-			_fnSaveFormData({
-				table: t_customer,
-				url: WS_CUSTOMER_UPDATE,
-				tools: customer_tools,
-				fields: customer_fields,
-				holder: customer_data_holder,
-				modalId: 'edit-form-modal',
-				alertTitle: MSG_EDIT_REC_TITLE,
-				alertContent: MSG_EDIT_REC_INFO
-			});
-		});
-
-		var t_product_picker = $('#table-product-picker').DataTable();
-		var t_destination_picker = $('#table-destination-picker').DataTable();
-
-		// Destination > Tools > Add
-		$('#tools-add-destination').on('click', function() {
-			var customer_id = t_customer.row('.selected').data().cust_id;
-			var ws_url = WS_DESTINATION_LIST + customer_id;
-
-			// Data Table
-			t_destination_picker.destroy();
-			t_destination_picker = _fnSetDataTable('table-destination-picker', ws_url, DS_DESTINATION_LIST, CD_DESTINATION_LIST, 10);
-
-			// Show
-			$('#destination-modal').modal('show');
-		});
-
-		// Destination > Tools > Add > Row Click Event
-		$('#table-destination-picker tbody').on( 'click', 'tr', function () {
-			_fnTableRowSelection(t_destination_picker, this, ['destination-modal #select-item']);
-		});
-
-		// Destination > Tools > Add > Insert Destination
-		$('#destination-modal #select-item').on('click', function() {
-			var customer_id = t_customer.row('.selected').data().cust_id;
-			var destination_id = t_destination_picker.row('.selected').data().dest_id;
-			var post_data = 'custDestInfo={ "cust_id": ' + customer_id + ', "dest_id": ' + destination_id + '}';
-			$.post(WS_CUSTDEST_INSERT, post_data, function(data, status) {
-				t_customer_destinations.ajax.url(WS_CUSTDEST_LIST + 'cust_id=' + t_customer.row('.selected').data().cust_id).load();
-				$('#destination-modal').modal('hide');
-			});
-		});
-
-		// Destination > Tools > Remove
-		$('#tools-remove-destination').on('click', function() {
-			var cd_id = t_customer_destinations.row('.selected').data().cd_id;
-			var post_url = WS_CUSTDEST_DELETE + 'custDestId=' + cd_id;
-			$.ajax({
-				method: "GET",
-				url: post_url,
-			}).done(function(msg) {
-				t_customer_destinations.row('.selected').remove().draw( false );
-				t_customer_destinations.ajax.url(WS_CUSTDEST_LIST + 'cust_id=' + t_customer.row('.selected').data().cust_id).load();
-			});
-		});
-
-		// Product > Tools > Add
-		$('#tools-add-product').on('click', function() {
-			// Data Table
-			//t_product_picker.clear();
-			t_product_picker.destroy();
-			t_product_picker = _fnSetDataTable('table-product-picker', WS_PRODUCT_LIST, DS_PRODUCT_LIST, CD_PRODUCT_LIST, 10);
-
-			// Show
-			$('#product-modal').modal('show');
-		});
-
-		// Product > Tools > Add > Row Click Event
-		$('#table-product-picker tbody').on( 'click', 'tr', function () {
-			_fnTableRowSelection(t_product_picker, this, ['product-modal #select-item']);
-		});
-
-		// Product > Tools > Add > Insert Product
-		$('#product-modal #select-item').on('click', function() {
-			var customer_id = t_customer.row('.selected').data().cust_id;
-			var product_id = t_product_picker.row('.selected').data().prod_id;
-			var post_data = 'custProdInfo={ "cust_id": ' + customer_id + ', "prod_id": ' + product_id + '}';
-			console.log(post_data);
-			$.post(WS_CUSTPROD_INSERT, post_data, function(data, status) {
-				t_customer_products.ajax.url(WS_CUSTPROD_LIST + 'cust_id=' + t_customer.row('.selected').data().cust_id).load();
-				$('#product-modal').modal('hide');
-			});
-		});
-
-		// Product > Tools > Remove
-		$('#tools-remove-product').on('click', function() {
-			var cp_id = t_customer_products.row('.selected').data().cp_id;
-			var post_url = WS_CUSTPROD_DELETE + 'custProdId=' + cp_id;
-			$.ajax({
-				method: "GET",
-				url: post_url,
-			}).done(function(msg) {
-				t_customer_products.row('.selected').remove().draw( false );
-				t_customer_products.ajax.url(WS_CUSTPROD_LIST + 'cust_id=' + t_customer.row('.selected').data().cust_id).load();
-			});
-		});
-	});
-</script>
-<input type="hidden" id="selected_cust_id">
 <div class="panel panel-primary">
 	<div class="panel-heading">
-		<i class="fa fa-pencil-square-o"></i> Product Data
+		<i class="fa fa-pencil-square-o"></i> Customer Data
 	</div>
 	<div class="panel-body">
+		<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+			<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+			<ul>
+				<li>All Customer, Destination & Product Details listed here will be available for selection in the Weighing Scale form.</li>
+				<li>Use this page to manage Customer, Destination & Product Details that were added through the Weighing Scale form.</li>
+			</ul>
+		</div>
 		<div class="panel panel-default" style="margin-bottom: 5px">
 			<div class="panel-body">
-				<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-					<div class="btn-group" role="group" aria-label="First group" style="padding-top: 10px;">
-						<i class="fa fa-users"></i> <strong>Customer Data</strong>
-					</div>
-					<div class="btn-group pull-right" role="group" aria-label="First group">
-						<button type="button" class="btn btn-primary" id="tools-new"><i class="fa fa-plus"></i> New</button>
-						<button type="button" class="btn btn-primary disabled" id="tools-edit"><i class="fa fa-pencil"></i> Edit</button>
-						<button type="button" class="btn btn-primary disabled" id="tools-delete"><i class="fa fa-trash-o"></i> Delete</button>
-					</div>
-				</div>
 				<table class="display compact" id="table-customer">
 					<thead>
 						<tr>
 							<th class="text-left">Customer ID</th>
 							<th class="text-left">Customer Code</th>
 							<th class="text-left">Customer Name</th>
+							<th class="text-left">Date Modified</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -315,17 +27,11 @@
 			</div>
 		</div>
 		<div class="panel panel-default" style="margin-bottom: 5px">
+			<div class="panel-heading">
+				<i class="fa fa-map-marker"></i> <strong>Customer <i class="fa fa-angle-double-right"></i> Destination Data</strong>
+			</div>
 			<div class="panel-body" id="panel-content-destinations">
-				<div class="btn-group" role="group" aria-label="First group" style="padding-top: 10px;" id="destTitle">
-					<i class="fa fa-map-marker"></i> <strong>Destination Data </strong>
-				</div>
-				<div class="btn-toolbar pull-right" role="toolbar" aria-label="Toolbar with button groups">
-					<div class="btn-group" role="group" aria-label="First group">
-						<button type="button" class="btn btn-primary disabled" id="tools-add-destination"><i class="fa fa-plus"></i> Add</button>
-						<button type="button" class="btn btn-primary disabled" id="tools-remove-destination"><i class="fa fa-trash-o"></i> Delete</button>
-					</div>
-				</div>
-				<table class="display compact" id="table-destination">
+				<table class="display compact" id="table-custdest-data">
 					<thead>
 						<tr>
 							<th class="text-left">CD ID</th>
@@ -342,17 +48,11 @@
 			</div>
 		</div>
 		<div class="panel panel-default" style="margin-bottom: 10px">
+			<div class="panel-heading">
+				<i class="fa fa-product-hunt"></i> <strong>Customer <i class="fa fa-angle-double-right"></i> Product Data</strong>
+			</div>
 			<div class="panel-body">
-				<div class="btn-group" role="group" aria-label="First group" style="padding-top: 10px;" id="prodTitle">
-					<i class="fa fa-product-hunt"></i> <strong>Product Data </strong>
-				</div>
-				<div class="btn-toolbar pull-right" role="toolbar" aria-label="Toolbar with button groups">
-					<div class="btn-group" role="group" aria-label="First group">
-						<button type="button" class="btn btn-primary disabled" id="tools-add-product"><i class="fa fa-plus"></i> Add</button>
-						<button type="button" class="btn btn-primary disabled" id="tools-remove-product"><i class="fa fa-trash-o"></i> Delete</button>
-					</div>
-				</div>
-				<table class="display compact" id="table-product">
+				<table class="display compact" id="table-custprod-data">
 					<thead>
 						<tr>
 							<th class="text-left">CP ID</th>
@@ -370,108 +70,113 @@
 		</div>
 	</div>
 </div>
-<div class="modal fade bootstrap-dialog type-primary" id="new-form-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-plus"></i> New Customer Data
-			</div>
-			<div class="modal-body">
-				<form class="well no-margin-bottom">
-					<div class="form-group">
-						<label>Customer Code</label>
-						<input type="text" class="form-control" id="cust_code" placeholder="Enter Customer Code">
-					</div>
-					<div class="form-group">
-						<label>Customer Name</label>
-						<input type="text" class="form-control" id="cust_name" placeholder="Enter Customer Name">
-					</div>
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="save-changes"><i class="fa fa-floppy-o"></i> Save</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade bootstrap-dialog type-primary" id="edit-form-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog">
-		<div class="modal-content">
-			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-pencil"></i> Edit Customer Data
-			</div>
-			<div class="modal-body">
-				<form class="well no-margin-bottom">
-					<div class="form-group">
-						<label>Customer Code</label>
-						<input type="text" class="form-control" id="cust_code">
-					</div>
-					<div class="form-group">
-						<label>Customer Name</label>
-						<input type="text" class="form-control" id="cust_name">
-					</div>
-					<input type="hidden" id="cust_id">
-				</form>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="save-changes"><i class="fa fa-floppy-o"></i> Save</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade bootstrap-dialog type-primary" id="destination-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-map-marker"></i> Select Destination Data
-			</div>
-			<div class="modal-body">
-				<table class="display compact" id="table-destination-picker" style="width: 100%">
-					<thead>
-						<tr>
-							<th class="text-left">Destination ID</th>
-							<th class="text-left">Zip Code</th>
-							<th class="text-left">Name</th>
-							<th class="text-left">Location</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-floppy-o"></i> Save</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade bootstrap-dialog type-primary" id="product-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-product-hunt"></i> Select Product Data
-			</div>
-			<div class="modal-body">
-				<table class="display compact" id="table-product-picker" style="width: 100%">
-					<thead>
-						<tr>
-							<th class="text-left">Product ID</th>
-							<th class="text-left">Product Code</th>
-							<th class="text-left">Product Name</th>
-							<th class="text-left">Unit Price</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-floppy-o"></i> Save</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
+<script type="text/javascript" src="js/stic-data-custom.js"></script>
+<script>
+	$(function() {
+		// Customers DT
+		var dtCustomer = loadCustomerData({
+			pkey: 'cust_id',
+			objectId: 'custInfo',
+			modTitle: 'Customer Data',
+			formId: '#dataCustomerForm',
+			formSrc: FORM_CUSTOMER_DATA,
+			showAllBtns: true,
+			cd: CD_CUSTOMER_LIST,
+			ds: DS_CUSTOMER_LIST,
+			wsList: WS_CUSTOMER_LIST,
+			wsInsert: WS_CUSTOMER_INSERT,
+			wsUpdate: WS_CUSTOMER_UPDATE,
+			wsDelete: WS_CUSTOMER_DELETE
+		});		
+		
+		// Customer Destinations DT
+		var dtCustDest = loadDestProdData({
+			pkey1: 'dest_id',
+			pkey2: 'cd_id',
+			objectId1: 'custDestInfo',
+			objectId2: 'custDestId',
+			domId1: 'table-custdest-data',
+			domId2: 'table-destination-data',
+			cd1: CD_CUSTDEST_LIST, 
+			cd2: CD_DESTINATION_LIST,
+			ds1: DS_CUSTDEST_LIST, 
+			ds2: DS_DESTINATION_LIST,
+			wsList1: DEFAULT_ROOT + 'data/data-destination-empty.json',		
+			wsList2: WS_DESTINATION_LIST,
+			wsInsert: WS_CUSTDEST_INSERT,
+			wsDelete: WS_CUSTDEST_DELETE,
+			modTitle: 'Destination Data', 
+			formSrc: PICKER_CUSTDEST_DATA,
+			dtCustomer: dtCustomer
+		});		
+		
+		// Customer Products DT
+		var dtCustProd = loadDestProdData({
+			pkey1: 'prod_id',
+			pkey2: 'cp_id',
+			objectId1: 'custProdInfo',
+			objectId2: 'custProdId',
+			domId1: 'table-custprod-data',
+			domId2: 'table-product-data',
+			cd1: CD_CUSTPROD_LIST, 
+			cd2: CD_PRODUCT_LIST,
+			ds1: DS_CUSTPROD_LIST, 
+			ds2: DS_PRODUCT_LIST,
+			wsList1: DEFAULT_ROOT + 'data/data-product-empty.json',		
+			wsList2: WS_PRODUCT_LIST,
+			wsInsert: WS_CUSTPROD_INSERT,
+			wsDelete: WS_CUSTPROD_DELETE,
+			modTitle: 'Product Data', 
+			formSrc: PICKER_CUSTPROD_DATA,
+			dtCustomer: dtCustomer
+		});
+
+		// Customer DT onDraw event
+		dtCustomer.on('draw.dt', function (e, settings, data) {			
+			dtCustDest.clear().draw();
+			dtCustProd.clear().draw();	
+			dtCustDest.buttons().disable();
+			dtCustProd.buttons().disable();
+			dtCustomer.$('tr.selected').removeClass('selected');			
+		});	
+
+		// Customer Destinations DT onDraw event
+		dtCustDest.on('draw.dt', function (e, settings, data) {			
+			dtCustDest.button('delete:name').disable();
+		});		
+		
+		// Customer Products DT onDraw event
+		dtCustProd.on('draw.dt', function (e, settings, data) {			
+			dtCustProd.button('delete:name').disable();
+		});		
+		
+		// Customer > Data Table > Row Click Event
+		$('#table-customer tbody').on( 'click', 'tr', function () {
+			var row = dtCustomer.row(this).data(),
+				custId = row.cust_id,
+				custCode = row.cust_code,
+				custName = row.cust_name,
+				custDestURL =  WS_CUSTDEST_LIST + 'cust_id=' + custId,
+				custProdURL = WS_CUSTPROD_LIST + 'cust_id=' + custId;
+			// Reload DT based on selected customer
+			if (custId != '') {
+				if ($(this).hasClass('selected')) {
+					$(this).removeClass('selected');	
+					dtCustDest.clear().draw();
+					dtCustProd.clear().draw();
+					dtCustDest.buttons().disable();
+					dtCustProd.buttons().disable();
+					dtCustomer.buttons(['edit:name', 'delete:name']).disable();
+				} else {
+					dtCustomer.$('tr.selected').removeClass('selected');
+					$(this).addClass('selected');					
+					dtCustDest.ajax.url(custDestURL).load();
+					dtCustProd.ajax.url(custProdURL).load();
+					dtCustomer.buttons(['edit:name', 'delete:name']).enable();
+					dtCustDest.buttons(['new:name', 'reload:name']).enable();
+					dtCustProd.buttons(['new:name', 'reload:name']).enable();
+				}
+			}
+		});
+	});
+</script>

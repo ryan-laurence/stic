@@ -11,63 +11,88 @@
 			{
 				"mod_id": "1",
 				"mod_parent": "0",
-				"mod_label": "Weighing"
+				"mod_label": "Weighing",
+				"mod_type": "link"
 			}, {
 				"mod_id": "2",
 				"mod_parent": "0",
-				"mod_label": "Truck In"
+				"mod_label": "Truck In",
+				"mod_type": "link"
 			}, {
 				"mod_id": "3",
 				"mod_parent": "0",
-				"mod_label": "Edit Data"
+				"mod_label": "Edit Data",
+				"mod_type": "group"
 			}, {
 				"mod_id": "4",
 				"mod_parent": "3",
-				"mod_label": "Supplier Data"
+				"mod_label": "Supplier Data",
+				"mod_type": "link"
 			}, {
 				"mod_id": "5",
 				"mod_parent": "3",
-				"mod_label": "Category Data"
+				"mod_label": "Category Data",
+				"mod_type": "link"
 			}
 		];
 			
+		// Build Tree
 		var builddata = function () {
 			var source = [];
 			var items = [];
-			// build hierarchical source.
+			
 			for (i = 0; i < data.length; i++) {
-				var item = data[i];
-				var label = item["mod_label"];
-				var parentid = item["mod_parent"];
-				var id = item["mod_id"];
+				var item = data[i],
+					id = item['mod_id'],
+					type = item['mod_type'],
+					label = item['mod_label'],
+					parentid = item['mod_parent'];
 
 				if (items[parentid]) {
-					var item = { parentid: parentid, label: label, item: item };
+					var item = { 
+						type: type,		
+						item: item, 
+						label: label,
+						parentid: parentid
+					};
+					
 					if (!items[parentid].items) {
 						items[parentid].items = [];
 					}
+					
 					items[parentid].items[items[parentid].items.length] = item;
 					items[id] = item;
-				}
-				else {
-					items[id] = { parentid: parentid, label: label, item: item };
+				
+				} else {
+					items[id] = { 
+						type: type,		
+						item: item, 
+						label: label,
+						parentid: parentid
+					};
+					
 					source[id] = items[id];
 				}
+				
 			}
 			
 			return source;
 		}
+		
 		var source = builddata();
 		console.log(source);
+		
 		var buildUL = function (parent, items) {
 			$.each(items, function () {
 				if (this.label) {
+					
 					// create LI element and append it to the parent element.
 					var li = $('<li><input type="checkbox" data-id="">'  + this.label + '</li>');
 					li.appendTo(parent);
+					
 					// if there are sub items, call the buildUL function.
 					if (this.items && this.items.length > 0) {
-						var ul = $("<ul></ul>");
+						var ul = $('<ul></ul>');
 						ul.appendTo(li);
 						buildUL(ul, this.items);
 					}

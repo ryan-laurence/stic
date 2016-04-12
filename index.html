@@ -2,10 +2,10 @@
 <html lang="en">
 	<head>
 		<title>Weighing System 2.0</title>
-		<link rel="stylesheet" href="css/bootstrap.css" />
-		<link rel="stylesheet" href="css/bootstrap-login.css" />
-		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/bootstrap.css" />			
 		<link rel="stylesheet" href="css/bootstrap-dialog.css" />	
+		<link rel="stylesheet" href="css/bootstrap-login.css" />	
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
 	</head>
 	<body class="login-page">
 		<div class="container">		
@@ -40,14 +40,12 @@
 				</div>
 			</div>
 		</div>
-		<script src="js/jquery/jquery.min.js"></script>
-		<script src="js/jquery/jquery.widget.min.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery-widget.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>
 		<script type="text/javascript" src="js/stic-constants.js"></script>
-		<script type="text/javascript" src="js/stic-functions.js"></script>
-		
-		<script src="js/scaletech-functions.js"></script>
+		<script type="text/javascript" src="js/stic-functions.js"></script>		
 		<script type="text/javascript">
 			$(function () { 
 				console.log('Cookies Before Login: ' + document.cookie);
@@ -82,6 +80,7 @@
 								if (sData === 'SUCCESS') {
 									createCookie('username', username, 1);
 									createCookie('userid', getXMLData(oXml, 'user_id'), 1);
+									createCookie('roleid', getXMLData(oXml, 'role_id'), 1);
 									window.location = DEFAULT_ROOT + 'main.html';
 								};
 								if (sData === 'FAILED') {									

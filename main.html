@@ -7,30 +7,29 @@
 	<link rel="stylesheet" href="css/bootstrap-select.min.css" />
 	<link rel="stylesheet" href="css/bootstrap-dialog.css" />	
 	<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
-	 <!-- Font Awesome CSS -->
-	<link rel="stylesheet" href="css/font-awesome.min.css" />
 	<!-- JQuery DataTable styles -->	
-	<link rel="stylesheet" href="css/dataTables.css" />
-	<link rel="stylesheet" href="css/dataTables.colReorder.min.css" />	
-	<link rel="stylesheet" href="css/dataTables.buttons.css" />
-	<link rel="stylesheet" href="css/bootstrap.buttons.css" />   
+	<link rel="stylesheet" href="css/dt.css" />
+	<link rel="stylesheet" href="css/dt-colreorder.min.css" />	
+	<link rel="stylesheet" href="css/dt-buttons.css" />
+	<link rel="stylesheet" href="css/dt-buttons-bootstrap.css" />   
+	<!-- Font Awesome CSS -->
+	<link rel="stylesheet" href="css/font-awesome.min.css" />
 	<!-- Custom styles -->
   </head>
   <body>
 		<nav class="navbar navbar-inverse">
 			<div class="container">
 				<div id="navbar" class="collapse navbar-collapse">
-					<ul class="nav navbar-nav">
-						<li><a href="#" data-mod-name="weight-scale"><i class="fa fa-balance-scale"></i> Weighing</a></li>
+					<ul class="nav navbar-nav" id="nav-wrapper">
+						<!--li><a href="#" data-mod-name="weight-scale"><i class="fa fa-balance-scale"></i> Weighing</a></li>
 						<li><a href="#" data-mod-name="truck-in"><i class="fa fa-truck"></i> Truck In</a></li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-pencil-square-o"></i> Edit Data <span class="caret"></span></a>
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="#" data-mod-name="data-supplier">Supplier Data</a></li>
 								<li><a href="#" data-mod-name="data-category">Category Data</a></li>
-								<li><a href="#" data-mod-name="data-customer">Product Data</a></li>
+								<li><a href="#" data-mod-name="data-customer">Customer Data</a></li>
 								<li><a href="#" data-mod-name="data-truck">Truck Data</a></li>
-								<li><a href="#" data-mod-name="data-user">User Data</a></li>
 							</ul>
 						</li>
 						<li class="dropdown">
@@ -48,7 +47,6 @@
 								<li><a href="#" data-mod-name="summary-custom">Custom Report</a></li>
 								<li class="divider"></li>
 								<li><a href="#" data-mod-name="summary-event-log">Event Log</a></li>
-								<!--li><a href="#" data-mod-name="erase-data">Erase Data</a></li-->
 							</ul>
 						</li>
 						<li><a href="#" data-mod-name="docket-template-main"><i class="fa fa-file-text-o"></i> Docket</a></li>
@@ -57,11 +55,12 @@
 							<ul class="dropdown-menu" role="menu">
 								<li><a href="#" data-mod-name="others-select-com">Select Com</a></li>
 								<li><a href="#" data-mod-name="others-system-config">System Config</a></li>
+								<li><a href="#" data-mod-name="others-system-access">System Access</a></li>
 								<li><a href="#" data-mod-name="others-calibration">Calibration</a></li>
 								<li><a href="#" data-mod-name="others-backup-data">Backup Data</a></li>
 								<li><a href="#" data-mod-name="others-restore-data">Restore Data</a></li>
 							</ul>
-						</li>
+						</li-->
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#" id="link-user"><i class="fa fa-user"></i> User: <span id="current-user" style="font-weight: bold">Admin</span></a></li>
@@ -87,13 +86,13 @@
 				</div>
 			</div>
 		</div>		
-		<script src="js/jquery/jquery.min.js"></script>
-		<script src="js/jquery/jquery.widget.min.js"></script>
-		<script src="js/jquery/jquery.dataTables.js"></script>
-		<script src="js/jquery/dataTables.colReorder.min.js"></script>		
-		<script src="js/jquery/dataTables.buttons.min.js"></script>		
-		<script src="js/jquery/buttons.print.min.js"></script>		
-		<script src="js/jquery/buttons.bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<script type="text/javascript" src="js/jquery-widget.min.js"></script>
+		<script type="text/javascript" src="js/dt.min.js"></script>
+		<script type="text/javascript" src="js/dt-colreorder.min.js"></script>		
+		<script type="text/javascript" src="js/dt-buttons.min.js"></script>		
+		<script type="text/javascript" src="js/dt-buttons-print.min.js"></script>		
+		<script type="text/javascript" src="js/dt-buttons-bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/moment.min.js"></script>
 		<script type="text/javascript" src="js/transition.js"></script>
 		<script type="text/javascript" src="js/collapse.js"></script>
@@ -101,14 +100,25 @@
 		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>		
 		<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-select.min.js"></script>	
-		<script type="text/javascript" src="js/jquery.formatDateTime.min.js"></script>
-		<script type="text/javascript" src="js/jquery.MyDigitClock.js"></script>
+		<script type="text/javascript" src="js/bootstrap-waitingfor.js"></script>
+		<script type="text/javascript" src="js/jquery-formatDateTime.min.js"></script>
+		<script type="text/javascript" src="js/jquery-MyDigitClock.js"></script>
 		<script type="text/javascript" src="js/stic-constants.js"></script>
-		<script type="text/javascript" src="js/stic-functions.js"></script>
-		<script type="text/javascript" src="js/scaletech-functions.js"></script>	
-		<script type="text/javascript" src="js/validator.min.js"></script>			
+		<script type="text/javascript" src="js/stic-functions.js"></script>		
 		<script type="text/javascript">
 			$(function () { 	
+				console.log('Cookies After Login: ' + document.cookie);
+			
+				// Progress Bar Start
+				$(document).ajaxStart(function() {
+					waitingDialog.show();
+				});
+				
+				// Progress Bar End
+				$(document).ajaxStop(function() {
+					waitingDialog.hide();
+				});
+				
 				// Check Cookies				
 				if (readCookie('userid') === null) {
 					window.location = DEFAULT_ROOT;
@@ -120,10 +130,51 @@
 					$('#current-user').text(sUserName);
 				}	
 				
+				// Load allowed pages
+				$.getJSON(WS_UI_MODULES_LIST + 'roleModuleId=' + readCookie('roleid'), 
+					function(data) { 
+						var label = '', 
+							modules = [],
+							prevParentId = '',
+							currParentId = '',
+							results = data.response['report-list'].report;
+						
+						console.log(results.length);
+						
+						$.each(results, function(i, m) {					
+							currParentId = m.mod_parent;
+							label = (m.mod_icon != '' ? '<i class="' + m.mod_icon + '"></i> ' + m.mod_label : m.mod_label);
+							
+							if (prevParentId != '' && currParentId > prevParentId) {
+								modules.push('</ul></li>');
+							} else if (prevParentId != '' && currParentId == '') {
+								modules.push('</ul></li>');
+							}
+							
+							if (m.mod_type == 'group') {
+								modules.push(
+									'<li class="dropdown">' +
+										'<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">' + 
+											label + ' <span class="caret"></span></a>' +
+											'<ul class="dropdown-menu" role="menu">'
+								);
+							} else {
+								modules.push('<li><a href="#" data-mod-name="' + m.mod_name + '">' + label + '</a></li>');
+							}
+						
+							prevParentId = currParentId;
+							
+						});
+						$('#nav-wrapper').html(modules.join(''));
+						$('[data-mod-name]').on('click', function() { 
+							STIC.loadPage({ 'page_name': $(this).attr('data-mod-name') });
+						});
+					});
+				
 				// New Page Call Function!
-				$('[data-mod-name]').on('click', function() { 
+				/*$('[data-mod-name]').on('click', function() { 
 					STIC.loadPage({ 'page_name': $(this).attr('data-mod-name') });
-				});
+				});*/
 				
 				// Custom Call for un-developed pages
 				$('[data-mod-name="others-calibration"]').on('click', function() {

@@ -67,13 +67,14 @@
 		
 		// Truck > Picker > Select Item
 		$('#truck-data-modal #select-item').on('click', function() {
-			var selected_row = dtTDP.row('.selected');
-			toggleWeightScaleFields({ status: 'SECOND_WEIGHT_IN' });
+			var selected_row = dtTDP.row('.selected'),
+				dateIn =  moment(new Date(selected_row.data().date_in)).format('MM/DD/YYYY');
+			toggleWeightScaleFields({ status: 'SECOND_WEIGHT_IN' });			
 			$('#wr_id').val(selected_row.data().wr_id);
 			$('#truck_code').val(selected_row.data().truck_code);
 			$('#weight_unit').text(selected_row.data().weight_unit);
 			$('#weight_in_reading').val(selected_row.data().weight_in_reading);
-			$('#weight_in_date').val(selected_row.data().date_in + ' ' + selected_row.data().time_in);
+			$('#weight_in_date').val(dateIn + ' ' + selected_row.data().time_in);
 			$('#truck-data-modal').modal('hide');			
 		});
 		
@@ -191,7 +192,7 @@
 					domId: 'table-destination-data-all',
 					ds: DS_DESTINATION_LIST,
 					cd: CD_DESTINATION_LIST,
-					ws: WS_DESTINATION_LIST + $('#cust_id').val()
+					ws: WS_DESTINATION_LIST + 'cust_id=' + $('#cust_id').val()
 				});
 				$('#destination-data-all-modal').modal('show');			
 			} else {
@@ -753,7 +754,7 @@
 				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
 					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
 					<ul>
-						<li>Records listed here are Customer Details which are already available in the system.</li>
+						<li>Records listed here are Customer Details that are already available in the system.</li>
 						<li>To add new Customer Details, use the Weighing Scale form.</li>
 					</ul>
 				</div>
@@ -763,6 +764,7 @@
 							<th class="text-left">Customer ID</th>
 							<th class="text-left">Customer Code</th>
 							<th class="text-left">Customer Name</th>
+							<th class="text-left">Date Modified</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -786,7 +788,7 @@
 				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
 					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
 					<ul>
-						<li>Records listed here are Destination Details which are already assigned to the selected Customer Detail.</li>
+						<li>Records listed here are Destination Details that are already assigned to the selected Customer Detail.</li>
 						<li>To assign new Destination Details to the selected Customer Detail, use the Weighing Scale form.</li>
 					</ul>
 				</div>
@@ -822,7 +824,7 @@
 				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
 					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
 					<ul>
-						<li>Records listed here are Destination Details which are not yet assigned to the selected Customer Detail.</li>
+						<li>Records listed here are Destination Details that are not yet assigned to the selected Customer Detail.</li>
 						<li>To assign new Destination Details to the selected Customer Detail, select a record below.</li>
 					</ul>
 				</div>
@@ -856,7 +858,7 @@
 				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
 					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
 					<ul>
-						<li>Records listed here are Product Details which are already assigned to the selected Customer Detail.</li>
+						<li>Records listed here are Product Details that are already assigned to the selected Customer Detail.</li>
 						<li>To assign new Product Details to the selected Customer Detail, use the Weighing Scale form.</li>
 					</ul>
 				</div>
@@ -892,7 +894,7 @@
 				<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
 					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
 					<ul>
-						<li>Records listed here are Supplier Details which are already available in the system.</li>
+						<li>Records listed here are Supplier Details that are already available in the system.</li>
 						<li>To add new Supplier Details, use the Weighing Scale form.</li>
 					</ul>
 				</div>
@@ -902,6 +904,7 @@
 							<th class="text-left">Supplier ID</th>
 							<th class="text-left">Supplier Code</th>
 							<th class="text-left">Supplier Name</th>
+							<th class="text-left">Date Modified</th>
 						</tr>
 					</thead>
 					<tbody>

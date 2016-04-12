@@ -50,18 +50,25 @@
 		];	
 	
 		// Docket Field Table
-		var dt_docket_fields = $('#table-data').DataTable({	
-			'info': true,
-			'paging': true,
-			'ordering': true,
-			'searching': false,
-			'lengthChange': false,
-			'columns': cd_fields,
-			'ajax': { 
-				'url': WS_LIST_DOCKET_FIELDS + 'available=A1', 
-				'dataSrc': DEFAULT_DS_REPORTS 
-			}			
-		});
+		var dt_docket_fields = $('#table-data')
+			.DataTable({	
+				'info': true,
+				'paging': true,
+				'ordering': true,
+				'searching': false,
+				'lengthChange': false,
+				'columns': cd_fields,
+				'ajax': { 
+					'url': WS_LIST_DOCKET_FIELDS + 'available=A1', 
+					'dataSrc': DEFAULT_DS_REPORTS 
+				}			
+			});
+		
+		// DT Default Sorting
+		dt_docket_fields
+			.column('0:visible')
+			.order('asc')
+			.draw();  
 		
 		// Select Docket Type
 		$('#select-docket-type').on('change', function() {		

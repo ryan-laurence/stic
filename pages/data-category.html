@@ -3,12 +3,19 @@
 		<i class="fa fa-pencil-square-o"></i> Category Data
 	</div>
 	<div class="panel-body">
+		<div class="alert alert-success" role="alert" style="margin: 0px 0px 15px 0px;">
+			<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+			<ul>
+				<li>Use this page to manage Category Details for future use in the system.</li>
+			</ul>
+		</div>
 		<table class="display compact" id="table-data">
 			<thead>
 				<tr>
 					<th class="text-left">Category ID</th>
 					<th class="text-left">Category Code</th>
 					<th class="text-left">Category Name</th>
+					<th class="text-left">Date Modified</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -20,18 +27,18 @@
 <script>
 	$(function() {
 		loadEditData({
-			pk_id: 'cat_id',
-			root_node: 'cateInfo',
-			report_title: 'Category Data',
-			form_id: '#dataCategoryForm',
-			frm_html: FORM_CATEGORY_DATA,
-			dt_btns_all: true,
-			dt_cd: CD_CATEGORY_LIST,
-			dt_ds: DS_CATEGORY_LIST,
-			ws_list: WS_CATEGORY_LIST,
-			ws_insert: WS_CATEGORY_INSERT,
-			ws_update: WS_CATEGORY_UPDATE,
-			ws_delete: WS_CATEGORY_DELETE
+			pkey: 'cat_id',
+			objectId: 'cateInfo',
+			modTitle: 'Category Data',
+			formId: '#dataCategoryForm',
+			formSrc: FORM_CATEGORY_DATA,
+			showAllBtns: true,
+			cd: CD_CATEGORY_LIST,
+			ds: DS_CATEGORY_LIST,
+			wsList: WS_CATEGORY_LIST,
+			wsInsert: WS_CATEGORY_INSERT,
+			wsUpdate: WS_CATEGORY_UPDATE,
+			wsDelete: WS_CATEGORY_DELETE
 		});
 	});
 </script>

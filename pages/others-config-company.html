@@ -1,17 +1,35 @@
-<form class="form-horizontal well no-margin-bottom">
+<form class="form-horizontal well no-margin-bottom" id="dataConfigCompanyForm">
 	<div class="row">
 		<div class="col-md-12">
 			<div class="form-group">
-				<label class="control-label" for="contact-person">Contact Person</label>
-				<input type="text" class="form-control" data-field="contact_person" value="Juan Dela Cruz">
+				<label class="control-label" for="contact_person">Contact Person</label>
+				<input type="text" class="form-control" 
+					data-field="contact_person"
+					data-fv-notempty="true"
+					data-fv-notempty-msg="Contact Person is required."
+					data-fv-stringlength="true"
+					data-fv-stringlength-max="50"
+					data-fv-stringlength-msg="Bridge Code must be less than 50 characters.">
 			</div>
 			<div class="form-group">
-				<label class="control-label" for="company-name">Company Name</label>
-				<input type="text" class="form-control" data-field="company_name" value="Scaletech International Corporation">
+				<label class="control-label" for="company_name">Company Name</label>
+				<input type="text" class="form-control" 
+					data-field="company_name"
+					data-fv-notempty="true"
+					data-fv-notempty-msg="Company Name is required."
+					data-fv-stringlength="true"
+					data-fv-stringlength-max="100"
+					data-fv-stringlength-msg="Company Name must be less than 100 characters.">
 			</div>
 			<div class="form-group">
-				<label class="control-label" for="address">Address</label>
-				<input type="text" class="form-control" data-field="company_address" value="3050 F. Bautista St. Bo. Ugong, Valenzuela City">
+				<label class="control-label" for="company_address">Address</label>
+				<input type="text" class="form-control" 
+					data-field="company_address"
+					data-fv-notempty="true"
+					data-fv-notempty-msg="Address is required."
+					data-fv-stringlength="true"
+					data-fv-stringlength-max="200"
+					data-fv-stringlength-msg="Address must be less than 200 characters.">
 			</div>
 		</div>
 	</div>
@@ -59,33 +77,46 @@
 
 		// Save
 		$('#save-config').on('click', function() {
-			BootstrapDialog.confirm({
-				title: MSG_TITLE_CONFIRM_SAVE,
-				message: MSG_CONFIRM_SAVE_CONFIG_COMPANY,			
-				callback: function(result) {
-					if (result) {
-						var jsonString = '',
-							jsonObject = {};							
-						$.each($('input[data-field]'), function(index, formElement) {
-							var postString = '{"' + $(formElement).attr('data-field') + '":"' + $(formElement).val() + '"}';
-							$.extend(jsonObject, $.parseJSON(postString)); 
-						});
-						jsonString = 'companyInfo=' + JSON.stringify(jsonObject);
-						$.post(WS_UPDATE_CONFIG_COMPANY, jsonString, function(data, status){
-							BootstrapDialog.alert({
-								title: MSG_INFO_TITLE,
-								message: 'Company Details were updated successfully.',	
-								type: BootstrapDialog.TYPE_PRIMARY
+			var isValid = STIC.FormValidation({ 
+				formId: '#dataConfigCompanyForm' 
+			});		
+			if (isValid) {
+				BootstrapDialog.confirm({
+					title: MSG_TITLE_CONFIRM_SAVE,
+					message: MSG_CONFIRM_SAVE_CONFIG_COMPANY,			
+					callback: function(result) {
+						if (result) {
+							var jsonString = '',
+								jsonObject = {};							
+							$.each($('input[data-field]'), function(index, formElement) {
+								var postString = '{"' + $(formElement).attr('data-field') + '":"' + $(formElement).val() + '"}';
+								$.extend(jsonObject, $.parseJSON(postString)); 
 							});
-							loadCompanyDetails();
-						});
-					} 
-				}
-			});
+							jsonString = 'companyInfo=' + JSON.stringify(jsonObject);
+							$.post(WS_UPDATE_CONFIG_COMPANY, jsonString, function(data, status){
+								BootstrapDialog.alert({
+									title: MSG_INFO_TITLE,
+									message: 'Company Details were updated successfully.',	
+									type: BootstrapDialog.TYPE_PRIMARY
+								});
+								loadCompanyDetails();
+							});
+						}
+						STIC.FormValidation({ 
+							clearHelpBlocks: true,
+							formId: '#dataConfigCompanyForm'
+						});	
+					}
+				});
+			}
 		});
 		
 		// Reset
 		$('#reset-config').on('click', function() {
+			STIC.FormValidation({ 
+				clearHelpBlocks: true,
+				formId: '#dataConfigCompanyForm'
+			});	
 			loadCompanyDetails();
 		});
 	});

@@ -1,0 +1,30 @@
+<table class="display compact" id="table-data">
+	<thead>
+		<tr>
+			<th class="text-left">Role ID</th>
+			<th class="text-left">Role Name</th>
+			<th class="text-left">Date Modified</th>
+		</tr>
+	</thead>
+	<tbody>
+	</tbody>
+</table>
+<script type="text/javascript" src="js/stic-data.js"></script>
+<script>
+	$(function() {
+		loadEditData({
+			pkey: 'role_id', 
+			objectId: 'roleInfo', 
+			modTitle: 'Role Data', 
+			formId: '#dataRolesForm', 
+			formSrc: FORM_ROLES_DATA, 
+			showAllBtns: true,
+			cd: CD_ROLES_LIST, 
+			ds: DEFAULT_DS_REPORTS, 
+			wsList: WS_ROLES_LIST, 
+			wsInsert: WS_ROLES_INSERT, 
+			wsUpdate: WS_ROLES_UPDATE, 
+			wsDelete: WS_ROLES_DELETE 
+		});
+	});
+</script>
