@@ -19,7 +19,7 @@
 .funkyradio input[type="checkbox"]:empty ~ label {
   position: relative;
   line-height: 2.5em;
-  text-indent: 3.25em;
+  text-indent: 1.7em;
   margin-top: 0.25em;
   cursor: pointer;
   -webkit-user-select: none;
