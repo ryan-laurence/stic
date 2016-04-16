@@ -123,7 +123,8 @@ var WS_CUSTPROD_DELETE = '/scaletech/services/CustProductsInfoServices/updateCus
 // Truck Data
 var CD_TRUCK_LIST = [
 	{ data: 'truck_id', visible: false, searchable: false },
-	{ data: 'truck_code' }
+	{ data: 'truck_code', width: '50%' },
+	{ data: 'date_modified', width: '50%' }
 ];
 var FORM_TRUCK_DATA = 'pages/data-truck-form.html';
 var DS_TRUCK_LIST = 'response.trucks-list.truck';
@@ -141,7 +142,9 @@ var CD_USER_LIST = [
 	{ data: 'role_name' },
 	{ data: 'date_modified' }
 ];
-var FORM_USER_DATA = 'pages/others-user-details-form.html';
+var FORM_USER_NEW_DATA = 'pages/others-user-details-form-new.html';
+var FORM_USER_EDIT_DATA = 'pages/others-user-details-form-edit.html';
+var FORM_USER_CPASS_DATA = 'pages/others-user-details-form-cpass.html';
 var FORM_CHANGE_PASS_DATA = 'pages/user-change-pass-form.html';
 var DS_USER_LIST = 'response.users-list.user';
 var WS_USER_LIST = '/scaletech/services/UserInfoServices/getAllUserList?response=application/json&';
@@ -150,6 +153,7 @@ var WS_USER_UPDATE = '/scaletech/services/UserInfoServices/updateUser?response=a
 var WS_USER_DELETE = '/scaletech/services/UserInfoServices/updateUserByIsDeleted?response=application/json&is_deleted=0&';
 var WS_USER_PASS_CHECK = '/scaletech/services/UserInfoServices/getUserByNamePassList?response=application/json&';
 var WS_USER_PASS_UPDATE = '/scaletech/services/UserInfoServices/updateUserPassword?response=application/json&';
+var WS_USER_CHECK = '/scaletech/services/UserInfoServices/getUserByNamePassList?response=application/json&'
 
 // Roles Data
 var WS_LIST_ROLES = '/scaletech/services/RolesInfoServices/getAllRolesList?response=application/json&roleId=1&';
@@ -285,7 +289,18 @@ var WS_ROLES_DELETE = '/scaletech/services/RolesInfoServices/updateRolesByIsDele
 
 // Role Modules
 var WS_ROLE_MODULES_LIST = '/scaletech/services/ModulesInfoServices/getAllModulesList?response=application/json&';
+var WS_ROLE_MODULES_INSERT = '/scaletech/services/RoleModulesInfoService/addRoleModules?response=application/json&'
+var WS_ROLE_MODULES_DELETE = '/scaletech/services/RoleModulesInfoService/updateRoleModulesByIsDeleted?response=application/json&isDeleted=0'
 var WS_UI_MODULES_LIST = '/scaletech/services/RoleModulesInfoService/getAllRoleModulesList?response=application/json&isDeleted=0&';
+
+var WS_UNIQUE_CHECK = [];
+WS_UNIQUE_CHECK['supp_code'] = '/scaletech/services/SuppliersInfoServices/getSuppliersByCodeList?response=application/json&';
+WS_UNIQUE_CHECK['cat_code'] = '/scaletech/services/CategoriesInfoService/getCategoriesByCodeList?response=application/json&';
+WS_UNIQUE_CHECK['prod_code'] = '/scaletech/services/ProductsInfoServices/getProductsByCodeList?response=application/json&';
+WS_UNIQUE_CHECK['cust_code'] = '/scaletech/services/CustomerInfoServices/getCustomersByCodeList?response=application/json&';
+WS_UNIQUE_CHECK['truck_code'] = '/scaletech/services/TrucksInfoServices/getTrucksByCodeList?response=application/json&';
+WS_UNIQUE_CHECK['role_name'] = '/scaletech/services/RolesInfoServices/getAllRolesByRoleNameList?response=application/json&';
+WS_UNIQUE_CHECK['user_name'] = '/scaletech/services/UserInfoServices/getUserByNameList?response=application/json&';
 
 // ******************************************************************************************************************************************************8
 
@@ -316,6 +331,9 @@ var MSG_SECOND_WEIGHING_CONFIRM = 'Please make sure all details provided are cor
 
 var MSG_WEIGHT_INPUT_ERROR_TITLE = '<i class="fa fa-exclamation-circle"></i> Input Error';
 var MSG_ERROR_TITLE = '<i class="fa fa-exclamation-circle"></i> Error';
+var MSG_TITLE_LOGIN_ERROR = '<i class="fa fa-exclamation-circle"></i> Login Error';
+var MSG_INFO_LOGIN_ERROR = '<strong>Invalid</strong> login credentials. You are <strong>not allowed</strong> to access the system.';
+var MSG_INFO_LOGIN_ERROR_INLINE = '<div class="alert alert-danger" role="alert" style="text-align: left"><i class="fa fa-exclamation-circle"></i> <strong>Invalid</strong> login credentials. You are <strong>not allowed</strong> to access the system. Please contact system administrator for more details.</div>';
 
 var MSG_INFO_TITLE = '<i class="fa fa-info-circle"></i> Information';
 var MSG_TITLE_CONFIRM_SAVE = '<i class="fa fa-question-circle"></i> Confirm Update';
@@ -328,13 +346,19 @@ var MSG_ADD_REC_TITLE = '<i class="fa fa-info-circle"></i> Information';
 var MSG_EDIT_REC_TITLE = '<i class="fa fa-info-circle"></i> Information';
 var MSG_DEL_REC_TITLE = '<i class="fa fa-info-circle"></i> Information';
 var MSG_WS_ERROR_TITLE = '<i class="fa fa-exclamation-circle"></i> Web Service Error';
-var MSG_ADD_REC_INFO = 'Success. A new record has been created.';
-var MSG_EDIT_REC_INFO = 'Success. The selected record was updated.';
-var MSG_DEL_REC_INFO = 'Success. The selected record was deleted.';
-var MSG_WS_ERROR_INFO = 'Unable to commit changes due to web service error.';
+var MSG_DUPLICATE_REC_TITLE = '<i class="fa fa-exclamation-circle"></i> Duplicate Entry';
+var MSG_ADD_REC_INFO = '<strong>Success</strong>. A new record has been <strong>created</strong> in the system.';
+var MSG_EDIT_REC_INFO = '<strong>Success</strong>. The selected record was <strong>updated</strong> in the system.';
+var MSG_DEL_REC_INFO = '<strong>Success</strong>. The selected record was <strong>deleted</strong> from the system.';
+var MSG_WS_ERROR_INFO = 'The changes you requested were <strong>not successful</strong> because there was an error in the Web Service response. If issue still persists, please contact your System Administrator.';
+var MSG_WS_ERROR_INLINE = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> The changes you requested were <strong>not successful</strong> because there was an error in the Web Service response. If issue still persists, please contact your System Administrator.</div>';
+var MSG_DUPLICATE_REC_INLINE = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> The changes you requested were <strong>not submitted</strong> because they would create duplicate data in the system. Change the value of the field(s) that contains duplicate data and try again.</div>';
+var MSG_FORM_ERROR_INLINE = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> The changes you requested were <strong>not submitted</strong>. Change the value of the field(s) that contains errors and try again.</div>';
+var MSG_LOGIN_ERROR_INLINE = '<div class="alert alert-danger" role="alert" style="text-align: left"><i class="fa fa-exclamation-circle"></i> Your request was <strong>not submitted</strong>. Change the value of the field(s) that contains errors and try again.</div>';
 
-var MSG_CONFIRM_DELETE_RECORD = 'This will delete the selected record. Press OK to continue.';
-var MSG_CONFIRM_SAVE_COM_PORT = 'This will update the current Communication Port settings. Press OK to continue.';
-var MSG_CONFIRM_SAVE_CONFIG_WEIGHIN = 'This will update the current Weigh In settings. Press OK to continue.';
-var MSG_CONFIRM_SAVE_CONFIG_COMPANY = 'This will update the current Company Details settings. Press OK to continue.';
-var MSG_CONFIRM_SAVE_CONFIG_DOCKET = 'This will update the current Docket settings. Press OK to continue.';
+var MSG_CONFIRM_REMOVE_MODULES = 'This will <strong>remove</strong> all modules assigned to the selected role. Press <strong>OK</strong> to continue.';
+var MSG_CONFIRM_DELETE_RECORD = 'This will <strong>delete</strong> the selected record. Press <strong>OK</strong> to continue.';
+var MSG_CONFIRM_SAVE_COM_PORT = 'This will <strong>update</strong> the current Communication Port settings. Press <strong>OK</strong> to continue.';
+var MSG_CONFIRM_SAVE_CONFIG_WEIGHIN = 'This will <strong>update</strong> the current Weigh In settings. Press <strong>OK</strong> to continue.';
+var MSG_CONFIRM_SAVE_CONFIG_COMPANY = 'This will <strong>update</strong> the current Company Details settings. Press <strong>OK</strong> to continue.';
+var MSG_CONFIRM_SAVE_CONFIG_DOCKET = 'This will <strong>update</strong> the current Docket settings. Press <strong>OK</strong> to continue.';

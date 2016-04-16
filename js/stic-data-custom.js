@@ -35,14 +35,14 @@ function loadDestProdData(params) {
 		dtCustomer = params.dtCustomer,
 
 		// DT Buttons Text
-		dtBtnNewTxt = '<i class="fa fa-plus"></i> Add',
-		dtBtnDelTxt = '<i class="fa fa-trash-o"></i> Delete',
+		dtBtnNewTxt = '<i class="fa fa-plus-circle"></i> Add',
+		dtBtnDelTxt = '<i class="fa fa-minus-circle"></i> Remove',
 		dtBtnRelTxt = '<i class="fa fa-refresh"></i> Refresh',
 		dtBtnPrintTxt = '<i class="glyphicon glyphicon-print"></i> Print',
 
 		// Modal Form Options
 		modalFrmContent = $('<div></div>').load(params.formSrc),
-		modalNewTitle = '<i class="fa fa-plus"></i> Add ' + params.modTitle,
+		modalNewTitle = '<i class="fa fa-plus-circle"></i> Add ' + params.modTitle,
 
 		// Modal Buttons > Save
 		modalBtnSave = {
@@ -245,7 +245,8 @@ function loadDestProdData(params) {
 		.on('draw.dt', function (e, settings, data) {
 			dt.data().length > 0 ?
 				dt.button('print:name').enable() :
-				dt.button('print:name').disable()
+				dt.button('print:name').disable();
+			dt.button('delete:name').disable();
 		});
 
 	// DT Default Sorting
@@ -311,7 +312,7 @@ function loadCustomerData(params) {
 		// Modal Buttons > Cancel
 		modalBtnCancel = {
 			label: 'Cancel',
-			className: 'btn-primary',
+			cssClass: 'btn-primary',
 			icon: 'fa fa-ban',
 			action: function(dialogItself) {
 				BootstrapDialog.closeAll();
@@ -416,21 +417,19 @@ function loadCustomerData(params) {
 		STIC.FormValidation({ formId: params.formId, clearHelpBlocks: true });
 	}
 
-	// New & Edit Button Action
+	// New & Edit Save Button Action
 	function btnSaveAction(dialogRef) {
 		// Form Validation
 		var isValid = STIC.FormValidation({ formId: params.formId });
 
 		// Proceed if form is valid
 		if (isValid) {
-			var wsPost = '',
-				postString = '',
-				JSONString = '',
-				JSONObject = {},
-				infoMessage = '',
-				modalBody = dialogRef.getModalBody(),
-				elements = modalBody.find('input[data-field]'),
-				pkey = $('input[data-field="' + params.pkey + '"]');
+			var wsPost = '', postString = '', 
+				infoTitle = '', infoMessage = '',
+				JSONString = '', JSONObject = {},
+				modalBody = dialogRef.getModalBody(),				
+				pkey = $('input[data-field="' + params.pkey + '"]'),
+				elements = modalBody.find('input[data-field], select[data-field]');
 
 			// Switch between insert & update options
 			if (pkey.val() != '') {
@@ -442,26 +441,79 @@ function loadCustomerData(params) {
 				infoTitle = MSG_ADD_REC_TITLE;
 				infoMessage = MSG_ADD_REC_INFO;
 			}
-
-			// Build post data
-			$.each(elements, function(idx, elem) {
-				var input = $(elem),
-					inputValue = input.val(),
-					inputField = input.attr('data-field');
-				postString = '{"' + inputField + '":"' + inputValue + '"}';
+			
+			var input = $(params.formId).find('input[data-fv-unique="true"]'),
+				fieldValue = $(input).val(), fieldName = $(input).attr('data-field'),
+				postString = '{"' + fieldName + '": "' + fieldValue + '"}';		
+				
+			// Check for duplicate entry if required
+			if (input.length > 0) {
+				if (pkey.val() != '')
+					$.extend(JSONObject, $.parseJSON('{"' + params.pkey + '": "' + pkey.val() + '"}'));				
+				
 				$.extend(JSONObject, $.parseJSON(postString));
-			});
+				$.post(WS_UNIQUE_CHECK[fieldName], JSONObject)
+					.done(function (result, status) {
+						
+						// Proceed with insert if no duplicate records found
+						if (result.response.type === 'FAILED') {
+							insertUpdateData({
+								url: wsPost,
+								title: infoTitle,
+								message: infoMessage,
+								elements: elements
+							});
+							
+						// Show errors if there are duplicate records found
+						} else {
+							STIC.showDuplicateError({
+								ukey: fieldName,
+								formId: params.formId
+							});
+						}
+					})
+					
+					// Show WS Error
+					.fail(function () {
+						STIC.showWSError({ formId: params.formId });
+					});
+			
+			// Proceed with insert if not required to check duplicate
+			} else {
+				insertUpdateData({
+					url: wsPost,
+					title: infoTitle,
+					message: infoMessage,
+					elements: elements
+				});
+			}
+			
+			// Insert & Update
+			function insertUpdateData(o) {
+				var postString = '', JSONString = '', 
+					JSONObject = {};
+				
+				// Build post data
+				$.each(o.elements, function(idx, elem) {
+					var input = $(elem),
+						inputValue = input.val(),
+						inputField = input.attr('data-field');
+					postString = '{"' + inputField + '":"' + inputValue + '"}';
+					$.extend(JSONObject, $.parseJSON(postString));
+				});
 
-			// Build JSON string
-			JSONString = params.objectId + '=' + JSON.stringify(JSONObject);
-
-			// Call WS
-			STIC.postData({
-				url: wsPost,
-				data: JSONString,
-				title: infoTitle,
-				message: infoMessage
-			});
+				// Build JSON string
+				JSONString = params.objectId + '=' + JSON.stringify(JSONObject);
+				
+				// Call WS
+				STIC.postData({
+					url: o.url,
+					data: JSONString,
+					title: o.title,
+					message: o.message,
+					formId: params.formId
+				});
+			}
 		}
 	}
 
@@ -553,7 +605,9 @@ function loadCustomerData(params) {
 		.on('draw.dt', function (e, settings, data) {
 			dt.data().length > 0 ?
 				dt.button('print:name').enable() :
-				dt.button('print:name').disable()
+				dt.button('print:name').disable();
+			dt.button('edit:name').disable();
+			dt.button('delete:name').disable();
 		});
 
 	// DT Default Sorting

@@ -29,8 +29,8 @@
 								<input class="form-control input-lg" placeholder="Password" id="password" type="password" autofocus>
 							</div>
 						</div>
-						<button type="button" name="go" class="btn btn-lg btn-primary btn-block" id="loginbtn"><i class="fa fa-sign-in"></i> Login</button>	
-						<div style="border-top: 1px solid #888; margin: 30px 0 5px 0; padding-top: 20px; font-size: 85%">
+						<button type="button" name="go" class="btn btn-lg btn-primary btn-block" id="loginbtn" style="margin-top: 20px"><i class="fa fa-sign-in"></i> Login</button>	
+						<div style="border-top: 1px solid #888; margin: 20px 0 5px 0; padding-top: 20px; font-size: 85%">
 							<div style="font-weight: bold">Scaletech International Corporation</div>
 							<div>3050 F. Bautista St. Bo. Ugong, Valenzuela City</div>
 							<div>Phone: 983-7895/96, Fax: 444-0592</div>
@@ -56,50 +56,96 @@
 				}
 				
 				// Login Button action
-				$("#loginbtn").click(function() {
-					var username = $('#username').val();
-					var password = $('#password').val();
-					if (username == '' || password == '') {	
-						$('#username').val('');
-						$('#password').val('');
-						BootstrapDialog.alert({
-							title: MSG_ERROR_TITLE,
-							message: 'Username or Password must not be empty!',
-							type: BootstrapDialog.TYPE_DANGER
-						});
+				$("#loginbtn").on('click', function () {
+					var totalErrors = 0,
+						username = $('#username').val(),
+						password = $('#password').val();
+					
+					// Clear error messages & styles
+					$('.login-form').find('div.form-group')
+						.removeClass('has-error has-feedback')
+						.removeClass('has-success has-feedback');
+					$('.login-form').find('div.form-group')
+						.find('span.glyphicon, small.help-block')
+						.remove();	
+					$('.login-form').find('div.alert').remove();
+					
+					// Validate user name
+					var divInputGroup = $('.login-form').find('#username').parent(),
+							divFormGroup = $('.login-form').find('#username').parent().parent();		
+					if (username == '') {										
+						divFormGroup.addClass('has-error has-feedback');
+						divFormGroup.append('<small class="help-block" style="text-align: left">Username is required.</small>');
+						divInputGroup.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+						totalErrors++;
 					} else {
-						$.ajax({
-							type: 'POST',
-							url: '/scaletech/services/UserInfoServices/getUserByNamePassList',
-							data: {
-								user_name: username,
-								user_password: password
-							},
-							success: function(oXml, textStatus, jqXHR) {
-								var sData = getXMLData(oXml, 'type'); 
-								if (sData === 'SUCCESS') {
-									createCookie('username', username, 1);
-									createCookie('userid', getXMLData(oXml, 'user_id'), 1);
-									createCookie('roleid', getXMLData(oXml, 'role_id'), 1);
+						divFormGroup.addClass('has-success has-feedback');								
+						divInputGroup.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+					}
+					
+					// Validate user password
+					var divInputGroup = $('.login-form').find('#password').parent(),
+							divFormGroup = $('.login-form').find('#password').parent().parent();	
+					if (password == '') {
+						divFormGroup.addClass('has-error has-feedback');
+						divFormGroup.append('<small class="help-block" style="text-align: left">Password is required.</small>');
+						divInputGroup.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+						totalErrors++;
+					} else {
+						divFormGroup.addClass('has-success has-feedback');								
+						divInputGroup.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+					}
+					
+					// Authenticate user 
+					if (totalErrors <= 0 ) {
+						$.post(WS_USER_CHECK, { user_name: username, user_password: password })
+							.done(function (result, status) {
+								var response = result.response;
+
+								// Authenticated
+								if (response.type === 'SUCCESS') {
+									createCookie('username', response['users-list'].user.user_name, 1);
+									createCookie('userid', response['users-list'].user.user_id, 1);
+									createCookie('roleid', response['users-list'].user.role_id, 1);
 									window.location = DEFAULT_ROOT + 'main.html';
-								};
-								if (sData === 'FAILED') {									
-									$('#username').val('');
-									$('#password').val('');
-									BootstrapDialog.alert({
-										title: MSG_ERROR_TITLE,
-										message: 'Invalid Credentials! Please try again!',
-										type: BootstrapDialog.TYPE_DANGER
-									});
+								
+								// Not Authorized
 								} else {
-									//alert(oXml);
-								};
-							},
-							error: function(jqXHR, textStatus, errorThrown) {
-								console.log('jqXHR: ' + jqXHR + ', textStatus: ' + textStatus + ', errorThrown: ' + errorThrown);
-							}					
-						});
-					}					
+									// Clear error messages & styles
+									$('.login-form').find('div.form-group')
+										.removeClass('has-error has-feedback')
+										.removeClass('has-success has-feedback');
+									$('.login-form').find('div.form-group')
+										.find('span.glyphicon, small.help-block')
+										.remove();	
+									$('.login-form').find('div.alert').remove();
+									
+									// Clear form values
+									//$('#username').val('');
+									//$('#password').val('');
+									
+									$('.login-form img').after(MSG_INFO_LOGIN_ERROR_INLINE);
+									$('.login-form').find('#username, #password').parent()
+										.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+									$('.login-form').find('#username, #password').parent().parent()
+										.addClass('has-error has-feedback')
+										.append('<small class="help-block" style="text-align: left">Invalid credential.</small>');
+									
+									/*BootstrapDialog.alert({
+										title: MSG_TITLE_LOGIN_ERROR,
+										message: MSG_INFO_LOGIN_ERROR,
+										type: 'type-danger'
+									});*/
+								}
+							})
+							
+							// Show WS Error
+							.fail(function () {
+								STIC.showWSError();
+							})
+					} else {
+						$('.login-form img').after(MSG_LOGIN_ERROR_INLINE);
+					}
 				});
 			});
 		</script>

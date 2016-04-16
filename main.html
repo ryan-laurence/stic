@@ -139,7 +139,7 @@
 							currParentId = '',
 							results = data.response['report-list'].report;
 						
-						console.log(results.length);
+						//console.log(results.length);
 						
 						$.each(results, function(i, m) {					
 							currParentId = m.mod_parent;
@@ -165,6 +165,7 @@
 							prevParentId = currParentId;
 							
 						});
+						$('#nav-wrapper').html('');
 						$('#nav-wrapper').html(modules.join(''));
 						$('[data-mod-name]').on('click', function() { 
 							STIC.loadPage({ 'page_name': $(this).attr('data-mod-name') });

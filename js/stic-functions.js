@@ -266,6 +266,31 @@ var STIC = {
 		}
 	},
 
+	// DT toggle Row Select
+	dtToggleRowSelect: function (params) {
+		var pid = params.pid, 
+			row = params.row,
+			table = params.table,
+			buttons = params.buttons || [];
+		if (table.row(row).data()[pid] != '') {
+			if ($(row).hasClass('selected')) {
+				$(row).removeClass('selected');	
+				if (buttons.length > 0) {
+					$.each(buttons, function(idx, button) {
+						$(button).addClass('disabled');
+					});	
+				}						
+			} else {
+				table.$('tr.selected').removeClass('selected');
+				$(row).addClass('selected');			
+				if (buttons.length > 0) {
+					$.each(buttons, function(idx, button) {
+						$(button).removeClass('disabled');
+					});	
+				}		
+			}
+		}			
+	},
 	
 	// Docket Style Functions
 	DocketStyle: {
@@ -326,103 +351,150 @@ var STIC = {
 		}
 	},
 	
-	// Form Validation
-	FormValidation: function(options) {
-		var clearHelpBlocks = (typeof options.clearHelpBlocks != 'undefined' ? options.clearHelpBlocks : false);
-		if (clearHelpBlocks) {
-			var elems = $(options.formId).find('input[data-field], select[data-field]');
-			$.each(elems, function(idx, elem) {
-				var div = $(elem).parent(),
-					span = $(div).children('span'),
-					small = $(div).children('small');
-				var div2 = $('label[for="' + $(elem).attr('data-field') + '"]').parent();
-				span.remove();
-				small.remove();
-				div.removeClass('has-error has-feedback');	
-				div.removeClass('has-success has-feedback');	
-				div2.removeClass('has-error has-feedback');
-				div2.removeClass('has-success has-feedback');
-				console.log('Removed Help Block for: ' + $(elem).attr('data-field'));
-			});
-			return true;
+	// Show Duplicate Error messages on form after submit
+	showDuplicateError: function (params) {
+		var div = $(params.formId).find('label[for="' + params.ukey + '"]').parent(),
+			input = $(params.formId).find('input[data-field="' + params.ukey + '"]');
+		
+		// Remove error messages & styles
+		this.clearHelpBlocks({ formId: params.formId }); 
+		
+		// Show duplicate error message
+		$(params.formId).prepend(MSG_DUPLICATE_REC_INLINE);
+
+		// Show form error messages & styles
+		div.addClass('has-error has-feedback');		
+		div.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+		div.append('<small class="help-block">' + input.attr('data-fv-unique-msg') + '</small>');
+	},
+	
+	// Show WS Error message on form after submit
+	showWSError: function (params) {
+		if (typeof params.formId !== 'undefined') {
+			var formId = params.formId;
+			$(formId).find('div.alert').remove();
+			$(formId).prepend(MSG_WS_ERROR_INLINE);
 		} else {
-			var errors = 0,
+			BootstrapDialog.closeAll();
+			BootstrapDialog.alert({
+				type: 'type-danger',
+				title: MSG_WS_ERROR_TITLE,
+				message: MSG_WS_ERROR_INFO,
+				callback: function(result) {
+					BootstrapDialog.closeAll();
+				}
+			});
+		}
+	},
+	
+	// Remove error messages & styles
+	clearHelpBlocks: function (params) {
+		$(params.formId).find('div.form-group')
+			.removeClass('has-error has-feedback')
+			.removeClass('has-success has-feedback');
+		$(params.formId).find('div.alert, span.glyphicon, small.help-block')
+			.remove();			
+	},
+	
+	// Form Validation
+	FormValidation: function (options) {
+		var clearHelpBlocks = (typeof options.clearHelpBlocks != 'undefined' 
+			? options.clearHelpBlocks : false);
+
+		// Clear Help Blocks
+		if (clearHelpBlocks) {
+	
+			// Remove error messages & styles
+			this.clearHelpBlocks({ formId: options.formId });
+		
+			return true;
+			
+		// Validate Form
+		} else {			
+			var totalErrors = 0, postString = '',
 				elems = $(options.formId).find('input[data-field], select[data-field]');
-			//console.log('Start Form Validation for: ' + options.formId);
-			$.each(elems, function(idx, elem) {
-				var input = $(elem).val(),
-					div = $(elem).parent(),
-					hidden = $(elem).attr('type'),
-					span = $(div).children('span'),
-					small = $(div).children('small'),				
+			
+			// Remove error messages & styles
+			this.clearHelpBlocks({ formId: options.formId }); 
+			
+			// Validate each field
+			$.each(elems, function(idx, elem) {		
+				if ($(elem).attr('type') == 'hidden' || $(elem).attr('type') == 'checkbox')
+					return;
+			
+				var errorMsg = '', stringMax = 0, fieldErrors = 0,
+					fieldValue = $(elem).val(), fieldName = $(elem).attr('data-field'), 		
+				
+					// Validation types
 					notempty = $(elem).attr('data-fv-notempty'),
-					notempty_msg = $(elem).attr('data-fv-notempty-msg'),				
 					stringlength = $(elem).attr('data-fv-stringlength'),
-					stringlength_max = parseInt($(elem).attr('data-fv-stringlength-max')),
-					stringlength_msg = $(elem).attr('data-fv-stringlength-msg');
-				
-				//console.log('Checking ' + $(elem).attr('data-field') + ' : ' + input);
-				//console.log($('label[for="' + $(elem).attr('data-field') + '"]').parent());
-				
-				var div2 = $('label[for="' + $(elem).attr('data-field') + '"]').parent();
-				
-				span.remove();
-				small.remove();
-				div.removeClass('has-error has-feedback');
-				div2.removeClass('has-error has-feedback');
+					
+					// Field container
+					div = $(options.formId).find('label[for="' + fieldName + '"]').parent();
 				
 				// Check if Empty
-				if (notempty == 'true') {				
-					if (input == '') {	
-						errors++;
-						div.addClass('has-error has-feedback');
-						div2.addClass('has-error has-feedback');
-						if (!$(elem).is('select'))
-							div.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
-						div.append('<small class="help-block">' + notempty_msg + '</small>');
-					} else {
-						div.addClass('has-success has-feedback');			
-						div2.addClass('has-success has-feedback');	
-						if (!$(elem).is('select'))
-							div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-					}
+				if (notempty === 'true') { 
+					errorMsg = $(elem).attr('data-fv-notempty-msg');
+					if (fieldValue === '') fieldErrors++;
 				} 
-				
+
 				// Check Input Length
-				else if (stringlength == 'true') {
-					if (input.length > stringlength_max) {
-						errors++;
-						div.addClass('has-error has-feedback');
-						div2.addClass('has-error has-feedback');
-						if (!$(elem).is('select'))
-							div.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-						div.append('<small class="help-block">' + stringlength_msg + '</small>');
-					} else {
-						div.addClass('has-success has-feedback');			
-						div2.addClass('has-success has-feedback');							
-						if (!$(elem).is('select'))
-							div.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-					}
+				if (stringlength === 'true' && fieldErrors <= 0) {
+					errorMsg = $(elem).attr('data-fv-stringlength-msg');
+					stringMax = parseInt($(elem).attr('data-fv-stringlength-max'));
+					if (fieldValue.length > stringMax) fieldErrors++;
 				}
+				
+				// Toggle error messages & styles
+				if (fieldErrors > 0) {
+					div.addClass('has-error has-feedback');
+					$(elem).parent().addClass('has-error has-feedback');
+					if (!$(elem).is('select')) 
+						$(elem).after(
+							'<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>' +
+							'<small class="help-block">' + errorMsg + '</small>'
+						);
+					else
+						$(elem).parent().after('<small class="help-block" style="margin-top: 5px">' + errorMsg + '</small>');
+				} else {
+					div.addClass('has-success has-feedback');			
+					$(elem).parent().addClass('has-success has-feedback');		
+					if (!$(elem).is('select')) 
+						$(elem).after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+				}
+				
+				// Accumulate Error count
+				totalErrors += fieldErrors;
 			});					
-			//console.log('End Form Validation for: ' + options.formId);
-			return errors > 0 ? false : true;
+
+			if (totalErrors > 0)
+				$(options.formId).prepend(MSG_FORM_ERROR_INLINE);
+			
+			return totalErrors > 0 ? false : true;
 		}
 	},
 	
 	// Default AJAX Post
-	postData: function(params) {
-		var errorTitle = MSG_WS_ERROR_TITLE,
-			errorMessage = MSG_WS_ERROR_INFO;		
-	
+	postData: function (params) {		
+		// Check if callback is passed
+		var callback = (typeof params.callback !== 'undefined' 
+			? params.callback : '');
+		
 		$.post(params.url, params.data)
-			.done(function(result, status) {
-				BootstrapDialog.closeAll();
+			.done(function(result, status) {				
+				// Execute callback function
+				$.isFunction(callback.func) 
+					? callback.func(callback.args) : ''; 
+				
+				// Reload DT
 				(typeof params.dt !== 'undefined' 
-					? params.dt.ajax.reload() : '')
+					? params.dt.ajax.reload() : '');
 				
 				var response = result.response;
+				
+				// on Success
 				if (response.type == 'SUCCESS') {
+					BootstrapDialog.closeAll();
 					BootstrapDialog.alert({
 						type: 'type-primary',
 						title: params.title,
@@ -431,26 +503,16 @@ var STIC = {
 							BootstrapDialog.closeAll();
 						}
 					});
+				
+				// on WS Error
 				} else {
-					BootstrapDialog.alert({
-						type: 'type-danger',
-						title: errorTitle,
-						message: errorMessage,
-						callback: function() {
-							BootstrapDialog.closeAll();
-						}
-					});
+					STIC.showWSError({ formId: params.formId });
 				}
 			})
+			
+			// on Request Error
 			.fail(function() {
-				BootstrapDialog.alert({
-					type: 'type-danger',
-					title: errorTitle,
-					message: errorMessage,
-					callback: function() {
-						BootstrapDialog.closeAll();
-					}
-				});
+				STIC.showWSError({ formId: params.formId });
 			});
 	}
 }
@@ -685,8 +747,8 @@ function notFoundContextSave(sUserId, sUserName) {
 		type: 'POST',
 		url: '/scaletech/services/UserInfoServices/checkIfUserIsAuthentication',
 		data: {
-			userId: sUserId, 
-			userName: sUserName
+			user_id: sUserId, 
+			user_name: sUserName
 		},
 		success: function(oXml, textStatus, jqXHR) {
 			var sData = getXMLData(oXml, 'type');

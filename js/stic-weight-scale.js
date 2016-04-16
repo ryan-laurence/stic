@@ -1,20 +1,20 @@
 function showNewModalForm(params) {			
 	var 
-	
-	formId = params.form_id,
 
 	// Modal Form Options
-	_modalFrmContent = $('<div></div>').load(params.frm_html),
-	_modalNewTitle = '<i class="fa fa-plus"></i> New ' + params.data_type,
+	modalFrmContent = $('<div></div>').load(params.formSrc),
+	modalNewTitle = '<i class="fa fa-plus"></i> New ' + params.dataType,
 	
-	// Modal Buttons Object
-	_modalBtnSave = {
+	// Modal Buttons > Save
+	modalBtnSave = {
 		label: 'Save',
 		icon: 'fa fa-floppy-o',
 		cssClass: 'btn-primary',
-		action: _btnSaveAction
+		action: btnSaveAction
 	},
-	_modalBtnCancel = {
+	
+	// Modal Buttons > Cancel
+	modalBtnCancel = {
 		label: 'Cancel',
 		icon: 'fa fa-ban',
 		cssClass: 'btn-primary',
@@ -23,69 +23,126 @@ function showNewModalForm(params) {
 		}
 	};
 	
-	// Trigger on Modal onshown event
-	function _btnNewOnShown(dialogRef) {
+	// Trigger on New Modal onShown event
+	function btnNewOnShown(dialogRef) {
 		var modalBody = dialogRef.getModalBody(),
 			elements = modalBody.find('input[data-field]');
+			
+		// Clear form values
 		$.each(elements, function(idx, elem) { $(elem).val(''); });
 	}		
 	
 	// Save Action
-	function _btnSaveAction(dialogRef) {
-		var isValid = STIC.FormValidation({
-			formId: formId
-		});		
+	function btnSaveAction(dialogRef) {
+		// Form Validation
+		var isValid = STIC.FormValidation({ formId: params.formId });		
+		
+		// Proceed if form is valid
 		if (isValid) {
-			var postString = '',
-				JSONString = '',
-				JSONObject = {},
+			var postString = '', JSONString = '', JSONObject = {},
 				modalBody = dialogRef.getModalBody(),
 				elements = modalBody.find('input[data-field]');
-			$.each(elements, function(idx, elem) {
-				var input = $(elem), 	
-					inputValue = input.val(),
-					inputField = input.attr('data-field');		
-				postString = '{"' + inputField + '":"' + inputValue + '"}';
-				$.extend(JSONObject, $.parseJSON(postString)); 
-			});					
-			if (typeof params.data != 'undefined')
-				$.extend(JSONObject, params.data);
-			JSONString = params.root_node + '=' + JSON.stringify(JSONObject);		
-			$.post(params.ws_insert, JSONString, function(data, status, jqXHR) {
-				var result = $.parseJSON(jqXHR.responseText);
-				$.each(JSONObject, function(field, value) {
-					$('input[id="' + field + '"]').val(value);
-				});				
-				if (params.root_node == 'custInfo')
-					$('#cust_id').val(result.response.newId);				
-				else if (params.root_node == 'prodInfo')
-					$('#prod_id').val(result.response.newId);
-				else if (params.root_node == 'suppInfo')
-					$('#supp_id').val(result.response.newId);
-				BootstrapDialog.closeAll();	
-				if (params.status == 'FIRST_WEIGHT_IN')
-					toggleWeightScaleFields({ status: params.status });
-				/*BootstrapDialog.alert({
-					title: MSG_ADD_REC_TITLE,
-					message: MSG_ADD_REC_INFO,	
-					type: BootstrapDialog.TYPE_PRIMARY,
-					callback: function(result) {
-						BootstrapDialog.closeAll();
-						if (params.status == 'FIRST_WEIGHT_IN')
-							toggleWeightScaleFields({ status: params.status });
-					}
-				});*/				
-			});
+				
+			var input = $(params.formId).find('input[data-fv-unique="true"]'),
+				fieldValue = $(input).val(), fieldName = $(input).attr('data-field'),
+				postString = '{"' + fieldName + '": "' + fieldValue + '"}';		
+				
+			// Check for duplicate entry if required
+			if (input.length > 0) {
+				$.post(WS_UNIQUE_CHECK[fieldName], $.parseJSON(postString))
+					.done(function (result, status) {
+						
+						// Proceed with insert if no duplicate records found
+						if (result.response.type === 'FAILED') {
+							insertData({ elements: elements });
+							
+						// Show errors if there are duplicate records found
+						} else {
+							STIC.showDuplicateError({
+								ukey: fieldName,
+								formId: params.formId
+							});
+						}
+					})
+					
+					// Show WS Error
+					.fail(function () {
+						STIC.showWSError({ formId: params.formId });
+					});
+			
+			// Proceed with insert if not required to check duplicate
+			} else {
+				insertData({ elements: elements });
+			}
+			
+			// Insert & Update
+			function insertData(o) {
+				var postString = '', JSONString = '', 
+					JSONObject = {};
+							
+				// Build post data
+				$.each(o.elements, function(idx, elem) {
+					var input = $(elem), 	
+						inputValue = input.val(),
+						inputField = input.attr('data-field');					
+					postString = '{"' + inputField + '":"' + inputValue + '"}';
+					$.extend(JSONObject, $.parseJSON(postString)); 
+				});		
+
+				// Add extra data object passed to post data
+				if (typeof params.data != 'undefined')
+					$.extend(JSONObject, params.data);				
+
+				// Build JSON String
+				JSONString = params.objectId + '=' + JSON.stringify(JSONObject);		
+				
+				// Call WS
+				$.post(params.wsInsert, JSONString)
+					.done(function (result, status) {
+						if (result.response.type === 'SUCCESS') {
+							// Load form values
+							$.each(JSONObject, function(field, value) {
+								$('input[id="' + field + '"]').val(value);
+							});				
+							
+							// New Id for Customer
+							if (params.objectId === 'custInfo')
+								$('#cust_id').val(result.response.newId);				
+							
+							// New Id for Product
+							else if (params.objectId === 'prodInfo')
+								$('#prod_id').val(result.response.newId);
+							
+							// New Id for Supplier
+							else if (params.objectId === 'suppInfo')
+								$('#supp_id').val(result.response.newId);
+							
+							BootstrapDialog.closeAll();	
+							
+							if (params.status == 'FIRST_WEIGHT_IN')
+								toggleWeightScaleFields({ status: params.status });		
+						
+						// Show WS Error
+						} else {
+							STIC.showWSError({ formId: params.formId });
+						}	
+					})
+					
+					// Show WS Error
+					.fail(function () {
+						STIC.showWSError({ formId: params.formId });
+					});
+			}
 		}
 	}
 
 	// Show Add Form
 	BootstrapDialog.show({
 		closable: false,
-		title: _modalNewTitle,
-		message: _modalFrmContent,
-		onshown: _btnNewOnShown,
-		buttons: [_modalBtnSave, _modalBtnCancel]
+		title: modalNewTitle,
+		message: modalFrmContent,
+		onshown: btnNewOnShown,
+		buttons: [modalBtnSave, modalBtnCancel]
 	});
 }
 
@@ -158,6 +215,6 @@ function toggleWeightScaleFields(options) {
 			$('input[data-action="enable"]').prop('readonly', true);
 			break;
 		default:
-			alert('Error: Unknown Response Type!');
+			console.log('Error: Unknown Response Type!');
 	}
 }

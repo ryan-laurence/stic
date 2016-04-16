@@ -1,3 +1,6 @@
+<div class="alert alert-info" role="alert">
+	<i class="fa fa-info-circle"></i> <strong>Note:</strong> Use this page to manage User Details that are available in the system.
+</div>
 <table class="display compact" id="table-data">
 	<thead>
 		<tr>
@@ -18,9 +21,11 @@
 		loadEditData({
 			pkey: 'user_id',
 			objectId: 'userInfo',
-			modTitle: 'User Data',
+			modTitle: 'User Details',
 			formId: '#dataUserForm',
-			formSrc: FORM_USER_DATA,
+			formSrcNew: FORM_USER_NEW_DATA,
+			formSrcEdit: FORM_USER_EDIT_DATA,
+			formSrcCPass: FORM_USER_CPASS_DATA,
 			showAllBtns: true,
 			cd: CD_USER_LIST,
 			ds: DS_USER_LIST,

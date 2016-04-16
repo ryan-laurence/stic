@@ -1,0 +1,33 @@
+<form class="form-horizontal well no-margin-bottom" id="dataUserForm">
+	<input type="hidden" data-field="user_id">
+	<input type="hidden" data-field="ur_id">
+	<div class="form-group">
+		<label class="control-label" for="user_name">User Name</label>
+		<input type="text" class="form-control" placeholder="Enter User Name"
+			data-field="user_name" 
+			data-fv-notempty="true"
+			data-fv-notempty-msg="User Name is required."
+			data-fv-stringlength="true"
+			data-fv-stringlength-max="15"
+			data-fv-stringlength-msg="User Name must be less than 15 characters."
+			data-fv-unique="true"
+			data-fv-unique-msg="User Name already exists in the system.">
+	</div>
+	<div class="form-group">
+		<label class="control-label" for="user_password">Password</label>
+		<input type="password" class="form-control" placeholder="Enter Password"
+			data-field="user_password" 
+			data-fv-notempty="true"
+			data-fv-notempty-msg="User Password is required."
+			data-fv-stringlength="true"
+			data-fv-stringlength-max="20"
+			data-fv-stringlength-msg="User Password must be less than 20 characters.">
+	</div>
+	<div class="form-group" id="role-box">
+		<label class="control-label" for="role_id">Role Name</label>
+		<select class="form-control" data-field="role_id">
+			<option value="2">Manager</option>
+			<option value="3" selected>User</option>
+		</select>
+	</div>
+</form>

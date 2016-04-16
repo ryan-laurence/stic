@@ -1,3 +1,6 @@
+<div class="alert alert-info" role="alert">
+	<i class="fa fa-info-circle"></i> <strong>Note:</strong> Use this page to manage Role Details that will be assigned for each system user.
+</div>
 <table class="display compact" id="table-data">
 	<thead>
 		<tr>
@@ -13,18 +16,18 @@
 <script>
 	$(function() {
 		loadEditData({
-			pkey: 'role_id', 
-			objectId: 'roleInfo', 
-			modTitle: 'Role Data', 
-			formId: '#dataRolesForm', 
-			formSrc: FORM_ROLES_DATA, 
+			pkey: 'role_id',
+			objectId: 'roleInfo',
+			modTitle: 'Role Data',
+			formId: '#dataRolesForm',
+			formSrc: FORM_ROLES_DATA,
 			showAllBtns: true,
-			cd: CD_ROLES_LIST, 
-			ds: DEFAULT_DS_REPORTS, 
-			wsList: WS_ROLES_LIST, 
-			wsInsert: WS_ROLES_INSERT, 
-			wsUpdate: WS_ROLES_UPDATE, 
-			wsDelete: WS_ROLES_DELETE 
+			cd: CD_ROLES_LIST,
+			ds: DEFAULT_DS_REPORTS,
+			wsList: WS_ROLES_LIST,
+			wsInsert: WS_ROLES_INSERT,
+			wsUpdate: WS_ROLES_UPDATE,
+			wsDelete: WS_ROLES_DELETE
 		});
 	});
 </script>

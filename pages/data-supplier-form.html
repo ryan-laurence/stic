@@ -1,18 +1,20 @@
 <form class="form-horizontal well no-margin-bottom" id="dataSupplierForm">
 	<input type="hidden" data-field="supp_id">
 	<div class="form-group">
-		<label class="control-label">Supplier Code</label>
-		<input type="text" class="form-control" placeholder="Enter Supplier Code" 
-			data-field="supp_code" 
+		<label class="control-label" for="supp_code">Supplier Code</label>
+		<input type="text" class="form-control" placeholder="Enter Supplier Code"
+			data-field="supp_code"
 			data-fv-notempty="true"
 			data-fv-notempty-msg="Supplier Code is required."
 			data-fv-stringlength="true"
 			data-fv-stringlength-max="10"
-			data-fv-stringlength-msg="Supplier Code must be less than 10 characters.">
+			data-fv-stringlength-msg="Supplier Code must be less than 10 characters."
+			data-fv-unique="true"
+			data-fv-unique-msg="Supplier Code already exists in the system.">
 	</div>
 	<div class="form-group">
-		<label class="control-label">Supplier Name</label>
-		<input type="text" class="form-control" placeholder="Enter Supplier Name" 
+		<label class="control-label" for="supp_name">Supplier Name</label>
+		<input type="text" class="form-control" placeholder="Enter Supplier Name"
 			data-field="supp_name"
 			data-fv-notempty="true"
 			data-fv-notempty-msg="Supplier Name is required."

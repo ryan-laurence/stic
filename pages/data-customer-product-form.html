@@ -1,19 +1,21 @@
 <form class="form-horizontal well no-margin-bottom" id="dataProductForm">
 	<input type="hidden" data-field="prod_id">
 	<div class="form-group">
-		<label class="control-label">Product Code</label>
-		<input type="text" class="form-control" placeholder="Enter Product Code" 
-			data-field="prod_code" 
+		<label class="control-label" for="prod_code">Product Code</label>
+		<input type="text" class="form-control" placeholder="Enter Product Code"
+			data-field="prod_code"
 			data-fv-notempty="true"
 			data-fv-notempty-msg="Product Code is required."
 			data-fv-stringlength="true"
 			data-fv-stringlength-max="10"
-			data-fv-stringlength-msg="Product Code must be less than 10 characters.">
+			data-fv-stringlength-msg="Product Code must be less than 10 characters."
+			data-fv-unique="true"
+			data-fv-unique-msg="Product Code already exists in the system.">
 	</div>
 	<div class="form-group">
-		<label class="control-label">Product Name</label>
-		<input type="text" class="form-control" placeholder="Enter Product Name" 
-			data-field="prod_name" 
+		<label class="control-label" for="prod_name">Product Name</label>
+		<input type="text" class="form-control" placeholder="Enter Product Name"
+			data-field="prod_name"
 			data-fv-notempty="true"
 			data-fv-notempty-msg="Product Name is required."
 			data-fv-stringlength="true"
@@ -21,9 +23,9 @@
 			data-fv-stringlength-msg="Product Name must be less than 40 characters.">
 	</div>
 	<div class="form-group">
-		<label class="control-label">Unit Price</label>
-		<input type="text" class="form-control" placeholder="Enter Unit Price" 
-			data-field="unit_price" 
+		<label class="control-label" for="unit_price">Unit Price</label>
+		<input type="text" class="form-control" placeholder="Enter Unit Price"
+			data-field="unit_price"
 			data-fv-notempty="true"
 			data-fv-notempty-msg="Unit Price is required.">
 	</div>
