@@ -1,0 +1,126 @@
+@font-face {
+	font-family: 'sa-digital-number';
+	src: url('../fonts/sa-digital-number.eot');
+}
+@font-face {
+	font-family: 'sa-digital-number';
+	src: url('../fonts/sa-digital-number.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.weight-lcd {
+	color: #FFFFFF;
+	padding: 20px;
+	display: table;
+	border-radius: 4px;
+	background: linear-gradient(#56585D, #2F3034);	
+	-webkit-box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.75);
+	-moz-box-shadow:		4px 4px 5px 0px rgba(50, 50, 50, 0.75);
+	box-shadow:         4px 4px 5px 0px rgba(50, 50, 50, 0.75);
+}
+
+.weight-input {
+	color: #FFFFFF;
+	background: linear-gradient(#56585D, #2F3034);	
+}
+	
+.weight-lcd .weight-reading {
+	color: #FFFFFF;
+	text-shadow: #FFFFFF 0px 0px 10px !important;
+	width: 80%;
+	font-size: 62px;
+	text-align: right;
+	display: table-cell;
+	padding-right: 15px;
+	font-family: 'sa-digital-number';
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+	
+.weight-lcd .weight-info {
+	width: 10%;
+	font-weight: bold;
+	display: table-cell;
+	vertical-align: top;
+	padding-left: 20px; 
+	padding-right: 20px; 
+	margin-top: 0px; 
+	border-left: 1px dashed #FFFFFF;
+}
+
+.weight-lcd .weight-stage {
+	width: 10%;
+	font-weight: bold;
+	display: table-cell;
+	vertical-align: middle;
+	padding-left: 20px; 
+	margin-top: 0px; 
+	border-left: 1px dashed #FFFFFF;
+}
+
+.weight-lcd .weight-stage .txt1,
+.weight-lcd .weight-stage .txt2 {
+	font-size: 16px;
+	display: table-row;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	height: 30px;
+	color: #CCCCCC;
+	vertical-align: middle;
+}
+	
+.weight-lcd .weight-info .weight-unit {		
+	font-size: 30px;
+	display: table-row;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.weight-lcd .weight-info .weight-status {
+	color: #777777;
+	font-size: 18px;
+	display: table-row;
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
+.icon-minus:before {
+	content: "\2d";
+}
+.icon-zero:before {
+	content: "\30";
+}
+.icon-one:before {
+	content: "\31";
+}
+.icon-two:before {
+	content: "\32";
+}
+.icon-three:before {
+	content: "\33";
+}
+.icon-four:before {
+	content: "\34";
+}
+.icon-five:before {
+	content: "\35";
+}
+.icon-six:before {
+	content: "\36";
+}
+.icon-seven:before {
+	content: "\37";
+}
+.icon-eight:before {
+	content: "\38";
+}
+.icon-nine:before {
+	content: "\39";
+}
