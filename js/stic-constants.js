@@ -16,7 +16,8 @@ var CD_CHECK_TRUCK_CODE_LIST = [
 	{ data: 'time_in' },
 	{ data: 'weight_in_reading' },
 	{ data: 'weight_unit' },
-	{ data: 'user_name' }
+	{ data: 'user_name' },
+	{ data: 'docket_no', visible: false, searchable: false, orderable: false }
 ];
 var FORM_CUST_PRODUCT_DATA = 'pages/data-customer-product-form.html'
 var WS_CHECK_TRUCK_CODE_LIST = '/scaletech/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&';
@@ -333,7 +334,7 @@ var MSG_WEIGHT_INPUT_ERROR_TITLE = '<i class="fa fa-exclamation-circle"></i> Inp
 var MSG_ERROR_TITLE = '<i class="fa fa-exclamation-circle"></i> Error';
 var MSG_TITLE_LOGIN_ERROR = '<i class="fa fa-exclamation-circle"></i> Login Error';
 var MSG_INFO_LOGIN_ERROR = '<strong>Invalid</strong> login credentials. You are <strong>not allowed</strong> to access the system.';
-var MSG_INFO_LOGIN_ERROR_INLINE = '<div class="alert alert-danger" role="alert" style="text-align: left"><i class="fa fa-exclamation-circle"></i> <strong>Invalid</strong> login credentials. You are <strong>not allowed</strong> to access the system. Please contact system administrator for more details.</div>';
+var MSG_INFO_LOGIN_ERROR_INLINE = '<div class="alert alert-danger" role="alert" style="text-align: left"><i class="fa fa-exclamation-circle"></i> <strong>Invalid</strong> login credentials. You are <strong>not allowed</strong> to access the system. In case of forgotten password, please contact your system administrator.</div>';
 
 var MSG_INFO_TITLE = '<i class="fa fa-info-circle"></i> Information';
 var MSG_TITLE_CONFIRM_SAVE = '<i class="fa fa-question-circle"></i> Confirm Update';

@@ -151,6 +151,9 @@ function toggleWeightScaleFields(options) {
 	switch(options.status) {
 		case 'FIRST_WEIGHT_IN':
 			console.log('FIRST_WEIGHT_IN');
+			$('.weight-status').text('stable');
+			$('label[for]').css('color', '#333333');
+			$('.weight-stage .txt1').html('<img src="images/numeric-1-box-outline.png">');
 			// Main Buttons
 			$('#first-weighing').removeClass('disabled'); 		
 			$('#second-weighing').addClass('disabled');
@@ -172,6 +175,9 @@ function toggleWeightScaleFields(options) {
 			break;
 		case 'SECOND_WEIGHT_IN':
 			console.log('SECOND_WEIGHT_IN');
+			$('.weight-status').text('stable');
+			$('label[for]').css('color', '#333333');
+			$('.weight-stage .txt1').html('<img src="images/numeric-2-box-outline.png">');
 			// Main Buttons
 			$('#first-weighing').addClass('disabled'); 					
 			$('#second-weighing').removeClass('disabled');	
@@ -190,11 +196,14 @@ function toggleWeightScaleFields(options) {
 			$('input[data-stage="second"][type="hidden"]').val('');
 			$('input[data-stage="second"][data-type="varchar"]').val('');
 			$('input[data-stage="second"][data-type="float"]').val('0.00');	
-			$('input[data-action="enable"]').prop('disabled', false);
 			$('input[data-action="enable"]').prop('readonly', false);
 			break;
 		case 'CANCEL_WEIGHT_IN':
 			console.log('CANCEL_WEIGHT_IN');
+			$('.weight-reading').text('0.00');
+			$('.weight-status').text('inactive');
+			$('label[for]').css('color', '#333333');
+			$('.weight-stage .txt1').html('<img src="images/numeric-0-box-outline.png">');
 			// Main Buttons
 			$('button[data-type="button"]').addClass('disabled');	
 			// Field Buttons
@@ -207,11 +216,11 @@ function toggleWeightScaleFields(options) {
 			$('#search-product-data').addClass('disabled');
 			$('#search-supplier-data').addClass('disabled');
 			// Input Fields
-			$('input[data-stage="first"]').val('');
+			$('input[data-stage="first"][data-type="varchar"]').val('');
+			$('input[data-stage="first"][data-type="float"]').val('0.00');		
 			$('input[data-stage="second"][type="hidden"]').val('');
-			$('input[data-stage="second"][data-type="varchar"]').val('');
+			$('input[data-stage="second"][data-type="varchar"]').val('');			
 			$('input[data-stage="second"][data-type="float"]').val('0.00');			
-			$('input[data-action="enable"]').prop('disabled', true);
 			$('input[data-action="enable"]').prop('readonly', true);
 			break;
 		default:
