@@ -82,7 +82,7 @@
 						if (result) {
 							// Build JSON object
 							JSONObject = {
-								roleModuleId: roleId
+								ra_id: roleId
 							};
 							// Delete all modules
 							STIC.postData({
@@ -100,7 +100,7 @@
 				});
 			} else {
 				// Delete current modules
-				$.post(WS_ROLE_MODULES_DELETE, { roleModuleId: roleId })
+				$.post(WS_ROLE_MODULES_DELETE, { ra_id: roleId })
 					.done(function(result, status) {
 						if (result.response.type == 'SUCCESS') {
 							// Build JSON object

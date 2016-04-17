@@ -1,21 +1,552 @@
+<div class="panel panel-primary" style="width: 990px !important; margin-left: auto; margin-right: auto">
+	<div class="panel-heading" style="text-align: left">
+		<i class="fa fa-balance-scale"></i> Weighing
+	</div>
+	<div class="panel-body">
+		<div class="row">
+			<div class="col-lg-9 col-centered weight-lcd">
+				<div class="weight-reading">0.00</div>
+				<div class="weight-info">
+					<div class="weight-unit">kg</div>
+					<div class="weight-status">inactive</div>
+				</div>
+				<div class="weight-stage">
+					<div class="txt1"><img src="images/numeric-0-box-outline.png"></div>
+				</div>
+			</div>
+		</div>
+		<div style="margin: 15px 0px 15px 0px; border-top: 1px solid #CCC"></div>
+		<div class="container well no-margin-bottom no-margin-right" style="width: auto; padding: 10px">
+			<div class="form-horizontal no-margin-bottom" style="width: 750px; float: left;" id="weight-scale-form">
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="truck_code" class="col-sm-2 control-label" style="width: 130px">Truck</label>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-default" id="new-truck-data"
+							data-toggle="popover" 
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<strong><i class="fa fa-plus"></i> New Truck Data</strong>' 
+							data-content="Click to create new truck data for First Weighing."><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-default" id="search-truck-data"
+							data-toggle="popover" 
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<strong><i class="fa fa-truck"></i> Truck Data Lookup</strong>' 
+							data-content="Click to search for truck data that are already available for First and Second Weighing."><i class="fa fa-search"></i></button>
+					</div>
+					<div class="btn-group" role="group" style="width: 150px">
+						<input type="text" class="form-control" id="truck_code" data-type="varchar" data-stage="first" readonly>
+					</div>
+				</div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="cust_code" class="col-sm-2 control-label" style="width: 130px">Customer</label>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-default disabled" id="new-customer-data"
+							data-toggle="popover" 
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<strong><i class="fa fa-plus"></i> New Customer Data</strong>' 
+							data-content="Click to create new customer data for Second Weighing."><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-default disabled" id="search-customer-data"
+							data-toggle="popover" 
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<strong><i class="fa fa-users"></i> Customer Data Lookup</strong>' 
+							data-content="Click to search for customer data that are already available for Second Weighing."><i class="fa fa-search"></i></button>
+					</div>
+					<div class="btn-group" role="group" style="width: 150px">
+						<input type="text" class="form-control" id="cust_code" data-type="varchar" data-stage="second" readonly>
+					</div>
+					<div class="btn-group" role="group" style="width: 365px">
+						<input type="text" class="form-control" id="cust_name" data-type="varchar" data-stage="second" readonly>
+					</div>
+				</div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="dest_zipcode" class="col-sm-2 control-label" style="width: 130px">Destination</label>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-default disabled" id="new-destination-data"
+							data-toggle="popover" 
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<strong><i class="fa fa-map-marker"></i> Add Destination Lookup</strong>' 
+							data-content="Click to add destination data that are already available in the system to the selected customer data."><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-default disabled" id="search-destination-data"
+							data-toggle="popover" 
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<strong><i class="fa fa-map-marker"></i> Destination Data Lookup</strong>' 
+							data-content="Click to search for destination data that are already tagged to the selected customer data."><i class="fa fa-search"></i></button>
+					</div>
+					<div class="btn-group" role="group" style="width: 150px">
+						<input type="text" class="form-control" id="dest_zipcode" data-type="varchar" data-stage="second" readonly>
+					</div>
+					<div class="btn-group" role="group" style="width: 365px">
+						<input type="text" class="form-control" id="dest_location" data-type="varchar" data-stage="second" readonly>
+					</div>
+				</div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="prod_code" class="col-sm-2 control-label" style="width: 130px">Product</label>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-default disabled" id="new-product-data"
+							data-toggle="popover" 
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<strong><i class="fa fa-plus"></i> New Product Data</strong>' 
+							data-content="Click to create new product data for Second Weighing. This will be tagged automatically to the selected customer data."><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-default disabled" id="search-product-data"
+							data-toggle="popover" 
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<strong><i class="fa fa-product-hunt"></i> Product Data Lookup</strong>' 
+							data-content="Click to search for product data that are already available in the system or tagged to the selected customer data."><i class="fa fa-search"></i></button>
+					</div>
+					<div class="btn-group" role="group" style="width: 150px">
+						<input type="text" class="form-control" id="prod_code" data-type="varchar" data-stage="second" readonly>
+					</div>
+					<div class="btn-group" role="group" style="width: 365px">
+						<input type="text" class="form-control" id="prod_name" data-type="varchar" data-stage="second" readonly>
+					</div>
+				</div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="supp_code" class="col-sm-2 control-label" style="width: 130px">Supplier</label>
+					</div>
+					<div class="btn-group" role="group">
+						<button type="button" class="btn btn-default disabled" id="new-supplier-data"
+							data-toggle="popover" 
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<strong><i class="fa fa-plus"></i> New Supplier Data</strong>' 
+							data-content="Click to create new supplier data for Second Weighing."><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-default disabled" id="search-supplier-data"
+							data-toggle="popover" 
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<strong><i class="fa fa-users"></i> Supplier Data Lookup</strong>' 
+							data-content="Click to search for supplier data that are already available for Second Weighing."><i class="fa fa-search"></i></button>
+					</div>
+					<div class="btn-group" role="group" style="width: 150px">
+						<input type="text" class="form-control" id="supp_code" data-type="varchar" data-stage="second" readonly>
+					</div>
+					<div class="btn-group" role="group" style="width: 365px">
+						<input type="text" class="form-control" id="supp_name" data-type="varchar" data-stage="second" readonly>
+					</div>
+				</div>
+				<div style="margin: 10px 15px 15px 0px; border-top: 1px solid #CCC"></div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="user_name" class="col-sm-2 control-label" style="width: 130px">User</label>
+					</div>
+					<div class="btn-group" role="group">
+						<input type="text" class="form-control" id="user_name" style="width: 120px" readonly>
+					</div>
+					<div class="btn-group" role="group">
+						<label for="unit_price" class="col-sm-2 control-label" style="width:100px; text-align:right">Unit Price</label>
+					</div>
+					<div class="btn-group" role="group">
+						<input type="text" class="form-control" id="unit_price" style="width: 125px" value="0.00" data-type="float" data-stage="second" data-action="enable" readonly>
+					</div>
+					<div class="btn-group" role="group">
+						<label for="total_price" class="col-sm-2 control-label" style="width:110px; text-align:right">Total Price</label>
+					</div>
+					<div class="btn-group" role="group">
+						<input type="text" class="form-control weight-input" id="total_price" style="width: 125px" value="0.00" data-type="float" data-stage="second" readonly>
+					</div>
+				</div>
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" role="group">
+						<label for="remarks" class="col-sm-2 control-label" style="width: 130px">Remarks</label>
+					</div>
+					<div class="btn-group" role="group" style="width: 600px">
+						<input type="text" class="form-control" id="remarks" placeholder="Enter Remarks" data-type="varchar" data-stage="second" data-action="enable" readonly>
+					</div>
+				</div>
+				<div style="margin: 10px 15px 8px 0px; border-top: 1px solid #CCC"></div>
+				<div class="form-group no-margin-bottom">
+					<div class="col-sm-2 no-padding-left" style="margin-left: 20px; width: 175px">
+						<label for="weight_in_reading" class="control-label">Truck In Weight</label>
+						<input type="text" class="form-control weight-input" id="weight_in_reading" value="0.00" data-type="float" data-stage="first" readonly>
+					</div>
+					<div class="col-sm-2 no-padding-left" style="width: 175px">
+						<label for="weight_out_reading" class="control-label">Truck Out Weight</label>
+						<input type="text" class="form-control weight-input" id="weight_out_reading" value="0.00" data-type="float" data-stage="second" readonly>
+					</div>
+					<div class="col-sm-2 no-padding-left" style="width: 175px">
+						<label for="compensation" class="control-label">Compensation(%)</label>
+						<input type="text" class="form-control col-sm-1" id="compensation" value="0.00" data-type="float" data-stage="second" data-action="enable" readonly>
+					</div>
+					<div class="col-sm-2 no-padding-left" style="width: 175px">
+						<label for="net_weight" class="control-label">Net Weight</label>
+						<input type="text" class="form-control weight-input" id="net_weight" value="0.00" data-type="float" data-stage="second" readonly>
+					</div>
+				</div>
+			</div>
+			<div class="form-horizontal no-margin-bottom" style="width: 180px; float: right;">
+				<button id="first-weighing" class="btn btn-primary btn-lg disabled" data-type="button"><i class="fa fa-tag fa-3x"></i><p>First Weighing</p></button>
+				<button id="second-weighing" class="btn btn-primary btn-lg disabled" data-type="button"><i class="fa fa-tags fa-3x"></i><p>Second Weighing</p></button>
+				<button id="cancel-weighing" class="btn btn-primary btn-lg disabled" data-type="button"><i class="fa fa-ban fa-3x"></i><p>Cancel</p></button>
+				<button id="reprint-docket" class="btn btn-primary btn-lg disabled no-margin-bottom" data-type="button"><i class="glyphicon glyphicon-print fa-3x"></i><p>Print Docket</p></button>
+			</div>
+		</div>
+	</div>
+</div>
+<input type="hidden" data-stage="second" id="wr_id">
+<input type="hidden" data-stage="second" id="cust_id">
+<input type="hidden" data-stage="second" id="dest_id">
+<input type="hidden" data-stage="second" id="prod_id">
+<input type="hidden" data-stage="second" id="supp_id">
+<input type="hidden" data-stage="second" id="docket_no">
+<div class="modal fade bootstrap-dialog type-primary" id="truck-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-truck"></i> Truck Data Lookup
+			</div>
+			<div class="modal-body">
+				<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 15px;" id="tabSelectTruck">
+					<li role="presentation" class="active">
+						<a href="#firstWeighing" aria-controls="firstWeighing" role="tab" data-toggle="tab">
+							<i class="fa fa-tag"></i> First Weighing
+						</a>
+					</li>
+					<li role="presentation">
+						<a href="#secondWeighing" aria-controls="secondWeighing" role="tab" data-toggle="tab">
+							<i class="fa fa-tags"></i> Second Weighing
+						</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="firstWeighing">
+						<div class="alert alert-info" role="alert">
+							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+							<ul>
+								<li>Records listed here are Truck Codes available for First Weighing only.</li>
+								<li>To create new Truck Code for First Weighing, use the Weighing Scale form.</li>
+							</ul>
+						</div>
+						<table class="display compact" id="table-truck-first" style="width: 100%">
+							<thead>
+								<tr>
+									<th class="text-left">Truck ID</th>
+									<th class="text-left">Truck Code</th>
+									<th class="text-left">Date Modified</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
+						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-primary btnFWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
+							</div>
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-primary disabled" id="btnFWTrucksOK"><i class="fa fa-check"></i> OK</button>
+							</div>
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="secondWeighing">
+						<div class="alert alert-info" role="alert">
+							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+							<ul>
+								<li>Records listed here are Truck Codes available for Second Weighing only.</li>
+								<li>To remove Truck Code from Second Weighing, go to the Truck In report page.</li>
+							</ul>
+						</div>
+						<table class="display compact" id="table-truck-second" style="width: 100%">
+							<thead>
+								<tr>
+									<th class="text-left">ID</th>
+									<th class="text-left">Truck Code</th>
+									<th class="text-left">Date In</th>
+									<th class="text-left">Time In</th>
+									<th class="text-left">Weight In</th>
+									<th class="text-left">Unit</th>
+									<th class="text-left">User</th>
+									<th class="text-left">Docket No.</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
+						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-primary btnSWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
+							</div>
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-primary disabled" id="btnSWTrucksOK"><i class="fa fa-check"></i> OK</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="customer-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-users"></i> Customer Data Lookup
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-info" role="alert">
+					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<ul>
+						<li>Records listed here are Customer Data that are already available in the system.</li>
+						<li>To create new Customer Data, use the Weighing Scale form.</li>
+					</ul>
+				</div>
+				<table class="display compact" id="table-customer-data" style="width: 100%">
+					<thead>
+						<tr>
+							<th class="text-left">Customer ID</th>
+							<th class="text-left">Customer Code</th>
+							<th class="text-left">Customer Name</th>
+							<th class="text-left">Date Modified</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="destination-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-map-marker"></i> Destination Data Lookup
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-info" role="alert">
+					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<ul>
+						<li>Records listed here are Destination Data that are already tagged to the selected Customer Data.</li>
+						<li>To tag new Destination Data to the selected Customer Data, use the Weighing Scale form.</li>
+					</ul>
+				</div>
+				<table class="display compact" id="table-destination-data" style="width: 100%">
+					<thead>
+						<tr>
+							<th class="text-left">CD ID</th>
+							<th class="text-left">Customer ID</th>
+							<th class="text-left">Destination ID</th>
+							<th class="text-left">Zip Code</th>
+							<th class="text-left">Name</th>
+							<th class="text-left">Location</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="destination-data-all-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-map-marker"></i> Add Destination Lookup
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-info" role="alert">
+					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<ul>
+						<li>Records listed here are Destination Data that are not yet tagged to the selected Customer Data.</li>
+						<li>To tag new Destination Data to the selected Customer Data, select a record below.</li>
+					</ul>
+				</div>
+				<table class="display compact" id="table-destination-data-all" style="width: 100%">
+					<thead>
+						<tr>
+							<th class="text-left">Destination ID</th>
+							<th class="text-left">Zip Code</th>
+							<th class="text-left">Name</th>
+							<th class="text-left">Location</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-floppy-o"></i> Save</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="product-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-product-hunt"></i> Product Data Lookup
+			</div>
+			<div class="modal-body">
+				<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 15px;" id="tabSelectProduct">
+					<li role="presentation" class="active">
+						<a href="#products" aria-controls="products" role="tab" data-toggle="tab">
+							<i class="fa fa-product-hunt"></i> Products
+						</a>
+					</li>
+					<li role="presentation">
+						<a href="#customerProducts" aria-controls="customerProducts" role="tab" data-toggle="tab">
+							<i class="fa fa-user"></i> Customer Products
+						</a>
+					</li>
+				</ul>
+				<div class="tab-content">
+					<div role="tabpanel" class="tab-pane active" id="products">
+						<div class="alert alert-info" role="alert">
+							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+							<ul>
+								<li>Records listed here are Product Data that are not yet tagged to the selected Customer Data.</li>
+								<li>To create new Product Data, use the Weighing Scale form.</li>
+							</ul>
+						</div>
+						<table class="display compact" id="table-product-data-all" style="width: 100%">
+							<thead>
+								<tr>
+									<th class="text-left">Product ID</th>
+									<th class="text-left">Product Code</th>
+									<th class="text-left">Product Name</th>
+									<th class="text-left">Unit Price</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
+						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-primary btnAllProdCancel"><i class="fa fa-ban"></i> Cancel</button>
+							</div>
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-primary disabled" id="btnAllProdOK"><i class="fa fa-check"></i> OK</button>
+							</div>
+						</div>
+					</div>
+					<div role="tabpanel" class="tab-pane" id="customerProducts">
+						<div class="alert alert-info" role="alert">
+							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+							<ul>
+								<li>Records listed here are Product Data that are already tagged to the selected Customer Data.</li>
+								<li>To tag other Product Data to the selected Customer Data, go to the Products tab.</li>
+							</ul>
+						</div>
+						<table class="display compact" id="table-product-data" style="width: 100%">
+							<thead>
+								<tr>
+									<th class="text-left">CP ID</th>
+									<th class="text-left">Customer ID</th>
+									<th class="text-left">Product ID</th>
+									<th class="text-left">Product Code</th>
+									<th class="text-left">Product Name</th>
+									<th class="text-left">Unit Price</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
+						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-primary btnCustProdCancel"><i class="fa fa-ban"></i> Cancel</button>
+							</div>
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-primary disabled" id="btnCustProdOK"><i class="fa fa-check"></i> OK</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="supplier-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-users"></i> Supplier Data Lookup
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-info" role="alert">
+					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<ul>
+						<li>Records listed here are Supplier Data that are already available in the system.</li>
+						<li>To create new Supplier Data, use the Weighing Scale form.</li>
+					</ul>
+				</div>
+				<table class="display compact" id="table-supplier-data" style="width: 100%">
+					<thead>
+						<tr>
+							<th class="text-left">Supplier ID</th>
+							<th class="text-left">Supplier Code</th>
+							<th class="text-left">Supplier Name</th>
+							<th class="text-left">Date Modified</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
+				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+			</div>
+		</div>
+	</div>
+</div>
 <script type="text/javascript" src="js/stic-weight-scale.js"></script>
 <script>
 	$(function() {
-		// Digital Clock
-		$('#clock-timer').MyDigitClock({
-			bAmPm: true,
-			fontSize: 22,
-			fontColor: '#FFF',
-			background: '#000',
-			fontWeight: 'normal',
-			bShowHeartBeat: false,
-			fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif"
-		});
-
-		/**********************************************************************************************************************************************/
-
 		// Initialize DT variables
 		var dtFWT, dtSWT, dtCDP, dtDDP, dtADDP, dtPDP, dtAPDP, dtSDP;
+		
+		// Load user based on cookie
+		$('#user_name').val(readCookie('username'));
+		
+		$('[data-toggle="popover"]').popover()
 
 		/**********************************************************************************************************************************************/
 
@@ -98,6 +629,8 @@
 
 			// Load form values
 			$('#truck_code').val(selected_row.data().truck_code);
+			
+			setNetWeight();
 
 			// Hide Lookup
 			$('#truck-data-modal').modal('hide');
@@ -105,18 +638,19 @@
 
 		// Second Weighing Trucks > Lookup > Select Item
 		$('#truck-data-modal #btnSWTrucksOK').on('click', function () {
-			var selected_row = dtSWT.row('.selected'),
-				dateIn =  moment(new Date(selected_row.data().date_in)).format('MM/DD/YYYY'); // Firefox date issue fix
+			var selected_row = dtSWT.row('.selected');
 
 			// Toggle form fields & buttons
 			toggleWeightScaleFields({ status: 'SECOND_WEIGHT_IN' });
 
 			// Load form values
 			$('#wr_id').val(selected_row.data().wr_id);
+			$('#docket_no').val(selected_row.data().docket_no);
 			$('#truck_code').val(selected_row.data().truck_code);
 			$('#weight_unit').text(selected_row.data().weight_unit);
 			$('#weight_in_reading').val(selected_row.data().weight_in_reading);
-			$('#weight_in_date').val(dateIn + ' ' + selected_row.data().time_in);
+
+			setNetWeight();
 
 			// Hide Lookup
 			$('#truck-data-modal').modal('hide');
@@ -440,6 +974,8 @@
 			$('#prod_name').val(selected_row.data().prod_name);
 			$('#unit_price').val(selected_row.data().unit_price);
 			
+			setTotalPrice();
+					
 			// Hide Lookup
 			$('#product-data-modal').modal('hide');
 		});
@@ -453,6 +989,8 @@
 			$('#prod_code').val(selected_row.data().prod_code);
 			$('#prod_name').val(selected_row.data().prod_name);
 			$('#unit_price').val(selected_row.data().unit_price);
+			
+			setTotalPrice();
 			
 			// Hide Lookup
 			$('#product-data-modal').modal('hide');
@@ -552,42 +1090,50 @@
 		// First Weighing Button > Show Confirm Modal
 		$('#first-weighing').on('click', function() {
 			BootstrapDialog.confirm({
+				type: 'type-danger',
 				title: MSG_TITLE_CONFIRM_FIRST_WEIGHT,
 				message: MSG_FIRST_WEIGHING_CONFIRM,
-				type: BootstrapDialog.TYPE_DANGER,
-				callback: function(result) {
+				callback: function (result) {	
 					if (result) {
+					
+						// Build post data
 						var params = 'weightReadingInfo={'
 							+ '"weight_count":"1", '
 							+ '"weight_status":"PENDING", '
 							+ '"user_id": ' + readCookie('userid') + ', '
 							+ '"truck_code":"' + $('#truck_code').val() + '", '
-							+ '"weight_unit":"' + $('#weight_unit').text() + '", '
+							+ '"weight_unit":"' + $('.weight-unit').text() + '", '
 							+ '"weight_in_reading":"' + $('#weight_in_reading').val() + '", '
 							+ '"weight_in_date":"' + $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()) + '", '
 							+ '"date_modified":"' + $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()) + '"}';
+						
 						console.log('First Weight In: ' + params);
-						var result = $.post(WS_FIRST_WEIGHING_INSERT, params);
-						result.done(function(data) {
-							BootstrapDialog.alert({
-								title: MSG_INFO_TITLE,
-								message: MSG_FIRST_WEIGHING_SUCCESS,
-								type: BootstrapDialog.TYPE_PRIMARY,
-								callback: function() {
-									BootstrapDialog.closeAll();
-								}
-							});
-							toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+						
+						// Call WS
+						var result = $.post(WS_FIRST_WEIGHING_INSERT, params);						
+						result.done(function(result) {
+						
+							// Insert Success
+							if (result.response.type === 'SUCCESS') {
+								toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });								
+								BootstrapDialog.alert({
+									title: MSG_INFO_TITLE,
+									message: MSG_FIRST_WEIGHING_SUCCESS,
+									type: BootstrapDialog.TYPE_PRIMARY,
+									callback: function() {
+										BootstrapDialog.closeAll();
+									}
+								});
+			
+							// Show WS Error
+							} else {
+								STIC.showWSError();
+							}
 						});
+						
+						// Show WS Error
 						result.fail(function() {
-							BootstrapDialog.alert({
-								title: MSG_WS_ERROR_TITLE,
-								message: MSG_WS_ERROR_INFO,
-								type: BootstrapDialog.TYPE_DANGER,
-								callback: function() {
-									BootstrapDialog.closeAll();
-								}
-							});
+							STIC.showWSError();
 						});
 					}
 				}
@@ -600,17 +1146,17 @@
 		$('#second-weighing').on('click', function() {
 			var errorMessage = '';
 			var inputFields = [
-				{ label: 'inputTruckCode', name: 'Truck Code', field: 'truck_code' },
-				{ label: 'inputCustomerCode', name: 'Customer Code', field: 'cust_id' },
-				{ label: 'inputDestinationCode', name: 'Destination Code', field: 'dest_id' },
-				{ label: 'inputProductCode', name: 'Product Code', field: 'prod_id' },
-				{ label: 'inputSupplierCode', name: 'Supplier Code', field: 'supp_id' }
+				{ name: 'Truck', field: 'truck_code' },
+				{ name: 'Customer', field: 'cust_code' },
+				{ name: 'Destination', field: 'dest_zipcode' },
+				{ name: 'Product', field: 'prod_code' },
+				{ name: 'Supplier', field: 'supp_code' }
 			];
 
 			$.each(inputFields, function(index, input) {
 				if ($('#' + input.field).val() == '') {
 					errorMessage = errorMessage + '<li>' + input.name + '</li>';
-					$('label[for="' + input.label + '"]').css('color', 'red');
+					$('label[for="' + input.field + '"]').css('color', 'red');
 				}
 			});
 
@@ -633,7 +1179,6 @@
 						if (result) {
 							var params = 'weightReadingInfo={'
 								+ '"wr_id": "' + $('#wr_id').val() + '", '
-								+ '"truck_code": "' + $('#truck_code').val() + '", '
 								+ '"cust_id": ' + $('#cust_id').val() + ', '
 								+ '"dest_id": ' + $('#dest_id').val() + ', '
 								+ '"prod_id": ' + $('#prod_id').val() + ', '
@@ -642,12 +1187,10 @@
 								+ '"unit_price": ' + $('#unit_price').val() + ', '
 								+ '"total_price": ' + $('#total_price').val() + ', '
 								+ '"remarks": "' + $('#remarks').val() + '", '
-								+ '"weight_in_reading": ' + $('#weight_in_reading').val() + ', '
 								+ '"weight_out_reading": ' + $('#weight_out_reading').val() + ', '
 								+ '"compensation": ' + $('#compensation').val() + ', '
 								+ '"net_weight": ' + $('#net_weight').val() + ', '
-								+ '"weight_unit": "' + $('#weight_unit').text() + '", '
-								+ '"weight_in_date": "' + $.formatDateTime('yy-mm-dd hh:ii:ss', new Date($('#weight_in_date').val())) + '", '
+								+ '"weight_unit": "' + $('.weight-unit').text() + '", '
 								+ '"weight_out_date": "' + $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()) + '", '
 								+ '"weight_count": 2, '
 								+ '"weight_status": "DONE"}';
@@ -698,6 +1241,75 @@
 			});
 		});
 	});
+
+	// Set Net Weight
+	function setNetWeight() {
+		var weightIn = parseFloat($('#weight_in_reading').val()),
+			weightOut = parseFloat($('#weight_out_reading').val()),
+			netWeight = (weightIn > weightOut ?
+				(weightIn - weightOut) :
+				(weightOut - weightIn));
+		$('#net_weight').val(netWeight.toFixed(2));
+	}
+	
+	// Set Total Price
+	function setTotalPrice() {
+		var unitPrice = parseFloat($('#unit_price').val()),
+			netWeight = parseFloat($('#net_weight').val()),
+			totalPrice = parseFloat(unitPrice * netWeight);
+		$('#total_price').val(totalPrice.toFixed(2));
+	}
+	
+	// Sample Indicator
+	$(document).ready(function () {
+		var random = function (max, min) {
+				return ((Math.random() * (max - min)) + min).toFixed(2);
+		};
+		
+		// Unit Price onKeyDown
+		$('#unit_price').on('keydown', function (e) {
+			var self = this;
+				
+			setTimeout(function () {
+				//if (!$(self).val().match(/^\d*(\.)?\d{0,2}$/)) 
+				//	return false;
+				
+				var oldVal = $(self).val();
+				//console.log(oldVal.substring(1, oldVal.length - 1));
+					
+				if (oldVal == '')
+					$(self).val('0.00');
+					
+				/*if (oldVal.indexOf(0) == 0 && oldVal.length > 1) {
+					var length = oldVal.length - 1;
+					$(self).val(oldVal.substring(1, length));
+				}*/
+					
+				setTotalPrice();
+			}, 0);
+		});
+
+		setInterval(function () {
+			var rand = random(41000, 5000);			
+			
+			// 2nd Weighing
+			if ($('#wr_id').val() != '') {
+				$('.weight-reading').text((rand).toString());
+				$('#weight_out_reading').val(rand);
+				setNetWeight();
+				setTotalPrice();
+				
+			// 1st Weighing
+			} else if ($('#truck_code').val() != '') {
+				$('.weight-reading').text((rand).toString());
+				$('#weight_in_reading').val(rand);
+			}
+
+			// LCD 
+			
+		}, 1000);
+	});
+
 	/*
 	var scaleReaderUrl = '/scaletech/services/ScaleReaderInfoServices/readScaleReading?response=application/json';
 	$(document).ready(function() {
@@ -721,7 +1333,7 @@
 				}
 			});
 
-		}, 1000); // every 1sec
+		}, 100); // every 1sec
 		console.log('intervalId: '+ intervalId);
 
 		$('#cancel-weighing').on('click', function() {
@@ -731,479 +1343,3 @@
 	});
 	*/
 </script>
-<style>
-	.no-padding-left {
-		padding-left: 0px !important;
-	}
-</style>
-<div class="panel panel-primary" style="width: 990px !important; margin-left: auto; margin-right: auto">
-	<div class="panel-heading" style="text-align: left">
-		<i class="fa fa-balance-scale"></i> Weighing
-	</div>
-	<div class="panel-body">
-		<div class="form-horizontal">
-			<div class="form-group" style="margin-bottom: 0px;">
-				<div class="col-lg-4 no-padding-left">
-					<div id="clock-timer" style="padding: 8px; width: 150px; text-align: center"></div>
-				</div>
-				<div class="col-lg-8" style="margin-bottom: 0px;">
-					<div id="weighing-scale" style="border:1px solid #000; width:400px; text-align:right; font-size:62px; padding:20px 40px 20px 0px; background:#222; color:#fff; float:left">
-						+  0.00
-					</div>
-					<div style="float:left; margin-top:20px; margin-left:10px; font-weight:bold;">
-						<h1><span id="weight_unit">kg</span><small id="read-status1" style="margin-left: 10px">stable</small></h1>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div style="margin: 15px 0px 15px 0px; border-top: 1px solid #CCC"></div>
-		<div class="container well no-margin-bottom no-margin-right" style="width: auto; padding: 10px">
-			<div class="form-horizontal no-margin-bottom" style="width: 750px; float: left;" id="weight-scale-form">
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Truck</label>
-					</div>
-					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-default" id="new-truck-data"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-default" id="search-truck-data"><i class="fa fa-search"></i></button>
-					</div>
-					<div class="btn-group" role="group" style="width: 150px">
-						<input type="text" class="form-control" id="truck_code" data-type="varchar" data-stage="first" disabled>
-					</div>
-				</div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Customer</label>
-					</div>
-					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-default disabled" id="new-customer-data"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-default disabled" id="search-customer-data"><i class="fa fa-search"></i></button>
-					</div>
-					<div class="btn-group" role="group" style="width: 150px">
-						<input type="text" class="form-control" id="cust_code" data-type="varchar" data-stage="second" disabled>
-					</div>
-					<div class="btn-group" role="group" style="width: 365px">
-						<input type="text" class="form-control" id="cust_name" data-type="varchar" data-stage="second" disabled>
-					</div>
-				</div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Destination</label>
-					</div>
-					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-default disabled" id="new-destination-data"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-default disabled" id="search-destination-data"><i class="fa fa-search"></i></button>
-					</div>
-					<div class="btn-group" role="group" style="width: 150px">
-						<input type="text" class="form-control" id="dest_zipcode" data-type="varchar" data-stage="second" disabled>
-					</div>
-					<div class="btn-group" role="group" style="width: 365px">
-						<input type="text" class="form-control" id="dest_location" data-type="varchar" data-stage="second" disabled>
-					</div>
-				</div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Product</label>
-					</div>
-					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-default disabled" id="new-product-data"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-default disabled" id="search-product-data"><i class="fa fa-search"></i></button>
-					</div>
-					<div class="btn-group" role="group" style="width: 150px">
-						<input type="text" class="form-control" id="prod_code" data-type="varchar" data-stage="second" disabled>
-					</div>
-					<div class="btn-group" role="group" style="width: 365px">
-						<input type="text" class="form-control" id="prod_name" data-type="varchar" data-stage="second" disabled>
-					</div>
-				</div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Supplier</label>
-					</div>
-					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-default disabled" id="new-supplier-data"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-default disabled" id="search-supplier-data"><i class="fa fa-search"></i></button>
-					</div>
-					<div class="btn-group" role="group" style="width: 150px">
-						<input type="text" class="form-control" id="supp_code" data-type="varchar" data-stage="second" disabled>
-					</div>
-					<div class="btn-group" role="group" style="width: 365px">
-						<input type="text" class="form-control" id="supp_name" data-type="varchar" data-stage="second" disabled>
-					</div>
-				</div>
-				<div style="margin: 10px 15px 15px 0px; border-top: 1px solid #CCC"></div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">User</label>
-					</div>
-					<div class="btn-group" role="group">
-						<input type="text" class="form-control" id="user_name" style="width: 120px" value="admin" data-stage="first second" disabled>
-					</div>
-					<div class="btn-group" role="group">
-						<label for="inputUnitPrice" class="col-sm-2 control-label" style="width:100px; text-align:right">Unit Price</label>
-					</div>
-					<div class="btn-group" role="group">
-						<input type="text" class="form-control" id="unit_price" style="width: 125px" value="0.00" data-type="float" data-stage="second" data-action="enable" disabled>
-					</div>
-					<div class="btn-group" role="group">
-						<label for="inputTotalPrice" class="col-sm-2 control-label" style="width:110px; text-align:right">Total Price</label>
-					</div>
-					<div class="btn-group" role="group">
-						<input type="text" class="form-control" id="total_price" style="width: 125px" value="0.00" data-type="float" data-stage="second" disabled>
-					</div>
-				</div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="inputTruckCode" class="col-sm-2 control-label" style="width: 130px">Remarks</label>
-					</div>
-					<div class="btn-group" role="group" style="width: 600px">
-						<input type="text" class="form-control" id="remarks" placeholder="Enter Remarks here..." data-type="varchar" data-stage="second" data-action="enable" disabled>
-					</div>
-				</div>
-				<div style="margin: 10px 15px 8px 0px; border-top: 1px solid #CCC"></div>
-				<div class="form-group no-margin-bottom">
-					<div class="col-sm-2 no-padding-left" style="margin-left: 20px; width: 175px">
-						<label for="inputTruckInWeight" class="control-label">Truck In Weight</label>
-						<input type="text" class="form-control" id="weight_in_reading" value="0.00" data-type="float" data-stage="first second" disabled>
-					</div>
-					<div class="col-sm-2 no-padding-left" style="width: 175px">
-						<label for="inputTruckOutWeight" class="control-label">Truck Out Weight</label>
-						<input type="text" class="form-control" id="weight_out_reading" value="0.00" data-type="float" data-stage="second" disabled>
-					</div>
-					<div class="col-sm-2 no-padding-left" style="width: 175px">
-						<label for="inputTruckOutWeight" class="control-label">Compensation(%)</label>
-						<input type="text" class="form-control col-sm-1" id="compensation" value="0.00" data-type="float" data-stage="second" data-action="enable" disabled>
-					</div>
-					<div class="col-sm-2 no-padding-left" style="width: 175px">
-						<label for="inputNetWeight" class="control-label">Net Weight</label>
-						<input type="text" class="form-control" id="net_weight" value="0.00" data-type="float" data-stage="second" disabled>
-					</div>
-				</div>
-			</div>
-			<div class="form-horizontal no-margin-bottom" style="width: 180px; float: right;">
-				<button id="first-weighing" class="btn btn-primary btn-lg disabled" data-type="button"><i class="fa fa-tag fa-3x"></i><p>First Weighing</p></button>
-				<button id="second-weighing" class="btn btn-primary btn-lg disabled" data-type="button"><i class="fa fa-tags fa-3x"></i><p>Second Weighing</p></button>
-				<button id="cancel-weighing" class="btn btn-primary btn-lg disabled" data-type="button"><i class="fa fa-ban fa-3x"></i><p>Cancel</p></button>
-				<button id="reprint-docket" class="btn btn-primary btn-lg disabled no-margin-bottom" data-type="button"><i class="glyphicon glyphicon-print fa-3x"></i><p>Print Docket</p></button>
-			</div>
-		</div>
-	</div>
-</div>
-<input type="hidden" data-stage="second" id="wr_id">
-<input type="hidden" data-stage="second" id="cust_id">
-<input type="hidden" data-stage="second" id="dest_id">
-<input type="hidden" data-stage="second" id="prod_id">
-<input type="hidden" data-stage="second" id="supp_id">
-<input type="hidden" data-stage="second" id="weight_in_date">
-<div class="modal fade bootstrap-dialog type-primary" id="truck-data-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-truck"></i> Select Truck Code
-			</div>
-			<div class="modal-body">
-				<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 15px;" id="tabSelectTruck">
-					<li role="presentation" class="active">
-						<a href="#firstWeighing" aria-controls="firstWeighing" role="tab" data-toggle="tab">
-							<i class="fa fa-tag"></i> First Weighing
-						</a>
-					</li>
-					<li role="presentation">
-						<a href="#secondWeighing" aria-controls="secondWeighing" role="tab" data-toggle="tab">
-							<i class="fa fa-tags"></i> Second Weighing
-						</a>
-					</li>
-				</ul>
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane active" id="firstWeighing">
-						<div class="alert alert-info" role="alert">
-							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
-							<ul>
-								<li>Records listed here are Truck Codes available for First Weighing only.</li>
-								<li>To add a new Truck Code for First Weighing, use the Weighing Scale form.</li>
-							</ul>
-						</div>
-						<table class="display compact" id="table-truck-first" style="width: 100%">
-							<thead>
-								<tr>
-									<th class="text-left">Truck ID</th>
-									<th class="text-left">Truck Code</th>
-									<th class="text-left">Date Modified</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
-						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary btnFWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
-							</div>
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary disabled" id="btnFWTrucksOK"><i class="fa fa-check"></i> OK</button>
-							</div>
-						</div>
-					</div>
-					<div role="tabpanel" class="tab-pane" id="secondWeighing">
-						<div class="alert alert-info" role="alert">
-							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
-							<ul>
-								<li>Records listed here are Truck Codes available for Second Weighing only.</li>
-								<li>To remove a Truck Code from Second Weighing, go to the Truck In report page.</li>
-							</ul>
-						</div>
-						<table class="display compact" id="table-truck-second" style="width: 100%">
-							<thead>
-								<tr>
-									<th class="text-left">ID</th>
-									<th class="text-left">Truck Code</th>
-									<th class="text-left">Date In</th>
-									<th class="text-left">Time In</th>
-									<th class="text-left">Weight In</th>
-									<th class="text-left">Unit</th>
-									<th class="text-left">User</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
-						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary btnSWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
-							</div>
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary disabled" id="btnSWTrucksOK"><i class="fa fa-check"></i> OK</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade bootstrap-dialog type-primary" id="customer-data-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-users"></i> Select Customer
-			</div>
-			<div class="modal-body">
-				<div class="alert alert-info" role="alert">
-					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
-					<ul>
-						<li>Records listed here are Customer Details that are already available in the system.</li>
-						<li>To add new Customer Details, use the Weighing Scale form.</li>
-					</ul>
-				</div>
-				<table class="display compact" id="table-customer-data" style="width: 100%">
-					<thead>
-						<tr>
-							<th class="text-left">Customer ID</th>
-							<th class="text-left">Customer Code</th>
-							<th class="text-left">Customer Name</th>
-							<th class="text-left">Date Modified</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade bootstrap-dialog type-primary" id="destination-data-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-map-marker"></i> Select Destination
-			</div>
-			<div class="modal-body">
-				<div class="alert alert-info" role="alert">
-					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
-					<ul>
-						<li>Records listed here are Destination Details that are already assigned to the selected Customer Detail.</li>
-						<li>To assign new Destination Details to the selected Customer Detail, use the Weighing Scale form.</li>
-					</ul>
-				</div>
-				<table class="display compact" id="table-destination-data" style="width: 100%">
-					<thead>
-						<tr>
-							<th class="text-left">CD ID</th>
-							<th class="text-left">Customer ID</th>
-							<th class="text-left">Destination ID</th>
-							<th class="text-left">Zip Code</th>
-							<th class="text-left">Name</th>
-							<th class="text-left">Location</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade bootstrap-dialog type-primary" id="destination-data-all-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-map-marker"></i> New Destination
-			</div>
-			<div class="modal-body">
-				<div class="alert alert-info" role="alert">
-					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
-					<ul>
-						<li>Records listed here are Destination Details that are not yet assigned to the selected Customer Detail.</li>
-						<li>To assign new Destination Details to the selected Customer Detail, select a record below.</li>
-					</ul>
-				</div>
-				<table class="display compact" id="table-destination-data-all" style="width: 100%">
-					<thead>
-						<tr>
-							<th class="text-left">Destination ID</th>
-							<th class="text-left">Zip Code</th>
-							<th class="text-left">Name</th>
-							<th class="text-left">Location</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-floppy-o"></i> Save</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade bootstrap-dialog type-primary" id="product-data-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-product-hunt"></i> Select Product
-			</div>
-			<div class="modal-body">
-				<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 15px;" id="tabSelectProduct">
-					<li role="presentation" class="active">
-						<a href="#products" aria-controls="products" role="tab" data-toggle="tab">
-							<i class="fa fa-product-hunt"></i> Products
-						</a>
-					</li>
-					<li role="presentation">
-						<a href="#customerProducts" aria-controls="customerProducts" role="tab" data-toggle="tab">
-							<i class="fa fa-user"></i> Customer Products
-						</a>
-					</li>
-				</ul>
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane active" id="products">
-						<div class="alert alert-info" role="alert">
-							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
-							<ul>
-								<li>Records listed here are Product Details that are not yet assigned to the selected Customer Detail.</li>
-								<li>To add new Product Details, use the Weighing Scale form.</li>
-							</ul>
-						</div>
-						<table class="display compact" id="table-product-data-all" style="width: 100%">
-							<thead>
-								<tr>
-									<th class="text-left">Product ID</th>
-									<th class="text-left">Product Code</th>
-									<th class="text-left">Product Name</th>
-									<th class="text-left">Unit Price</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
-						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary btnAllProdCancel"><i class="fa fa-ban"></i> Cancel</button>
-							</div>
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary disabled" id="btnAllProdOK"><i class="fa fa-check"></i> OK</button>
-							</div>
-						</div>
-					</div>
-					<div role="tabpanel" class="tab-pane" id="customerProducts">
-						<div class="alert alert-info" role="alert">
-							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
-							<ul>
-								<li>Records listed here are Product Details that are already assigned to the selected Customer Detail.</li>
-								<li>To assign other Product Details to the selected Customer Detail, go to the Products tab.</li>
-							</ul>
-						</div>
-						<table class="display compact" id="table-product-data" style="width: 100%">
-							<thead>
-								<tr>
-									<th class="text-left">CP ID</th>
-									<th class="text-left">Customer ID</th>
-									<th class="text-left">Product ID</th>
-									<th class="text-left">Product Code</th>
-									<th class="text-left">Product Name</th>
-									<th class="text-left">Unit Price</th>
-								</tr>
-							</thead>
-							<tbody>
-							</tbody>
-						</table>
-						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
-						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary btnCustProdCancel"><i class="fa fa-ban"></i> Cancel</button>
-							</div>
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary disabled" id="btnCustProdOK"><i class="fa fa-check"></i> OK</button>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<div class="modal fade bootstrap-dialog type-primary" id="supplier-data-modal" tabindex="-1" role="dialog">
-	<div class="modal-dialog modal-lg">
-		<div class="modal-content">
-			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-users"></i> Select Supplier
-			</div>
-			<div class="modal-body">
-				<div class="alert alert-info" role="alert">
-					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
-					<ul>
-						<li>Records listed here are Supplier Details that are already available in the system.</li>
-						<li>To add new Supplier Details, use the Weighing Scale form.</li>
-					</ul>
-				</div>
-				<table class="display compact" id="table-supplier-data" style="width: 100%">
-					<thead>
-						<tr>
-							<th class="text-left">Supplier ID</th>
-							<th class="text-left">Supplier Code</th>
-							<th class="text-left">Supplier Name</th>
-							<th class="text-left">Date Modified</th>
-						</tr>
-					</thead>
-					<tbody>
-					</tbody>
-				</table>
-			</div>
-			<div class="modal-footer">
-				<button type="button" class="btn btn-primary disabled" id="select-item"><i class="fa fa-check"></i> OK</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
-			</div>
-		</div>
-	</div>
-</div>
