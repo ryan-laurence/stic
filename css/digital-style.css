@@ -12,12 +12,13 @@
 .weight-lcd {
 	color: #FFFFFF;
 	padding: 20px;
+	margin-left: 15px;
+	margin-right: 15px;
 	display: table;
 	border-radius: 4px;
 	background: linear-gradient(#56585D, #2F3034);	
-	-webkit-box-shadow: 4px 4px 5px 0px rgba(50, 50, 50, 0.75);
-	-moz-box-shadow:		4px 4px 5px 0px rgba(50, 50, 50, 0.75);
-	box-shadow:         4px 4px 5px 0px rgba(50, 50, 50, 0.75);
+	-webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+          box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
 }
 
 .weight-input {
