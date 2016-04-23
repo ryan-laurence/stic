@@ -129,7 +129,7 @@ function loadEditData(params) {
 			name: 'delete',
 			enabled: false,
 			text: dtBtnDelTxt,
-			className: 'btn-primary',
+			className: 'btn-danger',
 			action: btnDeleteAction
 		},
 
@@ -324,12 +324,12 @@ function loadEditData(params) {
 			// Switch between insert & update options
 			if (pkey.val() != '') {
 				wsPost = params.wsUpdate;
-				infoTitle = MSG_EDIT_REC_TITLE;
-				infoMessage = MSG_EDIT_REC_INFO;
+				infoTitle = MSG_TITLE_EDIT_REC;
+				infoMessage = MSG_INFO_EDIT_REC;
 			} else {
 				wsPost = params.wsInsert;
-				infoTitle = MSG_ADD_REC_TITLE;
-				infoMessage = MSG_ADD_REC_INFO;
+				infoTitle = MSG_TITLE_ADD_REC;
+				infoMessage = MSG_INFO_ADD_REC;
 			}
 			
 			var input = $(params.formId).find('input[data-fv-unique="true"]'),
@@ -427,8 +427,8 @@ function loadEditData(params) {
 			STIC.postData({
 				url: WS_USER_PASS_UPDATE,
 				data: JSONObject,
-				title: MSG_EDIT_REC_TITLE,
-				message: MSG_EDIT_REC_INFO
+				title: MSG_TITLE_EDIT_REC,
+				message: MSG_INFO_EDIT_REC
 			});
 		}
 	}
@@ -455,8 +455,8 @@ function loadEditData(params) {
 							dt: dt,
 							url: params.wsDelete,
 							data: postData,
-							title: MSG_INFO_TITLE,
-							message: MSG_DEL_REC_INFO
+							title: MSG_TITLE_INFO,
+							message: MSG_INFO_DEL_REC
 						});
 					}
 				}
@@ -466,9 +466,9 @@ function loadEditData(params) {
 		} else {
 			reloadDT();
 			BootstrapDialog.alert({
-				title: MSG_ERROR_TITLE,
+				type: 'type-danger',
+				title: MSG_TITLE_INFO,
 				message: 'This is a Super User account. You are not allowed to perform this action.',
-				type: BootstrapDialog.TYPE_DANGER,
 				callback: function(result) {
 					BootstrapDialog.closeAll();
 				}
@@ -524,6 +524,7 @@ function loadEditData(params) {
 			processing: false,
 			lengthChange: false,
 			dom: '<"dt-toolbar">Bfrtip',
+			//pagingType: 'full_numbers',
 			pageLength: DEFAULT_PAGE_LENGTH,
 			columns: params.cd,
 			ajax: {

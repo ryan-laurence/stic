@@ -1,15 +1,14 @@
 // Default Constants
-var CONSOLE_LOG = true;
 var DEFAULT_ROOT = '/forms/';
+var DEFAULT_PAGE_LENGTH = 10;
 var DEFAULT_PAGE_LOC = 'pages/';
 var DEFAULT_PAGE_FILE_EXT = '.html';
-var DEFAULT_PAGE_LENGTH = 10;
 var DEFAULT_WRAPPER_ID = '#main-wrapper';
 var DEFAULT_DS_REPORTS = 'response.report-list.report';
 var DEFAULT_DATASOURCE = 'response.record-list.record';
 
 // Weighing Screen
-var CD_CHECK_TRUCK_CODE_LIST = [
+var CD_TRUCK_IN_LIST = [
 	{ data: 'wr_id', visible: false, searchable: false, orderable: false },
 	{ data: 'truck_code' },
 	{ data: 'date_in' },
@@ -22,8 +21,8 @@ var CD_CHECK_TRUCK_CODE_LIST = [
 var FORM_CUST_PRODUCT_DATA = 'pages/data-customer-product-form.html'
 var WS_CHECK_TRUCK_CODE_LIST = '/scaletech/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&';
 var WS_FIRST_WEIGHING_INSERT = '/scaletech/services/WeightReadingInfoServices/addWeightReadings?response=application/json&';
-var WS_SECOND_WEIGHING_UPDATE = '/scaletech/services/WeightReadingInfoServices/updateWeightReadings?response=application/json&';
 var WS_FIRST_WEIGHING_DELETE = '/scaletech/services/WeightReadingInfoServices/deleteWeighReadingById?response=application/json&';
+var WS_SECOND_WEIGHING_UPDATE = '/scaletech/services/WeightReadingInfoServices/updateWeightReadings?response=application/json&';
 var WS_CUST_PRODUCT_INSERT = '/scaletech/services/ProductsInfoServices/addProductsAndCustomerProducts?response=application/json&'
 
 // Supplier Data
@@ -154,7 +153,9 @@ var WS_USER_UPDATE = '/scaletech/services/UserInfoServices/updateUser?response=a
 var WS_USER_DELETE = '/scaletech/services/UserInfoServices/updateUserByIsDeleted?response=application/json&is_deleted=0&';
 var WS_USER_PASS_CHECK = '/scaletech/services/UserInfoServices/getUserByNamePassList?response=application/json&';
 var WS_USER_PASS_UPDATE = '/scaletech/services/UserInfoServices/updateUserPassword?response=application/json&';
-var WS_USER_CHECK = '/scaletech/services/UserInfoServices/getUserByNamePassList?response=application/json&'
+var WS_USER_CHECK = '/scaletech/services/UserInfoServices/getUserByNamePassList?response=application/json&';
+var WS_USER_AUTHENTICATE = '/scaletech/services/UserInfoServices/checkIfUserIsAuthentication?response=application/json&';
+var WS_USER_REMOVE_FROM_AUDIT = '/scaletech/services/UserInfoServices/removeUser?response=application/json&'
 
 // Roles Data
 var WS_LIST_ROLES = '/scaletech/services/RolesInfoServices/getAllRolesList?response=application/json&roleId=1&';
@@ -180,7 +181,7 @@ var REPORT_TITLE_CUSTOMER = 'Customer Summary';
 var WS_SUMMARY_CUSTOMER = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByCustomerList?response=application/json&';
 
 // Destination Summary
-var CD_SUMMARY_DESTINATION = [	
+var CD_SUMMARY_DESTINATION = [
 	{ data: 'dest_name' },
 	{ data: 'cust_name' },
 	{ data: 'net_weight' },
@@ -276,7 +277,7 @@ var WS_UPDATE_CONFIG_COMPANY = '/scaletech/services/CompanyInfoServices/updateCo
 var WS_LIST_CONFIG_DOCKET = '/scaletech/services/PrinterConfigurationInfoServices/getAllPrintersList?response=application/json&printerId=1&';
 var WS_UPDATE_CONFIG_DOCKET = '/scaletech/services/PrinterConfigurationInfoServices/updatePrinter?response=application/json&id=1&';
 
-// Roles
+// Roles Data
 var CD_ROLES_LIST = [
 	{ data: 'role_id', visible: false, searchable: false },
 	{ data: 'role_name' },
@@ -288,12 +289,16 @@ var WS_ROLES_INSERT = '/scaletech/services/RolesInfoServices/addRoles?response=a
 var WS_ROLES_UPDATE = '/scaletech/services/RolesInfoServices/updateRoles?response=application/json&';
 var WS_ROLES_DELETE = '/scaletech/services/RolesInfoServices/updateRolesByIsDeleted?response=application/json&isDeleted=0&';
 
-// Role Modules
+// Role Modules Data
 var WS_ROLE_MODULES_LIST = '/scaletech/services/ModulesInfoServices/getAllModulesList?response=application/json&';
 var WS_ROLE_MODULES_INSERT = '/scaletech/services/RoleModulesInfoService/addRoleModules?response=application/json&'
 var WS_ROLE_MODULES_DELETE = '/scaletech/services/RoleModulesInfoService/updateRoleModulesByIsDeleted?response=application/json&isDeleted=0'
 var WS_UI_MODULES_LIST = '/scaletech/services/RoleModulesInfoService/getAllRoleModulesList?response=application/json&isDeleted=0&';
 
+// Calibration
+var FORM_CALIBRATION_SPAN = 'pages/others-calibration-span-form.html';
+
+// Unique Checking
 var WS_UNIQUE_CHECK = [];
 WS_UNIQUE_CHECK['supp_code'] = '/scaletech/services/SuppliersInfoServices/getSuppliersByCodeList?response=application/json&';
 WS_UNIQUE_CHECK['cat_code'] = '/scaletech/services/CategoriesInfoService/getCategoriesByCodeList?response=application/json&';
@@ -303,63 +308,44 @@ WS_UNIQUE_CHECK['truck_code'] = '/scaletech/services/TrucksInfoServices/getTruck
 WS_UNIQUE_CHECK['role_name'] = '/scaletech/services/RolesInfoServices/getAllRolesByRoleNameList?response=application/json&';
 WS_UNIQUE_CHECK['user_name'] = '/scaletech/services/UserInfoServices/getUserByNameList?response=application/json&';
 
-// ******************************************************************************************************************************************************8
+// Weigh Scale messages
+var MSG_TRUCK_DATA_EMPTY = 'Please add or select a <strong>Truck Code</strong> to continue.';
+var MSG_CUSTOMER_DATA_EMPTY = 'Please add or select a <strong>Customer Data</strong> to continue.';
+var MSG_FIRST_WEIGHING_CONFIRM = 'Please make sure all details provided for <strong>First Weighing</strong> are correct. Press <strong>OK</strong> to continue.';
+var MSG_SECOND_WEIGHING_CONFIRM = 'Please make sure all details provided for <strong>Second Weighing</strong> are correct. Press <strong>OK</strong> to continue.';
+var MSG_FIRST_WEIGHING_SUCCESS = '<strong>Success</strong>. The <strong>First Weighing</strong> details you have entered were <strong>successfully created</strong> in the system. Press <strong>OK</strong> to continue.';
+var MSG_SECOND_WEIGHING_SUCCESS = '<strong>Success</strong>. The <strong>Second Weighing</strong> details you have entered were <strong>successfully updated</strong> in the system. Press <strong>OK</strong> to continue.';
 
-// System Messages
-var MESSAGE_TITLE = '<i class="fa fa-info-circle"></i> System Message';
-var DEFAULT_MESSAGE_STATUS = 'info';
-var DEFAULT_MESSAGE_TITLE = '<i class="fa fa-info-circle"></i> System Message';
-var MESSAGE_SUCCESS_NEW = '<strong>Success!</strong> New record has been created.';
-var MESSAGE_SUCCESS_EDIT = '<strong>Success!</strong> Record has been updated.';
-var MESSAGE_SUCCESS_DELETE = '<strong>Success!</strong> Record has been deleted.';
-var MESSAGE_CONFIRM_DELETE = '<strong>Confirm Delete!</strong> Are you sure you want to delete this record?';
-
-// System Messages
-var MSG_STATUS = 'info';
-var MSG_TITLE = '<i class="fa fa-info-circle"></i> System Message';
-var MSG_SUCCESS_CREATE = 'Record has been created.';
-var MSG_SUCCESS_UPDATE = 'Record has been updated.';
-var MSG_SUCCESS_DELETE = 'Record has been deleted.';
-var MSG_CONFIRM_DELETE = 'Are you sure you want to delete this record?';
-var MSG_WARNING_ICON = '<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span>';
-var MSG_ERROR_ICON = '<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>';
-var MSG_FIRST_WEIGHING_SUCCESS = 'Truck Code added for Second Weighing.';
-var MSG_FIRST_WEIGHING_CONFIRM = 'Continue to Second Weighing? Press OK to continue.';
-var MSG_SEARCH_PRODUCT_ERROR_1 = 'Please enter or select a Customer Data to continue.';
-var MSG_SEARCH_DESTINATION_ERROR_1 = 'Please enter or select a Customer Data to continue.';
-var MSG_SEARCH_CUSTOMER_ERROR_1 = 'Please enter or select a Truck Data to continue.';
-var MSG_SECOND_WEIGHING_CONFIRM = 'Please make sure all details provided are correct. Press OK to continue.';
-
-var MSG_WEIGHT_INPUT_ERROR_TITLE = '<i class="fa fa-exclamation-circle"></i> Input Error';
-var MSG_ERROR_TITLE = '<i class="fa fa-exclamation-circle"></i> Error';
-var MSG_TITLE_LOGIN_ERROR = '<i class="fa fa-exclamation-circle"></i> Login Error';
-var MSG_INFO_LOGIN_ERROR = '<strong>Invalid</strong> login credentials. You are <strong>not allowed</strong> to access the system.';
-var MSG_INFO_LOGIN_ERROR_INLINE = '<div class="alert alert-danger" role="alert" style="text-align: left"><i class="fa fa-exclamation-circle"></i> <strong>Invalid</strong> login credentials. You are <strong>not allowed</strong> to access the system. In case of forgotten password, please contact your system administrator.</div>';
-
-var MSG_INFO_TITLE = '<i class="fa fa-info-circle"></i> Information';
+// Message Title
+var MSG_TITLE_INFO = '<i class="fa fa-info-circle"></i> Information';
+var MSG_TITLE_ADD_REC = '<i class="fa fa-info-circle"></i> Information';
+var MSG_TITLE_EDIT_REC = '<i class="fa fa-info-circle"></i> Information';
+var MSG_TITLE_DEL_REC = '<i class="fa fa-info-circle"></i> Information';
+var MSG_TITLE_WS_ERROR = '<i class="fa fa-exclamation-circle"></i> Web Service Error';
 var MSG_TITLE_CONFIRM_SAVE = '<i class="fa fa-question-circle"></i> Confirm Update';
 var MSG_TITLE_CONFIRM_DELETE = '<i class="fa fa-question-circle"></i> Confirm Deletion';
 var MSG_TITLE_CONFIRM_FIRST_WEIGHT = '<i class="fa fa-question-circle"></i> Confirm First Weighing';
 var MSG_TITLE_CONFIRM_SECOND_WEIGHT = '<i class="fa fa-question-circle"></i> Confirm Second Weighing';
 
-// Generic CRUD Messages
-var MSG_ADD_REC_TITLE = '<i class="fa fa-info-circle"></i> Information';
-var MSG_EDIT_REC_TITLE = '<i class="fa fa-info-circle"></i> Information';
-var MSG_DEL_REC_TITLE = '<i class="fa fa-info-circle"></i> Information';
-var MSG_WS_ERROR_TITLE = '<i class="fa fa-exclamation-circle"></i> Web Service Error';
-var MSG_DUPLICATE_REC_TITLE = '<i class="fa fa-exclamation-circle"></i> Duplicate Entry';
-var MSG_ADD_REC_INFO = '<strong>Success</strong>. A new record has been <strong>created</strong> in the system.';
-var MSG_EDIT_REC_INFO = '<strong>Success</strong>. The selected record was <strong>updated</strong> in the system.';
-var MSG_DEL_REC_INFO = '<strong>Success</strong>. The selected record was <strong>deleted</strong> from the system.';
-var MSG_WS_ERROR_INFO = 'The changes you requested were <strong>not successful</strong> because there was an error in the Web Service response. If issue still persists, please contact your System Administrator.';
-var MSG_WS_ERROR_INLINE = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> The changes you requested were <strong>not successful</strong> because there was an error in the Web Service response. If issue still persists, please contact your System Administrator.</div>';
-var MSG_DUPLICATE_REC_INLINE = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> The changes you requested were <strong>not submitted</strong> because they would create duplicate data in the system. Change the value of the field(s) that contains duplicate data and try again.</div>';
-var MSG_FORM_ERROR_INLINE = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle"></i> The changes you requested were <strong>not submitted</strong>. Change the value of the field(s) that contains errors and try again.</div>';
-var MSG_LOGIN_ERROR_INLINE = '<div class="alert alert-danger" role="alert" style="text-align: left"><i class="fa fa-exclamation-circle"></i> Your request was <strong>not submitted</strong>. Change the value of the field(s) that contains errors and try again.</div>';
+// CRUD Messages
+var MSG_INFO_ADD_REC = '<strong>Success</strong>. A new record has been <strong>created</strong> in the system.';
+var MSG_INFO_EDIT_REC = '<strong>Success</strong>. The selected record was <strong>updated</strong> in the system.';
+var MSG_INFO_DEL_REC = '<strong>Success</strong>. The selected record was <strong>deleted</strong> from the system.';
+var MSG_INFO_LOGOUT_AFTER_CPASS = 'You have <strong>successfully</strong> updated your password. Please take note that you will be logged out of the system after this.'
+var MSG_INFO_WS_ERROR = 'Your request was <strong>not successful</strong> because there was an <strong>error</strong> in the Web Service response. If issue still persists, please contact your System Administrator.';
 
-var MSG_CONFIRM_REMOVE_MODULES = 'This will <strong>remove</strong> all modules assigned to the selected role. Press <strong>OK</strong> to continue.';
+// Confirm Messages
 var MSG_CONFIRM_DELETE_RECORD = 'This will <strong>delete</strong> the selected record. Press <strong>OK</strong> to continue.';
 var MSG_CONFIRM_SAVE_COM_PORT = 'This will <strong>update</strong> the current Communication Port settings. Press <strong>OK</strong> to continue.';
 var MSG_CONFIRM_SAVE_CONFIG_WEIGHIN = 'This will <strong>update</strong> the current Weigh In settings. Press <strong>OK</strong> to continue.';
 var MSG_CONFIRM_SAVE_CONFIG_COMPANY = 'This will <strong>update</strong> the current Company Details settings. Press <strong>OK</strong> to continue.';
 var MSG_CONFIRM_SAVE_CONFIG_DOCKET = 'This will <strong>update</strong> the current Docket settings. Press <strong>OK</strong> to continue.';
+var MSG_CONFIRM_REMOVE_MODULES = 'This will <strong>remove</strong> all modules assigned to the selected role. Press <strong>OK</strong> to continue.';
+
+// Alert Messages
+var MSG_ALERT_LOGIN_FORM_ERROR = '<div class="alert alert-danger" role="alert" style="text-align: left; margin-bottom: 20px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was <strong>not submitted</strong> because of the following <strong>errors</strong>. Change the value of the field(s) that contains errors and try again.</div>';
+var MSG_ALERT_INVALID_OLD_PASS = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you requested were <strong>not submitted</strong> because you provided an <strong>invalid old password</strong>. Change the value of the field(s) that contains errors and try again.</div>';
+var MSG_ALERT_INVALID_LOGIN = '<div class="alert alert-danger" role="alert" style="text-align: left; margin-bottom: 20px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> You are <strong>not allowed</strong> to access the system. Please enter a valid <strong>Username</strong> and <strong>Password</strong> to continue.</div>';
+var MSG_ALERT_FORM_ERROR = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you requested were <strong>not submitted</strong> because of the following <strong>errors</strong>. Change the value of the field(s) that contains errors and try again.</div>';
+var MSG_ALERT_DUPLICATE_REC = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you requested were <strong>not submitted</strong> because they would create <strong>duplicate data</strong> in the system. Change the value of the field(s) that contains duplicate data and try again.</div>';
+var MSG_ALERT_WS_ERROR = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was <strong>not successful</strong> because there was an <strong>error</strong> in the Web Service response. If issue still persists, please contact your System Administrator.</div>';

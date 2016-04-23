@@ -40,22 +40,16 @@
 	<input type="hidden" data-field="bridge_code">
 	<input type="hidden" data-field="current_docket_number">
 	<input type="hidden" data-field="port_baudrate">
-	<input type="hidden" data-field="weight_unit">
-	<div class="row">
-		<div class="form-group">
-			<div class="col-md-12">
-				<div class="footer-line-divider "></div>
-			</div>
+	<input type="hidden" data-field="weight_unit">		
+	<hr>					
+	<div class="btn-toolbar" role="toolbar" aria-label="button groups">
+		<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+			<button class="btn btn-primary" type="button" id="reset-config"><i class="fa fa-ban"></i> Cancel</button>
 		</div>
-	</div>					
-	<div class="row">
-		<div class="form-group no-margin-bottom">
-			<div class="col-md-12">
-				<button class="btn btn-primary" type="button" id="save-config"><i class="fa fa-floppy-o"></i> Save</button>
-				<button class="btn btn-primary" type="button" id="reset-config"><i class="fa fa-ban"></i> Cancel</button>
-			</div>
+		<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+			<button class="btn btn-primary" type="button" id="save-config"><i class="fa fa-floppy-o"></i> Save</button>
 		</div>
-	</div>							
+	</div>		
 </form>	
 <script>
 	$(function() {
@@ -95,7 +89,7 @@
 							jsonString = 'companyInfo=' + JSON.stringify(jsonObject);
 							$.post(WS_UPDATE_CONFIG_COMPANY, jsonString, function(data, status){
 								BootstrapDialog.alert({
-									title: MSG_INFO_TITLE,
+									title: MSG_TITLE_INFO,
 									message: 'Company Details were updated successfully.',	
 									type: BootstrapDialog.TYPE_PRIMARY
 								});

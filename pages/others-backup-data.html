@@ -1,312 +1,96 @@
-<script>
-	$(document).ready(function() {
-		var navListItems = $('div.setup-panel div a'),
-			navListNames = $('div.setup-panel div p'),
-			allWells = $('.setup-content'),
-			allNextBtn = $('.nextBtn'),
-			allPrevBtn = $('.prevBtn');
-
-			allWells.hide();
-
-		navListItems.click(function(e) {
-			e.preventDefault();
-			loadStepWizard(this);
-		});
-		
-		function loadStepWizard(targetStep) {
-			var $target = $($(targetStep).attr('href')),
-				$item = $(targetStep);
-				
-			navListNames.removeClass('current');
-			navListItems.removeClass('btn-primary').addClass('btn-default');	
-			$item.addClass('btn-primary');
-			$item.next().addClass('current');
-			allWells.hide();
-			$target.show();	
-		}
-	  
-		allPrevBtn.click(function() {
-			var curStep = $(this).closest('.setup-content'),
-				curStepBtn = curStep.attr('id'),
-				prevStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]').parent().prev().children('a');
-			
-			loadStepWizard(prevStepWizard);
-		});		
-
-		allNextBtn.click(function() {
-			var curStep = $(this).closest(".setup-content"),
-				curStepBtn = curStep.attr('id'),
-				curStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]'),
-				nextStepWizard = curStepWizard.parent().next().children('a'),
-				checkInput = curStepWizard.attr('data-validate-input');
-			
-			if (checkInput === '1') {
-				curInputs = curStep.find('input[type="checkbox"]'),
-					unCheckedItems = 0;
-					
-				for(var i = 0; i < curInputs.length; i++) {
-					if (!curInputs[i].checked)
-						unCheckedItems++;
-				}
-				
-				if (unCheckedItems < curInputs.length)
-					loadStepWizard(nextStepWizard);
-				else {
-					BootstrapDialog.alert({
-						title: 'Input Error',
-						message: 'Please select at least one data to backup.',
-						type: BootstrapDialog.TYPE_DANGER,
-					});
-				}			
-			} else 
-				loadStepWizard(nextStepWizard);
-		});
-
-		loadStepWizard($('div.setup-panel div a.btn-primary'));
-	});
-
-	$(function() {
-		$('#table-backup').DataTable({
-			"dom": 'tip'	
-		});
-	});
-</script>
-<link rel="stylesheet" href="css/bootstrap-stepwizard.css" />	
-<link rel="stylesheet" href="css/bootstrap-funky-checkbox.css" />
-<div class="row" style="margin-top: 20px;">
-	<div class="col-md-10 col-centered">
-		<div class="panel panel-primary">
-			<div class="panel-heading">
-				<span class="glyphicon glyphicon-cog"></span> Backup Data
-			</div>
-			<div class="panel-body">
-				<div class="stepwizard">
-					<div class="stepwizard-row setup-panel">
-						<div class="stepwizard-step">
-							<a class="btn btn-primary btn-circle" href="#step-1" type="button" data-validate-input="1">1</a>
-							<p>Select Data to Backup</p>
-						</div>
-						<div class="stepwizard-step">
-							<a class="btn btn-default btn-circle" href="#step-2" type="button" data-validate-input="0">2</a>
-							<p>Confirm Data to Backup</p>
-						</div>
-						<div class="stepwizard-step">
-							<a class="btn btn-default btn-circle" href="#step-3" type="button" data-validate-input="0">3</a>
-							<p>Backup in Progress</p>
-						</div>
-						<div class="stepwizard-step">
-							<a class="btn btn-default btn-circle" href="#step-4" type="button" data-validate-input="0">4</a>
-							<p>Backup Complete</p>
-						</div>
-					</div>
-				</div>
-				<form class="form-horizontal well">
-					<div class="row setup-content" id="step-1">						
-						<div class="form-group no-margin-bottom">
-							<div class="row">
-								<div class="col-md-12">
-									<h5><strong>Select items you want to Backup:</strong></h5>	
-								</div>
-							</div>
-							<div class="row">
-								<div class="col-md-6">
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-1" id="option-1"/>
-											<label for="option-1">Supplier Data</label>
-										</div>
-									</div>
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-2" id="option-2"/>
-											<label for="option-2">Category Data</label>
-										</div>
-									</div>
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-11" id="option-11"/>
-											<label for="option-11">Customer Data</label>
-										</div>
-									</div>
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-3" id="option-3"/>
-											<label for="option-3">Destinations Data</label>
-										</div>
-									</div>
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-4" id="option-4"/>
-											<label for="option-4">Product Data</label>
-										</div>
-									</div>
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-9" id="option-9"/>
-											<label for="option-9">Truck Data</label>
-										</div>
-									</div>
-								</div>
-								<div class="col-md-6">
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-5" id="option-5"/>
-											<label for="option-5">User Data</label>
-										</div>
-									</div>
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-6" id="option-6"/>
-											<label for="option-6">Docket Data</label>
-										</div>
-									</div>
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-7" id="option-7"/>
-											<label for="option-7">Truck In Record</label>
-										</div>
-									</div>
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-10" id="option-10"/>
-											<label for="option-10">Weighing Record</label>
-										</div>
-									</div>
-									<div class="funkyradio">
-										<div class="funkyradio-primary">
-											<input type="checkbox" name="option-8" id="option-8"/>
-											<label for="option-8">Event Log</label>
-										</div>
-									</div>									
-								</div>								
-							</div>	
-							<div style="border-top: 1px solid #ccc; margin: 25px 0px 20px 0px;"></div>
-							<div class="row">
-								<div class="col-md-12">
-									<button class="btn btn-primary nextBtn pull-right" type="button">Next</button>	
-								</div>
-							</div>							
-						</div>				
-					</div>	
-					<div class="row setup-content" id="step-2">
-						<div class="form-group" style="margin-bottom: 0px;">
-							<div class="row">
-								<div class="col-md-12">
-									<h5><strong>You have selected to backup the following data.</strong></h5>		
-									<ul>
-										<li>Supplier Data</li>
-										<li>Category Data</li>
-										<li>Customer Data</li>
-										<li>Destinations Data</li>
-										<li>Product Data</li>
-										<li>Truck Data</li>
-										<li>User Data</li>
-										<li>Docket Data</li>
-										<li>Truck In Record</li>
-										<li>Weighing Record</li>										
-										<li>Event Log</li>
-									</ul>
-									<h5>Press the Next button to start the backup process.</h5>
-								</div>						
-							</div>	
-							<div style="border-top: 1px solid #ccc; margin: 25px 0px 20px 0px;"></div>
-							<div class="row">
-								<div class="col-md-12">
-									<button class="btn btn-primary prevBtn pull-left" type="button">Previous</button>
-									<button class="btn btn-primary nextBtn pull-right" type="button">Next</button>	
-								</div>
-							</div>							
-						</div> 
-					</div>
-					<div class="row setup-content" id="step-3">
-						<div class="form-group" style="margin-bottom: 0px;">
-							<div class="row">
-								<div class="col-md-12">
-									<h5><strong>Backup in progress please wait...</strong></h5>	
-									<div class="progress">
-										<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100" style="width: 65%">
-											<span class="sr-only">65% Complete</span>
-										</div>
-									</div>										
-									<div class="alert alert-danger" role="alert" style="margin-bottom: 10px;">
-										<h5><span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> <strong>Important Reminders:</strong></h5>		
-										<ul>
-											<li>Please wait for the backup process to be completed.</li>
-											<li>Don't navigate away from this page while backup is in progress.</li>
-											<li>You will proceed to step #4 after the backup is complete.</li>
-										</ul>
-									</div>
-								</div>						
-							</div>	
-							<div style="border-top: 1px solid #ccc; margin: 25px 0px 20px 0px;"></div>
-							<div class="row">
-								<div class="col-md-12">
-								</div>
-							</div>							
-						</div> 
-					</div>
-					<div class="row setup-content" id="step-4">
-						<div class="form-group" style="margin-bottom: 0px;">
-							<div class="row">
-								<div class="col-md-12">
-									<div class="alert alert-success" role="alert">
-										<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> Data Backup completed.
-									</div>
-									<h5 style="margin-bottom: 20px;"><strong>Here are the list of all data backups for your reference.</strong></h5>
-									<table class="display compact" id="table-backup">
-										<thead>
-											<tr>
-												<th class="text-left">Backup Name</th>
-												<th class="text-left">User</th>
-												<th class="text-left">Date</th>
-												<th class="text-left">Time</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td class="text-left">data-backup-20162203-1453</th>
-												<td class="text-left">admin</th>
-												<td class="text-left">March 22, 2016</th>
-												<td class="text-left">02:53 PM</th>
-											</tr>
-											<tr>
-												<td class="text-left">data-backup-20162203-1453</th>
-												<td class="text-left">admin</th>
-												<td class="text-left">March 22, 2016</th>
-												<td class="text-left">02:53 PM</th>
-											</tr>
-											<tr>
-												<td class="text-left">data-backup-20162203-1453</th>
-												<td class="text-left">admin</th>
-												<td class="text-left">March 22, 2016</th>
-												<td class="text-left">02:53 PM</th>
-											</tr>
-											<tr>
-												<td class="text-left">data-backup-20162203-1453</th>
-												<td class="text-left">admin</th>
-												<td class="text-left">March 22, 2016</th>
-												<td class="text-left">02:53 PM</th>
-											</tr>
-											<tr>
-												<td class="text-left">data-backup-20162203-1453</th>
-												<td class="text-left">admin</th>
-												<td class="text-left">March 22, 2016</th>
-												<td class="text-left">02:53 PM</th>
-											</tr>
-										</tbody>
-									</table>
-								</div>						
-							</div>	
-							<div style="border-top: 1px solid #ccc; margin: 25px 0px 20px 0px;"></div>
-							<div class="row">
-								<div class="col-md-12">
-									<button class="btn btn-primary pull-right" type="button">Done</button>	
-								</div>
-							</div>							
-						</div> 
-					</div>
-				</form>						
-			</div>
-		</div>
+<div class="alert alert-info" role="alert">
+	<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+	<ul>
+		<li><i class="fa fa-check-square-o"></i> Listed here are backup data logs that were triggered by the system administrator and scheduler.</li>
+		<li><i class="fa fa-check-square-o"></i> To start the backup data process, click the <strong>Backup Data</strong> button below.</li>
+		<li><i class="fa fa-check-square-o"></i> After starting the backup data process, you will be logged out of the system.</li>
+	</ul>
+</div>
+<div class="panel panel-default no-margin-bottom">
+	<div class="panel-body">
+		<table class="display compact" id="table-history">
+			<thead>
+				<tr>
+					<th class="text-left">Triggered By</th>
+					<th class="text-left">Backup Date</th>
+					<th class="text-left">Backup Time</th>
+					<th class="text-left">Backup Status</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td class="text-left">system</th>
+					<td class="text-left">March 22, 2016</th>
+					<td class="text-left">02:53 PM</th>
+					<td class="text-left">Success</th>
+				</tr>
+				<tr>
+					<td class="text-left">system</th>
+					<td class="text-left">March 22, 2016</th>
+					<td class="text-left">02:53 PM</th>
+					<td class="text-left">Failed</th>
+				</tr>
+				<tr>
+					<td class="text-left">system</th>
+					<td class="text-left">March 22, 2016</th>
+					<td class="text-left">02:53 PM</th>
+					<td class="text-left">Success</th>
+				</tr>
+				<tr>
+					<td class="text-left">admin</th>
+					<td class="text-left">March 22, 2016</th>
+					<td class="text-left">02:53 PM</th>
+					<td class="text-left">Success</th>
+				</tr>
+				<tr>
+					<td class="text-left">admin</th>
+					<td class="text-left">March 22, 2016</th>
+					<td class="text-left">02:53 PM</th>
+					<td class="text-left">Pending</th>
+				</tr>
+			</tbody>
+		</table>
 	</div>
 </div>
+<script>
+	$(function() {
+		// DT Buttons Text
+		var dtBckDataTxt = '<i class="fa fa-floppy-o"></i> Backup Data',
+			dtBtnRelTxt = '<i class="fa fa-refresh"></i> Refresh',
+		
+		// DT Buttons > Backup Data
+		dtBtnBackup = {
+			name: 'backup',
+			text: dtBckDataTxt,
+			className: 'btn-primary',
+			action: function(e, dt, node, config) {
+				BootstrapDialog.alert({
+					type: 'type-danger',
+					title: MSG_TITLE_INFO,
+					message: 'Call WS to trigger Backup.'
+				});
+			}
+		},
+		
+		// DT Buttons > Refresh
+		dtBtnReload = {
+			name: 'reload',
+			text: dtBtnRelTxt,
+			className: 'btn-primary',
+			action: function(e, dt, node, config) {
+				BootstrapDialog.alert({
+					type: 'type-danger',
+					title: MSG_TITLE_INFO,
+					message: 'Reload DataTable.'
+				});
+			}
+		};
+	
+		// DT
+		var dt = $('#table-history')
+			.DataTable({
+				dom: '<"dt-toolbar">Bfrtip',
+				buttons: [dtBtnBackup, dtBtnReload]
+			});
+	});
+</script>

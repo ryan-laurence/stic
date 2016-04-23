@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Weighing System 2.0</title>
+		<title>Weighing System 2.0</title>
     <link rel="icon" type="images/png" href="images/company.ico" />
     <!-- Bootstrap core CSS -->
-	<link rel="stylesheet" href="css/bootstrap.css" />	
-	<link rel="stylesheet" href="css/bootstrap-select.min.css" />
-	<link rel="stylesheet" href="css/bootstrap-dialog.css" />	
-	<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
-	<!-- JQuery DataTable styles -->	
-	<link rel="stylesheet" href="css/dt.css" />
-	<link rel="stylesheet" href="css/dt-colreorder.min.css" />	
-	<link rel="stylesheet" href="css/dt-buttons.css" />
-	<link rel="stylesheet" href="css/dt-buttons-bootstrap.css" />   
-	<!-- Font Awesome CSS -->
-	<link rel="stylesheet" href="css/font-awesome.min.css" />
-	<!-- Custom styles -->
-	<link rel="stylesheet" href="css/digital-style.css" />
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="css/bootstrap-select.min.css" />
+		<link rel="stylesheet" href="css/bootstrap-dialog.css" />
+		<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+		<!-- JQuery DataTable styles -->
+		<link rel="stylesheet" href="css/dt.css" />
+		<link rel="stylesheet" href="css/dt-colreorder.min.css" />
+		<link rel="stylesheet" href="css/dt-buttons.css" />
+		<link rel="stylesheet" href="css/dt-buttons-bootstrap.css" />
+		<!-- Font Awesome CSS -->
+		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<!-- Custom styles -->
+		<link rel="stylesheet" href="css/digital-style.css" />
   </head>
   <body>
 		<nav class="navbar navbar-inverse">
@@ -65,218 +65,85 @@
 						</li-->
 					</ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li><a href="#" id="link-user"><i class="fa fa-user"></i> User: <span id="current-user" style="font-weight: bold">Admin</span></a></li>
+						<li><a href="#" id="link-user"><i class="fa fa-user"></i> User: <span id="current-user" style="font-weight: bold">default</span></a></li>
 						<li><a href="#" id="link-exit"><i class="fa fa-sign-out"></i> Logout</a></li>
 					</ul>
 				</div>
 			</div>
 		</nav>
-		<div class="container" id="main-wrapper"></div>	
-		<div class="modal fade" id="alert-modal" tabindex="-1" role="dialog" aria-labelledby="alertModal" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-						<h4 class="modal-title" id="alert-title"></h4>
-					</div>
-					<div class="modal-body">
-						<div class="alert alert-success alert-dismissible" role="alert" id="alert-message"></div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Close</button>
-					</div>
-				</div>
-			</div>
-		</div>		
+		<div class="container" id="main-wrapper"></div>
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/jquery-widget.min.js"></script>
 		<script type="text/javascript" src="js/dt.min.js"></script>
-		<script type="text/javascript" src="js/dt-colreorder.min.js"></script>		
-		<script type="text/javascript" src="js/dt-buttons.min.js"></script>		
-		<script type="text/javascript" src="js/dt-buttons-print.min.js"></script>		
+		<script type="text/javascript" src="js/dt-colreorder.min.js"></script>
+		<script type="text/javascript" src="js/dt-buttons.min.js"></script>
+		<script type="text/javascript" src="js/dt-buttons-print.min.js"></script>
 		<script type="text/javascript" src="js/dt-buttons-bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/moment.min.js"></script>
 		<script type="text/javascript" src="js/transition.js"></script>
 		<script type="text/javascript" src="js/collapse.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
-		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>		
+		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
-		<script type="text/javascript" src="js/bootstrap-select.min.js"></script>	
+		<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-waitingfor.js"></script>
 		<script type="text/javascript" src="js/jquery-formatDateTime.min.js"></script>
 		<script type="text/javascript" src="js/stic-constants.js"></script>
-		<script type="text/javascript" src="js/stic-functions.js"></script>		
+		<script type="text/javascript" src="js/stic-functions.js"></script>
 		<script type="text/javascript">
-			$(function () { 	
-				console.log('Cookies After Login: ' + document.cookie);
-			
+			$(function () {
+				// Set DT Defaults
+				$.extend(true, $.fn.dataTable.defaults, {
+					pagingType: 'full',
+					language: {
+						paginate: {
+							first: '<i class="fa fa-fast-backward"></i> First',
+							previous: '<i class="fa fa-backward"></i> Previous',							
+							next: 'Next <i class="fa fa-forward"></i>',
+							last: 'Last <i class="fa fa-fast-forward"></i>'
+						}
+					}
+				});
+
 				// Progress Bar Start
 				$(document).ajaxStart(function() {
 					waitingDialog.show();
 				});
-				
+
 				// Progress Bar End
 				$(document).ajaxStop(function() {
 					waitingDialog.hide();
 				});
-				
-				// Check Cookies				
-				if (readCookie('userid') === null) {
+
+				// Check Cookies
+				if (STIC.User.ReadCookie('userid') === null) {
 					window.location = DEFAULT_ROOT;
-				} else {
-					var sUserName = '', userId = '';
-					sUserName = readCookie('username');
-					userId = readCookie('userid');
-					notFoundContextSave(userId, sUserName);
-					$('#current-user').text(sUserName);
-				}	
-				
-				// Load allowed pages
-				$.getJSON(WS_UI_MODULES_LIST + 'roleModuleId=' + readCookie('roleid'), 
-					function(data) { 
-						var label = '', 
-							modules = [],
-							prevParentId = '',
-							currParentId = '',
-							results = data.response['report-list'].report;
-						
-						//console.log(results.length);
-						
-						$.each(results, function(i, m) {					
-							currParentId = m.mod_parent;
-							label = (m.mod_icon != '' ? '<i class="' + m.mod_icon + '"></i> ' + m.mod_label : m.mod_label);
-							
-							if (prevParentId != '' && currParentId > prevParentId) {
-								modules.push('</ul></li>');
-							} else if (prevParentId != '' && currParentId == '') {
-								modules.push('</ul></li>');
-							}
-							
-							if (m.mod_type == 'group') {
-								modules.push(
-									'<li class="dropdown">' +
-										'<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">' + 
-											label + ' <span class="caret"></span></a>' +
-											'<ul class="dropdown-menu" role="menu">'
-								);
-							} else {
-								modules.push('<li><a href="#" data-mod-name="' + m.mod_name + '">' + label + '</a></li>');
-							}
-						
-							prevParentId = currParentId;
-							
-						});
-						$('#nav-wrapper').html('');
-						$('#nav-wrapper').html(modules.join(''));
-						$('[data-mod-name]').on('click', function() { 
-							STIC.loadPage({ 'page_name': $(this).attr('data-mod-name') });
-						});
-					});
-				
-				// New Page Call Function!
-				/*$('[data-mod-name]').on('click', function() { 
-					STIC.loadPage({ 'page_name': $(this).attr('data-mod-name') });
-				});*/
-				
-				// Custom Call for un-developed pages
-				$('[data-mod-name="others-calibration"]').on('click', function() {
-					var page = $(this).attr('data-mod-name');
-					BootstrapDialog.alert({
-						title: '<i class="fa fa-info-circle"></i> System Info',
-						message: 'Sorry, the page [' + page + '] is not yet available.'
-					});
-				});
-				
+				} else {					
+					STIC.User.Authenticate();
+					$('#current-user').text(STIC.User.ReadCookie('username'));
+				}
+
+				// Load allowed modules
+				STIC.Modules.Init();
+
 				// Change Password
-				$('#link-user').on('click', function() {
-					BootstrapDialog.show({
-						closable: false,
-						title: '<i class="fa fa-lock"></i> Change Password',
-						message: $('<div></div>').load(FORM_CHANGE_PASS_DATA),			
-						buttons: [{
-							label: 'Save',
-							icon: 'fa fa-floppy-o',
-							cssClass: 'btn-primary',
-							onshown: function(dialogItself) {
-								$('#data-form').validator();
-							},
-							action: function(dialogItself) {
-								var user = readCookie('username'),
-									oldPass = $('#form-change-pass input[data-field="old_password"]').val(),
-									newPass = $('#form-change-pass input[data-field="new_password"]').val(),
-									confPass = $('#form-change-pass input[data-field="confirm_password"]').val(),
-									JSONString = { user_name: user, user_password: oldPass };
-								if (newPass != confPass) {
-									BootstrapDialog.alert({
-										title: MSG_ERROR_TITLE,
-										message: 'Passwords dont match!',
-										type: BootstrapDialog.TYPE_DANGER
-									});
-								} else {
-									console.log('Check: ' + JSON.stringify(JSONString));
-									$.post(WS_USER_PASS_CHECK, JSONString, 
-										function(data, status, jqXHR) {
-											var result = $.parseJSON(jqXHR.responseText);
-											if (result.response.type == 'SUCCESS') {
-												var userid = readCookie('userid'),
-													JSONString = { userId: userid, password: newPass };
-												console.log('Update: ' + JSON.stringify(JSONString));
-												$.post(WS_USER_PASS_UPDATE, JSONString, 
-													function(data, status, jqXHR) {
-														var result = $.parseJSON(jqXHR.responseText);
-														if (result.response.type == 'SUCCESS') {
-															BootstrapDialog.alert({
-																title: MSG_INFO_TITLE,
-																message: 'Password was changed successfully.',
-																type: BootstrapDialog.TYPE_PRIMARY,
-																callback: function() {
-																	$('#form-change-pass input[data-field]').val('');
-																	BootstrapDialog.closeAll();	
-																	logout();
-																}
-															});
-														} else {
-															BootstrapDialog.alert({
-																title: MSG_WS_ERROR_TITLE,
-																message: MSG_WS_ERROR_INFO,
-																type: BootstrapDialog.TYPE_DANGER
-															});
-														}
-													});
-											} else {
-												BootstrapDialog.alert({
-													title: '<i class="fa fa-exclamation-circle"></i> Password Error',
-													message: 'Old password is invalid. Please enter the correct password to continue.',
-													type: BootstrapDialog.TYPE_DANGER
-												});
-											}
-										});
-								}
-							}
-						}, {
-							label: 'Cancel',
-							icon: 'fa fa-ban',
-							cssClass: 'btn-primary',
-							action: function(dialogItself) {
-								BootstrapDialog.closeAll();
-							}
-						}]
-					});
+				$('#link-user').on('click', function () {
+					STIC.User.ChangePassword();
 				});
-				
+
 				// Logout
-				$('#link-exit').click(function() {	
+				$('#link-exit').click(function() {
 					BootstrapDialog.confirm({
-						title: '<i class="fa fa-sign-out"></i> Confirm Logout',
-						message: 'Are you sure you want to logout?',			
+						title: '<i class="fa fa-info-circle"></i> Confirm Logout',
+						message: 'Are you sure you want to logout of the system?',
 						callback: function(result) {
 							if (result) {
-								logout();
-							} 
+								STIC.User.Logout();
+							}
 						}
 					});
-				});		
+				});
 			});
-		</script>	
+		</script>
 	</body>
 </html>

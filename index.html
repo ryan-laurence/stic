@@ -13,12 +13,16 @@
 				<div class="col-md-5 col-centered">
 					<section class="login-form" role="login">							
 						<img src="images/vendor-logo.gif" class="img-responsive" alt="" />							
+						<hr>
+						<div class="alert alert-info" role="alert" style="text-align: left; margin-bottom: 20px;">
+							<i class="fa fa-info-circle fa-4x fa-pull-left"></i> Enter your <strong>Username</strong> and <strong>Password</strong> to access the system. In case of forgotten password, please contact your System Administrator.
+						</div>
 						<div class="form-group">
 							<div class="input-group">
 								<span class="input-group-addon">
 									<i class="fa fa-user"></i>
 								</span> 
-								<input class="form-control input-lg" placeholder="Login" id="username" type="text" autofocus>
+								<input class="form-control input-lg" placeholder="Username" id="username" type="text" autofocus>
 							</div>
 						</div>
 						<div class="form-group">
@@ -29,8 +33,9 @@
 								<input class="form-control input-lg" placeholder="Password" id="password" type="password" autofocus>
 							</div>
 						</div>
-						<button type="button" name="go" class="btn btn-lg btn-primary btn-block" id="loginbtn" style="margin-top: 20px"><i class="fa fa-sign-in"></i> Login</button>	
-						<div style="border-top: 1px solid #888; margin: 20px 0 5px 0; padding-top: 20px; font-size: 85%">
+						<button type="button" name="go" class="btn btn-lg btn-primary btn-block" id="btnLogin"><i class="fa fa-sign-in"></i> Login</button>	
+						<hr>
+						<div class="login-footer">
 							<div style="font-weight: bold">Scaletech International Corporation</div>
 							<div>3050 F. Bautista St. Bo. Ugong, Valenzuela City</div>
 							<div>Phone: 983-7895/96, Fax: 444-0592</div>
@@ -51,12 +56,12 @@
 				console.log('Cookies Before Login: ' + document.cookie);
 			
 				// Check Cookies				
-				if (readCookie('userid') !== null) {
+				if (STIC.User.ReadCookie('userid') !== null) {
 					window.location = DEFAULT_ROOT + 'main.html';
 				}
 				
 				// Login Button action
-				$("#loginbtn").on('click', function () {
+				$('#btnLogin').on('click', function () {
 					var totalErrors = 0,
 						username = $('#username').val(),
 						password = $('#password').val();					
@@ -104,9 +109,13 @@
 
 								// Authenticated
 								if (response.type === 'SUCCESS') {
-									createCookie('username', response['users-list'].user.user_name, 1);
-									createCookie('userid', response['users-list'].user.user_id, 1);
-									createCookie('roleid', response['users-list'].user.role_id, 1);
+									var user = response['users-list'].user;
+									
+									// Create Cookies
+									STIC.User.CreateCookie('username', user.user_name, 1);
+									STIC.User.CreateCookie('userid', user.user_id, 1);
+									STIC.User.CreateCookie('roleid', user.role_id, 1);
+									
 									window.location = DEFAULT_ROOT + 'main.html';
 								
 								// Not Authorized
@@ -121,7 +130,7 @@
 										.remove();
 									
 									// Show error messages & styles
-									$('.login-form img').after(MSG_INFO_LOGIN_ERROR_INLINE);
+									$('.login-form hr:first').after(MSG_ALERT_INVALID_LOGIN);
 									$('.login-form').find('#username, #password').parent()
 										.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
 									$('.login-form').find('#username, #password').parent().parent()
@@ -138,7 +147,7 @@
 								STIC.showWSError();
 							})
 					} else {
-						$('.login-form img').after(MSG_LOGIN_ERROR_INLINE);
+						$('.login-form hr:first').after(MSG_ALERT_LOGIN_FORM_ERROR);
 					}
 				});
 			});

@@ -86,7 +86,7 @@ function loadDestProdData(params) {
 			name: 'delete',
 			enabled: false,
 			text: dtBtnDelTxt,
-			className: 'btn-primary',
+			className: 'btn-danger',
 			action: btnDeleteAction
 		},
 
@@ -230,6 +230,7 @@ function loadDestProdData(params) {
 			processing: false,
 			lengthChange: false,
 			dom: '<"dt-toolbar">Bfrtip',
+			//pagingType: 'full_numbers',
 			pageLength: 5,
 			columns: params.cd1,
 			ajax: {
@@ -359,7 +360,7 @@ function loadCustomerData(params) {
 			name: 'delete',
 			enabled: false,
 			text: dtBtnDelTxt,
-			className: 'btn-primary',
+			className: 'btn-danger',
 			action: btnDeleteAction
 		},
 
@@ -434,12 +435,12 @@ function loadCustomerData(params) {
 			// Switch between insert & update options
 			if (pkey.val() != '') {
 				wsPost = params.wsUpdate;
-				infoTitle = MSG_EDIT_REC_TITLE;
-				infoMessage = MSG_EDIT_REC_INFO;
+				infoTitle = MSG_TITLE_EDIT_REC;
+				infoMessage = MSG_INFO_EDIT_REC;
 			} else {
 				wsPost = params.wsInsert;
-				infoTitle = MSG_ADD_REC_TITLE;
-				infoMessage = MSG_ADD_REC_INFO;
+				infoTitle = MSG_TITLE_ADD_REC;
+				infoMessage = MSG_INFO_ADD_REC;
 			}
 			
 			var input = $(params.formId).find('input[data-fv-unique="true"]'),
@@ -535,8 +536,8 @@ function loadCustomerData(params) {
 						dt: dt,
 						url: params.wsDelete,
 						data: postData,
-						title: MSG_INFO_TITLE,
-						message: MSG_DEL_REC_INFO
+						title: MSG_TITLE_INFO,
+						message: MSG_INFO_DEL_REC
 					});
 				}
 			}
@@ -590,6 +591,7 @@ function loadCustomerData(params) {
 			processing: false,
 			lengthChange: false,
 			dom: '<"dt-toolbar">Bfrtip',
+			//pagingType: 'full_numbers',
 			pageLength: 5,
 			columns: params.cd,
 			ajax: {

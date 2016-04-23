@@ -150,71 +150,117 @@ function showNewModalForm(params) {
 function toggleWeightScaleFields(options) {		
 	switch(options.status) {
 		case 'FIRST_WEIGHT_IN':
-			console.log('FIRST_WEIGHT_IN');
-			$('.weight-status').text('stable');
-			$('label[for]').css('color', '#333333');
+			// LCD 
+			$('#weight-status').text('stable');			
 			$('.weight-stage .txt1').html('<img src="images/numeric-1-box-outline.png">');
+			
 			// Main Buttons
-			$('#first-weighing').removeClass('disabled'); 		
-			$('#second-weighing').addClass('disabled');
-			$('#cancel-weighing').removeClass('disabled');
-			$('#reprint-docket').removeClass('disabled');
+			$('#first-weighing').prop('disabled', false); 		
+			$('#second-weighing').prop('disabled', true); 	
+			$('#cancel-weighing').prop('disabled', false); 	
+			$('#reprint-docket').prop('disabled', true); 	
+			$('#first-weighing').popover();
+			$('#second-weighing').popover('destroy');
+			$('#cancel-weighing').popover();
+			$('#reprint-docket').popover('destroy');
+
 			// Field Buttons
-			$('#new-customer-data').addClass('disabled');
-			$('#new-destination-data').addClass('disabled');
-			$('#new-product-data').addClass('disabled');
-			$('#new-supplier-data').addClass('disabled');
-			$('#search-customer-data').addClass('disabled');
-			$('#search-destination-data').addClass('disabled');
-			$('#search-product-data').addClass('disabled');
-			$('#search-supplier-data').addClass('disabled');
+			$('label[for]').css('color', '#333333');
+			$('#new-customer-data').prop('disabled', true); 	
+			$('#search-customer-data').prop('disabled', true); 	
+			$('#new-destination-data').prop('disabled', true); 	
+			$('#search-destination-data').prop('disabled', true); 
+			$('#new-product-data').prop('disabled', true); 	
+			$('#search-product-data').prop('disabled', true); 	
+			$('#new-supplier-data').prop('disabled', true); 
+			$('#search-supplier-data').prop('disabled', true); 				
+			$('#new-customer-data').popover('destroy');
+			$('#search-customer-data').popover('destroy');
+			$('#new-destination-data').popover('destroy');
+			$('#search-destination-data').popover('destroy');
+			$('#new-product-data').popover('destroy');
+			$('#search-product-data').popover('destroy');	
+			$('#new-supplier-data').popover('destroy');
+			$('#search-supplier-data').popover('destroy');	
+			
 			// Input Fields
 			$('input[data-stage="second"][type="hidden"]').val('');
 			$('input[data-stage="second"][data-type="varchar"]').val('');
 			$('input[data-stage="second"][data-type="float"]').val('0.00');	
 			break;
+		
 		case 'SECOND_WEIGHT_IN':
-			console.log('SECOND_WEIGHT_IN');
-			$('.weight-status').text('stable');
-			$('label[for]').css('color', '#333333');
+			// LCD
+			$('#weight-status').text('stable');			
 			$('.weight-stage .txt1').html('<img src="images/numeric-2-box-outline.png">');
+			
 			// Main Buttons
-			$('#first-weighing').addClass('disabled'); 					
-			$('#second-weighing').removeClass('disabled');	
-			$('#cancel-weighing').removeClass('disabled');
-			$('#reprint-docket').removeClass('disabled');
+			$('#first-weighing').prop('disabled', true); 			
+			$('#second-weighing').prop('disabled', false); 	
+			$('#cancel-weighing').prop('disabled', false); 	
+			$('#reprint-docket').prop('disabled', false); 	
+			$('#first-weighing').popover('destroy');
+			$('#second-weighing').popover();
+			$('#cancel-weighing').popover();
+			$('#reprint-docket').popover();
+			
 			// Field Buttons
-			$('#new-customer-data').removeClass('disabled');
-			$('#new-destination-data').removeClass('disabled');
-			$('#new-product-data').removeClass('disabled');
-			$('#new-supplier-data').removeClass('disabled');
-			$('#search-customer-data').removeClass('disabled');
-			$('#search-destination-data').removeClass('disabled');
-			$('#search-product-data').removeClass('disabled');
-			$('#search-supplier-data').removeClass('disabled');
+			$('label[for]').css('color', '#333333');
+			$('#new-customer-data').popover();
+			$('#new-customer-data').prop('disabled', false); 	
+			$('#search-customer-data').prop('disabled', false); 	
+			$('#new-destination-data').prop('disabled', false); 	
+			$('#search-destination-data').prop('disabled', false); 
+			$('#new-product-data').prop('disabled', false); 	
+			$('#search-product-data').prop('disabled', false); 	
+			$('#new-supplier-data').prop('disabled', false); 
+			$('#search-supplier-data').prop('disabled', false); 
+			$('#new-customer-data').popover();
+			$('#search-customer-data').popover();
+			$('#new-destination-data').popover();
+			$('#search-destination-data').popover();
+			$('#new-product-data').popover();
+			$('#search-product-data').popover();	
+			$('#new-supplier-data').popover();
+			$('#search-supplier-data').popover();	
+			
 			// Input Fields		
 			$('input[data-stage="second"][type="hidden"]').val('');
 			$('input[data-stage="second"][data-type="varchar"]').val('');
 			$('input[data-stage="second"][data-type="float"]').val('0.00');	
 			$('input[data-action="enable"]').prop('readonly', false);
 			break;
+		
 		case 'CANCEL_WEIGHT_IN':
-			console.log('CANCEL_WEIGHT_IN');
-			$('.weight-reading').text('0.00');
-			$('.weight-status').text('inactive');
-			$('label[for]').css('color', '#333333');
+			// LCD
+			$('#weight-reading').text('+0.00');
+			$('#weight-status').text('inactive');
 			$('.weight-stage .txt1').html('<img src="images/numeric-0-box-outline.png">');
+			
 			// Main Buttons
-			$('button[data-type="button"]').addClass('disabled');	
+			$('button[data-type="button"]').popover('destroy'); 	
+			$('button[data-type="button"]').prop('disabled', true); 	
+			
 			// Field Buttons
-			$('#new-customer-data').addClass('disabled');
-			$('#new-destination-data').addClass('disabled');
-			$('#new-product-data').addClass('disabled');
-			$('#new-supplier-data').addClass('disabled');
-			$('#search-customer-data').addClass('disabled');
-			$('#search-destination-data').addClass('disabled');
-			$('#search-product-data').addClass('disabled');
-			$('#search-supplier-data').addClass('disabled');
+			$('label[for]').css('color', '#333333');
+			$('#new-customer-data').popover('destroy');
+			$('#new-customer-data').prop('disabled', true); 	
+			$('#search-customer-data').prop('disabled', true); 	
+			$('#new-destination-data').prop('disabled', true); 	
+			$('#search-destination-data').prop('disabled', true); 
+			$('#new-product-data').prop('disabled', true); 	
+			$('#search-product-data').prop('disabled', true); 	
+			$('#new-supplier-data').prop('disabled', true); 
+			$('#search-supplier-data').prop('disabled', true); 	
+			$('#new-customer-data').popover('destroy');
+			$('#search-customer-data').popover('destroy');
+			$('#new-destination-data').popover('destroy');
+			$('#search-destination-data').popover('destroy');
+			$('#new-product-data').popover('destroy');
+			$('#search-product-data').popover('destroy');	
+			$('#new-supplier-data').popover('destroy');
+			$('#search-supplier-data').popover('destroy');	
+			
 			// Input Fields
 			$('input[data-stage="first"][data-type="varchar"]').val('');
 			$('input[data-stage="first"][data-type="float"]').val('0.00');		
@@ -223,6 +269,7 @@ function toggleWeightScaleFields(options) {
 			$('input[data-stage="second"][data-type="float"]').val('0.00');			
 			$('input[data-action="enable"]').prop('readonly', true);
 			break;
+		
 		default:
 			console.log('Error: Unknown Response Type!');
 	}

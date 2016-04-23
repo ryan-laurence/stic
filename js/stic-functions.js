@@ -7,7 +7,7 @@ function dateFormat(pDate, pDateFormat){
 		return false;
 	}
 	if (pDateFormat == null || pDateFormat == '') pDateFormat = 'M d, Y'
-		
+
     return pDate ? pDate.dateFormat( pDateFormat ) : '';
 };
 
@@ -15,283 +15,185 @@ function getCurrentDate() {
 	return new Date().format("yyyy-mm-dd");;
 }
 
-function getFirstDayOfMonth() {	
+function getFirstDayOfMonth() {
 	var newDate = new Date();
 	var dd = '01';
-	var yy = newDate.getFullYear();	
+	var yy = newDate.getFullYear();
 	var curDate = newDate.format("yyyy-mm-dd");
-	curDate = curDate.substring(0, curDate.length - 2) + dd;	
+	curDate = curDate.substring(0, curDate.length - 2) + dd;
 	return curDate;
-}
-
-// Clear Form Values
-function _fnClearFormValues(fields, buttons) {
-	buttons = buttons || [];
-	$.each(fields, function(index, fieldId) {
-		$('#' + fieldId).val("");
-	});
-	if (buttons.length > 0) {
-		$.each(buttons, function(index, buttonId) {
-			$('#' + buttonId).addClass('disabled');
-		});	
-	}
-}
-
-// Set Data Table
-function _fnSetDataTable(tableId, dataURL, dataSrc, colDef, pageLen, forceNull) {
-	var t;
-	var status;
-	pageLen = pageLen || 5;
-	forceNull = forceNull || false;
-	
-	$.ajax({
-		dataType: "json",
-		url: dataURL,
-		async: false
-	}).done(function(data) {
-		status = data.response.type;
-	});
-
-	console.log('Response Status: ' + status);
-
-	if (forceNull) {
-		t = $('#' + tableId).DataTable({
-			"dom": 'frtip',
-			ordering: true,
-			"lengthChange": false,
-			"pageLength": pageLen,
-			"processing": true,
-			"data": [],
-			"columns": colDef 
-		});
-	} else if (status != 'FAILED') {
-		t = $('#' + tableId).DataTable({
-			"dom": 'frtip',
-			ordering: true,
-			"lengthChange": false,
-			"pageLength": pageLen,
-			"processing": true,
-			"ajax": { 
-				"url": dataURL, 
-				"dataSrc": dataSrc
-			},
-			"columns": colDef 
-		});
-	} else {
-		t = $('#' + tableId).DataTable({
-			"dom": 'frtip',
-			ordering: true,
-			"lengthChange": false,
-			"pageLength": pageLen,
-			"processing": true,
-			"data": [],
-			"columns": colDef 
-		});
-	}
-	
-	return t;
-}
-
-// Custom Table
-function _fnSetCustomTable(tableId, dataURL, dataSrc, colDef) { 
-	return $('#' + tableId)
-		.DataTable({
-			dom: 'rtip',
-			pageLength: 5,
-			ordering: true,
-			searching: false,
-			processing: true,
-			lengthChange: false,
-			columns: colDef,
-			ajax: { 
-				url: dataURL, 
-				dataSrc: function(json) {
-					var ds = dataSrc.split('.'),
-						rec = json[ds[0]][ds[1]][ds[2]];
-					console.log('DT Ajax JSON Array? ' + $.isArray(rec));
-					console.log('DT JSON: ' + JSON.stringify(rec));					
-					return ($.isArray(rc) === true ? rec :(rec !== '' ? [rec] : []));
-				} 
-			}
-		});
 }
 
 // Table Row Selection Event
 function _fnTableRowSelection(tableObject, rowObject, tableTools) {
 	tableTools = tableTools || [];
 	if ($(rowObject).hasClass('selected')) {
-		$(rowObject).removeClass('selected');					
+		$(rowObject).removeClass('selected');
 		if (tableTools.length > 0) {
 			$.each(tableTools, function(index, tableTool) {
-				$('#' + tableTool).addClass('disabled');
-			});	
-		}						
+				$('#' + tableTool).prop('disabled', true);
+			});
+		}
 	} else {
 		tableObject.$('tr.selected').removeClass('selected');
-		$(rowObject).addClass('selected');				
+		$(rowObject).addClass('selected');
 		if (tableTools.length > 0) {
 			$.each(tableTools, function(index, tableTool) {
-				$('#' + tableTool).removeClass('disabled');
-			});	
-		}		
-	}		
-}
-
-// Show Alert Modal
-function _fnShowAlertModal(options) {
-	$('#alert-modal #alert-title').html(options.title);
-	$('#alert-modal #alert-message').html(options.content);				
-	$('#alert-modal').modal('show');
-}
-
-// Common Function for saving data
-function _fnSaveFormData(options) {
-	var isValid = STIC.FormValidation({ formId: options.formId });
-	console.log(isValid);
-	if (isValid) {
-		var string = '';
-		var data_json = '';
-		var o_table = options.table;
-		var o_modal = $('#' + options.modalId);	
-		$.each(options.fields, function(index, field_name) {
-			var field_value = o_modal.find('.modal-body #' + field_name).val();
-			if (typeof field_value != 'undefined') {
-				if (string != '') string = string + ', ';
-				string = string + '"' + field_name + '": "' + field_value + '"';
-			}
-		});
-		data_json = options.holder + '={' + string + '}';
-		$.post(options.url, data_json, function(data, status){
-			o_table.ajax.reload();
-			o_modal.modal('hide');
-			_fnClearFormValues(options.fields, options.tools);
-			BootstrapDialog.alert({
-				title: options.alertTitle,
-				message: options.alertContent,
-				type: BootstrapDialog.TYPE_PRIMARY,
-				callback: function(result) {
-					BootstrapDialog.closeAll();
-				}
+				$('#' + tableTool).prop('disabled', false);
 			});
-		});
+		}
 	}
 }
 
+// Global Namespace
 var STIC = {
-	initDataTable: function(options) {
-		var t = $('#' + options.id).DataTable({
-			"dom": 'lfrtip',
-			"processing": true,
-			"lengthChange": true,
-			"columns": options.cd,
-			"pageLength": options.pl,
-			"ajax": {
-				"url": options.ws,
-				"dataSrc": options.ds
-			}
-		});
-		return t;
-	},
-	setTableRowClickEvent: function(options) {
-		var rowObject = options.rowObject;
-		var tableTools = options.tableTools;
-		var tableObject = options.tableObject;
-		if ($(rowObject).hasClass('selected')) {
-			$(rowObject).removeClass('selected');
-			if (tableTools.length > 0) {
-				$.each(tableTools, function(index, tableTool) {
-					$('#' + tableTool).addClass('disabled');
-				});
-			}
-		} else {
-			tableObject.$('tr.selected').removeClass('selected');
-			$(rowObject).addClass('selected');
-			if (tableTools.length > 0) {
-				$.each(tableTools, function(index, tableTool) {
-					$('#' + tableTool).removeClass('disabled');
-				});
-			}
-		}
-	},
-	clearFormData: function(fields, buttons) {
-		fields = fields || [];
-		buttons = buttons || [];
-		if (fields.length > 0) {
-			$.each(fields, function(index, fieldId) {
-				$('#' + fieldId).val("");
-			});
-		}
-		if (buttons.length > 0) {
-			$.each(buttons, function(index, buttonId) {
-				$('#' + buttonId).addClass('disabled');
-			});
-		}
-	},
-	showSystemMessage: function(msgType, msgTitle, msgContent) {
-		switch(msgType) {
-			case 'success':
-				$('#success-modal #success-title').html(msgTitle);
-				$('#success-modal #success-message').html(msgContent);
-				$('#success-modal').modal('show');
-				break;
-			case 'confirm-delete':
-				$('#confirm-modal #confirm-title').html(msgTitle);
-				$('#confirm-modal #confirm-message').html(msgContent);
-				$('#confirm-modal').modal('show');
-				break;
-			case 'error':
-				var message = MSG_ERROR_ICON + ' ' + msgContent;
-				$('#error-modal #error-title').html(msgTitle);
-				$('#error-modal #error-message').html(message);
-				$('#error-modal').modal('show');
-				break;
-		}
-	},
-	loadPage: function(options) {
-		var wrapper = DEFAULT_WRAPPER_ID,
-			page_loc = DEFAULT_PAGE_LOC,
-			page_ext = DEFAULT_PAGE_FILE_EXT,
-			page_name = options.page_name;
-		
-		$(wrapper).load(page_loc + page_name + page_ext);
-	},
 	
+	// Modules Functions
+	Modules: {
+		
+		// Load allowed modules to user
+		Init: function () {			
+			var JSONObject = { 
+				roleModuleId: STIC.User.ReadCookie('roleid') 
+			};
+			
+			// Call WS to get allowed modules
+			$.getJSON(WS_UI_MODULES_LIST, JSONObject)
+				.done(function (results, status) {				
+					var response = results.response;
+					
+					// Proceed if there are allowed modules to user
+					if (response.type === 'SUCCESS') {
+						var navItems = [], navLabel = '',
+							prevParentId = '', currParentId = '',
+							modules = response['report-list'].report;
+				
+						// Build navigation list
+						$.each(modules, function (i, m) {						
+							currParentId = m.mod_parent;
+							navLabel = m.mod_icon != '' ? 
+								'<i class="' + m.mod_icon + '"></i> ' + m.mod_label :
+								m.mod_label;
+															
+							// Set drop down menu closing tags
+							if (prevParentId != '' && currParentId > prevParentId) {
+								navItems.push('</ul></li>');
+							} else if (prevParentId != '' && currParentId == '') {
+								navItems.push('</ul></li>');
+							}			
+
+							// Set navigation list
+							if (m.mod_type == 'group') {
+								navItems.push(
+									'<li class="dropdown" data-mod-id="' + m.mod_id + '">' +
+										'<a href="#" class="dropdown-toggle" data-toggle="dropdown" ' +
+											'role="button" aria-expanded="false">' +
+											navLabel +
+											' <span class="caret"></span>' +
+										'</a>' +
+										'<ul class="dropdown-menu" role="menu">'
+								);
+							} else {
+								navItems.push(
+									'<li>' +
+										'<a href="#" ' +
+											'data-mod-parent="' + m.mod_parent + '" ' +
+											'data-mod-name="' + m.mod_name + '">' +
+											navLabel +
+										'</a>' +
+									'</li>');
+							}
+
+							prevParentId = currParentId;					
+						});
+						
+						// Append Navigation List
+						$('#nav-wrapper').html(navItems.join(''));
+						
+						// Navigation onClick Event
+						$('[data-mod-name]').on('click', function () {
+							var modName = $(this).attr('data-mod-name'),
+								 modParent = $(this).attr('data-mod-parent');
+
+							// Clear active modules style
+							$('#nav-wrapper')
+								.find('li.active')
+								.removeClass('active');
+
+							// Set active module style
+							if (modParent != '') {
+								$('#nav-wrapper')
+									.find('li[data-mod-id="' + modParent + '"]')
+									.addClass('active');
+							} else {
+								$(this)
+									.parent()
+									.addClass('active');
+							}
+
+							// Load module page
+							STIC.Modules.LoadPage({ modName: modName });
+						});
+						
+					// Show alert if there are no modules assigned to user
+					} else {
+						BootstrapDialog.alert({
+							type: 'type-danger',
+							title: MSG_TITLE_INFO,
+							message: 'There are no modules currently assigned to your account. For more information, please contact your system administrator.',
+							callback: function(result) {
+								BootstrapDialog.closeAll();
+							}
+						});
+					}
+				});
+		},
+		
+		// Load module page
+		LoadPage: function (params) {
+			var wrapper = DEFAULT_WRAPPER_ID,
+				pageLoc = DEFAULT_PAGE_LOC,
+				pageExt = DEFAULT_PAGE_FILE_EXT;
+			$(wrapper).load(pageLoc + params.modName + pageExt);
+		}
+	},
+
 	// Disable Buttons
 	disableButtons: function(buttons) {
 		btns = buttons || [];
 		if (btns.length > 0) {
 			$.each(btns, function(idx, btn) {
-				$('button[data-btn="' + btn + '"]').addClass('disabled');
-			});	
+				$('button[data-btn="' + btn + '"]').prop('disabled', true);
+			});
 		}
 	},
 
 	// DT toggle Row Select
 	dtToggleRowSelect: function (params) {
-		var pid = params.pid, 
+		var pid = params.pid,
 			row = params.row,
 			table = params.table,
 			buttons = params.buttons || [];
 		if (table.row(row).data()[pid] != '') {
 			if ($(row).hasClass('selected')) {
-				$(row).removeClass('selected');	
+				$(row).removeClass('selected');
 				if (buttons.length > 0) {
 					$.each(buttons, function(idx, button) {
-						$(button).addClass('disabled');
-					});	
-				}						
+						$(button).prop('disabled', true);
+					});
+				}
 			} else {
 				table.$('tr.selected').removeClass('selected');
-				$(row).addClass('selected');			
+				$(row).addClass('selected');
 				if (buttons.length > 0) {
 					$.each(buttons, function(idx, button) {
-						$(button).removeClass('disabled');
-					});	
-				}		
+						$(button).prop('disabled', false);
+					});
+				}
 			}
-		}			
+		}
 	},
-	
+
 	// Docket Style Functions
 	DocketStyle: {
 		destroyMsgField: function() {
@@ -302,47 +204,47 @@ var STIC = {
 		newMsgInputField: function(params) {
 			var _container = params.container,
 				_defaultVal = params.defaultVal;
-			_container.append('<input type="text" class="form-control" value="' + 
-				_defaultVal + '" data-field="dt_message" data-fv-notempty="true" data-fv-notempty-msg="Message is required.">');				
+			_container.append('<input type="text" class="form-control" value="' +
+				_defaultVal + '" data-field="dt_message" data-fv-notempty="true" data-fv-notempty-msg="Message is required.">');
 		},
-		newMsgSelectField: function(params) {			
+		newMsgSelectField: function(params) {
 			var _JSONUrl = params.JSONUrl,
 				_JSONData = params.JSONData,
 				_container = params.container,
 				_defaultVal = params.defaultVal;
-			$.getJSON(_JSONUrl, function(data) { 
+			$.getJSON(_JSONUrl, function(data) {
 				var options = [];
 				$.each(data.response, function(a, b) {
 					if (a == _JSONData) {
-						$.each(b, function(c, d) {						
-							$.each(d, function(e, f) {							
+						$.each(b, function(c, d) {
+							$.each(d, function(e, f) {
 								options.push('<option value="' + f.df_id + '">' + f.df_alias + '</option>');
-							});						
+							});
 						});
 					}
-				});		
-				_container.append('<select class="selectpicker form-control" title="-"' + 
-					' data-field="dt_message" data-fv-notempty="true" data-fv-notempty-msg="Message is required." data-live-search="true" data-size="5">' + 
+				});
+				_container.append('<select class="selectpicker form-control" title="-"' +
+					' data-field="dt_message" data-fv-notempty="true" data-fv-notempty-msg="Message is required." data-live-search="true" data-size="5">' +
 					options.join('') + '</select>');
 				$('select[data-field="dt_message"]').selectpicker('refresh');
 				$('select[data-field="dt_message"]').selectpicker('val', _defaultVal);
-			});			
-		},				
-		toggleMsgField: function(params) {			
+			});
+		},
+		toggleMsgField: function(params) {
 			var _JSONUrl = params.JSONUrl,
 				_JSONData = params.JSONData,
 				_container = $('#message-field-box'),
-				_dataSrc = (typeof params.dataSrc != 'undefined' ? params.dataSrc : 'data'),	
+				_dataSrc = (typeof params.dataSrc != 'undefined' ? params.dataSrc : 'data'),
 				_defaultVal = (typeof params.defaultVal != 'undefined' ? params.defaultVal : '');
 			this.destroyMsgField();
-			if (_dataSrc == 'data') { 
+			if (_dataSrc == 'data') {
 				this.newMsgSelectField({
 					JSONUrl: _JSONUrl,
 					JSONData: _JSONData,
 					container: _container,
 					defaultVal: _defaultVal
-				}); 
-			} else {	
+				});
+			} else {
 				this.newMsgInputField({
 					container: _container,
 					defaultVal: _defaultVal
@@ -350,106 +252,128 @@ var STIC = {
 			}
 		}
 	},
-	
+
 	// Show Duplicate Error messages on form after submit
 	showDuplicateError: function (params) {
 		var div = $(params.formId).find('label[for="' + params.ukey + '"]').parent(),
 			input = $(params.formId).find('input[data-field="' + params.ukey + '"]');
-		
+
 		// Remove error messages & styles
-		this.clearHelpBlocks({ formId: params.formId }); 
-		
+		this.clearHelpBlocks({ formId: params.formId });
+
 		// Show duplicate error message
-		$(params.formId).prepend(MSG_DUPLICATE_REC_INLINE);
+		$(params.formId).prepend(MSG_ALERT_DUPLICATE_REC);
 
 		// Show form error messages & styles
-		div.addClass('has-error has-feedback');		
+		div.addClass('has-error has-feedback');
 		div.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
 		div.append('<small class="help-block">' + input.attr('data-fv-unique-msg') + '</small>');
 	},
-	
+
 	// Show WS Error message on form after submit
 	showWSError: function (params) {
 		if (typeof params.formId !== 'undefined') {
 			var formId = params.formId;
 			$(formId).find('div.alert').remove();
-			$(formId).prepend(MSG_WS_ERROR_INLINE);
+			$(formId).prepend(MSG_ALERT_WS_ERROR);
 		} else {
 			BootstrapDialog.closeAll();
 			BootstrapDialog.alert({
 				type: 'type-danger',
-				title: MSG_WS_ERROR_TITLE,
-				message: MSG_WS_ERROR_INFO,
+				title: MSG_TITLE_WS_ERROR,
+				message: MSG_INFO_WS_ERROR,
 				callback: function(result) {
 					BootstrapDialog.closeAll();
 				}
 			});
 		}
 	},
-	
+
 	// Remove error messages & styles
 	clearHelpBlocks: function (params) {
 		$(params.formId).find('div.form-group')
 			.removeClass('has-error has-feedback')
 			.removeClass('has-success has-feedback');
 		$(params.formId).find('div.alert, span.glyphicon, small.help-block')
-			.remove();			
+			.remove();
 	},
-	
+
 	// Form Validation
 	FormValidation: function (options) {
-		var clearHelpBlocks = (typeof options.clearHelpBlocks != 'undefined' 
+		var clearHelpBlocks = (typeof options.clearHelpBlocks != 'undefined'
 			? options.clearHelpBlocks : false);
 
 		// Clear Help Blocks
 		if (clearHelpBlocks) {
-	
+
 			// Remove error messages & styles
 			this.clearHelpBlocks({ formId: options.formId });
-		
+
 			return true;
-			
+
 		// Validate Form
-		} else {			
+		} else {
 			var totalErrors = 0, postString = '',
 				elems = $(options.formId).find('input[data-field], select[data-field]');
-			
+
 			// Remove error messages & styles
-			this.clearHelpBlocks({ formId: options.formId }); 
-			
+			this.clearHelpBlocks({ formId: options.formId });
+
 			// Validate each field
-			$.each(elems, function(idx, elem) {		
+			$.each(elems, function(idx, elem) {
 				if ($(elem).attr('type') == 'hidden' || $(elem).attr('type') == 'checkbox')
 					return;
-			
+
 				var errorMsg = '', stringMax = 0, fieldErrors = 0,
-					fieldValue = $(elem).val(), fieldName = $(elem).attr('data-field'), 		
-				
-					// Validation types
-					notempty = $(elem).attr('data-fv-notempty'),
-					stringlength = $(elem).attr('data-fv-stringlength'),
-					
+					fieldValue = $(elem).val(), fieldName = $(elem).attr('data-field'),
+
 					// Field container
 					div = $(options.formId).find('label[for="' + fieldName + '"]').parent();
-				
-				// Check if Empty
-				if (notempty === 'true') { 
-					errorMsg = $(elem).attr('data-fv-notempty-msg');
-					if (fieldValue === '') fieldErrors++;
-				} 
 
-				// Check Input Length
-				if (stringlength === 'true' && fieldErrors <= 0) {
-					errorMsg = $(elem).attr('data-fv-stringlength-msg');
-					stringMax = parseInt($(elem).attr('data-fv-stringlength-max'));
-					if (fieldValue.length > stringMax) fieldErrors++;
+				// Check if Empty
+				if ($(elem).data('fv-notempty') === true) {
+					errorMsg = $(elem).data('fv-notempty-msg');
+					if (fieldValue === '')
+						fieldErrors++;
 				}
 				
+				// Check for Special Characters
+				if ($(elem).data('fv-specialchars') === true && fieldErrors <= 0) {
+					var pattern = new RegExp(/[^\w ]/g);
+					errorMsg = 'Special and non alphanumeric characters are not allowed.';
+					if (pattern.test(fieldValue) === true)
+						fieldErrors++;
+				}
+
+				// Check Input Length
+				if ($(elem).data('fv-stringlength') === true && fieldErrors <= 0) {
+					errorMsg = $(elem).data('fv-stringlength-msg');
+					if (fieldValue.length > parseInt($(elem).data('fv-stringlength-max')))
+						fieldErrors++;
+				}
+
+				// Check Field Match
+				if ($(elem).data('fv-fieldmatch') === true && fieldErrors <= 0) {
+					errorMsg = $(elem).data('fv-fieldmatch-msg');
+					if (fieldValue !== $($(elem).data('fv-fieldmatch-dom')).val())
+						fieldErrors++;
+				}
+				
+				// Check if Integer
+				
+				// Check if Float 		
+				if ($(elem).data('fv-float') === true && fieldErrors <= 0) {
+					var pattern = new RegExp(/^\d*(\.\d{1,2})?$/g);
+					errorMsg = 'The correct number format should be like .99, 1999, 1999.9 or 1999.99.';
+					if (pattern.test(fieldValue) === false)
+						fieldErrors++;
+				}
+
 				// Toggle error messages & styles
 				if (fieldErrors > 0) {
 					div.addClass('has-error has-feedback');
 					$(elem).parent().addClass('has-error has-feedback');
-					if (!$(elem).is('select')) 
+					if (!$(elem).is('select'))
 						$(elem).after(
 							'<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>' +
 							'<small class="help-block">' + errorMsg + '</small>'
@@ -457,41 +381,41 @@ var STIC = {
 					else
 						$(elem).parent().after('<small class="help-block" style="margin-top: 5px">' + errorMsg + '</small>');
 				} else {
-					div.addClass('has-success has-feedback');			
-					$(elem).parent().addClass('has-success has-feedback');		
-					if (!$(elem).is('select')) 
+					div.addClass('has-success has-feedback');
+					$(elem).parent().addClass('has-success has-feedback');
+					if (!$(elem).is('select'))
 						$(elem).after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
 				}
-				
+
 				// Accumulate Error count
 				totalErrors += fieldErrors;
-			});					
+			});
 
 			if (totalErrors > 0)
-				$(options.formId).prepend(MSG_FORM_ERROR_INLINE);
-			
+				$(options.formId).prepend(MSG_ALERT_FORM_ERROR);
+
 			return totalErrors > 0 ? false : true;
 		}
 	},
-	
+
 	// Default AJAX Post
-	postData: function (params) {		
+	postData: function (params) {
 		// Check if callback is passed
-		var callback = (typeof params.callback !== 'undefined' 
+		var callback = (typeof params.callback !== 'undefined'
 			? params.callback : '');
-		
+
 		$.post(params.url, params.data)
-			.done(function(result, status) {				
+			.done(function(result, status) {
 				// Execute callback function
-				$.isFunction(callback.func) 
-					? callback.func(callback.args) : ''; 
-				
+				$.isFunction(callback.func)
+					? callback.func(callback.args) : '';
+
 				// Reload DT
-				(typeof params.dt !== 'undefined' 
+				(typeof params.dt !== 'undefined'
 					? params.dt.ajax.reload() : '');
-				
+
 				var response = result.response;
-				
+
 				// on Success
 				if (response.type == 'SUCCESS') {
 					BootstrapDialog.closeAll();
@@ -503,156 +427,338 @@ var STIC = {
 							BootstrapDialog.closeAll();
 						}
 					});
-				
+
 				// on WS Error
 				} else {
 					STIC.showWSError({ formId: params.formId });
 				}
 			})
-			
+
 			// on Request Error
 			.fail(function() {
 				STIC.showWSError({ formId: params.formId });
 			});
-	}
-}
+	},
 
-function getXMLData(objXML, sFindTag) {
-	//alert('Find Tag: '+ sFindTag);
-	var value = '';
-	$(objXML).find(sFindTag).each(function() {
-		val = $(this).text();
-		//console.log('Value: '+ val +'...');
-		if (val == 'SUCCESS') value = $(this).text();
-	});
-	return val;
+	// User Functions
+	User: {
+
+		// Create Cookie
+		CreateCookie: function (name, value, days) {
+			if (days) {
+				var date = new Date();
+				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+				var expires = '; expires=' + date.toGMTString();
+			}
+			else var expires = '';
+			document.cookie = name + '=' + value + expires + '; path=/';
+		},
+
+		// Read Cookie
+		ReadCookie: function (name) {
+			var nameEQ = name + '=', ca = document.cookie.split(';');
+			for (var i = 0; i < ca.length; i++) {
+				var c = ca[i];
+				while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+				if (c.indexOf(nameEQ) == 0)
+					return c.substring(nameEQ.length, c.length);
+			}
+			return null;
+		},
+
+		// Erase Cookie
+		EraseCookie: function (name) {
+			this.CreateCookie(name, '', -1);
+		},
+
+		// Validate User
+		Authenticate: function () {
+			var JSONObject = {
+				user_id: this.ReadCookie('userid'),
+				user_name: this.ReadCookie('username')
+			};
+			$.post(WS_USER_AUTHENTICATE, JSONObject)
+				.done(function (results, status) {
+					if (results.response.type === 'FAILED') {
+						this.Logout();
+					}
+				})
+				.fail(function () {
+					STIC.showWSError();
+				});
+		},
+
+		// Remove from Audit Trail
+		RemoveToContext: function () {
+			var JSONObject = {
+				user_name: this.ReadCookie('username')
+			};
+			$.post(WS_USER_REMOVE_FROM_AUDIT, JSONObject)
+				.done(function (results, status) {
+					if (results.response.type === 'FAILED') {
+						STIC.showWSError();
+					}
+				})
+				.fail(function () {
+					STIC.showWSError();
+				});
+		},
+		
+		// Confirm Logout
+		ConfirmLogout: function () {
+			
+			
+		},
+		
+		// Logout
+		Logout: function () {
+			this.RemoveToContext();
+			this.EraseCookie('username');
+			this.EraseCookie('userid');
+			this.EraseCookie('roleid');
+			window.location = DEFAULT_ROOT;
+		},
+
+		// Change Password
+		ChangePassword: function () {
+			// Modal Options
+			var modalFormTitle = '<i class="fa fa-key"></i> Change Password',
+				modalFormContent = $('<div></div>').load(FORM_CHANGE_PASS_DATA),
+
+			// Modal Buttons
+			modalBtnSave = {
+				label: 'Save',
+				icon: 'fa fa-floppy-o',
+				cssClass: 'btn-primary',
+				action: modalBtnSaveAction
+			},
+			modalBtnCancel = {
+				label: 'Cancel',
+				icon: 'fa fa-ban',
+				cssClass: 'btn-primary',
+				action: function (dialogItself) {
+					dialogItself.close();
+				}
+			};
+
+			// Modal Form
+			BootstrapDialog.show({
+				closable: false,
+				title: modalFormTitle,
+				message: modalFormContent,
+				onshown: function (dialogItself) {
+					var modalBody = dialogItself.getModalBody();
+					modalBody.find('input[data-field]').val('');
+				},
+				onhidden: function (dialogItself) {
+					var modalBody = dialogItself.getModalBody();
+					modalBody.find('input[data-field]').val('');
+				},
+				buttons: [modalBtnSave, modalBtnCancel]
+			});
+
+			// Modal Button > Save Action
+			function modalBtnSaveAction(dialogItself) {
+				// Form Validation
+				var formId = '#formChangePassword',
+					isValid = STIC.FormValidation({ formId: formId });
+
+				// Proceed if form is valid
+				if (isValid) {
+					var userName = STIC.User.ReadCookie('username'),
+						oldPass = $(formId + ' input[data-field="old_password"]').val(),
+						newPass = $(formId + ' input[data-field="new_password"]').val(),
+						confPass = $(formId + ' input[data-field="confirm_password"]').val(),
+						JSONSObject = { user_name: userName, user_password: oldPass };
+
+					// Check old password
+					$.post(WS_USER_PASS_CHECK, JSONSObject)
+						.done(function (results, status) {
+
+							// Proceed if old password is valid
+							if (results.response.type == 'SUCCESS') {
+								var userId = STIC.User.ReadCookie('userid'),
+									JSONSObject = { user_id: userId, user_password: newPass };
+
+								// Call WS
+								$.post(WS_USER_PASS_UPDATE, JSONSObject)
+									.done(function (results, status) {
+
+										// Password is updated
+										if (results.response.type == 'SUCCESS') {
+											BootstrapDialog.closeAll();
+											BootstrapDialog.alert({
+												type: 'type-primary',
+												title: MSG_TITLE_INFO,
+												message: MSG_INFO_LOGOUT_AFTER_CPASS,
+												callback: function (dialogItself) {
+													$(formId + ' input[data-field]').val('');
+													BootstrapDialog.closeAll();
+													STIC.User.Logout();
+												}
+											});
+
+										// Show WS Error
+										} else {
+											STIC.showWSError({ formId: formId });
+										}
+									})
+
+									// Show WS Error
+									.fail(function () {
+										STIC.showWSError({ formId: formId });
+									});
+
+							// Old Password is invalid
+							} else {
+								var div = $(formId).find('label[for="old_password"]').parent();
+
+								// Remove error messages & styles
+								$(formId).find('div.alert').remove();
+								div.removeClass('has-success has-feedback');
+								div.find('span.glyphicon, small.help-block').remove();
+
+								// Show invalid old password message
+								$(formId).prepend(MSG_ALERT_INVALID_OLD_PASS);
+
+								// Show form error messages & styles
+								div.addClass('has-error has-feedback');
+								div.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+								div.append('<small class="help-block">Old password is invalid.</small>');
+							}
+						});
+				}
+			}
+		}
+	}
 };
 
 // Load Summary Reports
 function loadSummaryReport(params) {
 	// Default Date
 	var today = new Date(),
-		defString = 'YYYY-MM-DD HH:mm:ss',				
+		defString = 'YYYY-MM-DD HH:mm:ss',
 		defEnd = moment(today).format(defString),
 		//defStart = moment(today).subtract(1, 'days').format(defString),
 		defStart = moment().startOf('month').format(defString),
-		defWsURL = params.ws + 'dateFrom=' + defStart + '&dateTo=' + defEnd;	
+		defWsURL = params.ws + 'dateFrom=' + defStart + '&dateTo=' + defEnd;
 		console.log('datetime: ' + defWsURL);
-	
+
 	// DT Initial
 	var dtSummary = $('#table-summary')
-		.DataTable({						
+		.DataTable({
 			pageLength: 10,
 			ordering: true,
 			searching: false,
 			processing: false,
-			lengthChange: false,					
+			lengthChange: false,
 			columns: params.cd,
 			dom: '<"dt-toolbar">B<"dt-total">Rrtip',
-			ajax: { 
-				url: defWsURL, 
+			//pagingType: 'full_numbers',
+			ajax: {
+				url: defWsURL,
 				dataSrc: function(json) {
 					var ds = params.ds.split('.'),
-						rec = json[ds[0]][ds[1]][ds[2]];				
+						rec = json[ds[0]][ds[1]][ds[2]];
 					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
-				}  
-			},				
-			buttons: [{						
+				}
+			},
+			buttons: [{
 				name: 'print',
-				extend: 'print',				
+				extend: 'print',
 				enabled: false,
 				autoPrint: true,
-				title: params.title,	
-				className: 'btn-primary',				
+				title: params.title,
+				className: 'btn-primary',
 				customize: dtPrintCustom,
-				text: '<i class="glyphicon glyphicon-print" aria-hidden="true"></i> Print'						
-			}, {						
+				text: '<i class="glyphicon glyphicon-print" aria-hidden="true"></i> Print'
+			}, {
 				name: 'reload',
-				text: '<i class="fa fa-refresh"></i> Refresh',						
+				text: '<i class="fa fa-refresh"></i> Refresh',
 				className: 'btn-primary',
 				action: function(e, dt, node, config) {
 					dt.ajax.reload();
-				}	
+				}
 			}]
 		})
 		.on('draw.dt', function (e, settings, data) {
-			dtSummary.data().length > 0 ? 
+			dtSummary.data().length > 0 ?
 				dtSummary.button('print:name').enable() :
 				dtSummary.button('print:name').disable();
-		});	
-		
+		});
+
 	// DT Default Sorting
-	dtSummary.column('0:visible').order('asc').draw();  
-		
+	dtSummary.column('0:visible').order('asc').draw();
+
 	// Load Toolbar Elements
 	$('div.dt-toolbar').css('float', 'left');
 	$('div.dt-buttons').css('float', 'left');
-	$('div.dt-buttons').css('padding-left', '5px');			
-	$('div.dt-toolbar').load('pages/summary-date-filter.html', 
-		function(response, status, xhr) {		
+	$('div.dt-buttons').css('padding-left', '5px');
+	$('div.dt-toolbar').load('pages/summary-date-filter.html',
+		function(response, status, xhr) {
 			var dp1 = $('#dp1'),
-				dp2 = $('#dp2'),			
+				dp2 = $('#dp2'),
 				inEndDt = $('#end-date'),
-				inStartDt = $('#start-date'),			
-				btnToolSearch = $('#tools-search-report');		
-			
+				inStartDt = $('#start-date'),
+				btnToolSearch = $('#tools-search-report');
+
 			// Date Picker Initial
 			dp1.datetimepicker();
-			dp2.datetimepicker();	
-			
+			dp2.datetimepicker();
+
 			// Set Default Date
 			//dp1.data('DateTimePicker').date(moment(today).subtract(1, 'days'));
 			dp1.data('DateTimePicker').date(moment().startOf('month'));
 			dp2.data('DateTimePicker').date(moment(today));
-			
+
 			// Set Min & Max dates
-			dp1.on('dp.change', function(e) {	
+			dp1.on('dp.change', function(e) {
 				dp2.data('DateTimePicker').minDate(e.date);
-			});				
-			dp2.on('dp.change', function(e) {			
+			});
+			dp2.on('dp.change', function(e) {
 				dp1.data('DateTimePicker').maxDate(e.date);
 			});
-			
+
 			// Search Report
 			btnToolSearch.on('click', function() {
 				var end = moment(new Date(inEndDt.val())).format(defString),
 					start = moment(new Date(inStartDt.val())).format(defString),
-					wsURL = params.ws + 'dateFrom=' + start + '&dateTo=' + end;							
-				dtSummary.ajax.url(wsURL).load();	
-			});	
+					wsURL = params.ws + 'dateFrom=' + start + '&dateTo=' + end;
+				dtSummary.ajax.url(wsURL).load();
+			});
 		});
-		
+
 	// Customize Print Preview
 	function dtPrintCustom(win) {
 		$(win.document.body)
 			.css('background', 'transparent')
 			.css('font-weight', 'normal')
-			.css('font-family', '"Trebuchet MS", Helvetica, sans-serif');				
+			.css('font-family', '"Trebuchet MS", Helvetica, sans-serif');
 		// Title
-		$(win.document.body).find('h1')								
+		$(win.document.body).find('h1')
 			.css('font-size', '16pt')
-			.css('text-align', 'center');							
+			.css('text-align', 'center');
 		// Message
-		$(win.document.body).find('div')							
+		$(win.document.body).find('div')
 			.css('font-size', '11pt')
 			.css('text-align', 'left')
 			.css('margin', '20px 0px 15px 0px')
-			.html('From: ' + $('#start-date').val() + ' <br />To: ' + $('#end-date').val());						
+			.html('From: ' + $('#start-date').val() + ' <br />To: ' + $('#end-date').val());
 		// Data Table
 		$(win.document.body).find('table')
 			.removeClass('display')
-			.removeClass('compact');							
+			.removeClass('compact');
 		$(win.document.body).find('table th')
 			.css('font-size', '11pt')
 			.css('text-align', 'left')
-			.css('padding-left', '0px');							
-		$(win.document.body).find('table td')							
+			.css('padding-left', '0px');
+		$(win.document.body).find('table td')
 			.css('font-size', '10pt')
 			.css('text-align', 'left')
 			.css('padding-left', '0px')
 			.css('padding-top', '10px')
 			.css('padding-bottom', '10px')
-			.css('font-weight', 'normal');							
+			.css('font-weight', 'normal');
 		//console.log($(win.document.body).html());
 	}
 }
@@ -665,123 +771,34 @@ function initDT_Picker(options) {
 		dtWs = options.ws,
 		dtDomId = options.domId,
 		dtOd = (typeof options.od != 'undefined' ? options.od : true)
-		dtPl = (typeof options.pl != 'undefined' ? options.pl : DEFAULT_PAGE_LENGTH);			
+		dtPl = (typeof options.pl != 'undefined' ? options.pl : DEFAULT_PAGE_LENGTH);
 		dt = $('#' + dtDomId)
-			.DataTable({						
+			.DataTable({
 				pageLength: dtPl,
 				ordering: dtOd,
 				searching: true,
 				processing: false,
-				lengthChange: false,					
+				lengthChange: false,
 				columns: dtCd,
-				dom: 'frtip',
-				ajax: { 
-					url: dtWs, 
+				dom: '<"dt-toolbar">Bfrtip',
+				//pagingType: 'full_numbers',
+				ajax: {
+					url: dtWs,
 					dataSrc: function(json) {
 						var ds = dtDs.split('.'),
-							rec = json[ds[0]][ds[1]][ds[2]]; 
+							rec = json[ds[0]][ds[1]][ds[2]];
 						return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
-					}  
-				}
+					}
+				},
+				buttons: [{
+					name: 'reload',
+					text: '<i class="fa fa-refresh"></i> Refresh',
+					className: 'btn-primary',
+					action: function(e, dt, node, config) {
+						dt.ajax.reload();
+					}
+				}]
 			});
-		dt.column('0:visible').order('asc').draw();  
+		dt.column('0:visible').order('asc').draw();
 		return dt;
 }
-
-/*****************************************************************
-	Plan to my cookies
-	Method: createCookie(name,value,days)
-			createCookie(name,value,0)
-			readCookie(name)
-			eraseCookie(name)
- */
-
-/*
- * createCookie('ppkcookie','testcookie',7)
- * 7days - active, 0 - close browser remove, less than 0 after opening a browser it will erase automatic
- */
-function createCookie(name, value, days) {
-	if (days) {
-		var date = new Date();
-		date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-		var expires = '; expires=' + date.toGMTString();
-	}
-	else var expires = '';
-	document.cookie = name + '=' + value + expires + '; path=/';
-}
-
-/*
-	var x = readCookie('ppkcookie1')
-	if (x) {
-		[do something with x]
-	}
- */
-function readCookie(name) {
-	var nameEQ = name + '=';
-	var ca = document.cookie.split(';');
-	for(var i = 0; i < ca.length; i++) {
-		var c = ca[i];
-		while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-		if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length, c.length);
-	}
-	return null;
-}
-
-/*
- * eraseCookie('ppkcookie')
- */ 
-function eraseCookie(name) {
-	createCookie(name, '', -1);
-}
-
-function logout() {
-	removeToContext()
-	eraseCookie('username');
-	eraseCookie('userid');
-	eraseCookie('roleid');
-	window.location = DEFAULT_ROOT;
-};
-
-function notFoundContextSave(sUserId, sUserName) {
-	$.ajax({
-		type: 'POST',
-		url: '/scaletech/services/UserInfoServices/checkIfUserIsAuthentication',
-		data: {
-			user_id: sUserId, 
-			user_name: sUserName
-		},
-		success: function(oXml, textStatus, jqXHR) {
-			var sData = getXMLData(oXml, 'type');
-			if (sData === 'SUCCESS') {
-				// do nothing
-			} else {
-				logout();
-			};
-		},
-		error: function(jqXHR, textStatus, errorThrown) {
-			console.log('jqXHR: ' + jqXHR + ', textStatus: ' + textStatus + ', errorThrown: ' + errorThrown);
-		}
-	});
-};
-
-function removeToContext() {
-	$.ajax({
-		type: 'POST',
-		url: '/scaletech/services/UserInfoServices/removeUser',
-		data: {
-			user_name: readCookie('username')
-		},
-		success: function(oXml) {
-			var sData = getXMLData(oXml, 'type'); 
-			if (sData === 'SUCCESS') {
-				return true;
-			} else {
-				console.log(oXml);
-			}
-		},
-		error: function() {
-			alert('error on logout...');
-		}
-	});
-	return false;;
-};

@@ -1,12 +1,12 @@
-<div class="panel panel-default">
+<div class="alert alert-info" role="alert">
+	<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+	<ul>
+		<li><i class="fa fa-check-square-o"></i> Messages enclosed in curly brackets {Data.CompanyName} are data fields which values are retrieved from the database.</li>
+		<li><i class="fa fa-check-square-o"></i> Messages enclosed in double quotes "Company Name:" are custom defined fields and printed directly.</li>
+	</ul>
+</div>
+<div class="panel panel-default no-margin-bottom">
 	<div class="panel-body">
-		<div class="alert alert-info" role="alert">
-			<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
-			<ul>
-				<li>Messages enclosed in curly brackets {Data.CompanyName} are data fields which values are retrieved from the database.</li>
-				<li>Messages enclosed in double quotes "Company Name:" are custom defined fields and printed directly.</li>
-			</ul>
-		</div>
 		<form class="form-horizontal no-margin-left">
 			<div class="form-group" style="margin-left: 0px;">
 				<label class="control-label col-sm-2 no-padding-left" for="selectDocketType" style="text-align: left; width: 100px;">Docket Type</label>
@@ -36,8 +36,8 @@
 			</div>
 			<div class="btn-group pull-left" role="group">
 				<button type="button" class="btn btn-primary" id="tools-new-style" data-btn="btnNewStyle"><i class="fa fa-plus" aria-hidden="true"></i> New</button>
-				<button type="button" class="btn btn-primary disabled" id="tools-edit-style" data-btn="btnEditStyle"><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
-				<button type="button" class="btn btn-primary disabled" id="tools-delete-style" data-btn="btnDelStyle"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+				<button type="button" class="btn btn-primary" id="tools-edit-style" data-btn="btnEditStyle" disabled><i class="fa fa-pencil" aria-hidden="true"></i> Edit</button>
+				<button type="button" class="btn btn-danger" id="tools-delete-style" data-btn="btnDelStyle" disabled><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
 				<button type="button" class="btn btn-primary" id="tools-reload-style" data-btn="btnRelStyle"><i class="fa fa-refresh" aria-hidden="true"></i> Refresh</button>
 			</div>
 		</div>
@@ -63,6 +63,8 @@
 </div>
 <script>
 	$(function() {
+		$('#select-docket-type').selectpicker();
+	
 		// Default
 		var styles = {
 			// DT Buttons
@@ -147,7 +149,7 @@
 						STIC.disableButtons(styles.btns);	
 						
 						BootstrapDialog.alert({
-							title: MSG_INFO_TITLE,
+							title: MSG_TITLE_INFO,
 							message: 'Docket Message was updated succesfully.',	
 							type: BootstrapDialog.TYPE_PRIMARY,
 							callback: function(result) {
@@ -212,7 +214,7 @@
 						dataSrc: 'data',
 						defaultVal: ''
 					})
-					.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
+					STIC.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
 				},
 				onhidden: function(dialogRef) {
 					$('input[data-field]').val('');
@@ -222,7 +224,8 @@
 					var input = $('input[data-field="dt_type"]');
 					$(input).val($('#select-docket-type').val());					
 					STIC.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
-					STIC.DocketStyle.destroyMsgField();	
+					STIC.DocketStyle.destroyMsgField();
+					STIC.disableButtons(styles.btns);					
 				},
 				buttons: [{
 					label: 'Save',
@@ -268,7 +271,7 @@
 						dataSrc: row.dt_source,
 						defaultVal: msgVal
 					})
-					.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
+					STIC.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
 				},
 				onhidden: function(dialogRef) {
 					$('input[data-field]').val('');
@@ -279,6 +282,7 @@
 					$(input).val($('#select-docket-type').val());						
 					STIC.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
 					STIC.DocketStyle.destroyMsgField();	
+					STIC.disableButtons(styles.btns);
 				},
 				buttons: [{
 					label: 'Save',
@@ -315,7 +319,7 @@
 							dtDocketStyles.ajax.reload();						
 							STIC.disableButtons(styles.btns);
 							BootstrapDialog.alert({
-								title: MSG_INFO_TITLE,
+								title: MSG_TITLE_INFO,
 								message: 'Record was deleted successfully.',
 								type: BootstrapDialog.TYPE_PRIMARY,
 								callback: function() {
@@ -342,12 +346,13 @@
 		// Refresh Table
 		$('button[data-btn="btnRelStyle"]').on('click', function() {
 			dtDocketStyles.ajax.reload();
+			STIC.disableButtons(styles.btns);
 		});
 
 		// Save Docket Width & Length
 		$('button[data-btn="btnSaveDWL"]').on('click', function() {
 			BootstrapDialog.alert({
-				title: MSG_INFO_TITLE,
+				title: MSG_TITLE_INFO,
 				message: 'Save docket width and docket length.',
 				type: BootstrapDialog.TYPE_DANGER
 			});
