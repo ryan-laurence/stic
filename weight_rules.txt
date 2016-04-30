@@ -1,0 +1,64 @@
+Weighing Scale Form
+
+1. Trucks
+
+New Trucks - check for duplicate in trucks, > ok
+existing in weight_readings
+(/scaletech/services/TrucksInfoServices/addTrucks)
+
+1st Weight Lookup - don't include trucks already in 2nd weighing > ok
+(/scaletech/services/TrucksInfoServices/getAllTrucksList)
+
+2nd Weight Lookup - show all for 2nd weighing only > ok
+(/scaletech/services/WeightReadingInfoServices/checkTruckCodeList)
+
+
+2. Customers
+
+New Customers - check for duplicate in customers > ok
+(/scaletech/services/CustomerInfoServices/addCustomers)
+
+Customers Lookup - show all customers > ok
+(/scaletech/services/CustomerInfoServices/getAllCustomersList)
+
+
+3. Destinations
+
+New Destination Lookup - don't include those already linked > ok
+(/scaletech/services/DestinationsInfoServices/getAllDestinationsNotInCustDestList)
+
+Customer Destination Lookup - show all linked to customer > ok
+(/scaletech/services/CustDestInfoServices/getAllCustDestList)
+
+
+4. Products
+
+New Products - check for duplicate in products > ok
+(/scaletech/services/ProductsInfoServices/addProductsAndCustomerProducts)
+
+Products Lookup - don't include products already linked > ok 
+(/scaletech/services/ProductsInfoServices/getAllProductsList)
+
+Customer Products Lookup - show all linked to customer > ok
+(/scaletech/services/CustProductsInfoServices/getAllCustProdList)
+
+
+5. Suppliers
+
+New Suppliers - check for duplicate in suppliers > ok
+(/scaletech/services/SuppliersInfoServices/addSuppliers)
+
+Suppliers Lookup - show all suppliers > ok
+(/scaletech/services/SuppliersInfoServices/getAllSuppliersList)
+
+
+6. Category
+New Category - check for duplicate in categories > ok
+
+
+7. Roles
+New Role - check for duplicate in roles > ok
+
+
+8. Users
+New User- check for duplicate in users > ok

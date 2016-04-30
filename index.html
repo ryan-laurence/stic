@@ -49,106 +49,27 @@
 		<script type="text/javascript" src="js/jquery-widget.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-waitingfor.js"></script>
 		<script type="text/javascript" src="js/stic-constants.js"></script>
 		<script type="text/javascript" src="js/stic-functions.js"></script>		
 		<script type="text/javascript">
-			$(function () { 
-				console.log('Cookies Before Login: ' + document.cookie);
+			$(function () { 	
+				// Progress Bar Start
+				$(document).ajaxStart(function () {
+					waitingDialog.show();
+				});
+
+				// Progress Bar End
+				$(document).ajaxStop(function () {
+					waitingDialog.hide();
+				});
 			
-				// Check Cookies				
-				if (STIC.User.ReadCookie('userid') !== null) {
-					window.location = DEFAULT_ROOT + 'main.html';
-				}
+				// Check if Logged in already
+				STIC.User.CheckIfValid(false);
 				
 				// Login Button action
 				$('#btnLogin').on('click', function () {
-					var totalErrors = 0,
-						username = $('#username').val(),
-						password = $('#password').val();					
-					
-					// Clear error messages & styles
-					$('.login-form').find('div.form-group')
-						.removeClass('has-error has-feedback')
-						.removeClass('has-success has-feedback');
-					$('.login-form').find('div.form-group').find('span.glyphicon, small.help-block')
-						.remove();	
-					$('.login-form').find('div.alert')
-						.remove();
-					
-					// Validate user name
-					var divInputGroup = $('.login-form').find('#username').parent(),
-							divFormGroup = $('.login-form').find('#username').parent().parent();		
-					if (username == '') {										
-						divFormGroup.addClass('has-error has-feedback');
-						divFormGroup.append('<small class="help-block" style="text-align: left">Username is required.</small>');
-						divInputGroup.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-						totalErrors++;
-					} else {
-						divFormGroup.addClass('has-success has-feedback');								
-						divInputGroup.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-					}
-					
-					// Validate user password
-					var divInputGroup = $('.login-form').find('#password').parent(),
-							divFormGroup = $('.login-form').find('#password').parent().parent();	
-					if (password == '') {
-						divFormGroup.addClass('has-error has-feedback');
-						divFormGroup.append('<small class="help-block" style="text-align: left">Password is required.</small>');
-						divInputGroup.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-						totalErrors++;
-					} else {
-						divFormGroup.addClass('has-success has-feedback');								
-						divInputGroup.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-					}
-					
-					// Authenticate user 
-					if (totalErrors <= 0 ) {
-						$.post(WS_USER_CHECK, { user_name: username, user_password: password })
-							.done(function (result, status) {
-								var response = result.response;
-
-								// Authenticated
-								if (response.type === 'SUCCESS') {
-									var user = response['users-list'].user;
-									
-									// Create Cookies
-									STIC.User.CreateCookie('username', user.user_name, 1);
-									STIC.User.CreateCookie('userid', user.user_id, 1);
-									STIC.User.CreateCookie('roleid', user.role_id, 1);
-									
-									window.location = DEFAULT_ROOT + 'main.html';
-								
-								// Not Authorized
-								} else {
-									// Clear error messages & styles
-									$('.login-form').find('div.form-group')
-										.removeClass('has-error has-feedback')
-										.removeClass('has-success has-feedback');
-									$('.login-form').find('div.form-group').find('span.glyphicon, small.help-block')
-										.remove();	
-									$('.login-form').find('div.alert')
-										.remove();
-									
-									// Show error messages & styles
-									$('.login-form hr:first').after(MSG_ALERT_INVALID_LOGIN);
-									$('.login-form').find('#username, #password').parent()
-										.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-									$('.login-form').find('#username, #password').parent().parent()
-										.addClass('has-error has-feedback');
-									$('.login-form').find('#username').parent().parent()
-										.append('<small class="help-block" style="text-align: left">Username is invalid.</small>');
-									$('.login-form').find('#password').parent().parent()
-										.append('<small class="help-block" style="text-align: left">Password is invalid.</small>');
-								}
-							})
-							
-							// Show WS Error
-							.fail(function () {
-								STIC.showWSError();
-							})
-					} else {
-						$('.login-form hr:first').after(MSG_ALERT_LOGIN_FORM_ERROR);
-					}
+					STIC.User.Login();
 				});
 			});
 		</script>

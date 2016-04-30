@@ -3,67 +3,22 @@
   <head>
 		<title>Weighing System 2.0</title>
     <link rel="icon" type="images/png" href="images/company.ico" />
-    <!-- Bootstrap core CSS -->
 		<link rel="stylesheet" href="css/bootstrap.css" />
 		<link rel="stylesheet" href="css/bootstrap-select.min.css" />
 		<link rel="stylesheet" href="css/bootstrap-dialog.css" />
 		<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
-		<!-- JQuery DataTable styles -->
 		<link rel="stylesheet" href="css/dt.css" />
 		<link rel="stylesheet" href="css/dt-colreorder.min.css" />
 		<link rel="stylesheet" href="css/dt-buttons.css" />
 		<link rel="stylesheet" href="css/dt-buttons-bootstrap.css" />
-		<!-- Font Awesome CSS -->
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
-		<!-- Custom styles -->
 		<link rel="stylesheet" href="css/digital-style.css" />
   </head>
   <body>
 		<nav class="navbar navbar-inverse">
 			<div class="container">
 				<div id="navbar" class="collapse navbar-collapse">
-					<ul class="nav navbar-nav" id="nav-wrapper">
-						<!--li><a href="#" data-mod-name="weight-scale"><i class="fa fa-balance-scale"></i> Weighing</a></li>
-						<li><a href="#" data-mod-name="truck-in"><i class="fa fa-truck"></i> Truck In</a></li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-pencil-square-o"></i> Edit Data <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="#" data-mod-name="data-supplier">Supplier Data</a></li>
-								<li><a href="#" data-mod-name="data-category">Category Data</a></li>
-								<li><a href="#" data-mod-name="data-customer">Customer Data</a></li>
-								<li><a href="#" data-mod-name="data-truck">Truck Data</a></li>
-							</ul>
-						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-table"></i> Summary <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="#" data-mod-name="summary-supplier">Supplier Summary</a></li>
-								<li><a href="#" data-mod-name="summary-customer">Customer Summary</a></li>
-								<li><a href="#" data-mod-name="summary-destination">Destination Summary</a></li>
-								<li><a href="#" data-mod-name="summary-product">Product Summary</a></li>
-								<li><a href="#" data-mod-name="summary-reprint-count">Reprint Count</a></li>
-								<li class="divider"></li>
-								<li><a href="#" data-mod-name="summary-truck">Truck Summary</a></li>
-								<li><a href="#" data-mod-name="summary-detailed-truck">Detailed Truck Summary</a></li>
-								<li class="divider"></li>
-								<li><a href="#" data-mod-name="summary-custom">Custom Report</a></li>
-								<li class="divider"></li>
-								<li><a href="#" data-mod-name="summary-event-log">Event Log</a></li>
-							</ul>
-						</li>
-						<li><a href="#" data-mod-name="docket-template-main"><i class="fa fa-file-text-o"></i> Docket</a></li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-cog"></i> Others <span class="caret"></span></a>
-							<ul class="dropdown-menu" role="menu">
-								<li><a href="#" data-mod-name="others-select-com">Select Com</a></li>
-								<li><a href="#" data-mod-name="others-system-config">System Config</a></li>
-								<li><a href="#" data-mod-name="others-system-access">System Access</a></li>
-								<li><a href="#" data-mod-name="others-calibration">Calibration</a></li>
-								<li><a href="#" data-mod-name="others-backup-data">Backup Data</a></li>
-								<li><a href="#" data-mod-name="others-restore-data">Restore Data</a></li>
-							</ul>
-						</li-->
-					</ul>
+					<ul class="nav navbar-nav" id="nav-wrapper"></ul>
 					<ul class="nav navbar-nav navbar-right">
 						<li><a href="#" id="link-user"><i class="fa fa-user"></i> User: <span id="current-user" style="font-weight: bold">default</span></a></li>
 						<li><a href="#" id="link-exit"><i class="fa fa-sign-out"></i> Logout</a></li>
@@ -75,9 +30,13 @@
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/jquery-widget.min.js"></script>
 		<script type="text/javascript" src="js/dt.min.js"></script>
+		<script type="text/javascript" src="js/dt-sum.js"></script>
 		<script type="text/javascript" src="js/dt-colreorder.min.js"></script>
 		<script type="text/javascript" src="js/dt-buttons.min.js"></script>
+		<script type="text/javascript" src="js/pdfmake.min.js"></script>
+		<script type="text/javascript" src="js/vfs_fonts.js"></script>
 		<script type="text/javascript" src="js/dt-buttons-print.min.js"></script>
+		<script type="text/javascript" src="js/dt-buttons-html5.min.js"></script>
 		<script type="text/javascript" src="js/dt-buttons-bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/moment.min.js"></script>
 		<script type="text/javascript" src="js/transition.js"></script>
@@ -92,36 +51,18 @@
 		<script type="text/javascript" src="js/stic-functions.js"></script>
 		<script type="text/javascript">
 			$(function () {
-				// Set DT Defaults
-				$.extend(true, $.fn.dataTable.defaults, {
-					pagingType: 'full',
-					language: {
-						paginate: {
-							first: '<i class="fa fa-fast-backward"></i> First',
-							previous: '<i class="fa fa-backward"></i> Previous',							
-							next: 'Next <i class="fa fa-forward"></i>',
-							last: 'Last <i class="fa fa-fast-forward"></i>'
-						}
-					}
-				});
-
 				// Progress Bar Start
-				$(document).ajaxStart(function() {
+				$(document).ajaxStart(function () {
 					waitingDialog.show();
 				});
 
 				// Progress Bar End
-				$(document).ajaxStop(function() {
+				$(document).ajaxStop(function () {
 					waitingDialog.hide();
 				});
-
-				// Check Cookies
-				if (STIC.User.ReadCookie('userid') === null) {
-					window.location = DEFAULT_ROOT;
-				} else {					
-					STIC.User.Authenticate();
-					$('#current-user').text(STIC.User.ReadCookie('username'));
-				}
+				
+				// Check if User is valid
+				STIC.User.CheckIfValid(true);
 
 				// Load allowed modules
 				STIC.Modules.Init();
@@ -132,17 +73,12 @@
 				});
 
 				// Logout
-				$('#link-exit').click(function() {
-					BootstrapDialog.confirm({
-						title: '<i class="fa fa-info-circle"></i> Confirm Logout',
-						message: 'Are you sure you want to logout of the system?',
-						callback: function(result) {
-							if (result) {
-								STIC.User.Logout();
-							}
-						}
-					});
+				$('#link-exit').on('click', function () {
+					STIC.User.ConfirmLogout();
 				});
+
+				// Set DT Defaults
+				$.extend(true, $.fn.dataTable.defaults, DEFAULT_DT_SETTINGS);
 			});
 		</script>
 	</body>
