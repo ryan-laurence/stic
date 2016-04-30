@@ -133,16 +133,16 @@ function loadEditData(params) {
 			action: btnDeleteAction
 		},
 
-		// DT Buttons > Print
+		// DT Buttons > Print	
 		dtBtnPrint = {
 			name: 'print',
-			extend: 'print',
-			enabled: false,
-			autoPrint: true,
+			extend: 'pdfHtml5',
+			download: 'open',
 			text: dtBtnPrintTxt,
+			title: params.modTitle,
 			className: 'btn-primary',
-			customize: customPrintData,
-			title: params.modTitle
+			exportOptions: { columns: ':visible' },
+			customize: dtPDFPrintCustom
 		},
 
 		// DT Buttons > Refresh
@@ -437,30 +437,43 @@ function loadEditData(params) {
 	function btnDeleteAction(e, dt, node, config) {
 		// Check if user is not super user
 		if (dt.row('.selected').data().role_id != '1') {
+			var userRoleId = STIC.User.ReadCookie('roleid');		
+			if (userRoleId === '1' || userRoleId === '2') {		
+				// Confirm delete
+				BootstrapDialog.confirm({
+					type: 'type-danger',
+					btnOKLabel: BTN_LABEL_CONFIRM_DELETE,
+					btnCancelLabel: BTN_LABEL_CANCEL_DELETE,
+					title: MSG_TITLE_CONFIRM_DELETE,
+					message: MSG_CONFIRM_DELETE_RECORD,
+					callback: function(result) {
+						if (result) {
 
-			// Confirm delete
-			BootstrapDialog.confirm({
-				title: MSG_TITLE_CONFIRM_DELETE,
-				message: MSG_CONFIRM_DELETE_RECORD,
-				type: BootstrapDialog.TYPE_DANGER,
-				callback: function(result) {
-					if (result) {
+							// Build post data
+							var pkeyVal = dt.cell('.selected', 0).data(),
+								postData = $.parseJSON('{"' + params.pkey + '":"' + pkeyVal + '"}');
 
-						// Build post data
-						var pkeyVal = dt.cell('.selected', 0).data(),
-							postData = $.parseJSON('{"' + params.pkey + '":"' + pkeyVal + '"}');
-
-						// Call WS
-						STIC.postData({
-							dt: dt,
-							url: params.wsDelete,
-							data: postData,
-							title: MSG_TITLE_INFO,
-							message: MSG_INFO_DEL_REC
-						});
+							// Call WS
+							STIC.postData({
+								dt: dt,
+								url: params.wsDelete,
+								data: postData,
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_DEL_REC
+							});
+						}
 					}
-				}
-			});
+				});
+			} else {
+				BootstrapDialog.alert({
+					type: 'type-danger',
+					title: MSG_TITLE_INFO,
+					message: MSG_INFO_ROLE_INVALID,
+					callback: function (result) {
+						BootstrapDialog.closeAll();
+					}
+				});
+			}		
 
 		// Restrict delete if super user
 		} else {
@@ -484,36 +497,13 @@ function loadEditData(params) {
 		dt.button('cpass:name').disable();
 	}
 
-	// Customize Print Preview
-	function customPrintData(win) {
-		$(win.document.body)
-			.css('background', 'transparent')
-			.css('font-weight', 'normal')
-			.css('font-family', '"Trebuchet MS", Helvetica, sans-serif');
-		// Title
-		$(win.document.body).find('h1')
-			.css('font-size', '16pt')
-			.css('text-align', 'center');
-		// Message
-		$(win.document.body).find('div')
-			.css('font-size', '11pt')
-			.css('text-align', 'left')
-			.css('margin', '20px 0px 15px 0px');
-		// Data Table
-		$(win.document.body).find('table')
-			.removeClass('display')
-			.removeClass('compact');
-		$(win.document.body).find('table th')
-			.css('font-size', '11pt')
-			.css('text-align', 'left')
-			.css('padding-left', '0px');
-		$(win.document.body).find('table td')
-			.css('font-size', '10pt')
-			.css('text-align', 'left')
-			.css('padding-left', '0px')
-			.css('padding-top', '10px')
-			.css('padding-bottom', '10px')
-			.css('font-weight', 'normal');
+	// Customize PDF Print Output
+	function dtPDFPrintCustom(doc) {		
+		// Set Default Styles
+		var pdfDoc = STIC.Report.SetPDFStyles({
+			doc: doc,
+			cd: params.cd		
+		});
 	}
 
 	// DT Initialization

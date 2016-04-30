@@ -20,22 +20,23 @@
 	</div>
 </div>
 <script>
-	$(function() {	
-		var first_tab = $('#tabAccessLevel > li:first-child'),
-			all_tabs = $('#tabAccessLevel > li[data-toggle="tabAccessLevel"]');
+	$(function () {	
+		var first_tab = $('#tabAccessLevel li:first-child'),
+			all_tabs = $('#tabAccessLevel li[data-toggle="tabAccessLevel"]');
 
-		$(all_tabs).click(function(e) {
+		$(all_tabs).on('click', function (e) {
 			var source = $(this).attr('data-url'),
 				target = $(this).attr('data-target');			
-			$.get(source, function(data) {
+			
+			$.get(source, function (data) {
 				$(target).html(data);				
 			});
+			
 			$(all_tabs).removeClass('active');
-			$(all_tabs).children('a')
-				.removeClass('make-bold');
+			$(all_tabs).children('a').removeClass('make-bold');
+			
 			$(this).addClass('active');
-			$(this).children('a')
-				.addClass('make-bold');
+			$(this).children('a').addClass('make-bold');
 		});
 
 		$(first_tab).trigger('click');

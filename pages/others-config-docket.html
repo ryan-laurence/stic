@@ -61,6 +61,10 @@
 </form>	
 <script>
 	$(function() {
+		$('select[data-field="printer_name"]').selectpicker();
+		$('select[data-field="first_docket_type"]').selectpicker();
+		$('select[data-field="second_docket_type"]').selectpicker();
+	
 		// Pre Load Values
 		function loadDocket() {
 			$.get(WS_LIST_CONFIG_DOCKET, function(data) { 
@@ -70,8 +74,10 @@
 							$.each(d, function(e, f) {	
 								if(e == 'is_print_first_docket' || e == 'is_print_second_docket') 
 									$('input[data-field="' + e + '"]').prop('checked', f == '1' ? true : false);
-								else
+								else {
 									$('[data-field="' + e + '"]').val(f);
+									$('select[data-field="' + e + '"]').selectpicker('val', f);
+								}
 							});							
 						});
 					}

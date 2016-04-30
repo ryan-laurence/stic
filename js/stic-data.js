@@ -23,17 +23,10 @@
 	*/
 function loadEditData(params) {
 	var
-		// DT Buttons Text
-		dtBtnNewTxt = '<i class="fa fa-plus"></i> New',
-		dtBtnEditTxt = '<i class="fa fa-pencil"></i> Edit',
-		dtBtnDelTxt = '<i class="fa fa-trash-o"></i> Delete',
-		dtBtnRelTxt = '<i class="fa fa-refresh"></i> Refresh',
-		dtBtnPrintTxt = '<i class="glyphicon glyphicon-print"></i> Print',
-
 		// Modal Form Options
 		modalFrmContent = $('<div></div>').load(params.formSrc),
-		modalNewTitle = '<i class="fa fa-plus"></i> New ' + params.modTitle,
-		modalEditTitle = '<i class="fa fa-pencil"></i> Edit ' + params.modTitle,
+		modalNewTitle = BTN_LABEL_NEW_RECORD + ' ' + params.modTitle,
+		modalEditTitle = BTN_LABEL_EDIT_RECORD + ' ' + params.modTitle,
 
 		// Modal Buttons > Save
 		modalBtnSave = {
@@ -56,16 +49,16 @@ function loadEditData(params) {
 		// DT Buttons > New
 		dtBtnNew = {
 			name: 'new',
-			text: dtBtnNewTxt,
 			className: 'btn-primary',
-			action: function(e, dt, node, config) {
+			text: BTN_LABEL_NEW_RECORD,
+			action: function (e, dt, node, config) {
 				// Show New Modal Form
 				BootstrapDialog.show({
 					closable: false,
 					title: modalNewTitle,
 					message: modalFrmContent,
-					onshown: btnNewOnShown,
-					onhidden: btnOnHidden,
+					onshown: modalNewOnShown,
+					onhidden: modalOnHidden,
 					buttons: [modalBtnSave, modalBtnCancel]
 				});
 			}
@@ -75,16 +68,16 @@ function loadEditData(params) {
 		dtBtnEdit = {
 			name: 'edit',
 			enabled: false,
-			text: dtBtnEditTxt,
 			className: 'btn-primary',
-			action: function(e, dt, node, config) {
+			text: BTN_LABEL_EDIT_RECORD,
+			action: function (e, dt, node, config) {
 				// Show Edit Modal Form
 				BootstrapDialog.show({
 					closable: false,
 					title: modalEditTitle,
 					message: modalFrmContent,
-					onshown: btnEditOnShown,
-					onhidden: btnOnHidden,
+					onshown: modalEditOnShown,
+					onhidden: modalOnHidden,
 					buttons: [modalBtnSave, modalBtnCancel]
 				});
 			}
@@ -94,30 +87,30 @@ function loadEditData(params) {
 		dtBtnDelete = {
 			name: 'delete',
 			enabled: false,
-			text: dtBtnDelTxt,
 			className: 'btn-danger',
+			text: BTN_LABEL_DELETE_RECORD,
 			action: btnDeleteAction
 		},
 
 		// DT Buttons > Print
 		dtBtnPrint = {
 			name: 'print',
-			extend: 'print',
-			enabled: false,
-			autoPrint: true,
-			text: dtBtnPrintTxt,
+			extend: 'pdfHtml5',
+			download: 'open',
+			title: params.modTitle,
 			className: 'btn-primary',
-			customize: customPrintData,
-			title: params.modTitle
+			text: BTN_LABEL_PRINT_RECORD,
+			exportOptions: { columns: ':visible' },
+			customize: dtPDFPrintCustom
 		},
 
 		// DT Buttons > Refresh
 		dtBtnReload = {
 			name: 'reload',
-			text: dtBtnRelTxt,
 			className: 'btn-primary',
-			action: function(e, dt, node, config) {
-				reloadDT();
+			text: BTN_LABEL_REFRESH_RECORD,
+			action: function (e, dt, node, config) {
+				dt.ajax.reload();
 			}
 		};
 
@@ -127,37 +120,28 @@ function loadEditData(params) {
 		[dtBtnDelete, dtBtnPrint, dtBtnReload];
 
 	// Trigger on New Modal onshown event
-	function btnNewOnShown(dialogRef) {
-		var modalBody = dialogRef.getModalBody(),
-			elements = modalBody.find('input[data-field], select[data-field]');
-
-		// Reset form values
-		$.each(elements, function(idx, elem) { $(elem).val(''); });
+	function modalNewOnShown(dialogRef) {
+		var modalBody = dialogRef.getModalBody();
+		modalBody.find('input[data-field], select[data-field]').val('');
 	}
 
 	// Trigger on Edit Modal onshown event
-	function btnEditOnShown(dialogRef) {
+	function modalEditOnShown(dialogRef) {
 		var rowData = dt.row('.selected').data(),
 			modalBody = dialogRef.getModalBody();
-
-		// Load form values from DT row data
-		$.each(rowData, function(name, value) {
+		$.each(rowData, function (name, value) {
 			modalBody.find('input[data-field="' + name + '"]').val(value);
 			modalBody.find('select[data-field="' + name + '"]').val(value);
 		});
 	}
 
 	// Trigger on Modal OnHidden
-	function btnOnHidden(dialogRef) {		
-		// Reload DT
-		reloadDT();
-		
-		// Reset form values
-		$(params.formId).find('input[data-field]').val('');
-		$(params.formId).find('select[data-field]').val('');
-
-		// Clear form validation styles
-		STIC.FormValidation({ formId: params.formId, clearHelpBlocks: true });
+	function modalOnHidden(dialogRef) {
+		var modalBody = dialogRef.getModalBody();
+		modalBody.find('input[data-field]').val('');
+		modalBody.find('select[data-field]').val('');
+		STIC.clearHelpBlocks({ formId: params.formId });
+		dt.ajax.reload();
 	}
 
 	// New & Edit Save Button Action
@@ -167,7 +151,7 @@ function loadEditData(params) {
 
 		// Proceed if form is valid
 		if (isValid) {
-			var wsPost = '', postString = '', 
+			var wsPost = '', postString = '',
 				infoTitle = '', infoMessage = '',
 				JSONString = '', JSONObject = {},
 				modalBody = dialogRef.getModalBody(),
@@ -184,20 +168,20 @@ function loadEditData(params) {
 				infoTitle = MSG_TITLE_ADD_REC;
 				infoMessage = MSG_INFO_ADD_REC;
 			}
-			
+
 			var input = $(params.formId).find('input[data-fv-unique="true"]'),
 				fieldValue = $(input).val(), fieldName = $(input).attr('data-field'),
-				postString = '{"' + fieldName + '": "' + fieldValue + '"}';			
-			
+				postString = '{"' + fieldName + '": "' + fieldValue + '"}';
+
 			// Check for duplicate entry if required
 			if (input.length > 0) {
 				if (pkey.val() != '')
-					$.extend(JSONObject, $.parseJSON('{"' + params.pkey + '": "' + pkey.val() + '"}'));				
-				
+					$.extend(JSONObject, $.parseJSON('{"' + params.pkey + '": "' + pkey.val() + '"}'));
+
 				$.extend(JSONObject, $.parseJSON(postString));
 				$.post(WS_UNIQUE_CHECK[fieldName], JSONObject)
 					.done(function (result, status) {
-						
+
 						// Proceed with insert if no duplicate records found
 						if (result.response.type === 'FAILED') {
 							insertUpdateData({
@@ -206,7 +190,7 @@ function loadEditData(params) {
 								message: infoMessage,
 								elements: elements
 							});
-							
+
 						// Show errors if there are duplicate records found
 						} else {
 							STIC.showDuplicateError({
@@ -215,12 +199,12 @@ function loadEditData(params) {
 							});
 						}
 					})
-					
+
 					// Show WS Error
 					.fail(function () {
 						STIC.showWSError({ formId: params.formId });
 					});
-			
+
 			// Proceed with insert if not required to check duplicate
 			} else {
 				insertUpdateData({
@@ -230,14 +214,14 @@ function loadEditData(params) {
 					elements: elements
 				});
 			}
-			
+
 			// Insert & Update
 			function insertUpdateData(o) {
-				var postString = '', JSONString = '', 
+				var postString = '', JSONString = '',
 					JSONObject = {};
-				
+
 				// Build post data
-				$.each(o.elements, function(idx, elem) {
+				$.each(o.elements, function (idx, elem) {
 					var input = $(elem),
 						inputValue = input.val(),
 						inputField = input.attr('data-field');
@@ -247,7 +231,7 @@ function loadEditData(params) {
 
 				// Build JSON string
 				JSONString = params.objectId + '=' + JSON.stringify(JSONObject);
-				
+
 				// Call WS
 				STIC.postData({
 					url: o.url,
@@ -262,67 +246,51 @@ function loadEditData(params) {
 
 	// Delete Button Action
 	function btnDeleteAction(e, dt, node, config) {
-		// Confirm delete
-		BootstrapDialog.confirm({
-			title: MSG_TITLE_CONFIRM_DELETE,
-			message: MSG_CONFIRM_DELETE_RECORD,
-			type: BootstrapDialog.TYPE_DANGER,
-			callback: function(result) {
-				if (result) {
-					// Build post data
-					var pkeyVal = dt.cell('.selected', 0).data(),
-						postData = $.parseJSON('{"' + params.pkey + '":"' + pkeyVal + '"}');
+		var userRoleId = STIC.User.ReadCookie('roleid');
+		if (userRoleId === '1' || userRoleId === '2') {
+			// Confirm delete
+			BootstrapDialog.confirm({
+				type: 'type-danger',
+				btnOKLabel: BTN_LABEL_CONFIRM_DELETE,
+				btnCancelLabel: BTN_LABEL_CANCEL_DELETE,
+				title: MSG_TITLE_CONFIRM_DELETE,
+				message: MSG_CONFIRM_DELETE_RECORD,
+				callback: function (result) {
+					if (result) {
+						// Build post data
+						var pkeyVal = dt.cell('.selected', 0).data(),
+							postData = $.parseJSON('{"' + params.pkey + '":"' + pkeyVal + '"}');
 
-					// Call WS
-					STIC.postData({
-						dt: dt,
-						url: params.wsDelete,
-						data: postData,
-						title: MSG_TITLE_INFO,
-						message: MSG_INFO_DEL_REC
-					});
+						// Call WS
+						STIC.postData({
+							dt: dt,
+							url: params.wsDelete,
+							data: postData,
+							title: MSG_TITLE_INFO,
+							message: MSG_INFO_DEL_REC
+						});
+					}
 				}
-			}
+			});
+		} else {
+			BootstrapDialog.alert({
+				type: 'type-danger',
+				title: MSG_TITLE_INFO,
+				message: MSG_INFO_ROLE_INVALID,
+				callback: function (result) {
+					BootstrapDialog.closeAll();
+				}
+			});
+		}
+	}
+
+	// Customize PDF Print Output
+	function dtPDFPrintCustom(doc) {
+		// Set Default Styles
+		var pdfDoc = STIC.Report.SetPDFStyles({
+			doc: doc,
+			cd: params.cd
 		});
-	}
-
-	// Reload DT
-	function reloadDT() {
-		dt.ajax.reload();
-		dt.button('edit:name').disable();
-		dt.button('delete:name').disable();
-	}
-
-	// Customize Print Preview
-	function customPrintData(win) {
-		$(win.document.body)
-			.css('background', 'transparent')
-			.css('font-weight', 'normal')
-			.css('font-family', '"Trebuchet MS", Helvetica, sans-serif');
-		// Title
-		$(win.document.body).find('h1')
-			.css('font-size', '16pt')
-			.css('text-align', 'center');
-		// Message
-		$(win.document.body).find('div')
-			.css('font-size', '11pt')
-			.css('text-align', 'left')
-			.css('margin', '20px 0px 15px 0px');
-		// Data Table
-		$(win.document.body).find('table')
-			.removeClass('display')
-			.removeClass('compact');
-		$(win.document.body).find('table th')
-			.css('font-size', '11pt')
-			.css('text-align', 'left')
-			.css('padding-left', '0px');
-		$(win.document.body).find('table td')
-			.css('font-size', '10pt')
-			.css('text-align', 'left')
-			.css('padding-left', '0px')
-			.css('padding-top', '10px')
-			.css('padding-bottom', '10px')
-			.css('font-weight', 'normal');
 	}
 
 	// DT Initialization
@@ -333,12 +301,11 @@ function loadEditData(params) {
 			processing: false,
 			lengthChange: false,
 			dom: '<"dt-toolbar">Bfrtip',
-			//pagingType: 'full_numbers',
 			pageLength: DEFAULT_PAGE_LENGTH,
 			columns: params.cd,
 			ajax: {
 				url: params.wsList,
-				dataSrc: function(json) {
+				dataSrc: function (json) {
 					var ds = params.ds.split('.'),
 						rec = json[ds[0]][ds[1]][ds[2]];
 					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
@@ -358,7 +325,7 @@ function loadEditData(params) {
 	dt.column('0:visible').order('asc').draw();
 
 	// DT Row Click Event
-	$('#table-data tbody').on('click', 'tr', function() {
+	$('#table-data tbody').on('click', 'tr', function () {
 		if (dt.row(this).data()[params.pkey] != '') {
 			if ($(this).hasClass('selected')) {
 				$(this).removeClass('selected');

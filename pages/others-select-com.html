@@ -57,6 +57,9 @@
 </div>
 <script>
 	$(function() {	
+		$('select[data-field="port"]').selectpicker();
+		$('select[data-field="baudrate"]').selectpicker();
+	
 		// Pre Load Values
 		function loadComPort() {
 			$.get(WS_LIST_CONFIG_COMPANY, function(data) { 
@@ -70,6 +73,8 @@
 								pbx = pb.split('=');
 							$('select[data-field="port"]').val(pbx[0]);
 							$('select[data-field="baudrate"]').val(pbx[1]);
+							$('select[data-field="port"]').selectpicker('val', pbx[0]);
+							$('select[data-field="baudrate"]').selectpicker('val', pbx[1]);
 						});
 					}
 				});		

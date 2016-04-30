@@ -6,7 +6,6 @@
 				<input type="text" class="form-control" 
 					data-field="bridge_code"
 					data-fv-notempty="true"
-					data-fv-notempty-msg="Bridge Code is required."
 					data-fv-specialchars="true"
 					data-fv-stringlength="true"
 					data-fv-stringlength-max="10"
@@ -17,8 +16,7 @@
 				<input type="text" class="form-control" 
 					data-field="current_docket_number"
 					data-fv-notempty="true"
-					data-fv-notempty-msg="Current Docket No. is required."
-					data-fv-specialchars="true"
+					data-fv-integer="true"
 					data-fv-stringlength="true"
 					data-fv-stringlength-max="6"
 					data-fv-stringlength-msg="Current Docket No. must be less than 6 digits.">
@@ -28,7 +26,6 @@
 				<input type="text" class="form-control" 
 					data-field="minimum_truck_weight"
 					data-fv-notempty="true"
-					data-fv-notempty-msg="Min. Truck Weight is required."
 					data-fv-float="true">
 			</div>
 		</div>
@@ -38,15 +35,13 @@
 				<input type="text" class="form-control" 
 					data-field="delay_time_second"
 					data-fv-notempty="true"
-					data-fv-notempty-msg="Delay Timer is required."
-					data-fv-specialchars="true">
+					data-fv-integer="true">
 			</div>
 			<div class="form-group">
 				<label class="control-label" for="weight_unit">Default Unit</label>
 				<select class="form-control" 
 					data-field="weight_unit"
-					data-fv-notempty="true"
-					data-fv-notempty-msg="Default Unit is required.">
+					data-fv-notempty="true">
 					<option value="kg" selected>kilogram</option>
 					<option value="g">gram</option>
 				</select>
@@ -56,8 +51,7 @@
 				<input type="text" class="form-control" 
 					data-field="zero_range"
 					data-fv-notempty="true"
-					data-fv-notempty-msg="Zero Range is required."
-					data-fv-specialchars="true">
+					data-fv-integer="true">
 			</div>
 		</div>
 	</div>
@@ -78,6 +72,8 @@
 </form>	
 <script>
 	$(function() {
+		$('select[data-field="weight_unit"]').selectpicker();
+	
 		// Pre Load Values
 		function loadWeighIn() {
 			$.get(WS_LIST_CONFIG_COMPANY, function(data) { 
@@ -85,9 +81,10 @@
 					if (a == 'company-list') {
 						$.each(b, function(c, d) {		
 							$.each(d, function(e, f) {	
-								if (e == 'weight_unit')
+								if (e == 'weight_unit') {
 									$('select[data-field="' + e + '"]').val(f);
-								else
+									$('select[data-field="weight_unit"]').selectpicker('val', f);
+								} else
 									$('input[data-field="' + e + '"]').val(f);								
 							});							
 						});

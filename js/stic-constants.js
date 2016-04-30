@@ -7,6 +7,19 @@ var DEFAULT_WRAPPER_ID = '#main-wrapper';
 var DEFAULT_DS_REPORTS = 'response.report-list.report';
 var DEFAULT_DATASOURCE = 'response.record-list.record';
 
+// Default DataTables Settings
+var DEFAULT_DT_SETTINGS = {
+	pagingType: 'full',
+	language: {
+		paginate: {
+			first: '<i class="fa fa-fast-backward"></i> First',
+			previous: '<i class="fa fa-backward"></i> Previous',
+			next: 'Next <i class="fa fa-forward"></i>',
+			last: 'Last <i class="fa fa-fast-forward"></i>'
+		}
+	}
+}
+
 // Weighing Screen
 var CD_TRUCK_IN_LIST = [
 	{ data: 'wr_id', visible: false, searchable: false, orderable: false },
@@ -70,9 +83,9 @@ var WS_CUSTOMER_LIST = '/scaletech/services/CustomerInfoServices/getAllCustomers
 // Destination Data
 var CD_DESTINATION_LIST = [
 	{ data: 'dest_id', visible: false, searchable: false },
-	{ data: 'dest_zipcode' },
-	{ data: 'dest_name' },
-	{ data: 'dest_location' }
+	{ data: 'dest_zipcode', width: '20%' },
+	{ data: 'dest_name', width: '50%' },
+	{ data: 'dest_location', width: '30%' }
 ];
 var DS_DESTINATION_LIST = 'response.destinations-list.destination';
 var WS_DESTINATION_LIST = '/scaletech/services/DestinationsInfoServices/getAllDestinationsNotInCustDestList?response=application/json&';
@@ -80,9 +93,9 @@ var WS_DESTINATION_LIST = '/scaletech/services/DestinationsInfoServices/getAllDe
 // Product Data
 var CD_PRODUCT_LIST = [
 	{ data: 'prod_id', visible: false, searchable: false },
-	{ data: 'prod_code' },
-	{ data: 'prod_name' },
-	{ data: 'unit_price' }
+	{ data: 'prod_code', width: '30%' },
+	{ data: 'prod_name', width: '50%' },
+	{ data: 'unit_price', width: '20%' }
 ];
 var DS_PRODUCT_LIST = 'response.products-list.product';
 var WS_PRODUCT_LIST = '/scaletech/services/ProductsInfoServices/getAllProductsList?response=application/json&';
@@ -92,12 +105,12 @@ var WS_PRODUCT_DELETE = '/scaletech/services/ProductsInfoServices/updateProducts
 
 // Customer Destination Data
 var CD_CUSTDEST_LIST = [
-	{ data: 'cd_id', visible: false, searchable: false },
-	{ data: 'cust_id', visible: false, searchable: false },
-	{ data: 'dest_id', visible: false, searchable: false },
-	{ data: 'dest_zipcode' },
-	{ data: 'dest_name' },
-	{ data: 'dest_location' }
+	{ data: 'cd_id', name: 'cd_id', visible: false, searchable: false },
+	{ data: 'cust_id', name: 'cust_id', visible: false, searchable: false },
+	{ data: 'dest_id', name: 'dest_id', visible: false, searchable: false },
+	{ data: 'dest_zipcode', name: 'dest_zipcode', width: '20%' },
+	{ data: 'dest_name', name: 'dest_name', width: '50%' },
+	{ data: 'dest_location', name: 'dest_location', width: '30%' }
 ];
 var PICKER_CUSTDEST_DATA = 'pages/data-customer-destination-picker.html';
 var DS_CUSTDEST_LIST = 'response.custDest-list.customerDestination';
@@ -107,12 +120,12 @@ var WS_CUSTDEST_DELETE = '/scaletech/services/CustDestInfoServices/updateCustDes
 
 // Customer Product Data
 var CD_CUSTPROD_LIST = [
-	{ data: 'cp_id', visible: false, searchable: false },
-	{ data: 'cust_id', visible: false, searchable: false },
-	{ data: 'prod_id', visible: false, searchable: false },
-	{ data: 'prod_code' },
-	{ data: 'prod_name' },
-	{ data: 'unit_price' }
+	{ data: 'cp_id', name: 'cp_id', visible: false, searchable: false },
+	{ data: 'cust_id', name: 'cust_id', visible: false, searchable: false },
+	{ data: 'prod_id', name: 'prod_id', visible: false, searchable: false },
+	{ data: 'prod_code', name: 'prod_code', width: '30%' },
+	{ data: 'prod_name', name: 'prod_name', width: '50%' },
+	{ data: 'unit_price', name: 'unit_price', width: '20%' }
 ];
 var PICKER_CUSTPROD_DATA = 'pages/data-customer-product-picker.html';
 var DS_CUSTPROD_LIST = 'response.custProducts-list.customerProduct';
@@ -138,9 +151,9 @@ var CD_USER_LIST = [
 	{ data: 'user_id', visible: false, searchable: false },
 	{ data: 'role_id', visible: false, searchable: false },
 	{ data: 'ur_id', visible: false, searchable: false },
-	{ data: 'user_name' },
-	{ data: 'role_name' },
-	{ data: 'date_modified' }
+	{ data: 'user_name', width: '35%' },
+	{ data: 'role_name', width: '35%' },
+	{ data: 'date_modified', width: '30%' }
 ];
 var FORM_USER_NEW_DATA = 'pages/others-user-details-form-new.html';
 var FORM_USER_EDIT_DATA = 'pages/others-user-details-form-edit.html';
@@ -162,89 +175,89 @@ var WS_LIST_ROLES = '/scaletech/services/RolesInfoServices/getAllRolesList?respo
 
 // Supplier Summary
 var CD_SUMMARY_SUPPLIER = [
-	{ data: 'supp_name' },
-	{ data: 'prod_name' },
-	{ data: 'net_weight' },
-	{ data: 'weight_unit' }
+	{ data: 'supp_name', name: 'supp_name', width: '35%' },
+	{ data: 'prod_name', name: 'prod_name', width: '35%' },
+	{ data: 'net_weight', name: 'net_weight', width: '20%' },
+	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_SUPPLIER = 'Supplier Summary';
 var WS_SUMMARY_SUPPLIER = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportBySupplierList?response=application/json&';
 
 // Customer Summary
 var CD_SUMMARY_CUSTOMER = [
-	{ data: 'cust_code' },
-	{ data: 'cust_name' },
-	{ data: 'net_weight' },
-	{ data: 'weight_unit' }
+	{ data: 'cust_code', name: 'cust_code', width: '35%' },
+	{ data: 'cust_name', name: 'cust_name', width: '35%' },
+	{ data: 'net_weight', name: 'net_weight', width: '20%' },
+	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_CUSTOMER = 'Customer Summary';
 var WS_SUMMARY_CUSTOMER = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByCustomerList?response=application/json&';
 
 // Destination Summary
 var CD_SUMMARY_DESTINATION = [
-	{ data: 'dest_name' },
-	{ data: 'cust_name' },
-	{ data: 'net_weight' },
-	{ data: 'weight_unit' }
+	{ data: 'dest_name', name: 'dest_name', width: '45%' },
+	{ data: 'cust_name', name: 'cust_name', width: '25%' },
+	{ data: 'net_weight', name: 'net_weight', width: '20%' },
+	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_DESTINATION = 'Destination Summary';
 var WS_SUMMARY_DESTINATION = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByDestinationList?response=application/json&';
 
 // Product Summary
 var CD_SUMMARY_PRODUCT = [
-	{ data: 'prod_name' },
-	{ data: 'net_weight' },
-	{ data: 'weight_unit' }
+	{ data: 'prod_name', name: 'prod_name', width: '40%' },
+	{ data: 'net_weight', name: 'net_weight', width: '40%' },
+	{ data: 'weight_unit', name: 'weight_unit', width: '20%' }
 ];
 var REPORT_TITLE_PRODUCT = 'Product Summary';
 var WS_SUMMARY_PRODUCT = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByProductList?response=application/json&';
 
 // Reprint Count Summary
 var CD_SUMMARY_REPRINT_COUNT = [
-	{ data: 'reprint_date' },
-	{ data: 'docket_no' },
-	{ data: 'reprint_count' },
-	{ data: 'user_name' }
+	{ data: 'reprint_date', name: 'reprint_date', width: '25%' },
+	{ data: 'docket_no', name: 'docket_no', width: '25%' },
+	{ data: 'reprint_count', name: 'reprint_count', width: '25%' },
+	{ data: 'user_name', name: 'user_name', width: '25%' }
 ];
 var REPORT_TITLE_REPRINT_COUNT = 'Reprint Count Summary';
 var WS_SUMMARY_REPRINT_COUNT = '/scaletech/services/DocketPrintLogInfoServices/getAllDocketPrintLogList?response=application/json&';
 
 // Truck Summary
 var CD_SUMMARY_TRUCK = [
-	{ data: 'truck_code' },
-	{ data: 'no_of_count' },
-	{ data: 'net_weight' },
-	{ data: 'weight_unit' }
+	{ data: 'truck_code', name: 'truck_code', width: '35%' },
+	{ data: 'no_of_count', name: 'no_of_count', width: '35%' },
+	{ data: 'net_weight', name: 'net_weight', width: '20%' },
+	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_TRUCK = 'Truck Summary';
 var WS_SUMMARY_TRUCK = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByTruckList?response=application/json&';
 
 // Detailed  Truck Summary
 var CD_SUMMARY_DETAILED_TRUCK = [
-	{ data: 'truck_code' },
-	{ data: 'date_in' },
-	{ data: 'time_in' },
-	{ data: 'date_out' },
-	{ data: 'time_out' },
-	{ data: 'net_weight' },
-	{ data: 'weight_unit' },
-	{ data: 'user_name' }
+	{ data: 'truck_code', name: 'truck_code', _width: '10%' },
+	{ data: 'date_in', name: 'date_in', _width: '15%' },
+	{ data: 'time_in', name: 'time_in', _width: '15%' },
+	{ data: 'date_out', name: 'date_out', _width: '15%' },
+	{ data: 'time_out', name: 'time_out', _width: '15%' },
+	{ data: 'net_weight', name: 'net_weight', _width: '15%' },
+	{ data: 'weight_unit', name: 'weight_unit', width: '5%' },
+	{ data: 'user_name', name: 'user_name', width: '10%' }
 ];
 var REPORT_TITLE_DETAILED_TRUCK = 'Detailed Truck Summary';
 var WS_SUMMARY_DETAILED_TRUCK = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByDetailedTruckList?response=application/json&';
 
 // Summary Custom
 var CD_SUMMARY_CUSTOM_DOCKET = [
-	{ data: 'docket_no' },
-	{ data: 'prod_name' },
-	{ data: 'cust_name' },
-	{ data: 'truck_code' },
-	{ data: 'user_name' },
-	{ data: 'weight_in_reading' },
-	{ data: 'weight_out_reading' },
-	{ data: 'net_weight' },
-	{ data: 'weight_unit' },
-	{ data: 'compensation' }
+	{ data: 'docket_no', name: 'docket_no' },
+	{ data: 'prod_name', name: 'prod_name' },
+	{ data: 'cust_name', name: 'cust_name' },
+	{ data: 'truck_code', name: 'truck_code' },
+	{ data: 'user_name', name: 'user_name', width: '10%' },
+	{ data: 'weight_in_reading', name: 'weight_in_reading' },
+	{ data: 'weight_out_reading', name: 'weight_out_reading' },
+	{ data: 'net_weight', name: 'net_weight' },
+	{ data: 'weight_unit', name: 'weight_unit', width: '5%' },
+	{ data: 'compensation', name: 'compensation' }
 ];
 var WS_SUMMARY_CUSTOM_DOCKET = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingByFilterList?response=application/json&';
 
@@ -261,6 +274,18 @@ var DS_EVENT_LOG_LIST = 'response.audittrail-list.audittrail';
 var WS_EVENT_LOG_LIST = '/scaletech/services/AuditInfoService/getAuditTrailList?response=application/json&';
 
 // Docket Styles
+var CD_LIST_DOCKET_STYLES = [
+	{ "data": "dt_id", "visible": false, orderable: false },
+	{ "data": "dt_row",  },
+	{ "data": "dt_column" },
+	{ "data": "dt_message" },
+	{ "data": "dt_font_size" },
+	{ "data": "dt_font_uppercase" },
+	{ "data": "dt_font_underline" },
+	{ "data": "dt_source", "visible": false },
+	{ "data": "dt_type", "visible": false },
+	{ "data": "dt_field", "visible": false }
+];
 var PG_DOCKET_STYLES_FORM = 'pages/docket-template-style-form.html';
 var	DS_DOCKET_STYLES = 'response.docketTemplate-list.docketTemplate';
 var	WS_LIST_DOCKET_STYLES = '/scaletech/services/DocketTemplateInfoService/getAllDocketTemplateByTypeList?response=application/json&';
@@ -280,8 +305,8 @@ var WS_UPDATE_CONFIG_DOCKET = '/scaletech/services/PrinterConfigurationInfoServi
 // Roles Data
 var CD_ROLES_LIST = [
 	{ data: 'role_id', visible: false, searchable: false },
-	{ data: 'role_name' },
-	{ data: 'date_modified' }
+	{ data: 'role_name', width: '50%' },
+	{ data: 'date_modified', width: '50%' }
 ];
 var FORM_ROLES_DATA = 'pages/others-role-details-form.html';
 var WS_ROLES_LIST = '/scaletech/services/RolesInfoServices/getAllRolesList?response=application/json&';
@@ -308,6 +333,21 @@ WS_UNIQUE_CHECK['truck_code'] = '/scaletech/services/TrucksInfoServices/getTruck
 WS_UNIQUE_CHECK['role_name'] = '/scaletech/services/RolesInfoServices/getAllRolesByRoleNameList?response=application/json&';
 WS_UNIQUE_CHECK['user_name'] = '/scaletech/services/UserInfoServices/getUserByNameList?response=application/json&';
 
+// Button Labels
+var BTN_LABEL_NEW_RECORD = '<i class="fa fa-plus"></i> New';
+var BTN_LABEL_EDIT_RECORD = '<i class="fa fa-pencil"></i> Edit';
+var BTN_LABEL_DELETE_RECORD = '<i class="fa fa-trash-o"></i> Delete';
+var BTN_LABEL_REFRESH_RECORD = '<i class="fa fa-refresh"></i> Refresh';
+var BTN_LABEL_PRINT_RECORD = '<i class="glyphicon glyphicon-print"></i> Print';
+var BTN_LABEL_CONFIRM_DELETE = '<i class="fa fa-trash-o"></i> Confirm Delete';
+var BTN_LABEL_CANCEL_DELETE = '<i class="fa fa-ban"></i> Cancel';
+
+// Form Validation Messages
+var MSG_FV_NOTEMPTY = 'This field is required and should not be empty.';
+var MSG_FV_SPECIAL_CHARS = 'Special and non alphanumeric characters are not allowed.';
+var MSG_FV_INTEGER = 'An integer value is required for this field. (e.g. 1999)';
+var MSG_FV_FLOAT = 'The correct numeric formats are ".99", "1999.99", "1999.9" or "1999".';
+
 // Weigh Scale messages
 var MSG_TRUCK_DATA_EMPTY = 'Please add or select a <strong>Truck Code</strong> to continue.';
 var MSG_CUSTOMER_DATA_EMPTY = 'Please add or select a <strong>Customer Data</strong> to continue.';
@@ -322,6 +362,7 @@ var MSG_TITLE_ADD_REC = '<i class="fa fa-info-circle"></i> Information';
 var MSG_TITLE_EDIT_REC = '<i class="fa fa-info-circle"></i> Information';
 var MSG_TITLE_DEL_REC = '<i class="fa fa-info-circle"></i> Information';
 var MSG_TITLE_WS_ERROR = '<i class="fa fa-exclamation-circle"></i> Web Service Error';
+var MSG_TITLE_CONFIRM_LOGOUT = '<i class="fa fa-info-circle"></i> Confirm Logout';
 var MSG_TITLE_CONFIRM_SAVE = '<i class="fa fa-question-circle"></i> Confirm Update';
 var MSG_TITLE_CONFIRM_DELETE = '<i class="fa fa-question-circle"></i> Confirm Deletion';
 var MSG_TITLE_CONFIRM_FIRST_WEIGHT = '<i class="fa fa-question-circle"></i> Confirm First Weighing';
@@ -332,10 +373,12 @@ var MSG_INFO_ADD_REC = '<strong>Success</strong>. A new record has been <strong>
 var MSG_INFO_EDIT_REC = '<strong>Success</strong>. The selected record was <strong>updated</strong> in the system.';
 var MSG_INFO_DEL_REC = '<strong>Success</strong>. The selected record was <strong>deleted</strong> from the system.';
 var MSG_INFO_LOGOUT_AFTER_CPASS = 'You have <strong>successfully</strong> updated your password. Please take note that you will be logged out of the system after this.'
-var MSG_INFO_WS_ERROR = 'Your request was <strong>not successful</strong> because there was an <strong>error</strong> in the Web Service response. If issue still persists, please contact your System Administrator.';
+var MSG_INFO_WS_ERROR = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was <strong>not successful</strong> because there was an <strong>error</strong> in the Web Service response. If issue still persists, please contact your System Administrator.</div>';
+var MSG_INFO_ROLE_INVALID = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Your current role privileges does <strong>not allow</strong> you to perform this action. For more information, please contact your System Administrator.</div>';
 
 // Confirm Messages
-var MSG_CONFIRM_DELETE_RECORD = 'This will <strong>delete</strong> the selected record. Press <strong>OK</strong> to continue.';
+var MSG_CONFIRM_LOGOUT = 'Are you sure you want to logout of the system?';
+var MSG_CONFIRM_DELETE_RECORD = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will <strong>delete</strong> the selected record from the system. Please <strong>confirm</strong> if you want to perform this action. Press <strong>Confirm Delete</strong> to continue.</div>';
 var MSG_CONFIRM_SAVE_COM_PORT = 'This will <strong>update</strong> the current Communication Port settings. Press <strong>OK</strong> to continue.';
 var MSG_CONFIRM_SAVE_CONFIG_WEIGHIN = 'This will <strong>update</strong> the current Weigh In settings. Press <strong>OK</strong> to continue.';
 var MSG_CONFIRM_SAVE_CONFIG_COMPANY = 'This will <strong>update</strong> the current Company Details settings. Press <strong>OK</strong> to continue.';

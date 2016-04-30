@@ -30,8 +30,7 @@
 				<input type="text" class="form-control" 
 					data-field="dt_font_size" 
 					data-fv-notempty="true"
-					data-fv-notempty-msg="Font Size is required."
-					data-fv-specialchars="true">
+					data-fv-integer="true">
 			</div>
 		</div>
 	</div>
@@ -48,8 +47,7 @@
 				<input type="text" class="form-control" 
 					data-field="dt_row"
 					data-fv-notempty="true"
-					data-fv-notempty-msg="Row is required."
-					data-fv-specialchars="true">
+					data-fv-integer="true">
 			</div>
 		</div>
 		<div class="col-md-6 no-padding-left">
@@ -75,8 +73,7 @@
 				<input type="text" class="form-control" 
 					data-field="dt_column"
 					data-fv-notempty="true"
-					data-fv-notempty-msg="Column is required."
-					data-fv-specialchars="true">
+					data-fv-integer="true">
 			</div>
 		</div>
 		<div class="col-md-6 no-padding-left">
@@ -92,8 +89,9 @@
 </form>
 <script>
 	$(function() {
+		$('select[data-field="dt_source"]').selectpicker();
 		$('select[data-field="dt_source"]').on('change', function() {
-			STIC.FormValidation({ formId: '#docketStylesForm', clearHelpBlocks: true });
+			STIC.clearHelpBlocks({ formId: '#docketStylesForm' });
 			STIC.DocketStyle.toggleMsgField({			
 				JSONUrl: WS_LIST_DOCKET_FIELDS + '&available=' + $('input[data-field="dt_type"]').val(),
 				JSONData: 'report-list',

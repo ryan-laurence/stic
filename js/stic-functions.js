@@ -47,40 +47,40 @@ function _fnTableRowSelection(tableObject, rowObject, tableTools) {
 
 // Global Namespace
 var STIC = {
-	
+
 	// Modules Functions
 	Modules: {
-		
+
 		// Load allowed modules to user
-		Init: function () {			
-			var JSONObject = { 
-				roleModuleId: STIC.User.ReadCookie('roleid') 
+		Init: function () {
+			var JSONObject = {
+				roleModuleId: STIC.User.ReadCookie('roleid')
 			};
-			
+
 			// Call WS to get allowed modules
 			$.getJSON(WS_UI_MODULES_LIST, JSONObject)
-				.done(function (results, status) {				
+				.done(function (results, status) {
 					var response = results.response;
-					
+
 					// Proceed if there are allowed modules to user
 					if (response.type === 'SUCCESS') {
 						var navItems = [], navLabel = '',
 							prevParentId = '', currParentId = '',
 							modules = response['report-list'].report;
-				
+
 						// Build navigation list
-						$.each(modules, function (i, m) {						
+						$.each(modules, function (i, m) {
 							currParentId = m.mod_parent;
-							navLabel = m.mod_icon != '' ? 
+							navLabel = m.mod_icon != '' ?
 								'<i class="' + m.mod_icon + '"></i> ' + m.mod_label :
 								m.mod_label;
-															
+
 							// Set drop down menu closing tags
 							if (prevParentId != '' && currParentId > prevParentId) {
 								navItems.push('</ul></li>');
 							} else if (prevParentId != '' && currParentId == '') {
 								navItems.push('</ul></li>');
-							}			
+							}
 
 							// Set navigation list
 							if (m.mod_type == 'group') {
@@ -104,12 +104,12 @@ var STIC = {
 									'</li>');
 							}
 
-							prevParentId = currParentId;					
+							prevParentId = currParentId;
 						});
-						
+
 						// Append Navigation List
 						$('#nav-wrapper').html(navItems.join(''));
-						
+
 						// Navigation onClick Event
 						$('[data-mod-name]').on('click', function () {
 							var modName = $(this).attr('data-mod-name'),
@@ -134,7 +134,7 @@ var STIC = {
 							// Load module page
 							STIC.Modules.LoadPage({ modName: modName });
 						});
-						
+
 					// Show alert if there are no modules assigned to user
 					} else {
 						BootstrapDialog.alert({
@@ -148,7 +148,7 @@ var STIC = {
 					}
 				});
 		},
-		
+
 		// Load module page
 		LoadPage: function (params) {
 			var wrapper = DEFAULT_WRAPPER_ID,
@@ -158,12 +158,22 @@ var STIC = {
 		}
 	},
 
-	// Disable Buttons
-	disableButtons: function(buttons) {
+	// Enable Buttons
+	enableButtons: function (buttons) {
 		btns = buttons || [];
 		if (btns.length > 0) {
 			$.each(btns, function(idx, btn) {
-				$('button[data-btn="' + btn + '"]').prop('disabled', true);
+				$(btn).prop('disabled', false);
+			});
+		}
+	},
+
+	// Disable Buttons
+	disableButtons: function (buttons) {
+		btns = buttons || [];
+		if (btns.length > 0) {
+			$.each(btns, function(idx, btn) {
+				$(btn).prop('disabled', true);
 			});
 		}
 	},
@@ -177,19 +187,11 @@ var STIC = {
 		if (table.row(row).data()[pid] != '') {
 			if ($(row).hasClass('selected')) {
 				$(row).removeClass('selected');
-				if (buttons.length > 0) {
-					$.each(buttons, function(idx, button) {
-						$(button).prop('disabled', true);
-					});
-				}
+				this.disableButtons(buttons);
 			} else {
 				table.$('tr.selected').removeClass('selected');
 				$(row).addClass('selected');
-				if (buttons.length > 0) {
-					$.each(buttons, function(idx, button) {
-						$(button).prop('disabled', false);
-					});
-				}
+				this.enableButtons(buttons);
 			}
 		}
 	},
@@ -205,7 +207,7 @@ var STIC = {
 			var _container = params.container,
 				_defaultVal = params.defaultVal;
 			_container.append('<input type="text" class="form-control" value="' +
-				_defaultVal + '" data-field="dt_message" data-fv-notempty="true" data-fv-notempty-msg="Message is required.">');
+				_defaultVal + '" data-field="dt_message" data-fv-notempty="true">');
 		},
 		newMsgSelectField: function(params) {
 			var _JSONUrl = params.JSONUrl,
@@ -224,7 +226,7 @@ var STIC = {
 					}
 				});
 				_container.append('<select class="selectpicker form-control" title="-"' +
-					' data-field="dt_message" data-fv-notempty="true" data-fv-notempty-msg="Message is required." data-live-search="true" data-size="5">' +
+					' data-field="dt_message" data-fv-notempty="true" data-live-search="true" data-size="5">' +
 					options.join('') + '</select>');
 				$('select[data-field="dt_message"]').selectpicker('refresh');
 				$('select[data-field="dt_message"]').selectpicker('val', _defaultVal);
@@ -272,6 +274,7 @@ var STIC = {
 
 	// Show WS Error message on form after submit
 	showWSError: function (params) {
+		var params = typeof params !== 'undefined' ? params : {};
 		if (typeof params.formId !== 'undefined') {
 			var formId = params.formId;
 			$(formId).find('div.alert').remove();
@@ -332,15 +335,15 @@ var STIC = {
 
 				// Check if Empty
 				if ($(elem).data('fv-notempty') === true) {
-					errorMsg = $(elem).data('fv-notempty-msg');
+					errorMsg = MSG_FV_NOTEMPTY;
 					if (fieldValue === '')
 						fieldErrors++;
 				}
-				
+
 				// Check for Special Characters
 				if ($(elem).data('fv-specialchars') === true && fieldErrors <= 0) {
 					var pattern = new RegExp(/[^\w ]/g);
-					errorMsg = 'Special and non alphanumeric characters are not allowed.';
+					errorMsg = MSG_FV_SPECIAL_CHARS;
 					if (pattern.test(fieldValue) === true)
 						fieldErrors++;
 				}
@@ -358,13 +361,19 @@ var STIC = {
 					if (fieldValue !== $($(elem).data('fv-fieldmatch-dom')).val())
 						fieldErrors++;
 				}
-				
+
 				// Check if Integer
-				
-				// Check if Float 		
+				if ($(elem).data('fv-integer') === true && fieldErrors <= 0) {
+					var pattern = new RegExp(/^\d+$/g);
+					errorMsg = MSG_FV_INTEGER;
+					if (pattern.test(fieldValue) === false)
+						fieldErrors++;
+				}
+
+				// Check if Float
 				if ($(elem).data('fv-float') === true && fieldErrors <= 0) {
 					var pattern = new RegExp(/^\d*(\.\d{1,2})?$/g);
-					errorMsg = 'The correct number format should be like .99, 1999, 1999.9 or 1999.99.';
+					errorMsg = MSG_FV_FLOAT;
 					if (pattern.test(fieldValue) === false)
 						fieldErrors++;
 				}
@@ -439,6 +448,94 @@ var STIC = {
 				STIC.showWSError({ formId: params.formId });
 			});
 	},
+	
+	// Report Functions
+	Report: {
+		
+		// Format Number
+		FormatNumber: function (sum) {
+			return sum.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+		},
+		
+		// Set PDF Styles
+		SetPDFStyles: function (params) {
+			var doc = params.doc,			
+				footerData = params.footerData || [];
+			
+			// Get Column Widths & Set Footer Columns
+			var widths = [], footerCols = [];
+			$.each(params.cd, function (idx, column) {
+				if (typeof column.visible === 'undefined') {
+
+					// Get Column Width
+					var width = typeof column.width !== 'undefined' ? column.width : '*';
+					widths.push(width);
+
+					// Set Table Footer
+					if (footerData.length > 0) {
+						var hasMatch = 0;
+						$.each(footerData, function (idy, footer) {
+							if (footer.data === column.data) {
+								hasMatch++;
+								footerCols.push({
+									text: footer.text,
+									style: 'tableFooter',
+									alignment: 'left'
+								});
+							} 
+						});
+						if (hasMatch === 0)
+							footerCols.push({ text: '' });
+					} else {
+						footerCols.push({ text: '' });
+					}					
+				}
+			});		
+			
+			// Default Styles
+			doc.defaultStyle.columnGap = 5;
+
+			// Table Header Styles overrides
+			doc.styles.tableHeader.fillColor = '';
+			doc.styles.tableHeader.color = '#000000';
+			doc.styles.tableHeader.alignment = 'left';
+			doc.styles.tableHeader.margin = [0, 12, 0, 2];
+
+			// Table Body Styles overrides
+			doc.styles.tableBodyOdd.fillColor = '';
+			doc.styles.tableBodyEven.fillColor = '';
+
+			// Table Footer Styles overrides
+			doc.styles.tableFooter.bold = true;
+			doc.styles.tableFooter.fillColor = '';
+			doc.styles.tableFooter.color = '#000000';
+
+			// Table Widths
+			doc.content[1]['table']['widths'] = widths;
+
+			// Table Layout
+			doc.content[1]['layout'] = {
+				hLineWidth: function (i, node) {
+					return (i === 1 || i === (node.table.body.length - 1)) ? 1 : 0;
+				},
+				hLineColor: function (i, node) {
+					return (i === 1 || i === (node.table.body.length - 1)) ? 'black' : '';
+				},
+				vLineWidth: function (i, node) { return 0; },
+				vLineColor: function (i, node) { return ''; },
+				paddingLeft: function (i, node) { return 2; },
+				paddingRight: function (i, node) { return 2; },
+				paddingTop: function (i, node) { return 6; },
+				paddingBottom: function (i, node) { return 6; }
+			};
+			
+			// Table Footer
+			var rowCount = doc.content[1]['table']['body'].length;
+			doc.content[1]['table']['body'].splice(rowCount, 0, footerCols);
+			
+			return doc;
+		}		
+	},
 
 	// User Functions
 	User: {
@@ -471,45 +568,169 @@ var STIC = {
 			this.CreateCookie(name, '', -1);
 		},
 
-		// Validate User
-		Authenticate: function () {
-			var JSONObject = {
-				user_id: this.ReadCookie('userid'),
-				user_name: this.ReadCookie('username')
-			};
-			$.post(WS_USER_AUTHENTICATE, JSONObject)
-				.done(function (results, status) {
-					if (results.response.type === 'FAILED') {
-						this.Logout();
-					}
-				})
-				.fail(function () {
-					STIC.showWSError();
-				});
-		},
-
 		// Remove from Audit Trail
 		RemoveToContext: function () {
-			var JSONObject = {
-				user_name: this.ReadCookie('username')
-			};
-			$.post(WS_USER_REMOVE_FROM_AUDIT, JSONObject)
-				.done(function (results, status) {
-					if (results.response.type === 'FAILED') {
+			if (this.ReadCookie('username') !== null) {
+				var JSONObject = {
+					user_name: this.ReadCookie('username')
+				};
+				$.post(WS_USER_REMOVE_FROM_AUDIT, JSONObject)
+					.done(function (results, status) {
+						if (results.response.type === 'FAILED') {
+							STIC.showWSError();
+						}
+					})
+					.fail(function () {
 						STIC.showWSError();
-					}
-				})
-				.fail(function () {
-					STIC.showWSError();
-				});
+					});
+			}
 		},
-		
+
+		// Check if User is valid
+		CheckIfValid: function (logout) {
+			var roleId = this.ReadCookie('roleid'),
+				userId = this.ReadCookie('userid'),
+				userName = this.ReadCookie('username'),
+				forceLogOut = typeof logout !== 'undefined' 
+					? logout : true;
+
+			if (roleId !== null && userId !== null && userName !== null) {
+				var JSONObject = {
+					user_id: userId,
+					user_name: userName
+				};
+
+				// Call WS Validation
+				$.post(WS_USER_AUTHENTICATE, JSONObject)
+					.done(function (results, status) {
+						if (results.response.type === 'SUCCESS') {
+							$('#current-user').text(userName);
+							if (!forceLogOut)
+								window.location = DEFAULT_ROOT + 'main.html';
+						} else {
+							if (forceLogOut)
+								this.Logout();
+						}
+					})
+					.fail(function () {
+						STIC.showWSError();
+					});
+			} else {
+					if (forceLogOut) {
+						this.Logout();
+					} else {
+						this.RemoveToContext();
+						this.EraseCookie('username');
+						this.EraseCookie('userid');
+						this.EraseCookie('roleid');
+					}
+			}
+		},
+
+		// Login
+		Login: function () {
+			var totalErrors = 0,
+				username = $('#username').val(),
+				password = $('#password').val();
+
+			// Clear error messages & styles
+			$('.login-form').find('div.form-group')
+				.removeClass('has-error has-feedback')
+				.removeClass('has-success has-feedback');
+			$('.login-form').find('div.form-group').find('span.glyphicon, small.help-block')
+				.remove();
+			$('.login-form').find('div.alert')
+				.remove();
+
+			// Validate user name
+			var divInputGroup = $('.login-form').find('#username').parent(),
+					divFormGroup = $('.login-form').find('#username').parent().parent();
+			if (username == '') {
+				divFormGroup.addClass('has-error has-feedback');
+				divFormGroup.append('<small class="help-block" style="text-align: left">Username is required.</small>');
+				divInputGroup.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+				totalErrors++;
+			} else {
+				divFormGroup.addClass('has-success has-feedback');
+				divInputGroup.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+			}
+
+			// Validate user password
+			var divInputGroup = $('.login-form').find('#password').parent(),
+					divFormGroup = $('.login-form').find('#password').parent().parent();
+			if (password == '') {
+				divFormGroup.addClass('has-error has-feedback');
+				divFormGroup.append('<small class="help-block" style="text-align: left">Password is required.</small>');
+				divInputGroup.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+				totalErrors++;
+			} else {
+				divFormGroup.addClass('has-success has-feedback');
+				divInputGroup.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+			}
+
+			// Authenticate user
+			if (totalErrors <= 0 ) {
+				$.post(WS_USER_CHECK, { user_name: username, user_password: password })
+					.done(function (result, status) {
+						var response = result.response;
+
+						// Authenticated
+						if (response.type === 'SUCCESS') {
+							var user = response['users-list'].user;
+
+							// Create Cookies
+							STIC.User.CreateCookie('username', user.user_name, 1);
+							STIC.User.CreateCookie('userid', user.user_id, 1);
+							STIC.User.CreateCookie('roleid', user.role_id, 1);
+
+							window.location = DEFAULT_ROOT + 'main.html';
+
+						// Not Authorized
+						} else {
+							// Clear error messages & styles
+							$('.login-form').find('div.form-group')
+								.removeClass('has-error has-feedback')
+								.removeClass('has-success has-feedback');
+							$('.login-form').find('div.form-group').find('span.glyphicon, small.help-block')
+								.remove();
+							$('.login-form').find('div.alert')
+								.remove();
+
+							// Show error messages & styles
+							$('.login-form hr:first').after(MSG_ALERT_INVALID_LOGIN);
+							$('.login-form').find('#username, #password').parent()
+								.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+							$('.login-form').find('#username, #password').parent().parent()
+								.addClass('has-error has-feedback');
+							$('.login-form').find('#username').parent().parent()
+								.append('<small class="help-block" style="text-align: left">Username is invalid.</small>');
+							$('.login-form').find('#password').parent().parent()
+								.append('<small class="help-block" style="text-align: left">Password is invalid.</small>');
+						}
+					})
+
+					// Show WS Error
+					.fail(function () {
+						STIC.showWSError();
+					})
+			} else {
+				$('.login-form hr:first').after(MSG_ALERT_LOGIN_FORM_ERROR);
+			}
+		},
+
 		// Confirm Logout
 		ConfirmLogout: function () {
-			
-			
+			BootstrapDialog.confirm({
+				title: MSG_TITLE_CONFIRM_LOGOUT,
+				message: MSG_CONFIRM_LOGOUT,
+				callback: function (result) {
+					if (result) {
+						STIC.User.Logout();
+					}
+				}
+			});
 		},
-		
+
 		// Logout
 		Logout: function () {
 			this.RemoveToContext();
@@ -641,8 +862,34 @@ function loadSummaryReport(params) {
 		defEnd = moment(today).format(defString),
 		//defStart = moment(today).subtract(1, 'days').format(defString),
 		defStart = moment().startOf('month').format(defString),
-		defWsURL = params.ws + 'dateFrom=' + defStart + '&dateTo=' + defEnd;
-		console.log('datetime: ' + defWsURL);
+		defWsURL = params.ws + 'dateFrom=' + defStart + '&dateTo=' + defEnd,
+		//console.log('datetime: ' + defWsURL);
+
+	// DT Button Text
+	dtBtnReloadTxt = '<i class="fa fa-refresh"></i> Refresh',
+	dtBtnPrintTxt = '<i class="glyphicon glyphicon-print"></i> Print',
+
+	// DT Button PDF Print
+	dtBtnPDFPrint = {
+		name: 'print',
+		extend: 'pdfHtml5',
+		download: 'open',
+		text: dtBtnPrintTxt,
+		title: params.title,
+		className: 'btn-primary',
+		exportOptions: { columns: ':visible' },
+		customize: dtPDFPrintCustom
+	},
+
+	// DT Button Reload
+	dtBtnReload = {
+		name: 'reload',
+		text: dtBtnReloadTxt,
+		className: 'btn-primary',
+		action: function (e, dt, node, config) {
+			dt.ajax.reload();
+		}
+	};
 
 	// DT Initial
 	var dtSummary = $('#table-summary')
@@ -654,7 +901,6 @@ function loadSummaryReport(params) {
 			lengthChange: false,
 			columns: params.cd,
 			dom: '<"dt-toolbar">B<"dt-total">Rrtip',
-			//pagingType: 'full_numbers',
 			ajax: {
 				url: defWsURL,
 				dataSrc: function(json) {
@@ -663,39 +909,48 @@ function loadSummaryReport(params) {
 					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
 				}
 			},
-			buttons: [{
-				name: 'print',
-				extend: 'print',
-				enabled: false,
-				autoPrint: true,
-				title: params.title,
-				className: 'btn-primary',
-				customize: dtPrintCustom,
-				text: '<i class="glyphicon glyphicon-print" aria-hidden="true"></i> Print'
-			}, {
-				name: 'reload',
-				text: '<i class="fa fa-refresh"></i> Refresh',
-				className: 'btn-primary',
-				action: function(e, dt, node, config) {
-					dt.ajax.reload();
-				}
-			}]
+			buttons: [dtBtnPDFPrint, dtBtnReload]
 		})
 		.on('draw.dt', function (e, settings, data) {
+			// Toggle Print Button
 			dtSummary.data().length > 0 ?
 				dtSummary.button('print:name').enable() :
 				dtSummary.button('print:name').disable();
+
+			// Set Total Net Weight
+			if (params.showTotal) {
+				var totalNetWeight = dtSummary
+					.column('net_weight:name')
+					.data().sum(),
+				formattedTotal = STIC.Report
+					.FormatNumber(totalNetWeight);					
+				$('#total_net_weight').val(formattedTotal);			}
 		});
 
 	// DT Default Sorting
 	dtSummary.column('0:visible').order('asc').draw();
+
+	// Show Total Net Weight
+	if (params.showTotal) {
+		$('div.dt-total').css('float', 'right');
+		$('div.dt-total').html(
+			'<div class="input-group">' +
+				'<span class="input-group-addon">' + 
+					'<i class="fa fa-calculator"></i> ' +
+					'<strong>Total Net Weight</strong>' +
+				'</span>' +
+				'<input type="text" class="form-control" id="total_net_weight" ' +
+					'value="0.00" style="width: 150px; background: #FFFFFF;" readonly>' +
+			'</div>'
+		);
+	}
 
 	// Load Toolbar Elements
 	$('div.dt-toolbar').css('float', 'left');
 	$('div.dt-buttons').css('float', 'left');
 	$('div.dt-buttons').css('padding-left', '5px');
 	$('div.dt-toolbar').load('pages/summary-date-filter.html',
-		function(response, status, xhr) {
+		function (response, status, xhr) {
 			var dp1 = $('#dp1'),
 				dp2 = $('#dp2'),
 				inEndDt = $('#end-date'),
@@ -727,39 +982,34 @@ function loadSummaryReport(params) {
 				dtSummary.ajax.url(wsURL).load();
 			});
 		});
+		
+	// Customize PDF Print Output
+	function dtPDFPrintCustom(doc) {	
+		var footerData = [];
+		if (params.showTotal) {
+			footerData.push(
+				{ data: 'weight_unit', text: 'kg' },
+				{ data: 'net_weight', text: $('#total_net_weight').val() }
+			);
+		}
 
-	// Customize Print Preview
-	function dtPrintCustom(win) {
-		$(win.document.body)
-			.css('background', 'transparent')
-			.css('font-weight', 'normal')
-			.css('font-family', '"Trebuchet MS", Helvetica, sans-serif');
-		// Title
-		$(win.document.body).find('h1')
-			.css('font-size', '16pt')
-			.css('text-align', 'center');
-		// Message
-		$(win.document.body).find('div')
-			.css('font-size', '11pt')
-			.css('text-align', 'left')
-			.css('margin', '20px 0px 15px 0px')
-			.html('From: ' + $('#start-date').val() + ' <br />To: ' + $('#end-date').val());
-		// Data Table
-		$(win.document.body).find('table')
-			.removeClass('display')
-			.removeClass('compact');
-		$(win.document.body).find('table th')
-			.css('font-size', '11pt')
-			.css('text-align', 'left')
-			.css('padding-left', '0px');
-		$(win.document.body).find('table td')
-			.css('font-size', '10pt')
-			.css('text-align', 'left')
-			.css('padding-left', '0px')
-			.css('padding-top', '10px')
-			.css('padding-bottom', '10px')
-			.css('font-weight', 'normal');
-		//console.log($(win.document.body).html());
+		// Set Default Styles
+		var pdfDoc = STIC.Report.SetPDFStyles({
+			doc: doc,
+			cd: params.cd,
+			footerData: footerData		
+		});
+
+		// Set add. messages
+		var defString = 'MM/DD/YYYY hh:mm A',
+			startDate = new Date($('#start-date').val()),
+			endDate = new Date($('#end-date').val()),			
+			fromLabel = { width: 30, bold: true, text: 'From :' },			
+			toLabel = { width: 30, bold: true, text: 'To :' },
+			fromDate = { width: 'auto', text: moment(startDate).format(defString) },
+			toDate = { width: 'auto', text: moment(endDate).format(defString) };
+		pdfDoc.content.splice(1, 0, { columns: [fromLabel, fromDate] });
+		pdfDoc.content.splice(2, 0, { columns: [toLabel, toDate] });
 	}
 }
 
@@ -781,7 +1031,6 @@ function initDT_Picker(options) {
 				lengthChange: false,
 				columns: dtCd,
 				dom: '<"dt-toolbar">Bfrtip',
-				//pagingType: 'full_numbers',
 				ajax: {
 					url: dtWs,
 					dataSrc: function(json) {
