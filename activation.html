@@ -4,65 +4,36 @@
 		<title>Weighing System 2.0</title>
 		<link rel="stylesheet" href="css/bootstrap.css" />		
 		<link rel="stylesheet" href="css/bootstrap-dialog.css" />	
-		<link rel="stylesheet" href="css/bootstrap-activate.css" />
+		<link rel="stylesheet" href="css/bootstrap-login.css" />
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
 	</head>
 	<body class="login-page">
 		<div class="container">		
 			<div class="row" id="pwd-container">
-				<div class="col-md-8 col-centered">
+				<div class="col-md-5 col-centered">
 					<section class="login-form" role="login">							
 						<img src="images/vendor-logo.gif" class="img-responsive" alt="" />			
 						<hr>
-						<div class="panel panel-primary no-margin-bottom">
-							<div class="panel-heading">
-								<i class="fa fa-desktop"></i> System Activation
-							</div>
-							<div class="panel-body">
-								<div class="navbar" style="margin-bottom: 0px;">
-									<div class="navbar-inner">
-										<ul class="nav nav-pills nav-justified" id="nav-client">
-											<li class="active"><a href="#step1" data-toggle="tab" data-step="1">1. <i class="fa fa-file-text"></i> License File Upload</a></li>
-											<li><a href="#step2" data-toggle="tab" data-step="2">2. <i class="fa fa-info-circle"></i> Confirm License Details</a></li>
-											<li><a href="#step3" data-toggle="tab" data-step="3">3. <i class="fa fa-desktop"></i> System Activation Status</a></li>
-										</ul>
-									</div>
-								</div>	
-								<hr style="margin-top: 5px; margin-bottom: 15px;">
-								<div class="tab-content" id="tab-client">
-									<div class="tab-pane fade in active" id="step1">
-										<form class="form-horizontal well no-margin-bottom" id="formUploadFile" enctype="multipart/form-data">
-											<div class="form-group" style="margin: 0px;">
-												<input type="file" class="form-control input-sm filestyle" id="license_file" 
-													data-size="nr"
-													data-buttonBefore="true"
-													data-buttonText="Find License File"
-													data-buttonName="btn-primary"
-													data-iconName="fa fa-folder-open"
-													data-placeholder="No file">
-											</div>
-										</form>
-										<hr style="margin-top: 15px; margin-bottom: 15px;">
-										<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-bottom: 5px;">	
-											<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-												<button type="button" class="btn btn-primary" id="upload-license-file">
-													<i class="fa fa-upload"></i> Upload License File
-												</button>
-											</div>
-										</div>
-									</div>
-									<div class="tab-pane fade" id="step2">
-										<form class="form-horizontal well no-margin-bottom pre-scrollable" id="dataLicenseForm">
-											<div id="results"></div>
-										</form>
-									</div>
-									<div class="tab-pane fade" id="step3">
-										<form class="form-horizontal well no-margin-bottom pre-scrollable" id="dataLicenseForm">
-										</form>
-									</div>
-								</div>
+						<div class="alert alert-info" role="alert" style="text-align: left; margin-bottom: 20px;">
+							<i class="fa fa-info-circle fa-3x fa-pull-left"></i> Enter the <strong>System Code</strong> and <strong>License Key</strong> provided by ScaleTech to start system activation.
+						</div>
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon">
+									<i class="fa fa-desktop"></i>
+								</span> 
+								<input class="form-control input-lg" placeholder="System Code" id="code" type="text" autofocus>
 							</div>
 						</div>
+						<div class="form-group">
+							<div class="input-group">
+								<span class="input-group-addon">
+									<i class="fa fa-key"></i>
+								</span> 
+								<input class="form-control input-lg" placeholder="License Key" id="password" type="text" autofocus>
+							</div>
+						</div>
+						<button type="button" name="go" class="btn btn-lg btn-primary btn-block" id="btnRegister"><i class="fa fa-sign-in"></i> Activate</button>	
 						<hr>
 						<div class="login-footer">
 							<div style="font-weight: bold">Scaletech International Corporation</div>
@@ -78,41 +49,13 @@
 		<script type="text/javascript" src="js/jquery-widget.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>
-		<script type="text/javascript" src="js/bootstrap-filestyle.min.js"></script>		
 		<script type="text/javascript" src="js/stic-constants.js"></script>
 		<script type="text/javascript" src="js/stic-functions.js"></script>
 		<script type="text/javascript">
-			$(function () { 		
-				// Initialize File Input
-				$('#license_file').filestyle();
-			
-				// Upload License File
-				$('#upload-license-file').on('click', function () {
-					var formData = new FormData(),
-						fileData = $('input[type=file]')[0].files[0];
-					
-					formData.append('file', fileData);
-					
-					$.ajax({	
-						type: 'POST',
-						data: formData,
-						processData: false,  
-						contentType: false,
-						url: '/scaletech/FileUploadService'						
-					})
-					.done(function(data) {
-						console.log(data);
-					});
-					
-					return false;
-				});
-				
-				$('[data-step="2"]').on('click', function () {					
-					$('#results').load('/forms/validation.html div', 
-						function () {
-							var obj = $.parseJSON($('#results').text().replace(/\=/g, ':'));
-							console.log(obj);
-						});					
+			$(function () { 			
+				// Login Button action
+				$("#btnRegister").click(function() {
+							
 				});
 			});
 		</script>
