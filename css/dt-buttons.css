@@ -164,6 +164,7 @@ div.dt-buttons {
   position: relative;
   float: left;
   margin-bottom: 10px;
+	margin-right: 5px;
 }
 div.dt-buttons.buttons-right {
   float: right;
