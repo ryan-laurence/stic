@@ -1,13 +1,11 @@
 function showNewModalForm(params) {			
-	var 
-
 	// Modal Form Options
-	modalFrmContent = $('<div></div>').load(params.formSrc),
+	var modalFrmContent = $('<div></div>').load(params.formSrc),
 	modalNewTitle = '<i class="fa fa-plus"></i> New ' + params.dataType,
 	
 	// Modal Buttons > Save
 	modalBtnSave = {
-		label: 'Save',
+		label: 'Save Data',
 		icon: 'fa fa-floppy-o',
 		cssClass: 'btn-primary',
 		action: btnSaveAction
@@ -17,7 +15,7 @@ function showNewModalForm(params) {
 	modalBtnCancel = {
 		label: 'Cancel',
 		icon: 'fa fa-ban',
-		cssClass: 'btn-primary',
+		cssClass: 'btn-default',
 		action: function(dialogItself) {
 			BootstrapDialog.closeAll();
 		}
@@ -102,6 +100,7 @@ function showNewModalForm(params) {
 						if (result.response.type === 'SUCCESS') {
 							// Load form values
 							$.each(JSONObject, function(field, value) {
+								clearErrorStyles([field]);
 								$('input[id="' + field + '"]').val(value);
 							});				
 							
@@ -119,7 +118,7 @@ function showNewModalForm(params) {
 							
 							BootstrapDialog.closeAll();	
 							
-							if (params.status == 'FIRST_WEIGHT_IN')
+							if (params.status === 'FIRST_WEIGHT_IN')
 								toggleWeightScaleFields({ status: params.status });		
 						
 						// Show WS Error
@@ -142,7 +141,7 @@ function showNewModalForm(params) {
 		title: modalNewTitle,
 		message: modalFrmContent,
 		onshown: btnNewOnShown,
-		buttons: [modalBtnSave, modalBtnCancel]
+		buttons: [modalBtnCancel, modalBtnSave]
 	});
 }
 
@@ -187,6 +186,8 @@ function toggleWeightScaleFields(options) {
 			$('input[data-stage="second"][type="hidden"]').val('');
 			$('input[data-stage="second"][data-type="varchar"]').val('');
 			$('input[data-stage="second"][data-type="float"]').val('0.00');	
+			
+			$('input[data-stage="second"][data-type="varchar"]').removeClass('bg-white');
 			break;
 		
 		case 'SECOND_WEIGHT_IN':
@@ -229,6 +230,8 @@ function toggleWeightScaleFields(options) {
 			$('input[data-stage="second"][data-type="varchar"]').val('');
 			$('input[data-stage="second"][data-type="float"]').val('0.00');	
 			$('input[data-action="enable"]').prop('readonly', false);
+			
+			$('input[data-stage="second"][data-type="varchar"]').addClass('bg-white');
 			break;
 		
 		case 'CANCEL_WEIGHT_IN':
@@ -268,9 +271,45 @@ function toggleWeightScaleFields(options) {
 			$('input[data-stage="second"][data-type="varchar"]').val('');			
 			$('input[data-stage="second"][data-type="float"]').val('0.00');			
 			$('input[data-action="enable"]').prop('readonly', true);
+			
+			$('div.btn-group').find('span.glyphicon').remove();
+			$('div.btn-group').removeClass('has-error');
+			$('div.btn-group').removeClass('has-feedback');
+			$('input[data-stage="second"][data-type="varchar"]').removeClass('bg-white');
 			break;
 		
 		default:
 			console.log('Error: Unknown Response Type!');
 	}
+}
+
+function showErrorStyles(elements) {
+	$.each(elements, function (idx, elem) {	
+		clearErrorStyles([elem]);
+		$('label[for="' + elem + '"]')
+			.parent('div.btn-group')
+			.addClass('has-error');
+		$('input[id="' + elem + '"]')
+			.parent('div.btn-group')
+			.addClass('has-error')
+			.addClass('has-feedback');	
+		$('input[id="' + elem + '"]')
+			.parent('div.btn-group')
+			.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+	});	
+}
+
+function clearErrorStyles(elements) {
+	$.each(elements, function (idx, elem) {		
+		$('label[for="' + elem + '"]')
+			.parent('div.btn-group')
+			.removeClass('has-error');
+		$('input[id="' + elem + '"]')
+			.parent('div.btn-group')
+			.removeClass('has-error')
+			.removeClass('has-feedback');			
+		$('div.btn-group input[id="' + elem + '"]')
+			.next('span.glyphicon')
+			.remove();	
+	});	
 }

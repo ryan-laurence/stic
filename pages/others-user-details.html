@@ -1,5 +1,9 @@
 <div class="alert alert-info" role="alert">
-	<i class="fa fa-info-circle"></i> <strong>Note:</strong> Use this page to manage User Data that are available in the system.
+	<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
+	<ul>
+		<li><i class="fa fa-check-square-o"></i> Use this page to manage User Data that are available in the system.</li>
+		<li><i class="fa fa-check-square-o"></i> Edit and Delete functions are disabled for system default users.</li>
+	</ul>
 </div>
 <div class="panel panel-default no-margin-bottom">
 	<div class="panel-body">	
@@ -25,7 +29,7 @@
 		loadEditData({
 			pkey: 'user_id',
 			objectId: 'userInfo',
-			modTitle: 'User Details',
+			modTitle: 'User Data',
 			formId: '#dataUserForm',
 			formSrcNew: FORM_USER_NEW_DATA,
 			formSrcEdit: FORM_USER_EDIT_DATA,

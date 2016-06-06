@@ -25,140 +25,279 @@
 */
 function loadEditData(params) {
 	var
-		// DT Buttons Text
-		dtBtnNewTxt = '<i class="fa fa-plus"></i> New',
-		dtBtnEditTxt = '<i class="fa fa-pencil"></i> Edit',
-		dtBtnDelTxt = '<i class="fa fa-trash-o"></i> Delete',
-		dtBtnRelTxt = '<i class="fa fa-refresh"></i> Refresh',
-		dtBtnCPassTxt = '<i class="fa fa-key"></i> Change Password',
-		dtBtnPrintTxt = '<i class="glyphicon glyphicon-print"></i> Print',
 
-		// Modal Form Options > New Details
-		modalFrmNewContent = $('<div></div>').load(params.formSrcNew),
-		modalNewTitle = '<i class="fa fa-plus"></i> New ' + params.modTitle,
+	// Modal Content
+	modalFrmNewContent = $('<div></div>').load(params.formSrcNew),
+	modalFrmEditContent = $('<div></div>').load(params.formSrcEdit),
+	modalCPassFrmContent = $('<div></div>').load(params.formSrcCPass),
 
-		// Modal Form Options > Edit Details
-		modalFrmEditContent = $('<div></div>').load(params.formSrcEdit),
-		modalEditTitle = '<i class="fa fa-pencil"></i> Edit ' + params.modTitle,
+	// Modal Title
+	modalNewTitle = BTN_LABEL_NEW_RECORD + ' New ' + params.modTitle,
+	modalEditTitle = BTN_LABEL_EDIT_RECORD + ' Edit ' + params.modTitle,
+	modalCPassTitle = BTN_LABEL_CHANGE_PASS + ' Change Password',
 
-		// Modal Form Options > Change Password
-		modalCPassFrmContent = $('<div></div>').load(params.formSrcCPass),
-		modalCPassTitle = '<i class="fa fa-key"></i> Change Password',
+	// Modal Button > Save
+	modalBtnSave = {
+		label: 'Save Data',
+		icon: 'fa fa-floppy-o',
+		cssClass: 'btn-primary',
+		action: modalBtnSaveAction
+	},
 
-		// Modal Buttons > Save
-		modalBtnSave = {
-			label: 'Save',
-			icon: 'fa fa-floppy-o',
-			cssClass: 'btn-primary',
-			action: btnSaveAction
-		},
+	// Modal Button > Change Pass
+	modalBtnCPassSave = {
+		label: 'Save Changes',
+		icon: 'fa fa-floppy-o',
+		cssClass: 'btn-primary',
+		action: modalSaveCPassAction
+	},
 
-		// Modal Buttons > Save > CPass
-		modalBtnCPassSave = {
-			label: 'Save',
-			icon: 'fa fa-floppy-o',
-			cssClass: 'btn-primary',
-			action: btnSaveCPassAction
-		},
+	// Modal Button > Cancel
+	modalBtnCancel = {
+		label: 'Cancel',
+		icon: 'fa fa-ban',
+		cssClass: 'btn-default',
+		action: function (dialogItself) {
+			BootstrapDialog.closeAll();
+		}
+	},
 
-		// Modal Buttons > Cancel
-		modalBtnCancel = {
-			label: 'Cancel',
-			icon: 'fa fa-ban',
-			cssClass: 'btn-primary',
-			action: function(dialogItself) {
-				BootstrapDialog.closeAll();
-			}
-		},
+	// DT Buttons > New
+	dtBtnNew = {
+		name: 'new',
+		className: 'btn-primary',
+		text: BTN_LABEL_NEW_RECORD,
+		titleAttr: BTN_TITLE_NEW_RECORD,
+		action: function (e, dt, node, config) {
+			BootstrapDialog.show({
+				closable: false,
+				title: modalNewTitle,
+				message: modalFrmNewContent,
+				onshown: modalNewOnShown,
+				onhidden: modalOnHidden,
+				buttons: [modalBtnCancel, modalBtnSave]
+			});
+		}
+	},
 
-		// DT Buttons > New
-		dtBtnNew = {
-			name: 'new',
-			text: dtBtnNewTxt,
-			className: 'btn-primary',
-			action: function(e, dt, node, config) {
-				BootstrapDialog.show({
-					closable: false,
-					title: modalNewTitle,
-					message: modalFrmNewContent,
-					onshown: btnNewOnShown,
-					onhidden: btnOnHidden,
-					buttons: [modalBtnSave, modalBtnCancel]
-				});
-			}
-		},
-
-		// DT Buttons > Edit
-		dtBtnEdit = {
-			name: 'edit',
-			enabled: false,
-			text: dtBtnEditTxt,
-			className: 'btn-primary',
-			action: function(e, dt, node, config) {
+	// DT Buttons > Edit
+	dtBtnEdit = {
+		name: 'edit',
+		enabled: false,
+		className: 'btn-primary',
+		text: BTN_LABEL_EDIT_RECORD,
+		titleAttr: BTN_TITLE_EDIT_RECORD,
+		action: function (e, dt, node, config) {
+			var userId = dt.row('.selected').data().user_id;
+			if (userId !== '1' && userId !== '2' && userId !== '3') {
 				BootstrapDialog.show({
 					closable: false,
 					title: modalEditTitle,
 					message: modalFrmEditContent,
-					onshown: btnEditOnShown,
-					onhidden: btnOnHidden,
-					buttons: [modalBtnSave, modalBtnCancel]
+					onshown: modalEditOnShown,
+					onhidden: modalOnHidden,
+					buttons: [modalBtnCancel, modalBtnSave]
+				});
+			} else {
+				BootstrapDialog.alert({
+					type: 'type-danger',
+					title: MSG_TITLE_INFO,
+					message: MSG_INFO_DEFAULT_USER_EDIT,
+					callback: function (result) {
+						BootstrapDialog.closeAll();
+					}
 				});
 			}
-		},
+		}
+	},
 
-		// DT Buttons > Change Password
-		dtBtnCPass = {
-			name: 'cpass',
-			enabled: false,
-			text: dtBtnCPassTxt,
-			className: 'btn-primary',
-			action: function(e, dt, node, config) {
-				BootstrapDialog.show({
-					closable: false,
-					title: modalCPassTitle,
-					message: modalCPassFrmContent,
-					onshown: btnCPassOnShown,
-					onhidden: btnOnHidden,
-					buttons: [modalBtnCPassSave, modalBtnCancel]
-				});
+	// DT Buttons > Change Password
+	dtBtnCPass = {
+		name: 'cpass',
+		enabled: false,
+		className: 'btn-primary',
+		text: BTN_LABEL_CHANGE_PASS,
+		titleAttr: BTN_TITLE_CHANGE_PASS,
+		action: function (e, dt, node, config) {
+			BootstrapDialog.show({
+				closable: false,
+				title: modalCPassTitle,
+				message: modalCPassFrmContent,
+				onshown: modalCPassOnShown,
+				onhidden: modalOnHidden,
+				buttons: [modalBtnCancel, modalBtnCPassSave]
+			});
+		}
+	},
+
+	// DT Buttons > Delete
+	dtBtnDelete = {
+		name: 'delete',
+		enabled: false,
+		className: 'btn-danger',
+		action: dtBtnDeleteAction,
+		text: BTN_LABEL_DELETE_RECORD,
+		titleAttr: BTN_TITLE_DELETE_RECORD
+	},
+
+	// DT Buttons > Refresh
+	dtBtnReload = {
+		name: 'reload',
+		className: 'btn-primary',
+		text: BTN_LABEL_REFRESH_RECORD,
+		titleAttr: BTN_TITLE_REFRESH_RECORD,
+		action: function (e, dt, node, config) {
+			dt.ajax.reload();
+		}
+	},
+
+	// DT Buttons > Copy
+	dtBtnCopy = {
+		name: 'copy',
+		extend: 'copyHtml5',
+		className: 'btn-primary',
+		text: BTN_LABEL_COPY,
+		titleAttr: BTN_TITLE_COPY,
+		exportOptions: {
+			columns: ':visible',
+			modifier: {
+				page: 'current'
 			}
-		},
+		}
+	},
 
-		// DT Buttons > Delete
-		dtBtnDelete = {
-			name: 'delete',
-			enabled: false,
-			text: dtBtnDelTxt,
-			className: 'btn-danger',
-			action: btnDeleteAction
-		},
+	// DT Buttons > CSV
+	dtBtnCSV = {
+		name: 'csv',
+		extend: 'csvHtml5',
+		className: 'btn-primary',
+		text: BTN_LABEL_EXPORT_CSV,
+		titleAttr: BTN_TITLE_EXPORT_CSV,
+		filename: params.modTitle,
+		exportOptions: {
+			columns: ':visible'
+		}
+	},
 
-		// DT Buttons > Print	
-		dtBtnPrint = {
-			name: 'print',
-			extend: 'pdfHtml5',
-			download: 'open',
-			text: dtBtnPrintTxt,
-			title: params.modTitle,
-			className: 'btn-primary',
-			exportOptions: { columns: ':visible' },
-			customize: dtPDFPrintCustom
-		},
+	// DT Buttons > Excel
+	dtBtnExcel = {
+		name: 'excel',
+		extend: 'excelHtml5',
+		className: 'btn-primary',
+		text: BTN_LABEL_EXPORT_EXCEL,
+		titleAttr: BTN_TITLE_EXPORT_EXCEL,
+		filename: params.modTitle,
+		sheetName: params.modTitle,
+		exportOptions: {
+			columns: ':visible'
+		}
+	},
 
-		// DT Buttons > Refresh
-		dtBtnReload = {
-			name: 'reload',
-			text: dtBtnRelTxt,
-			className: 'btn-primary',
-			action: function(e, dt, node, config) {
-				reloadDT();
-			}
-		};
+	// DT Buttons > PDF
+	dtBtnPDF = {
+		name: 'pdf',
+		extend: 'pdfHtml5',
+		title: params.modTitle,
+		className: 'btn-primary',
+		text: BTN_LABEL_EXPORT_PDF,
+		titleAttr: BTN_TITLE_EXPORT_PDF,
+		customize: dtPDFPrintCustom,
+		filename: params.modTitle,
+		exportOptions: {
+			columns: ':visible'
+		}
+	},
+
+	// DT Buttons > Web Page Print
+	dtBtnPrint = {
+		name: 'print',
+		extend: 'print',
+		enabled: false,
+		autoPrint: false,
+		title: params.modTitle,
+		className: 'btn-primary',
+		text: BTN_LABEL_PRINT_RECORD,
+		titleAttr: BTN_TITLE_PRINT_RECORD,
+		customize: dtWebPagePrintCustom,
+		exportOptions: {
+			columns: ':visible'
+		}
+	};
 
 	// Show only required buttons
 	var dtBtns = params.showAllBtns ?
-		[dtBtnNew, dtBtnEdit, dtBtnDelete, dtBtnCPass, dtBtnPrint, dtBtnReload] :
+		[dtBtnNew, dtBtnEdit, dtBtnDelete, dtBtnCPass, dtBtnReload] :
 		[dtBtnDelete, dtBtnPrint, dtBtnReload];
+
+	// DT Initialization
+	var dt = $('#table-data')
+		.DataTable({
+			ordering: true,
+			searching: true,
+			dom: '<"dt-toolbar">Bfrtip',
+			pageLength: DEFAULT_PAGE_LENGTH,
+			columns: params.cd,
+			ajax: {
+				url: params.wsList,
+				dataSrc: function(json) {
+					var ds = params.ds.split('.'),
+						rec = json[ds[0]][ds[1]][ds[2]];
+					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+				}
+			},
+			buttons: dtBtns
+		})
+		.on('draw.dt', function (e, settings, data) {
+			var btns = [
+				'copy:name',
+				'csv:name',
+				'excel:name',
+				'pdf:name',
+				'print:name'
+			];
+			dt.data().length > 0 ?
+				dt.buttons(btns).enable() :
+				dt.buttons(btns).disable();
+			dt.buttons(['delete:name', 'edit:name', 'cpass:name']).disable();
+			dt.$('tr.selected').removeClass('selected');
+		});
+
+	// Export & Print DT Buttons
+	new $.fn.dataTable.Buttons(dt, {
+		buttons: [
+			dtBtnCopy,
+			dtBtnCSV,
+			dtBtnExcel,
+			dtBtnPDF,
+			dtBtnPrint]
+   });
+
+	// Append to DT
+	dt.buttons(1, null).container()
+		.insertAfter('div.dt-buttons');
+
+	// DT Default Sorting
+	dt.column('0:visible').order('asc').draw();
+
+	// DT Row Click Event
+	$('#table-data tbody').on('click', 'tr', function() {
+		if (dt.row(this).data()[params.pkey] != '') {
+			if ($(this).hasClass('selected')) {
+				$(this).removeClass('selected');
+				dt.buttons(['delete:name', 'edit:name', 'cpass:name']).disable()
+			} else {
+				dt.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+				dt.button('cpass:name').enable();
+				var userId = dt.row('.selected').data().user_id;
+				if (userId !== '1' && userId !== '2' && userId !== '3') {
+					dt.buttons(['delete:name', 'edit:name']).enable();
+				} else {
+					dt.buttons(['delete:name', 'edit:name']).disable();
+				}
+			}
+		}
+	});
 
 	// Destroy Role Input & Select
 	var destroyRoleField = function() {
@@ -195,7 +334,8 @@ function loadEditData(params) {
 				if (a == JSONData) {
 					$.each(b, function(c, d) {
 						$.each(d, function(e, f) {
-							options.push('<option value="' + f.role_id + '">' + f.role_name + '</option>');
+							options.push('<option value="' + f.role_id + '">' +
+								f.role_name + '</option>');
 						});
 					});
 				}
@@ -219,7 +359,7 @@ function loadEditData(params) {
 	};
 
 	// Trigger on New Modal OnShown
-	function btnNewOnShown(dialogRef) {
+	function modalNewOnShown(dialogRef) {
 		var modalBody = dialogRef.getModalBody(),
 			elements = modalBody.find('input[data-field], select[data-field]');
 
@@ -229,24 +369,25 @@ function loadEditData(params) {
 		// Create Role field
 		destroyRoleField();
 		newRoleSelectField({
+			defaultId: '',
+			defaultVal: '',
 			JSONUrl: WS_LIST_ROLES,
 			JSONData: 'report-list',
-			container: $('#role-box'),
-			defaultId: '',
-			defaultVal: ''
+			container: $('#role-box')
 		});
 	}
 
 	// Trigger on Edit Modal OnShown
-	function btnEditOnShown(dialogRef) {
+	function modalEditOnShown(dialogRef) {
 		var container = $('#role-box'),
 			rowData = dt.row('.selected').data(),
+			userId = rowData.user_id,
 			defaultId = rowData.role_id,
 			defaultVal = rowData.role_name,
 			modalBody = dialogRef.getModalBody();
 
 		// Load values from row data
-		$.each(rowData, function(name, value) {
+		$.each(rowData, function (name, value) {
 			modalBody.find('input[data-field="' + name + '"]').val(value);
 			modalBody.find('select[data-field="' + name + '"]').val(value);
 		});
@@ -256,7 +397,7 @@ function loadEditData(params) {
 
 		// Create Role input or select field
 		destroyRoleField();
-		if (defaultId != '1') {
+		if (userId !== '1' && userId !== '2' && userId !== '3') {
 			newRoleSelectField({
 				JSONUrl: WS_LIST_ROLES,
 				JSONData: 'report-list',
@@ -275,7 +416,7 @@ function loadEditData(params) {
 	}
 
 	// Trigger on Change Pass Modal OnShown
-	function btnCPassOnShown(dialogRef) {
+	function modalCPassOnShown(dialogRef) {
 		var modalBody = dialogRef.getModalBody(),
 			rowData = dt.row('.selected').data();
 
@@ -291,14 +432,13 @@ function loadEditData(params) {
 	}
 
 	// Trigger on Modal OnHidden
-	function btnOnHidden(dialogRef) {
-		reloadDT();
+	function modalOnHidden(dialogRef) {
 		var modalBody = dialogRef.getModalBody();
 
 		// Reset form values
+		modalBody.find('input[data-field]').val('');
+		modalBody.find('select[data-field]').val('');
 		modalBody.find('input[data-field="user_name"]').prop('disabled', false);
-		$(params.formId).find('input[data-field]').val('');
-		$(params.formId).find('select[data-field]').val('');
 
 		// Clear form validation styles
 		STIC.FormValidation({ formId: params.formId, clearHelpBlocks: true });
@@ -308,13 +448,13 @@ function loadEditData(params) {
 	}
 
 	// New & Edit Button Action
-	function btnSaveAction(dialogRef) {
+	function modalBtnSaveAction(dialogRef) {
 		// Form Validation
 		var isValid = STIC.FormValidation({ formId: params.formId });
 
 		// Proceed if form is valid
 		if (isValid) {
-			var wsPost = '', postString = '', 
+			var wsPost = '', postString = '',
 				infoTitle = '', infoMessage = '',
 				JSONString = '', JSONObject = {},
 				modalBody = dialogRef.getModalBody(),
@@ -331,29 +471,30 @@ function loadEditData(params) {
 				infoTitle = MSG_TITLE_ADD_REC;
 				infoMessage = MSG_INFO_ADD_REC;
 			}
-			
+
 			var input = $(params.formId).find('input[data-fv-unique="true"]'),
 				fieldValue = $(input).val(), fieldName = $(input).attr('data-field'),
-				postString = '{"' + fieldName + '": "' + fieldValue + '"}';			
-				
+				postString = '{"' + fieldName + '": "' + fieldValue + '"}';
+
 			// Check for duplicate entry if required
 			if (input.length > 0) {
 				if (pkey.val() != '')
-					$.extend(JSONObject, $.parseJSON('{"' + params.pkey + '": "' + pkey.val() + '"}'));				
-				
+					$.extend(JSONObject, $.parseJSON('{"' + params.pkey + '": "' + pkey.val() + '"}'));
+
 				$.extend(JSONObject, $.parseJSON(postString));
 				$.post(WS_UNIQUE_CHECK[fieldName], JSONObject)
 					.done(function (result, status) {
-						
+
 						// Proceed with insert if no duplicate records found
 						if (result.response.type === 'FAILED') {
 							insertUpdateData({
+								dt: dt,
 								url: wsPost,
 								title: infoTitle,
 								message: infoMessage,
 								elements: elements
 							});
-							
+
 						// Show errors if there are duplicate records found
 						} else {
 							STIC.showDuplicateError({
@@ -362,27 +503,28 @@ function loadEditData(params) {
 							});
 						}
 					})
-					
+
 					// Show WS Error
 					.fail(function () {
 						STIC.showWSError({ formId: params.formId });
 					});
-			
+
 			// Proceed with insert if not required to check duplicate
 			} else {
 				insertUpdateData({
+					dt: dt,
 					url: wsPost,
 					title: infoTitle,
 					message: infoMessage,
 					elements: elements
 				});
 			}
-			
+
 			// Insert & Update
 			function insertUpdateData(o) {
-				var postString = '', JSONString = '', 
+				var postString = '', JSONString = '',
 					JSONObject = {};
-				
+
 				// Build post data
 				$.each(o.elements, function(idx, elem) {
 					var input = $(elem),
@@ -394,9 +536,10 @@ function loadEditData(params) {
 
 				// Build JSON string
 				JSONString = params.objectId + '=' + JSON.stringify(JSONObject);
-				
+
 				// Call WS
 				STIC.postData({
+					dt: o.dt,
 					url: o.url,
 					data: JSONString,
 					title: o.title,
@@ -408,7 +551,7 @@ function loadEditData(params) {
 	}
 
 	// Change Password Button Action
-	function btnSaveCPassAction(dialogRef) {
+	function modalSaveCPassAction(dialogRef) {
 		// Form Validation
 		var isValid = STIC.FormValidation({ formId: params.formId });
 
@@ -425,6 +568,7 @@ function loadEditData(params) {
 
 			// Call WS
 			STIC.postData({
+				dt: dt,
 				url: WS_USER_PASS_UPDATE,
 				data: JSONObject,
 				title: MSG_TITLE_EDIT_REC,
@@ -434,19 +578,19 @@ function loadEditData(params) {
 	}
 
 	// Delete Button Action
-	function btnDeleteAction(e, dt, node, config) {
-		// Check if user is not super user
-		if (dt.row('.selected').data().role_id != '1') {
-			var userRoleId = STIC.User.ReadCookie('roleid');		
-			if (userRoleId === '1' || userRoleId === '2') {		
+	function dtBtnDeleteAction(e, dt, node, config) {
+		var userId = dt.row('.selected').data().user_id;
+		if (userId !== '1' && userId !== '2' && userId !== '3') {
+			var userRoleId = STIC.User.ReadCookie('roleid');
+			if (userRoleId === '1' || userRoleId === '2') {
 				// Confirm delete
 				BootstrapDialog.confirm({
 					type: 'type-danger',
 					btnOKLabel: BTN_LABEL_CONFIRM_DELETE,
-					btnCancelLabel: BTN_LABEL_CANCEL_DELETE,
-					title: MSG_TITLE_CONFIRM_DELETE,
+					btnCancelLabel: BTN_LABEL_CANCEL,
+					title: MSG_TITLE_INFO,
 					message: MSG_CONFIRM_DELETE_RECORD,
-					callback: function(result) {
+					callback: function (result) {
 						if (result) {
 
 							// Build post data
@@ -473,84 +617,57 @@ function loadEditData(params) {
 						BootstrapDialog.closeAll();
 					}
 				});
-			}		
-
-		// Restrict delete if super user
+			}
 		} else {
-			reloadDT();
 			BootstrapDialog.alert({
 				type: 'type-danger',
 				title: MSG_TITLE_INFO,
-				message: 'This is a Super User account. You are not allowed to perform this action.',
-				callback: function(result) {
+				message: MSG_INFO_DEFAULT_USER_DELETE,
+				callback: function (result) {
 					BootstrapDialog.closeAll();
 				}
 			});
 		}
 	}
 
-	// Reload DT
-	function reloadDT() {
-		dt.ajax.reload();
-		dt.button('edit:name').disable();
-		dt.button('delete:name').disable();
-		dt.button('cpass:name').disable();
-	}
-
 	// Customize PDF Print Output
-	function dtPDFPrintCustom(doc) {		
+	function dtPDFPrintCustom(doc) {
 		// Set Default Styles
 		var pdfDoc = STIC.Report.SetPDFStyles({
 			doc: doc,
-			cd: params.cd		
+			cd: params.cd
 		});
 	}
 
-	// DT Initialization
-	var dt = $('#table-data')
-		.DataTable({
-			ordering: true,
-			searching: true,
-			processing: false,
-			lengthChange: false,
-			dom: '<"dt-toolbar">Bfrtip',
-			//pagingType: 'full_numbers',
-			pageLength: DEFAULT_PAGE_LENGTH,
-			columns: params.cd,
-			ajax: {
-				url: params.wsList,
-				dataSrc: function(json) {
-					var ds = params.ds.split('.'),
-						rec = json[ds[0]][ds[1]][ds[2]];
-					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
-				}
-			},
-			buttons: dtBtns
-		})
-		.on('draw.dt', function (e, settings, data) {
-			dt.data().length > 0 ?
-				dt.button('print:name').enable() :
-				dt.button('print:name').disable();
-			dt.buttons(['delete:name', 'edit:name', 'cpass:name']).disable();
-		});
-
-	// DT Default Sorting
-	dt.column('0:visible').order('asc').draw();
-
-	// DT Row Click Event
-	$('#table-data tbody').on('click', 'tr', function() {
-		if (dt.row(this).data()[params.pkey] != '') {
-			if ($(this).hasClass('selected')) {
-				$(this).removeClass('selected');
-				dt.buttons(['delete:name', 'edit:name', 'cpass:name']).disable()
-			} else {
-				dt.$('tr.selected').removeClass('selected');
-				$(this).addClass('selected');
-				dt.button('cpass:name').enable();
-				dt.row('.selected').data().role_id != '1' ?
-					dt.buttons(['delete:name', 'edit:name']).enable() :
-					dt.buttons(['delete:name', 'edit:name']).disable();
-			}
-		}
-	});
+	// Customize Web Page Print Output
+	function dtWebPagePrintCustom(win) {
+		$(win.document.body)
+			.css('background', 'transparent')
+			.css('font-weight', 'normal')
+			.css('font-family', 'Courier');
+		// Title
+		$(win.document.body).find('h1')
+			.css('font-size', '16pt')
+			.css('text-align', 'center');
+		// Message
+		$(win.document.body).find('div')
+			.css('font-size', '11pt')
+			.css('text-align', 'left')
+			.css('margin', '20px 0px 15px 0px');
+		// Data Table
+		$(win.document.body).find('table')
+			.removeClass('display')
+			.removeClass('compact');
+		$(win.document.body).find('table th')
+			.css('font-size', '11pt')
+			.css('text-align', 'left')
+			.css('padding-left', '0px');
+		$(win.document.body).find('table td')
+			.css('font-size', '10pt')
+			.css('text-align', 'left')
+			.css('padding-left', '0px')
+			.css('padding-top', '10px')
+			.css('padding-bottom', '10px')
+			.css('font-weight', 'normal');
+	}
 }

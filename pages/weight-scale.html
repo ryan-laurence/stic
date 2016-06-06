@@ -38,10 +38,10 @@
 							data-container="body"
 							data-html="true"
 							title='<i class="fa fa-truck"></i> <strong>Truck Data Lookup</strong>'
-							data-content="Click to search for truck data that are already available for First and Second Weighing."><i class="fa fa-search"></i></button>
+							data-content="Click to search for truck data that are already available for First and Second Weighing."><i class="fa fa-truck"></i></button>
 					</div>
 					<div class="btn-group" role="group" style="width: 150px">
-						<input type="text" class="form-control" id="truck_code" data-type="varchar" data-stage="first" placeholder="Truck Code" readonly>
+						<input type="text" class="form-control bg-white" id="truck_code" data-type="varchar" data-stage="first" placeholder="Truck Code" readonly>
 					</div>
 				</div>
 				<div class="btn-toolbar" role="toolbar">
@@ -64,7 +64,7 @@
 							data-container="body"
 							data-html="true"
 							title='<i class="fa fa-users"></i> <strong>Customer Data Lookup</strong>'
-							data-content="Click to search for customer data that are already available for Second Weighing."><i class="fa fa-search"></i></button>
+							data-content="Click to search for customer data that are already available for Second Weighing."><i class="fa fa-users"></i></button>
 					</div>
 					<div class="btn-group" role="group" style="width: 150px">
 						<input type="text" class="form-control" id="cust_code" data-type="varchar" data-stage="second" placeholder="Customer Code" readonly>
@@ -84,16 +84,16 @@
 							data-placement="bottom"
 							data-container="body"
 							data-html="true"
-							title='<i class="fa fa-map-marker"></i> <strong>Add Destination Lookup</strong>'
-							data-content="Click to add destination data that are already available in the system to the selected customer data."><i class="fa fa-plus"></i></button>
+							title='<i class="fa fa-plus-circle"></i> <strong>Add Destination Lookup</strong>'
+							data-content="Click to add destination data that are already available in the system to the selected customer data."><i class="fa fa-plus-circle"></i></button>
 						<button type="button" class="btn btn-primary" id="search-destination-data" disabled
 							data-toggle="popover"
 							data-trigger="hover"
 							data-placement="bottom"
 							data-container="body"
 							data-html="true"
-							title='<i class="fa fa-map-marker"></i> <strong>Destination Data Lookup</strong>'
-							data-content="Click to search for destination data that are already tagged to the selected customer data."><i class="fa fa-search"></i></button>
+							title='<i class="fa fa-map"></i> <strong>Destination Data Lookup</strong>'
+							data-content="Click to search for destination data that are already tagged to the selected customer data."><i class="fa fa-map"></i></button>
 					</div>
 					<div class="btn-group" role="group" style="width: 150px">
 						<input type="text" class="form-control" id="dest_zipcode" data-type="varchar" data-stage="second" placeholder="Zip Code" readonly>
@@ -122,7 +122,7 @@
 							data-container="body"
 							data-html="true"
 							title='<i class="fa fa-product-hunt"></i> <strong>Product Data Lookup</strong>'
-							data-content="Click to search for product data that are already available in the system or tagged to the selected customer data."><i class="fa fa-search"></i></button>
+							data-content="Click to search for product data that are already available in the system or tagged to the selected customer data."><i class="fa fa-product-hunt"></i></button>
 					</div>
 					<div class="btn-group" role="group" style="width: 150px">
 						<input type="text" class="form-control" id="prod_code" data-type="varchar" data-stage="second" placeholder="Product Code" readonly>
@@ -151,7 +151,7 @@
 							data-container="body"
 							data-html="true"
 							title='<i class="fa fa-users"></i> <strong>Supplier Data Lookup</strong>'
-							data-content="Click to search for supplier data that are already available for Second Weighing."><i class="fa fa-search"></i></button>
+							data-content="Click to search for supplier data that are already available for Second Weighing."><i class="fa fa-users"></i></button>
 					</div>
 					<div class="btn-group" role="group" style="width: 150px">
 						<input type="text" class="form-control" id="supp_code" data-type="varchar" data-stage="second" placeholder="Supplier Code" readonly>
@@ -206,7 +206,7 @@
 							data-placement="top"
 							data-container="body"
 							data-html="true"
-							title='<i class="fa fa-tag"></i> <strong>Truck In Weight</strong>'
+							title='<div class="all-middle"><img src="images/numeric-1-box-outline-16.png"> <strong>Truck In Weight</strong></div>'
 							data-content="Weight reading for First Weighing.">
 					</div>
 					<div class="col-sm-2 no-padding-left" style="width: 175px">
@@ -217,7 +217,7 @@
 							data-placement="top"
 							data-container="body"
 							data-html="true"
-							title='<i class="fa fa-tags"></i> <strong>Truck Out Weight</strong>'
+							title='<div class="all-middle"><img src="images/numeric-2-box-outline-16.png"> <strong>Truck Out Weight</strong></div>'
 							data-content="Weight reading for Second Weighing.">
 					</div>
 					<div class="col-sm-2 no-padding-left" style="width: 175px">
@@ -244,9 +244,9 @@
 					data-placement="left"
 					data-container="body"
 					data-html="true"
-					title='<i class="fa fa-tag"></i> <strong>First Weighing</strong>'
+					title='<div class="all-middle"><img src="images/numeric-1-box-outline-16.png"> <strong>First Weighing</strong></div>'
 					data-content="Click to save First Weighing details into the system.">
-					<i class="fa fa-tag fa-3x"></i>
+					<img src="images/numeric-1-box-outline.png">
 					<p>First Weighing</p>
 				</button>
 				<button id="second-weighing" class="btn btn-primary btn-lg" data-type="button" disabled
@@ -255,9 +255,9 @@
 					data-placement="left"
 					data-container="body"
 					data-html="true"
-					title='<i class="fa fa-tags"></i> <strong>Second Weighing</strong>'
+					title='<div class="all-middle"><img src="images/numeric-2-box-outline-16.png"> <strong>Second Weighing</strong></div>'
 					data-content="Click to save Second Weighing details into the system.">
-					<i class="fa fa-tags fa-3x"></i>
+					<img src="images/numeric-2-box-outline.png">
 					<p>Second Weighing</p>
 				</button>
 				<button id="cancel-weighing" class="btn btn-danger btn-lg" data-type="button" disabled
@@ -268,7 +268,7 @@
 					data-html="true"
 					title='<i class="fa fa-ban"></i> <strong>Cancel</strong>'
 					data-content="Click to clear and reset the Weighing Scale form.">
-					<i class="fa fa-ban fa-3x"></i>
+					<i class="fa fa-ban fa-3x" style="margin-top: 5px"></i>
 					<p>Cancel</p>
 				</button>
 				<button id="reprint-docket" class="btn btn-primary btn-lg no-margin-bottom" data-type="button" disabled
@@ -279,7 +279,7 @@
 					data-html="true"
 					title='<i class="glyphicon glyphicon-print"></i> <strong>Reprint Docket</strong>'
 					data-content="Click to reprint docket details for First Weighing.">
-					<i class="glyphicon glyphicon-print fa-3x"></i>
+					<i class="glyphicon glyphicon-print fa-3x" style="margin-top: 3px"></i>
 					<p>Reprint Docket</p>
 				</button>
 			</div>
@@ -302,19 +302,19 @@
 				<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 15px;" id="tabSelectTruck">
 					<li role="presentation" class="active">
 						<a href="#firstWeighing" aria-controls="firstWeighing" role="tab" data-toggle="tab">
-							<i class="fa fa-tag"></i> First Weighing
+							<div class="all-middle"><img src="images/numeric-1-box-outline-18.png"> First Weighing</div>
 						</a>
 					</li>
 					<li role="presentation">
 						<a href="#secondWeighing" aria-controls="secondWeighing" role="tab" data-toggle="tab">
-							<i class="fa fa-tags"></i> Second Weighing
+							<div class="all-middle"><img src="images/numeric-2-box-outline-18.png"> Second Weighing</div>
 						</a>
 					</li>
 				</ul>
 				<div class="tab-content">
 					<div role="tabpanel" class="tab-pane active" id="firstWeighing">
 						<div class="alert alert-info" role="alert">
-							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+							<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 							<ul>
 								<li><i class="fa fa-check-square-o"></i> Records listed here are Truck Codes available for First Weighing only.</li>
 								<li><i class="fa fa-check-square-o"></i> To create new Truck Code for First Weighing, use the Weighing Scale form.</li>
@@ -336,18 +336,18 @@
 							</div>
 						</div>
 						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
-						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary btnFWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
-							</div>
+						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">							
 							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
 								<button type="button" class="btn btn-primary" id="btnFWTrucksOK" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
+							</div>
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-default btnFWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
 							</div>
 						</div>
 					</div>
 					<div role="tabpanel" class="tab-pane" id="secondWeighing">
 						<div class="alert alert-info" role="alert">
-							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+							<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 							<ul>
 								<li><i class="fa fa-check-square-o"></i> Records listed here are Truck Codes available for Second Weighing only.</li>
 								<li><i class="fa fa-check-square-o"></i> To remove Truck Code from Second Weighing, go to the Truck In report page.</li>
@@ -374,12 +374,12 @@
 							</div>
 						</div>
 						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
-						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary btnSWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
-							</div>
+						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">							
 							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
 								<button type="button" class="btn btn-primary" id="btnSWTrucksOK" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
+							</div>
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-default btnSWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
 							</div>
 						</div>
 					</div>
@@ -396,7 +396,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
-					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 					<ul>
 						<li><i class="fa fa-check-square-o"></i> Records listed here are Customer Data that are already available in the system.</li>
 						<li><i class="fa fa-check-square-o"></i> To create new Customer Data, use the Weighing Scale form.</li>
@@ -419,9 +419,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer">
+			<div class="modal-footer">				
+				<button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
 				<button type="button" class="btn btn-primary" id="select-item" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
 			</div>
 		</div>
 	</div>
@@ -430,11 +430,11 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-map-marker"></i> Destination Data Lookup
+				<i class="fa fa-map"></i> Destination Data Lookup
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
-					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 					<ul>
 						<li><i class="fa fa-check-square-o"></i> Records listed here are Destination Data that are already tagged to the selected Customer Data.</li>
 						<li><i class="fa fa-check-square-o"></i> To tag other Destination Data to the selected Customer Data, use the Weighing Scale form.</li>
@@ -459,9 +459,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer">
+			<div class="modal-footer">				
+				<button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
 				<button type="button" class="btn btn-primary" id="select-item" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
 			</div>
 		</div>
 	</div>
@@ -470,11 +470,11 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-map-marker"></i> Add Destination Lookup
+				<i class="fa fa-plus-circle"></i> Add Destination Lookup
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
-					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 					<ul>
 						<li><i class="fa fa-check-square-o"></i> Records listed here are Destination Data that are not yet tagged to the selected Customer Data.</li>
 						<li><i class="fa fa-check-square-o"></i> To tag Destination Data to the selected Customer Data, select a record below.</li>
@@ -498,8 +498,8 @@
 				</div>
 			</div>
 			<div class="modal-footer">
-				<button type="button" class="btn btn-primary" id="select-item" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+				<button type="button" class="btn btn-primary" id="select-item" disabled><i class="fa fa-check-square-o"></i> Select Item</button>				
 			</div>
 		</div>
 	</div>
@@ -519,14 +519,14 @@
 					</li>
 					<li role="presentation">
 						<a href="#customerProducts" aria-controls="customerProducts" role="tab" data-toggle="tab">
-							<i class="fa fa-user"></i> Customer Products
+							<i class="fa fa-plus-circle"></i> Customer Products
 						</a>
 					</li>
 				</ul>
 				<div class="tab-content">
 					<div role="tabpanel" class="tab-pane active" id="products">
 						<div class="alert alert-info" role="alert">
-							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+							<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 							<ul>
 								<li><i class="fa fa-check-square-o"></i> Records listed here are Product Data that are not yet tagged to the selected Customer Data.</li>
 								<li><i class="fa fa-check-square-o"></i> To create new Product Data, use the Weighing Scale form.</li>
@@ -549,18 +549,18 @@
 							</div>
 						</div>
 						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
-						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary btnAllProdCancel"><i class="fa fa-ban"></i> Cancel</button>
-							</div>
+						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">							
 							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
 								<button type="button" class="btn btn-primary" id="btnAllProdOK" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
+							</div>
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-default btnAllProdCancel"><i class="fa fa-ban"></i> Cancel</button>
 							</div>
 						</div>
 					</div>
 					<div role="tabpanel" class="tab-pane" id="customerProducts">
 						<div class="alert alert-info" role="alert">
-							<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+							<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 							<ul>
 								<li><i class="fa fa-check-square-o"></i> Records listed here are Product Data that are already tagged to the selected Customer Data.</li>
 								<li><i class="fa fa-check-square-o"></i> To tag other Product Data to the selected Customer Data, go to the Products tab.</li>
@@ -585,12 +585,12 @@
 							</div>
 						</div>
 						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
-						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary btnCustProdCancel"><i class="fa fa-ban"></i> Cancel</button>
-							</div>
+						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">							
 							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
 								<button type="button" class="btn btn-primary" id="btnCustProdOK" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
+							</div>
+							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+								<button type="button" class="btn btn-default btnCustProdCancel"><i class="fa fa-ban"></i> Cancel</button>
 							</div>
 						</div>
 					</div>
@@ -607,7 +607,7 @@
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
-					<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+					<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 					<ul>
 						<li><i class="fa fa-check-square-o"></i> Records listed here are Supplier Data that are already available in the system.</li>
 						<li><i class="fa fa-check-square-o"></i> To create new Supplier Data, use the Weighing Scale form.</li>
@@ -630,9 +630,9 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer">
+			<div class="modal-footer">				
+				<button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
 				<button type="button" class="btn btn-primary" id="select-item" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
-				<button type="button" class="btn btn-primary" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
 			</div>
 		</div>
 	</div>
@@ -666,29 +666,26 @@
 
 		// Truck > Data Lookup
 		$('#search-truck-data').on('click', function () {
-			// Destroy First Weight Trucks DT if initialized
 			if ($.fn.DataTable.isDataTable('#table-truck-first')) {
 				dtFWT.destroy();
 			}
-			// Destroy Second Weight Trucks DT if initialized
 			if ($.fn.DataTable.isDataTable('#table-truck-second')) {
 				dtSWT.destroy();
 			}
-			// Initialize First Weight Trucks DT
-			dtFWT = initDT_Picker({
-				domId: 'table-truck-first',
+			dtFWT = initDT_Picker({				
+				pl: 5,
 				ds: DS_TRUCK_LIST,
 				cd: CD_TRUCK_LIST,
-				ws: WS_TRUCK_LIST
+				ws: WS_TRUCK_LIST,
+				domId: 'table-truck-first'
 			});
-			// Initialize Second Weight Trucks DT
 			dtSWT = initDT_Picker({
-				domId: 'table-truck-second',
+				pl: 5,				
 				ds: DEFAULT_DATASOURCE,
 				cd: CD_TRUCK_IN_LIST,
-				ws: WS_CHECK_TRUCK_CODE_LIST
+				ws: WS_CHECK_TRUCK_CODE_LIST,
+				domId: 'table-truck-second'
 			});
-			// Show Data Lookup
 			$('#truck-data-modal').modal('show');
 		});
 
@@ -732,31 +729,23 @@
 
 		// Truck > Data Lookup > First Weighing Trucks > Select Item
 		$('#truck-data-modal #btnFWTrucksOK').on('click', function () {
-			// Toggle form elements
 			toggleWeightScaleFields({ status: 'FIRST_WEIGHT_IN' });
-			// Load form values
 			$('#truck_code').val(dtFWT.row('.selected').data().truck_code);
-			// Hide Data Lookup
 			$('#truck-data-modal').modal('hide');
-			// Compute Net Weight
 			setNetWeight();
 		});
 
 		// Truck > Data Lookup > Second Weighing Trucks > Select Item
 		$('#truck-data-modal #btnSWTrucksOK').on('click', function () {
 			var selected_row = dtSWT.row('.selected');
-			// Toggle form elements
 			toggleWeightScaleFields({ status: 'SECOND_WEIGHT_IN' });
-			// Load form values
 			$('#wr_id').val(selected_row.data().wr_id);
 			$('#docket_no').val(selected_row.data().docket_no);
 			$('#truck_code').val(selected_row.data().truck_code);
 			$('#weight_unit').text(selected_row.data().weight_unit);
 			$('#weight_in_reading').val(selected_row.data().weight_in_reading
 				.replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-			// Hide Data Lookup
 			$('#truck-data-modal').modal('hide');
-			// Compute Net Weight
 			setNetWeight();
 		});
 
@@ -770,39 +759,49 @@
 
 		// Customer > New Customer Data
 		$('#new-customer-data').on('click', function () {
-			showNewModalForm({
-				objectId: 'custInfo',
-				dataType: 'Customer Data',
-				status: 'SECOND_WEIGHT_IN',
-				formId: '#dataCustomerForm',
-				formSrc: FORM_CUSTOMER_DATA,
-				wsInsert: WS_CUSTOMER_INSERT
-			});
+			if ($('#truck_code').val() != '') {
+				showNewModalForm({
+					objectId: 'custInfo',
+					dataType: 'Customer Data',
+					status: 'SECOND_WEIGHT_IN',
+					formId: '#dataCustomerForm',
+					formSrc: FORM_CUSTOMER_DATA,
+					wsInsert: WS_CUSTOMER_INSERT
+				});
+			} else {
+				showErrorStyles(['truck_code']);
+				BootstrapDialog.alert({
+					type: 'type-danger',
+					title: MSG_TITLE_INFO,
+					message: MSG_TRUCK_DATA_EMPTY,
+					callback: function () {
+						BootstrapDialog.closeAll();
+					}
+				});
+			}
 		});
 
 		// Customer > Data Lookup
 		$('#search-customer-data').on('click', function () {
 			if ($('#truck_code').val() != '') {
-				// Destroy Customers DT if initialized
 				if ($.fn.DataTable.isDataTable('#table-customer-data')) {
 					dtCDP.destroy();
 				}
-				// Initialize Customers DT
 				dtCDP = initDT_Picker({
+					pl: 5,
 					ds: DS_CUSTOMER_LIST,
 					cd: CD_CUSTOMER_LIST,
 					ws: WS_CUSTOMER_LIST,
 					domId: 'table-customer-data'
 				});
-				// Show Data Lookup
 				$('#customer-data-modal').modal('show');
 			} else {
-				// Show input error
+				showErrorStyles(['truck_code']);
 				BootstrapDialog.alert({
+					type: 'type-danger',
 					title: MSG_TITLE_INFO,
 					message: MSG_TRUCK_DATA_EMPTY,
-					type: BootstrapDialog.TYPE_DANGER,
-					callback: function() {
+					callback: function () {
 						BootstrapDialog.closeAll();
 					}
 				});
@@ -821,12 +820,11 @@
 
 		// Customer > Data Lookup > Select Item
 		$('#customer-data-modal #select-item').on('click', function () {
+			clearErrorStyles(['cust_code', 'cust_name']);
 			var selected_row = dtCDP.row('.selected');
-			// Load form values
 			$('#cust_id').val(selected_row.data().cust_id);
 			$('#cust_code').val(selected_row.data().cust_code);
 			$('#cust_name').val(selected_row.data().cust_name);
-			// Hide Data Lookup
 			$('#customer-data-modal').modal('hide');
 		});
 
@@ -835,25 +833,23 @@
 		// Destination > Data Lookup
 		$('#search-destination-data').on('click', function () {
 			if ($('#cust_code').val() != '') {
-				// Destroy Destinations DT if initialized
 				if ($.fn.DataTable.isDataTable('#table-destination-data')) {
 					dtDDP.destroy();
 				}
-				// Initialize Destinations DT
 				dtDDP = initDT_Picker({
+					pl: 5,
 					ds: DS_CUSTDEST_LIST,
 					cd: CD_CUSTDEST_LIST,
 					domId: 'table-destination-data',
 					ws: WS_CUSTDEST_LIST + 'cust_id=' +  $('#cust_id').val()
 				});
-				// Show Data Lookup
 				$('#destination-data-modal').modal('show');
 			} else {
-				// Show input error
+				showErrorStyles(['cust_code', 'cust_name']);
 				BootstrapDialog.alert({
+					type: 'type-danger',
 					title: MSG_TITLE_INFO,
 					message: MSG_CUSTOMER_DATA_EMPTY,
-					type: BootstrapDialog.TYPE_DANGER,
 					callback: function() {
 						BootstrapDialog.closeAll();
 					}
@@ -873,38 +869,35 @@
 
 		// Destination > Data Lookup > Select Item
 		$('#destination-data-modal #select-item').on('click', function () {
+			clearErrorStyles(['dest_zipcode', 'dest_location']);
 			var selected_row = dtDDP.row('.selected');
-			// Load form values
 			$('#dest_id').val(selected_row.data().dest_id);
 			$('#dest_zipcode').val(selected_row.data().dest_zipcode);
 			$('#dest_location').val(selected_row.data().dest_name + ', ' + selected_row.data().dest_location);
-			// Hide Data Lookup
 			$('#destination-data-modal').modal('hide');
 		});
 
 		// Destinations > New Item > Data Lookup
 		$('#new-destination-data').on('click', function () {
 			if ($('#cust_code').val() != '') {
-				// Destroy Destinations DT if initialized
 				if ($.fn.DataTable.isDataTable('#table-destination-data-all')) {
 					dtADDP.destroy();
 				}
-				// Initialize Destinations DT
 				dtADDP = initDT_Picker({
+					pl: 5,
 					ds: DS_DESTINATION_LIST,
 					cd: CD_DESTINATION_LIST,
 					domId: 'table-destination-data-all',
 					ws: WS_DESTINATION_LIST + 'cust_id=' + $('#cust_id').val()
 				});
-				// Show Destination Data Lookup
 				$('#destination-data-all-modal').modal('show');
 			} else {
-				// Show input error
+				showErrorStyles(['cust_code', 'cust_name']);
 				BootstrapDialog.alert({
+					type: 'type-danger',
 					title: MSG_TITLE_INFO,
 					message: MSG_CUSTOMER_DATA_EMPTY,
-					type: BootstrapDialog.TYPE_DANGER,
-					callback: function() {
+					callback: function () {
 						BootstrapDialog.closeAll();
 					}
 				});
@@ -923,31 +916,25 @@
 
 		// Destination > New Item > Data Lookup > Select Item
 		$('#destination-data-all-modal #select-item').on('click', function () {
+			clearErrorStyles(['dest_zipcode', 'dest_location']);
 			var cust_id = $('#cust_id').val(),
 				selected_row = dtADDP.row('.selected'),
 				dest_id = selected_row.data().dest_id,
 				post_data = 'custDestInfo={ "cust_id": ' + cust_id + ', "dest_id": ' + dest_id + '}';
-			// Load form values
 			$('#dest_id').val(dest_id);
 			$('#dest_zipcode').val(selected_row.data().dest_zipcode);
 			$('#dest_location').val(selected_row.data().dest_name + ', ' + selected_row.data().dest_location);
-			// Hide Data Lookup
 			$('#destination-data-all-modal').modal('hide');
-			// Insert Customer Destinations
 			$.post(WS_CUSTDEST_INSERT, post_data)
-				.done(function(data, status) {
-					if (data.response.type == 'SUCCESS') {
+				.done(function (data, status) {
+					if (data.response.type === 'SUCCESS') {
 						BootstrapDialog.closeAll();
 					} else {
-						BootstrapDialog.alert({
-							title: MSG_TITLE_WS_ERROR,
-							message: MSG_INFO_WS_ERROR,
-							type: BootstrapDialog.TYPE_DANGER,
-							callback: function() {
-								BootstrapDialog.closeAll();
-							}
-						});
+						STIC.showWSError();
 					}
+				})
+				.fail(function () {
+					STIC.showWSError();
 				});
 		});
 
@@ -966,7 +953,7 @@
 					data: { cust_id: $('#cust_id').val() }
 				});
 			} else {
-				// Show input error
+				showErrorStyles(['cust_code', 'cust_name']);
 				BootstrapDialog.alert({
 					type: 'type-danger',
 					title: MSG_TITLE_INFO,
@@ -981,37 +968,34 @@
 		// Product > Data Lookup
 		$('#search-product-data').on('click', function () {
 			if ($('#cust_code').val() != '') {
-				// Destroy Customer Products DT if initialized
 				if ($.fn.DataTable.isDataTable('#table-product-data')) {
 					dtPDP.destroy();
 				}
-				// Destroy All Products DT if initialized
 				if ($.fn.DataTable.isDataTable('#table-product-data-all')) {
 					dtAPDP.destroy();
 				}
-				// Initialize Customer Products DT
 				dtPDP = initDT_Picker({
+					pl: 5,
 					ds: DS_CUSTPROD_LIST,
 					cd: CD_CUSTPROD_LIST,
 					domId: 'table-product-data',
 					ws: WS_CUSTPROD_LIST + 'cust_id=' +  $('#cust_id').val()
 				});
-				// Initialize All Products DT
 				dtAPDP = initDT_Picker({
+					pl: 5,
 					ds: DS_PRODUCT_LIST,
 					cd: CD_PRODUCT_LIST,
 					domId: 'table-product-data-all',
 					ws: WS_PRODUCT_LIST + 'cust_id=' +  $('#cust_id').val()
 				});
-				// Show Product Data Lookup
 				$('#product-data-modal').modal('show');
 			} else {
-				// Show input error
+				showErrorStyles(['cust_code', 'cust_name']);
 				BootstrapDialog.alert({
+					type: 'type-danger',
 					title: MSG_TITLE_INFO,
 					message: MSG_CUSTOMER_DATA_EMPTY,
-					type: BootstrapDialog.TYPE_DANGER,
-					callback: function() {
+					callback: function () {
 						BootstrapDialog.closeAll();
 					}
 				});
@@ -1058,29 +1042,25 @@
 
 		// All Product > Data Lookup > Select Item
 		$('#product-data-modal #btnAllProdOK').on('click', function () {
+			clearErrorStyles(['prod_code', 'prod_name']);
 			var selected_row = dtAPDP.row('.selected');
-			// Load form values
 			$('#prod_id').val(selected_row.data().prod_id);
 			$('#prod_code').val(selected_row.data().prod_code);
 			$('#prod_name').val(selected_row.data().prod_name);
 			$('#unit_price').val(selected_row.data().unit_price);
-			// Hide Data Lookup
 			$('#product-data-modal').modal('hide');
-			// Compute Total Price
 			setTotalPrice();
 		});
 
 		// Customer Products > Data Lookup > Select Item
 		$('#product-data-modal #btnCustProdOK').on('click', function () {
+			clearErrorStyles(['prod_code', 'prod_name']);
 			var selected_row = dtPDP.row('.selected');
-			// Load form values
 			$('#prod_id').val(selected_row.data().prod_id);
 			$('#prod_code').val(selected_row.data().prod_code);
 			$('#prod_name').val(selected_row.data().prod_name);
 			$('#unit_price').val(selected_row.data().unit_price);
-			// Hide Data Lookup
 			$('#product-data-modal').modal('hide');
-			// Compute Total Price
 			setTotalPrice();
 		});
 
@@ -1107,26 +1087,23 @@
 		// Supplier > Data Lookup
 		$('#search-supplier-data').on('click', function () {
 			if ($('#truck_code').val() != '') {
-				// Destroy Suppliers DT if initialized
 				if ($.fn.DataTable.isDataTable('#table-supplier-data')) {
 					dtSDP.destroy();
 				}
-				// Initialize Suppliers DT
 				dtSDP = initDT_Picker({
+					pl: 5,
 					ds: DS_SUPPLIER_LIST,
 					cd: CD_SUPPLIER_LIST,
 					ws: WS_SUPPLIER_LIST,
 					domId: 'table-supplier-data'
 				});
-				// Show Data Lookup
 				$('#supplier-data-modal').modal('show');
 			} else {
-				// Show input error
 				BootstrapDialog.alert({
+					type: 'type-danger',
 					title: MSG_TITLE_INFO,
 					message: MSG_TRUCK_DATA_EMPTY,
-					type: BootstrapDialog.TYPE_DANGER,
-					callback: function() {
+					callback: function () {
 						BootstrapDialog.closeAll();
 					}
 				});
@@ -1145,12 +1122,11 @@
 
 		// Supplier > Data Lookup > Select Item
 		$('#supplier-data-modal #select-item').on('click', function () {
+			clearErrorStyles(['supp_code', 'supp_name']);
 			var selected_row = dtSDP.row('.selected');
-			// Load form values
 			$('#supp_id').val(selected_row.data().supp_id);
 			$('#supp_code').val(selected_row.data().supp_code);
 			$('#supp_name').val(selected_row.data().supp_name);
-			// Hide Data Lookup
 			$('#supplier-data-modal').modal('hide');
 		});
 
@@ -1159,12 +1135,13 @@
 		// First Weighing Button > Show Confirm Modal
 		$('#first-weighing').on('click', function () {
 			BootstrapDialog.confirm({
-				type: 'type-danger',
-				title: MSG_TITLE_CONFIRM_FIRST_WEIGHT,
-				message: MSG_FIRST_WEIGHING_CONFIRM,
+				type: 'type-primary',
+				title: MSG_TITLE_INFO,
+				message: MSG_CONFIRM_FIRST_WEIGHING,
+				btnOKLabel: BTN_LABEL_CONFIRM_FW,
+				btnCancelLabel: BTN_LABEL_CANCEL,
 				callback: function (result) {
 					if (result) {
-						// Build JSON Object
 						var JSONObject = {
 							weight_count: 1,
 							weight_status: 'PENDING',
@@ -1172,16 +1149,21 @@
 							weight_unit: $('#weight-unit').text(),
 							user_id: STIC.User.ReadCookie('userid'),
 							date_modified: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
-							weight_in_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),							
+							weight_in_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
 							weight_in_reading: $('#weight_in_reading').val().replace(/,/g, '')
 						},
-						// Build JSON String
 						JSONString = 'weightReadingInfo=' + JSON.stringify(JSONObject);
-						// Call Insert WS
 						var result = $.post(WS_FIRST_WEIGHING_INSERT, JSONString);
-						result.done(function(result) {
+						result.done(function (result) {
 							if (result.response.type === 'SUCCESS') {
-								// Show success alert then reset weighing scale form
+								// Docket Print
+								$.post(WS_DOCKET_PRINT, { wrId: result.response.wr_id, type: 'A1' })
+									.done(function (results, status) {
+
+									})
+									.fail(function () {
+										STIC.showWSError();
+									})
 								BootstrapDialog.alert({
 									type: 'type-primary',
 									title: MSG_TITLE_INFO,
@@ -1192,11 +1174,9 @@
 								});
 								toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
 							} else {
-								// Show WS Error if response failed
 								STIC.showWSError();
 							}
 						});
-						// Show WS Error if AJAX failed
 						result.fail(function() {
 							STIC.showWSError();
 						});
@@ -1209,41 +1189,73 @@
 
 		// Second Weighing Button > Show Confirm Modal
 		$('#second-weighing').on('click', function () {
-			var errorMessage = '';
-			var inputFields = [
-				{ name: 'Truck', field: 'truck_code' },
-				{ name: 'Customer', field: 'cust_code' },
-				{ name: 'Destination', field: 'dest_zipcode' },
-				{ name: 'Product', field: 'prod_code' },
-				{ name: 'Supplier', field: 'supp_code' }
-			];
+			var totalErrors = 0,
+				inputFields = [
+					{ code: 'truck_code' },
+					{ code: 'cust_code', name: 'cust_name' },
+					{ code: 'dest_zipcode', name: 'dest_location' },
+					{ code: 'prod_code', name: 'prod_name' },
+					{ code: 'supp_code', name: 'supp_name' }
+				];
+
 			// Check required fields
 			$.each(inputFields, function(index, input) {
-				if ($('#' + input.field).val() == '') {
-					errorMessage = errorMessage + '<li>' + input.name + '</li>';
-					$('label[for="' + input.field + '"]').css('color', 'red');
+				var errors = 0,
+					fieldCode = $('#' + input.code),
+					fieldCodeBox = fieldCode.parent('div.btn-group'),
+					labelWrapper = $('label[for="' + input.code + '"]').parent('div.btn-group');
+
+				labelWrapper.removeClass('has-error');
+				fieldCodeBox.find('span.glyphicon').remove();
+				fieldCodeBox.removeClass('has-error has-feedback');
+
+				if (fieldCode.val() === '') {
+					errors++;
+					fieldCodeBox.addClass('has-error has-feedback');
+					fieldCodeBox.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+				}
+
+				if (typeof input.name !== 'undefined') {
+					var fieldName = $('#' + input.name),
+					fieldNameBox = fieldName.parent('div.btn-group');
+
+					fieldNameBox.find('span.glyphicon').remove();
+					fieldNameBox.removeClass('has-error has-feedback');
+
+					if (fieldName.val() === '') {
+						errors++;
+						fieldNameBox.addClass('has-error has-feedback');
+						fieldNameBox.append('<span class="glyphicon glyphicon-remove form-control-feedback"></span>');
+					}
+				}
+
+				if (errors > 0) {
+					totalErrors += errors;
+					labelWrapper.addClass('has-error');
 				}
 			});
+
 			// Show alert message if there are errors
-			if (errorMessage != '') {
-				var message = '<ul>' + errorMessage + '</ul>';
+			if (totalErrors > 0) {
 				BootstrapDialog.alert({
 					type: 'type-danger',
 					title: MSG_TITLE_INFO,
-					message: 'The following fields are required. Please make sure all details are provided.<div>&nbsp;</div>' + message,
-					callback: function() {
+					message: MSG_WEIGHING_FORM_ERROR,
+					callback: function () {
 						BootstrapDialog.closeAll();
 					}
 				});
+
 			// Proceed with update if no errors
 			} else {
 				BootstrapDialog.confirm({
-					type: 'type-danger',
-					title: MSG_TITLE_CONFIRM_SECOND_WEIGHT,
-					message: MSG_SECOND_WEIGHING_CONFIRM,
-					callback: function(result) {
+					type: 'type-primary',
+					title: MSG_TITLE_INFO,
+					message: MSG_CONFIRM_SECOND_WEIGHING,
+					btnOKLabel: BTN_LABEL_CONFIRM_SW,
+					btnCancelLabel: BTN_LABEL_CANCEL,
+					callback: function (result) {
 						if (result) {
-							// Build JSON Object
 							var JSONObject = {
 								weight_count:	2,
 								weight_status: 'DONE',
@@ -1262,13 +1274,18 @@
 								weight_out_reading: $('#weight_out_reading').val().replace(/,/g, ''),
 								weight_out_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date())
 							},
-							// Build JSON String
 							JSONString = 'weightReadingInfo=' + JSON.stringify(JSONObject);
-							// Call Update WS
 							var result = $.post(WS_SECOND_WEIGHING_UPDATE, JSONString);
 							result.done(function (results) {
 								if (results.response.type === 'SUCCESS') {
-									// Show success alert then reset weighing scale form
+									// Docket Print
+									$.post(WS_DOCKET_PRINT, { wrId: $('#wr_id').val(), type: 'A2' })
+										.done(function (results, status) {
+
+										})
+										.fail(function () {
+											STIC.showWSError();
+										})
 									BootstrapDialog.alert({
 										type: 'type-primary',
 										title: MSG_TITLE_INFO,
@@ -1279,11 +1296,9 @@
 									});
 									toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
 								} else {
-									// Show WS Error if response failed
 									STIC.showWSError();
 								}
 							});
-							// Show WS Error if AJAX failed
 							result.fail(function () {
 								STIC.showWSError();
 							});
@@ -1295,16 +1310,15 @@
 
 		/**********************************************************************************************************************************************/
 
-		// Cancel Weighing Button Click Event
-		$('#cancel-weighing').on('click', function() {
-			toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
-		});
-
-		/**********************************************************************************************************************************************/
-
 		// Reprint Docket Button Click Event
 		$('#reprint-docket').on('click', function () {
-			var win = window.open('http://localhost:8080/forms/pdf.html', 'DocketPrintPreview').focus();
+			$.post(WS_DOCKET_PRINT, { wrId: $('#wr_id').val(), type: 'A1' })
+				.done(function (results, status) {
+
+				})
+				.fail(function () {
+					STIC.showWSError();
+				})
 		});
 	});
 
@@ -1330,7 +1344,7 @@
 			.replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	}
 
-	// Sample Indicator
+	//  Scale Reader
 	$(document).ready(function () {
 		var random = function (max, min) {
 				return ((Math.random() * (max - min)) + min).toFixed(2);
@@ -1360,7 +1374,10 @@
 			}, 0);
 		});
 
-		setInterval(function () {
+		/**********************************************************************************************************************************************/
+		
+		// Sample Indicator
+		/*STIC.IntervalId = setInterval(function () {
 			var rand = '+' + random(41000, 5000)
 				.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
@@ -1376,39 +1393,59 @@
 				$('#weight-reading').text(rand.toString());
 				$('#weight_in_reading').val(rand.replace('+', ''));
 			}
-		}, 5000);
-	});
+		}, 5000);*/
+		
+		/**********************************************************************************************************************************************/
+		
+		// Init Reader
+		$.post(WS_SCALE_DISCONNECT);
+		$.post('/stic/services/ScaleReaderInfoServices/initReader', { compId: 1 });
 
-	/*
-	var scaleReaderUrl = '/scaletech/services/ScaleReaderInfoServices/readScaleReading?response=application/json';
-	$(document).ready(function() {
+		var scaleReaderUrl = '/stic/services/ScaleReaderInfoServices/readScaleReading?response=application/json';
+
 		// Read Reading Scale.
-		var intervalId = setInterval(function() {
+		STIC.IntervalId = setInterval(function() {
 			$.ajax({
-				//url: 'data/scale-reader.json'
 				url: scaleReaderUrl
 				,type: 'GET'
-				,dataType: 'json'
 				,success: function(data,tx) {
+					//console.log(data);
 					var netWg = data['response']['readData-list']['readdata']['read-weight'];
 					var st = data['response']['readData-list']['readdata']['read-status1'];
 					var gs = data['response']['readData-list']['readdata']['read-status2'];
 					var unit = data['response']['readData-list']['readdata']['read-unitType'];
 
-					console.log(data['response']['readData-list']['readdata']['read-weight']);
-					$('#weighing-scale').text(netWg);
-					$('#unit-type').text(unit);
-					$('#read-status1').text(st);
+					//$('#weight-reading').text(netWg);
+					var netWeight = netWg.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+					//var netWeight = netWg;
+					$('#weight-reading').text(netWeight.toString());
+					$('#weight-unit').text(unit);
+					$('#weight-status').text(st);				
+
+					// 2nd Weighing
+					if ($('#wr_id').val() != '') {
+						//$('#weight-reading').text(netWeight.toString());
+						$('#weight_out_reading').val(netWeight.replace('+', ''));
+						setNetWeight();
+						setTotalPrice();
+
+					// 1st Weighing
+					} else if ($('#truck_code').val() != '') {
+						//$('#weight-reading').text(netWeight.toString());
+						$('#weight_in_reading').val(netWeight.replace('+', ''));
+					}
 				}
 			});
+		}, 5000); // every 1sec
+		
+		/**********************************************************************************************************************************************/
 
-		}, 100); // every 1sec
-		console.log('intervalId: '+ intervalId);
-
+		// Cancel Weighing Button Click Event
 		$('#cancel-weighing').on('click', function() {
-			clearInterval(intervalId);
-			window.location.replace("http://127.0.0.1:8080/scaletech/");
+			toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+			clearInterval(STIC.IntervalId);
+			$.post(WS_SCALE_DISCONNECT);			
 		});
+		
 	});
-	*/
 </script>

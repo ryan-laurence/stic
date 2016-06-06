@@ -1,27 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Weighing System 2.0</title>
-		<link rel="stylesheet" href="css/bootstrap.css" />			
-		<link rel="stylesheet" href="css/bootstrap-dialog.css" />	
-		<link rel="stylesheet" href="css/bootstrap-login.css" />	
+		<title>STIC System 2.0</title>
+		<link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="css/bootstrap-dialog.css" />
+		<link rel="stylesheet" href="css/bootstrap-login.css" />
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
+		<link rel="stylesheet" href="css/stic-custom.css" />
 	</head>
 	<body class="login-page">
-		<div class="container">		
+		<div class="container">
 			<div class="row" id="pwd-container">
 				<div class="col-md-5 col-centered">
-					<section class="login-form" role="login">							
-						<img src="images/vendor-logo.gif" class="img-responsive" alt="" />							
+					<section class="login-form" role="login">
+						<img src="images/vendor-logo.png" class="img-responsive" alt="" />
 						<hr>
 						<div class="alert alert-info" role="alert" style="text-align: left; margin-bottom: 20px;">
-							<i class="fa fa-info-circle fa-4x fa-pull-left"></i> Enter your <strong>Username</strong> and <strong>Password</strong> to access the system. In case of forgotten password, please contact your System Administrator.
+							<i class="fa fa-info-circle fa-4x fa-pull-left"></i> Enter your Username and Password. In case of forgotten password, please contact your System Administrator.
 						</div>
 						<div class="form-group">
 							<div class="input-group">
 								<span class="input-group-addon">
 									<i class="fa fa-user"></i>
-								</span> 
+								</span>
 								<input class="form-control input-lg" placeholder="Username" id="username" type="text" autofocus>
 							</div>
 						</div>
@@ -29,11 +31,11 @@
 							<div class="input-group">
 								<span class="input-group-addon">
 									<i class="fa fa-lock"></i>
-								</span> 
+								</span>
 								<input class="form-control input-lg" placeholder="Password" id="password" type="password" autofocus>
 							</div>
 						</div>
-						<button type="button" name="go" class="btn btn-lg btn-primary btn-block" id="btnLogin"><i class="fa fa-sign-in"></i> Login</button>	
+						<button type="button" name="go" class="btn btn-primary btn-block" id="btnLogin"><!-- <i class="fa fa-sign-in"></i> -->Login</button>
 						<hr>
 						<div class="login-footer">
 							<div style="font-weight: bold">Scaletech International Corporation</div>
@@ -41,7 +43,7 @@
 							<div>Phone: 983-7895/96, Fax: 444-0592</div>
 							<div>Email: scaletech_intl_corp@lycos.com</div>
 						</div>
-					</section>  
+					</section>
 				</div>
 			</div>
 		</div>
@@ -49,106 +51,27 @@
 		<script type="text/javascript" src="js/jquery-widget.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-waitingfor.js"></script>
 		<script type="text/javascript" src="js/stic-constants.js"></script>
-		<script type="text/javascript" src="js/stic-functions.js"></script>		
+		<script type="text/javascript" src="js/stic-functions.js"></script>
 		<script type="text/javascript">
-			$(function () { 
-				console.log('Cookies Before Login: ' + document.cookie);
-			
-				// Check Cookies				
-				if (STIC.User.ReadCookie('userid') !== null) {
-					window.location = DEFAULT_ROOT + 'main.html';
-				}
-				
+			$(function () {
+				// Progress Bar Start
+				$(document).ajaxStart(function () {
+					//waitingDialog.show();
+				});
+
+				// Progress Bar End
+				$(document).ajaxStop(function () {
+					//waitingDialog.hide();
+				});
+
+				// Check if Logged in already
+				STIC.User.CheckLicense(false);
+
 				// Login Button action
 				$('#btnLogin').on('click', function () {
-					var totalErrors = 0,
-						username = $('#username').val(),
-						password = $('#password').val();					
-					
-					// Clear error messages & styles
-					$('.login-form').find('div.form-group')
-						.removeClass('has-error has-feedback')
-						.removeClass('has-success has-feedback');
-					$('.login-form').find('div.form-group').find('span.glyphicon, small.help-block')
-						.remove();	
-					$('.login-form').find('div.alert')
-						.remove();
-					
-					// Validate user name
-					var divInputGroup = $('.login-form').find('#username').parent(),
-							divFormGroup = $('.login-form').find('#username').parent().parent();		
-					if (username == '') {										
-						divFormGroup.addClass('has-error has-feedback');
-						divFormGroup.append('<small class="help-block" style="text-align: left">Username is required.</small>');
-						divInputGroup.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-						totalErrors++;
-					} else {
-						divFormGroup.addClass('has-success has-feedback');								
-						divInputGroup.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-					}
-					
-					// Validate user password
-					var divInputGroup = $('.login-form').find('#password').parent(),
-							divFormGroup = $('.login-form').find('#password').parent().parent();	
-					if (password == '') {
-						divFormGroup.addClass('has-error has-feedback');
-						divFormGroup.append('<small class="help-block" style="text-align: left">Password is required.</small>');
-						divInputGroup.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-						totalErrors++;
-					} else {
-						divFormGroup.addClass('has-success has-feedback');								
-						divInputGroup.append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-					}
-					
-					// Authenticate user 
-					if (totalErrors <= 0 ) {
-						$.post(WS_USER_CHECK, { user_name: username, user_password: password })
-							.done(function (result, status) {
-								var response = result.response;
-
-								// Authenticated
-								if (response.type === 'SUCCESS') {
-									var user = response['users-list'].user;
-									
-									// Create Cookies
-									STIC.User.CreateCookie('username', user.user_name, 1);
-									STIC.User.CreateCookie('userid', user.user_id, 1);
-									STIC.User.CreateCookie('roleid', user.role_id, 1);
-									
-									window.location = DEFAULT_ROOT + 'main.html';
-								
-								// Not Authorized
-								} else {
-									// Clear error messages & styles
-									$('.login-form').find('div.form-group')
-										.removeClass('has-error has-feedback')
-										.removeClass('has-success has-feedback');
-									$('.login-form').find('div.form-group').find('span.glyphicon, small.help-block')
-										.remove();	
-									$('.login-form').find('div.alert')
-										.remove();
-									
-									// Show error messages & styles
-									$('.login-form hr:first').after(MSG_ALERT_INVALID_LOGIN);
-									$('.login-form').find('#username, #password').parent()
-										.append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-									$('.login-form').find('#username, #password').parent().parent()
-										.addClass('has-error has-feedback');
-									$('.login-form').find('#username').parent().parent()
-										.append('<small class="help-block" style="text-align: left">Username is invalid.</small>');
-									$('.login-form').find('#password').parent().parent()
-										.append('<small class="help-block" style="text-align: left">Password is invalid.</small>');
-								}
-							})
-							
-							// Show WS Error
-							.fail(function () {
-								STIC.showWSError();
-							})
-					} else {
-						$('.login-form hr:first').after(MSG_ALERT_LOGIN_FORM_ERROR);
-					}
+					STIC.User.Login();
 				});
 			});
 		</script>

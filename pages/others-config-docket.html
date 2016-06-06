@@ -90,8 +90,11 @@
 		// Save
 		$('#save-docket-config').on('click', function() {
 			BootstrapDialog.confirm({
-				title: MSG_TITLE_CONFIRM_SAVE,
-				message: MSG_CONFIRM_SAVE_CONFIG_DOCKET,			
+				type: 'type-danger',
+				btnOKLabel: BTN_LABEL_CONFIRM_SAVE,
+				btnCancelLabel: BTN_LABEL_CANCEL,
+				title: MSG_TITLE_INFO,
+				message: MSG_CONFIRM_SAVE_CONFIG,			
 				callback: function(result) {
 					if (result) {
 						var jsonString = '',
@@ -107,9 +110,9 @@
 						jsonString = 'printerInfo=' + JSON.stringify(jsonObject);						
 						$.post(WS_UPDATE_CONFIG_DOCKET, jsonString, function(data, status){
 							BootstrapDialog.alert({
+								type: 'type-primary',
 								title: MSG_TITLE_INFO,
-								message: 'Docket settings were updated successfully.',	
-								type: BootstrapDialog.TYPE_PRIMARY
+								message: MSG_INFO_SAVE_CONFIG
 							});
 							loadDocket();
 						});

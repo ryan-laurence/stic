@@ -22,102 +22,230 @@
 	*		{String} wsDelete : Web Service for Deleting records
 	*/
 function loadEditData(params) {
-	var
-		// Modal Form Options
-		modalFrmContent = $('<div></div>').load(params.formSrc),
-		modalNewTitle = BTN_LABEL_NEW_RECORD + ' ' + params.modTitle,
-		modalEditTitle = BTN_LABEL_EDIT_RECORD + ' ' + params.modTitle,
+	// Modal Form Options
+	var modalFrmContent = $('<div></div>').load(params.formSrc),
+	modalNewTitle = BTN_LABEL_NEW_RECORD + ' New ' + params.modTitle,
+	modalEditTitle = BTN_LABEL_EDIT_RECORD + ' Edit ' + params.modTitle,
 
-		// Modal Buttons > Save
-		modalBtnSave = {
-			label: 'Save',
-			icon: 'fa fa-floppy-o',
-			cssClass: 'btn-primary',
-			action: btnSaveAction
-		},
+	// Modal Buttons > Save
+	modalBtnSave = {
+		label: 'Save Data',
+		icon: 'fa fa-floppy-o',
+		cssClass: 'btn-primary',
+		action: modalBtnSaveAction
+	},
 
-		// Modal Buttons > Cancel
-		modalBtnCancel = {
-			label: 'Cancel',
-			icon: 'fa fa-ban',
-			cssClass: 'btn-primary',
-			action: function(dialogItself) {
-				BootstrapDialog.closeAll();
+	// Modal Buttons > Cancel
+	modalBtnCancel = {
+		label: 'Cancel',
+		icon: 'fa fa-ban',
+		cssClass: 'btn-default',
+		action: function (dialogItself) {
+			BootstrapDialog.closeAll();
+		}
+	},
+
+	// DT Buttons > New
+	dtBtnNew = {
+		name: 'new',
+		className: 'btn-primary',
+		text: BTN_LABEL_NEW_RECORD,
+		titleAttr: BTN_TITLE_NEW_RECORD,
+		action: function (e, dt, node, config) {
+			BootstrapDialog.show({
+				closable: false,
+				title: modalNewTitle,		
+				message: modalFrmContent,
+				onshown: modalNewOnShown,
+				onhidden: modalOnHidden,
+				buttons: [modalBtnCancel, modalBtnSave]				
+			});
+		}
+	},
+
+	// DT Buttons > Edit
+	dtBtnEdit = {
+		name: 'edit',
+		enabled: false,
+		className: 'btn-primary',
+		text: BTN_LABEL_EDIT_RECORD,
+		titleAttr: BTN_TITLE_EDIT_RECORD,
+		action: function (e, dt, node, config) {
+			BootstrapDialog.show({
+				closable: false,
+				title: modalEditTitle,
+				message: modalFrmContent,
+				onshown: modalEditOnShown,
+				onhidden: modalOnHidden,
+				buttons: [modalBtnCancel, modalBtnSave]
+			});
+		}
+	},
+
+	// DT Buttons > Delete
+	dtBtnDelete = {
+		name: 'delete',
+		enabled: false,
+		className: 'btn-danger',
+		action: dtBtnDeleteAction,
+		text: BTN_LABEL_DELETE_RECORD,
+		titleAttr: BTN_TITLE_DELETE_RECORD
+	},
+
+	// DT Buttons > Refresh
+	dtBtnReload = {
+		name: 'reload',
+		className: 'btn-primary',
+		text: BTN_LABEL_REFRESH_RECORD,
+		titleAttr: BTN_TITLE_REFRESH_RECORD,
+		action: function (e, dt, node, config) {
+			dt.ajax.reload();
+		}
+	},
+
+	// DT Buttons > Copy
+	dtBtnCopy = {
+		name: 'copy',
+		extend: 'copyHtml5',
+		className: 'btn-primary',
+		text: BTN_LABEL_COPY,
+		titleAttr: BTN_TITLE_COPY,
+		exportOptions: {
+			columns: ':visible',
+			modifier: {
+				page: 'current'
 			}
-		},
+		}
+	},
 
-		// DT Buttons > New
-		dtBtnNew = {
-			name: 'new',
-			className: 'btn-primary',
-			text: BTN_LABEL_NEW_RECORD,
-			action: function (e, dt, node, config) {
-				// Show New Modal Form
-				BootstrapDialog.show({
-					closable: false,
-					title: modalNewTitle,
-					message: modalFrmContent,
-					onshown: modalNewOnShown,
-					onhidden: modalOnHidden,
-					buttons: [modalBtnSave, modalBtnCancel]
-				});
-			}
-		},
+	// DT Buttons > CSV
+	dtBtnCSV = {
+		name: 'csv',
+		extend: 'csvHtml5',
+		className: 'btn-primary',
+		text: BTN_LABEL_EXPORT_CSV,
+		titleAttr: BTN_TITLE_EXPORT_CSV,
+		filename: params.modTitle,
+		exportOptions: {
+			columns: ':visible'
+		}
+	},
 
-		// DT Buttons > Edit
-		dtBtnEdit = {
-			name: 'edit',
-			enabled: false,
-			className: 'btn-primary',
-			text: BTN_LABEL_EDIT_RECORD,
-			action: function (e, dt, node, config) {
-				// Show Edit Modal Form
-				BootstrapDialog.show({
-					closable: false,
-					title: modalEditTitle,
-					message: modalFrmContent,
-					onshown: modalEditOnShown,
-					onhidden: modalOnHidden,
-					buttons: [modalBtnSave, modalBtnCancel]
-				});
-			}
-		},
+	// DT Buttons > Excel
+	dtBtnExcel = {
+		name: 'excel',
+		extend: 'excelHtml5',
+		className: 'btn-primary',
+		text: BTN_LABEL_EXPORT_EXCEL,
+		titleAttr: BTN_TITLE_EXPORT_EXCEL,
+		filename: params.modTitle,
+		sheetName: params.modTitle,
+		exportOptions: {
+			columns: ':visible'
+		}
+	},
 
-		// DT Buttons > Delete
-		dtBtnDelete = {
-			name: 'delete',
-			enabled: false,
-			className: 'btn-danger',
-			text: BTN_LABEL_DELETE_RECORD,
-			action: btnDeleteAction
-		},
+	// DT Buttons > PDF
+	dtBtnPDF = {
+		name: 'pdf',
+		extend: 'pdfHtml5',
+		title: params.modTitle,
+		className: 'btn-primary',
+		text: BTN_LABEL_EXPORT_PDF,
+		titleAttr: BTN_TITLE_EXPORT_PDF,
+		customize: dtPDFPrintCustom,
+		filename: params.modTitle,
+		exportOptions: {
+			columns: ':visible'
+		}
+	},
 
-		// DT Buttons > Print
-		dtBtnPrint = {
-			name: 'print',
-			extend: 'pdfHtml5',
-			download: 'open',
-			title: params.modTitle,
-			className: 'btn-primary',
-			text: BTN_LABEL_PRINT_RECORD,
-			exportOptions: { columns: ':visible' },
-			customize: dtPDFPrintCustom
-		},
-
-		// DT Buttons > Refresh
-		dtBtnReload = {
-			name: 'reload',
-			className: 'btn-primary',
-			text: BTN_LABEL_REFRESH_RECORD,
-			action: function (e, dt, node, config) {
-				dt.ajax.reload();
-			}
-		};
+	// DT Buttons > Web Page Print
+	dtBtnPrint = {
+		name: 'print',
+		extend: 'print',
+		enabled: false,
+		autoPrint: false,
+		title: params.modTitle,
+		className: 'btn-primary',
+		text: BTN_LABEL_PRINT_RECORD,
+		titleAttr: BTN_TITLE_PRINT_RECORD,
+		customize: dtWebPagePrintCustom,
+		exportOptions: {
+			columns: ':visible'
+		}
+	};
 
 	// Show only required buttons
 	var dtBtns = params.showAllBtns ?
-		[dtBtnNew, dtBtnEdit, dtBtnDelete, dtBtnPrint, dtBtnReload] :
-		[dtBtnDelete, dtBtnPrint, dtBtnReload];
+		[dtBtnNew, dtBtnEdit, dtBtnDelete, dtBtnReload] :
+		[dtBtnDelete, dtBtnReload];
+
+	// DT Initialization
+	var dt = $('#table-data')
+		.DataTable({
+			ordering: true,
+			searching: true,
+			dom: '<"dt-toolbar">Bfrtip',
+			pageLength: DEFAULT_PAGE_LENGTH,
+			columns: params.cd,
+			ajax: {
+				url: params.wsList,
+				dataSrc: function (json) {
+					var ds = params.ds.split('.'),
+						rec = json[ds[0]][ds[1]][ds[2]];
+					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+				}
+			},
+			buttons: dtBtns
+		})
+		.on('draw.dt', function (e, settings, data) {
+			var btns = [
+				'copy:name', 
+				'csv:name', 
+				'excel:name', 
+				'pdf:name', 
+				'print:name'
+			];			
+			dt.data().length > 0 ?
+				dt.buttons(btns).enable() :
+				dt.buttons(btns).disable();
+			dt.button('edit:name').disable();
+			dt.button('delete:name').disable();
+		});
+
+	// Export & Print DT Buttons
+	new $.fn.dataTable.Buttons(dt, {
+		buttons: [
+			dtBtnCopy,
+			dtBtnCSV,
+			dtBtnExcel,
+			dtBtnPDF,
+			dtBtnPrint]
+   });
+
+	// Append to DT
+	dt.buttons(1, null).container()
+		.insertAfter('div.dt-buttons');
+
+	// DT Default Sorting
+	dt.column('0:visible').order('asc').draw();
+
+	// DT Row Click Event
+	$('#table-data tbody').on('click', 'tr', function () {
+		if (dt.row(this).data()[params.pkey] != '') {
+			if ($(this).hasClass('selected')) {
+				$(this).removeClass('selected');
+				dt.button('edit:name').disable();
+				dt.button('delete:name').disable();
+			} else {
+				dt.$('tr.selected').removeClass('selected');
+				$(this).addClass('selected');
+				dt.button('edit:name').enable();
+				dt.button('delete:name').enable();
+			}
+		}
+	});
 
 	// Trigger on New Modal onshown event
 	function modalNewOnShown(dialogRef) {
@@ -135,17 +263,16 @@ function loadEditData(params) {
 		});
 	}
 
-	// Trigger on Modal OnHidden
+	// Trigger on Modal onhidden event
 	function modalOnHidden(dialogRef) {
 		var modalBody = dialogRef.getModalBody();
 		modalBody.find('input[data-field]').val('');
 		modalBody.find('select[data-field]').val('');
 		STIC.clearHelpBlocks({ formId: params.formId });
-		dt.ajax.reload();
 	}
 
 	// New & Edit Save Button Action
-	function btnSaveAction(dialogRef) {
+	function modalBtnSaveAction(dialogRef) {
 		// Form Validation
 		var isValid = STIC.FormValidation({ formId: params.formId });
 
@@ -185,6 +312,7 @@ function loadEditData(params) {
 						// Proceed with insert if no duplicate records found
 						if (result.response.type === 'FAILED') {
 							insertUpdateData({
+								dt: dt,
 								url: wsPost,
 								title: infoTitle,
 								message: infoMessage,
@@ -208,6 +336,7 @@ function loadEditData(params) {
 			// Proceed with insert if not required to check duplicate
 			} else {
 				insertUpdateData({
+					dt: dt,
 					url: wsPost,
 					title: infoTitle,
 					message: infoMessage,
@@ -234,6 +363,7 @@ function loadEditData(params) {
 
 				// Call WS
 				STIC.postData({
+					dt: o.dt,
 					url: o.url,
 					data: JSONString,
 					title: o.title,
@@ -245,15 +375,15 @@ function loadEditData(params) {
 	}
 
 	// Delete Button Action
-	function btnDeleteAction(e, dt, node, config) {
+	function dtBtnDeleteAction(e, dt, node, config) {
 		var userRoleId = STIC.User.ReadCookie('roleid');
 		if (userRoleId === '1' || userRoleId === '2') {
 			// Confirm delete
 			BootstrapDialog.confirm({
 				type: 'type-danger',
 				btnOKLabel: BTN_LABEL_CONFIRM_DELETE,
-				btnCancelLabel: BTN_LABEL_CANCEL_DELETE,
-				title: MSG_TITLE_CONFIRM_DELETE,
+				btnCancelLabel: BTN_LABEL_CANCEL,
+				title: MSG_TITLE_INFO,
 				message: MSG_CONFIRM_DELETE_RECORD,
 				callback: function (result) {
 					if (result) {
@@ -293,50 +423,35 @@ function loadEditData(params) {
 		});
 	}
 
-	// DT Initialization
-	var dt = $('#table-data')
-		.DataTable({
-			ordering: true,
-			searching: true,
-			processing: false,
-			lengthChange: false,
-			dom: '<"dt-toolbar">Bfrtip',
-			pageLength: DEFAULT_PAGE_LENGTH,
-			columns: params.cd,
-			ajax: {
-				url: params.wsList,
-				dataSrc: function (json) {
-					var ds = params.ds.split('.'),
-						rec = json[ds[0]][ds[1]][ds[2]];
-					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
-				}
-			},
-			buttons: dtBtns
-		})
-		.on('draw.dt', function (e, settings, data) {
-			dt.data().length > 0 ?
-				dt.button('print:name').enable() :
-				dt.button('print:name').disable();
-			dt.button('edit:name').disable();
-			dt.button('delete:name').disable();
-		});
-
-	// DT Default Sorting
-	dt.column('0:visible').order('asc').draw();
-
-	// DT Row Click Event
-	$('#table-data tbody').on('click', 'tr', function () {
-		if (dt.row(this).data()[params.pkey] != '') {
-			if ($(this).hasClass('selected')) {
-				$(this).removeClass('selected');
-				dt.button('edit:name').disable();
-				dt.button('delete:name').disable();
-			} else {
-				dt.$('tr.selected').removeClass('selected');
-				$(this).addClass('selected');
-				dt.button('edit:name').enable();
-				dt.button('delete:name').enable();
-			}
-		}
-	});
+	// Customize Web Page Print Output
+	function dtWebPagePrintCustom(win) {
+		$(win.document.body)
+			.css('background', 'transparent')
+			.css('font-weight', 'normal')
+			.css('font-family', 'Courier');
+		// Title
+		$(win.document.body).find('h1')
+			.css('font-size', '16pt')
+			.css('text-align', 'center');
+		// Message
+		$(win.document.body).find('div')
+			.css('font-size', '11pt')
+			.css('text-align', 'left')
+			.css('margin', '20px 0px 15px 0px');
+		// Data Table
+		$(win.document.body).find('table')
+			.removeClass('display')
+			.removeClass('compact');
+		$(win.document.body).find('table th')
+			.css('font-size', '11pt')
+			.css('text-align', 'left')
+			.css('padding-left', '0px');
+		$(win.document.body).find('table td')
+			.css('font-size', '10pt')
+			.css('text-align', 'left')
+			.css('padding-left', '0px')
+			.css('padding-top', '10px')
+			.css('padding-bottom', '10px')
+			.css('font-weight', 'normal');
+	}
 }

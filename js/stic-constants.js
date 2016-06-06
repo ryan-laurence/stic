@@ -1,22 +1,32 @@
 // Default Constants
-var DEFAULT_ROOT = '/forms/';
+var DEFAULT_ROOT = '/stic/';
+var DEFAULT_COOKIE_LIFE = 3;
 var DEFAULT_PAGE_LENGTH = 10;
 var DEFAULT_PAGE_LOC = 'pages/';
 var DEFAULT_PAGE_FILE_EXT = '.html';
+var DEFAULT_DATE_FORMAT = 'MM/DD/YYYY';
 var DEFAULT_WRAPPER_ID = '#main-wrapper';
 var DEFAULT_DS_REPORTS = 'response.report-list.report';
 var DEFAULT_DATASOURCE = 'response.record-list.record';
 
 // Default DataTables Settings
 var DEFAULT_DT_SETTINGS = {
+	processing: true,
+	lengthChange: false,
 	pagingType: 'full',
 	language: {
-		paginate: {
-			first: '<i class="fa fa-fast-backward"></i> First',
-			previous: '<i class="fa fa-backward"></i> Previous',
-			next: 'Next <i class="fa fa-forward"></i>',
-			last: 'Last <i class="fa fa-fast-forward"></i>'
-		}
+		paginate: {		
+			next: '<i class="fa fa-forward"></i>',
+			last: '<i class="fa fa-fast-forward"></i>',
+			previous: '<i class="fa fa-backward"></i>',
+			first: '<i class="fa fa-fast-backward"></i>'
+		},
+		processing: 
+			'<div class="indicator">' +
+				'<i class="fa fa-cog fa-spin fa-2x fa-fw margin-bottom"></i> ' +
+				'Please wait, loading data.' +
+			'</div>',
+		search: '<i class="fa fa-search"></i>'
 	}
 }
 
@@ -32,11 +42,13 @@ var CD_TRUCK_IN_LIST = [
 	{ data: 'docket_no', visible: false, searchable: false, orderable: false }
 ];
 var FORM_CUST_PRODUCT_DATA = 'pages/data-customer-product-form.html'
-var WS_CHECK_TRUCK_CODE_LIST = '/scaletech/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&';
-var WS_FIRST_WEIGHING_INSERT = '/scaletech/services/WeightReadingInfoServices/addWeightReadings?response=application/json&';
-var WS_FIRST_WEIGHING_DELETE = '/scaletech/services/WeightReadingInfoServices/deleteWeighReadingById?response=application/json&';
-var WS_SECOND_WEIGHING_UPDATE = '/scaletech/services/WeightReadingInfoServices/updateWeightReadings?response=application/json&';
-var WS_CUST_PRODUCT_INSERT = '/scaletech/services/ProductsInfoServices/addProductsAndCustomerProducts?response=application/json&'
+var WS_CHECK_TRUCK_CODE_LIST = '/stic/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&';
+var WS_FIRST_WEIGHING_INSERT = '/stic/services/WeightReadingInfoServices/addWeightReadings?response=application/json&';
+var WS_FIRST_WEIGHING_DELETE = '/stic/services/WeightReadingInfoServices/deleteWeighReadingById?response=application/json&';
+var WS_SECOND_WEIGHING_UPDATE = '/stic/services/WeightReadingInfoServices/updateWeightReadings?response=application/json&';
+var WS_CUST_PRODUCT_INSERT = '/stic/services/ProductsInfoServices/addProductsAndCustomerProducts?response=application/json&'
+var WS_SCALE_DISCONNECT = '/stic/services/ScaleReaderInfoServices/disconnect';
+var WS_DOCKET_PRINT = '/stic/DocketPrintReportService?';
 
 // Supplier Data
 var CD_SUPPLIER_LIST = [
@@ -47,10 +59,10 @@ var CD_SUPPLIER_LIST = [
 ];
 var FORM_SUPPLIER_DATA = 'pages/data-supplier-form.html';
 var DS_SUPPLIER_LIST = 'response.suppliers-list.supplier';
-var WS_SUPPLIER_LIST = '/scaletech/services/SuppliersInfoServices/getAllSuppliersList?response=application/json&';
-var WS_SUPPLIER_INSERT = '/scaletech/services/SuppliersInfoServices/addSuppliers?response=application/json&';
-var WS_SUPPLIER_UPDATE = '/scaletech/services/SuppliersInfoServices/updateSuppliers?response=application/json&';
-var WS_SUPPLIER_DELETE = '/scaletech/services/SuppliersInfoServices/updateSuppliersByIsDeleted?response=application/json&isDeleted=0&';
+var WS_SUPPLIER_LIST = '/stic/services/SuppliersInfoServices/getAllSuppliersList?response=application/json&';
+var WS_SUPPLIER_INSERT = '/stic/services/SuppliersInfoServices/addSuppliers?response=application/json&';
+var WS_SUPPLIER_UPDATE = '/stic/services/SuppliersInfoServices/updateSuppliers?response=application/json&';
+var WS_SUPPLIER_DELETE = '/stic/services/SuppliersInfoServices/updateSuppliersByIsDeleted?response=application/json&isDeleted=0&';
 
 // Category Data
 var CD_CATEGORY_LIST = [
@@ -61,10 +73,10 @@ var CD_CATEGORY_LIST = [
 ];
 var FORM_CATEGORY_DATA = 'pages/data-category-form.html';
 var DS_CATEGORY_LIST = 'response.categories-list.cateory';
-var WS_CATEGORY_LIST = '/scaletech/services/CategoriesInfoService/getAllCategoriesList?response=application/json';
-var WS_CATEGORY_INSERT = '/scaletech/services/CategoriesInfoService/addCategories?response=application/json&';
-var WS_CATEGORY_UPDATE = '/scaletech/services/CategoriesInfoService/updateCategories?response=application/json&';
-var WS_CATEGORY_DELETE = '/scaletech/services/CategoriesInfoService/updateCategoriesByIsDeleted?response=application/json&isDeleted=0&';
+var WS_CATEGORY_LIST = '/stic/services/CategoriesInfoService/getAllCategoriesList?response=application/json';
+var WS_CATEGORY_INSERT = '/stic/services/CategoriesInfoService/addCategories?response=application/json&';
+var WS_CATEGORY_UPDATE = '/stic/services/CategoriesInfoService/updateCategories?response=application/json&';
+var WS_CATEGORY_DELETE = '/stic/services/CategoriesInfoService/updateCategoriesByIsDeleted?response=application/json&isDeleted=0&';
 
 // Customer Data
 var CD_CUSTOMER_LIST = [
@@ -75,10 +87,10 @@ var CD_CUSTOMER_LIST = [
 ];
 var FORM_CUSTOMER_DATA = 'pages/data-customer-form.html';
 var DS_CUSTOMER_LIST = 'response.customers-list.customer';
-var WS_CUSTOMER_INSERT = '/scaletech/services/CustomerInfoServices/addCustomers?response=application/json&';
-var WS_CUSTOMER_UPDATE = '/scaletech/services/CustomerInfoServices/updateCustomers?response=application/json&';
-var WS_CUSTOMER_DELETE = '/scaletech/services/CustomerInfoServices/updateCustomersByIsDeleted?response=application/json&isDeleted=0&';
-var WS_CUSTOMER_LIST = '/scaletech/services/CustomerInfoServices/getAllCustomersList?response=application/json&';
+var WS_CUSTOMER_INSERT = '/stic/services/CustomerInfoServices/addCustomers?response=application/json&';
+var WS_CUSTOMER_UPDATE = '/stic/services/CustomerInfoServices/updateCustomers?response=application/json&';
+var WS_CUSTOMER_DELETE = '/stic/services/CustomerInfoServices/updateCustomersByIsDeleted?response=application/json&isDeleted=0&';
+var WS_CUSTOMER_LIST = '/stic/services/CustomerInfoServices/getAllCustomersList?response=application/json&';
 
 // Destination Data
 var CD_DESTINATION_LIST = [
@@ -88,7 +100,7 @@ var CD_DESTINATION_LIST = [
 	{ data: 'dest_location', width: '30%' }
 ];
 var DS_DESTINATION_LIST = 'response.destinations-list.destination';
-var WS_DESTINATION_LIST = '/scaletech/services/DestinationsInfoServices/getAllDestinationsNotInCustDestList?response=application/json&';
+var WS_DESTINATION_LIST = '/stic/services/DestinationsInfoServices/getAllDestinationsNotInCustDestList?response=application/json&';
 
 // Product Data
 var CD_PRODUCT_LIST = [
@@ -98,10 +110,10 @@ var CD_PRODUCT_LIST = [
 	{ data: 'unit_price', width: '20%' }
 ];
 var DS_PRODUCT_LIST = 'response.products-list.product';
-var WS_PRODUCT_LIST = '/scaletech/services/ProductsInfoServices/getAllProductsList?response=application/json&';
-var WS_PRODUCT_INSERT = '/scaletech/services/ProductsInfoServices/addProducts?response=application/json&';
-var WS_PRODUCT_UPDATE = '/scaletech/services/ProductsInfoServices/updateProducts?response=application/json&';
-var WS_PRODUCT_DELETE = '/scaletech/services/ProductsInfoServices/updateProductsByIsDeleted?response=application/json&isDeleted=0&';
+var WS_PRODUCT_LIST = '/stic/services/ProductsInfoServices/getAllProductsList?response=application/json&';
+var WS_PRODUCT_INSERT = '/stic/services/ProductsInfoServices/addProducts?response=application/json&';
+var WS_PRODUCT_UPDATE = '/stic/services/ProductsInfoServices/updateProducts?response=application/json&';
+var WS_PRODUCT_DELETE = '/stic/services/ProductsInfoServices/updateProductsByIsDeleted?response=application/json&isDeleted=0&';
 
 // Customer Destination Data
 var CD_CUSTDEST_LIST = [
@@ -114,9 +126,9 @@ var CD_CUSTDEST_LIST = [
 ];
 var PICKER_CUSTDEST_DATA = 'pages/data-customer-destination-picker.html';
 var DS_CUSTDEST_LIST = 'response.custDest-list.customerDestination';
-var WS_CUSTDEST_LIST = '/scaletech/services/CustDestInfoServices/getAllCustDestList?response=application/json&';
-var WS_CUSTDEST_INSERT = '/scaletech/services/CustDestInfoServices/addCustDest?response=application/json&';
-var WS_CUSTDEST_DELETE = '/scaletech/services/CustDestInfoServices/updateCustDestByIsDeleted?response=application/json&isDeleted=0&';
+var WS_CUSTDEST_LIST = '/stic/services/CustDestInfoServices/getAllCustDestList?response=application/json&';
+var WS_CUSTDEST_INSERT = '/stic/services/CustDestInfoServices/addCustDest?response=application/json&';
+var WS_CUSTDEST_DELETE = '/stic/services/CustDestInfoServices/updateCustDestByIsDeleted?response=application/json&isDeleted=0&';
 
 // Customer Product Data
 var CD_CUSTPROD_LIST = [
@@ -129,9 +141,9 @@ var CD_CUSTPROD_LIST = [
 ];
 var PICKER_CUSTPROD_DATA = 'pages/data-customer-product-picker.html';
 var DS_CUSTPROD_LIST = 'response.custProducts-list.customerProduct';
-var WS_CUSTPROD_LIST = '/scaletech/services/CustProductsInfoServices/getAllCustProdList?response=application/json&';
-var WS_CUSTPROD_INSERT = '/scaletech/services/CustProductsInfoServices/addCustProd?response=application/json&';
-var WS_CUSTPROD_DELETE = '/scaletech/services/CustProductsInfoServices/updateCustProdByIsDeleted?response=application/json&isDeleted=0&';
+var WS_CUSTPROD_LIST = '/stic/services/CustProductsInfoServices/getAllCustProdList?response=application/json&';
+var WS_CUSTPROD_INSERT = '/stic/services/CustProductsInfoServices/addCustProd?response=application/json&';
+var WS_CUSTPROD_DELETE = '/stic/services/CustProductsInfoServices/updateCustProdByIsDeleted?response=application/json&isDeleted=0&';
 
 // Truck Data
 var CD_TRUCK_LIST = [
@@ -141,10 +153,10 @@ var CD_TRUCK_LIST = [
 ];
 var FORM_TRUCK_DATA = 'pages/data-truck-form.html';
 var DS_TRUCK_LIST = 'response.trucks-list.truck';
-var WS_TRUCK_LIST = '/scaletech/services/TrucksInfoServices/getAllTrucksList?response=application/json&';
-var WS_TRUCK_INSERT = '/scaletech/services/TrucksInfoServices/addTrucks?response=application/json&';
-var WS_TRUCK_UPDATE = '/scaletech/services/TrucksInfoServices/updateTrucks?response=application/json&';
-var WS_TRUCK_DELETE = '/scaletech/services/TrucksInfoServices/updateTrucksByIsDeleted?response=application/json&isDeleted=0&';
+var WS_TRUCK_LIST = '/stic/services/TrucksInfoServices/getAllTrucksList?response=application/json&';
+var WS_TRUCK_INSERT = '/stic/services/TrucksInfoServices/addTrucks?response=application/json&';
+var WS_TRUCK_UPDATE = '/stic/services/TrucksInfoServices/updateTrucks?response=application/json&';
+var WS_TRUCK_DELETE = '/stic/services/TrucksInfoServices/updateTrucksByIsDeleted?response=application/json&isDeleted=0&';
 
 // User Data
 var CD_USER_LIST = [
@@ -160,18 +172,25 @@ var FORM_USER_EDIT_DATA = 'pages/others-user-details-form-edit.html';
 var FORM_USER_CPASS_DATA = 'pages/others-user-details-form-cpass.html';
 var FORM_CHANGE_PASS_DATA = 'pages/user-change-pass-form.html';
 var DS_USER_LIST = 'response.users-list.user';
-var WS_USER_LIST = '/scaletech/services/UserInfoServices/getAllUserList?response=application/json&';
-var WS_USER_INSERT = '/scaletech/services/UserInfoServices/addUser?response=application/json&';
-var WS_USER_UPDATE = '/scaletech/services/UserInfoServices/updateUser?response=application/json&';
-var WS_USER_DELETE = '/scaletech/services/UserInfoServices/updateUserByIsDeleted?response=application/json&is_deleted=0&';
-var WS_USER_PASS_CHECK = '/scaletech/services/UserInfoServices/getUserByNamePassList?response=application/json&';
-var WS_USER_PASS_UPDATE = '/scaletech/services/UserInfoServices/updateUserPassword?response=application/json&';
-var WS_USER_CHECK = '/scaletech/services/UserInfoServices/getUserByNamePassList?response=application/json&';
-var WS_USER_AUTHENTICATE = '/scaletech/services/UserInfoServices/checkIfUserIsAuthentication?response=application/json&';
-var WS_USER_REMOVE_FROM_AUDIT = '/scaletech/services/UserInfoServices/removeUser?response=application/json&'
+var WS_USER_LIST = '/stic/services/UserInfoServices/getAllUserList?response=application/json&';
+var WS_USER_INSERT = '/stic/services/UserInfoServices/addUser?response=application/json&';
+var WS_USER_UPDATE = '/stic/services/UserInfoServices/updateUser?response=application/json&';
+var WS_USER_DELETE = '/stic/services/UserInfoServices/updateUserByIsDeleted?response=application/json&is_deleted=0&';
+var WS_USER_PASS_CHECK = '/stic/services/UserInfoServices/getUserByNamePassList?response=application/json&';
+var WS_USER_PASS_UPDATE = '/stic/services/UserInfoServices/updateUserPassword?response=application/json&';
+var WS_USER_CHECK = '/stic/services/UserInfoServices/getUserByNamePassList?response=application/json&';
+var WS_USER_AUTHENTICATE = '/stic/services/UserInfoServices/checkIfUserIsAuthentication?response=application/json&';
+var WS_USER_REMOVE_FROM_AUDIT = '/stic/services/UserInfoServices/removeUser?response=application/json&'
+
+// License Validation
+var WS_LICENSE_UPLOAD = '/stic/FileUploadService';
+var WS_CHECK_LICENSE = '/stic/services/CompanyInfoServices/checkIsLicense?response=application/json&';
+var WS_LICENSE_NOTIFY = '/stic/services/CompanyInfoServices/getDaysBetweenDates?response=application/json&';
+var WS_VALIDATE_LICENSE = '/stic-admin/services/ClientsInfoServices/validateLicenseKey?response=application/json&';
+var WS_UPDATE_COMPANY_LICENSE = '/stic/services/CompanyInfoServices/updateCompanyLicenseKey?response=application/json&';
 
 // Roles Data
-var WS_LIST_ROLES = '/scaletech/services/RolesInfoServices/getAllRolesList?response=application/json&roleId=1&';
+var WS_LIST_ROLES = '/stic/services/RolesInfoServices/getAllRolesList?response=application/json&roleId=1&';
 
 // Supplier Summary
 var CD_SUMMARY_SUPPLIER = [
@@ -181,7 +200,7 @@ var CD_SUMMARY_SUPPLIER = [
 	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_SUPPLIER = 'Supplier Summary';
-var WS_SUMMARY_SUPPLIER = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportBySupplierList?response=application/json&';
+var WS_SUMMARY_SUPPLIER = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportBySupplierList?response=application/json&';
 
 // Customer Summary
 var CD_SUMMARY_CUSTOMER = [
@@ -191,7 +210,7 @@ var CD_SUMMARY_CUSTOMER = [
 	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_CUSTOMER = 'Customer Summary';
-var WS_SUMMARY_CUSTOMER = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByCustomerList?response=application/json&';
+var WS_SUMMARY_CUSTOMER = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByCustomerList?response=application/json&';
 
 // Destination Summary
 var CD_SUMMARY_DESTINATION = [
@@ -201,7 +220,7 @@ var CD_SUMMARY_DESTINATION = [
 	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_DESTINATION = 'Destination Summary';
-var WS_SUMMARY_DESTINATION = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByDestinationList?response=application/json&';
+var WS_SUMMARY_DESTINATION = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByDestinationList?response=application/json&';
 
 // Product Summary
 var CD_SUMMARY_PRODUCT = [
@@ -210,7 +229,7 @@ var CD_SUMMARY_PRODUCT = [
 	{ data: 'weight_unit', name: 'weight_unit', width: '20%' }
 ];
 var REPORT_TITLE_PRODUCT = 'Product Summary';
-var WS_SUMMARY_PRODUCT = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByProductList?response=application/json&';
+var WS_SUMMARY_PRODUCT = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByProductList?response=application/json&';
 
 // Reprint Count Summary
 var CD_SUMMARY_REPRINT_COUNT = [
@@ -220,7 +239,7 @@ var CD_SUMMARY_REPRINT_COUNT = [
 	{ data: 'user_name', name: 'user_name', width: '25%' }
 ];
 var REPORT_TITLE_REPRINT_COUNT = 'Reprint Count Summary';
-var WS_SUMMARY_REPRINT_COUNT = '/scaletech/services/DocketPrintLogInfoServices/getAllDocketPrintLogList?response=application/json&';
+var WS_SUMMARY_REPRINT_COUNT = '/stic/services/DocketPrintLogInfoServices/getAllDocketPrintLogList?response=application/json&';
 
 // Truck Summary
 var CD_SUMMARY_TRUCK = [
@@ -230,7 +249,7 @@ var CD_SUMMARY_TRUCK = [
 	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_TRUCK = 'Truck Summary';
-var WS_SUMMARY_TRUCK = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByTruckList?response=application/json&';
+var WS_SUMMARY_TRUCK = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByTruckList?response=application/json&';
 
 // Detailed  Truck Summary
 var CD_SUMMARY_DETAILED_TRUCK = [
@@ -244,7 +263,7 @@ var CD_SUMMARY_DETAILED_TRUCK = [
 	{ data: 'user_name', name: 'user_name', width: '10%' }
 ];
 var REPORT_TITLE_DETAILED_TRUCK = 'Detailed Truck Summary';
-var WS_SUMMARY_DETAILED_TRUCK = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByDetailedTruckList?response=application/json&';
+var WS_SUMMARY_DETAILED_TRUCK = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByDetailedTruckList?response=application/json&';
 
 // Summary Custom
 var CD_SUMMARY_CUSTOM_DOCKET = [
@@ -259,7 +278,7 @@ var CD_SUMMARY_CUSTOM_DOCKET = [
 	{ data: 'weight_unit', name: 'weight_unit', width: '5%' },
 	{ data: 'compensation', name: 'compensation' }
 ];
-var WS_SUMMARY_CUSTOM_DOCKET = '/scaletech/services/WeighingReadingSummInfoServices/getAllWeightReadingByFilterList?response=application/json&';
+var WS_SUMMARY_CUSTOM_DOCKET = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingByFilterList?response=application/json&';
 
 // Event Log
 var CD_EVENT_LOG_LIST = [
@@ -271,7 +290,7 @@ var CD_EVENT_LOG_LIST = [
 ];
 var REPORT_TITLE_EVENT_LOG = 'Event Log';
 var DS_EVENT_LOG_LIST = 'response.audittrail-list.audittrail';
-var WS_EVENT_LOG_LIST = '/scaletech/services/AuditInfoService/getAuditTrailList?response=application/json&';
+var WS_EVENT_LOG_LIST = '/stic/services/AuditInfoService/getAuditTrailList?response=application/json&';
 
 // Docket Styles
 var CD_LIST_DOCKET_STYLES = [
@@ -288,19 +307,19 @@ var CD_LIST_DOCKET_STYLES = [
 ];
 var PG_DOCKET_STYLES_FORM = 'pages/docket-template-style-form.html';
 var	DS_DOCKET_STYLES = 'response.docketTemplate-list.docketTemplate';
-var	WS_LIST_DOCKET_STYLES = '/scaletech/services/DocketTemplateInfoService/getAllDocketTemplateByTypeList?response=application/json&';
-var	WS_INSERT_DOCKET_STYLES = '/scaletech/services/DocketTemplateInfoService/addDocketTemplate?response=application/json&';
-var	WS_UPDATE_DOCKET_STYLES = '/scaletech/services/DocketTemplateInfoService/updateDocketTemplate?response=application/json&';
-var	WS_DELETE_DOCKET_STYLES = '/scaletech/services/DocketTemplateInfoService/deleteDocketTemplate?response=application/json&';
+var	WS_LIST_DOCKET_STYLES = '/stic/services/DocketTemplateInfoService/getAllDocketTemplateByTypeList?response=application/json&';
+var	WS_INSERT_DOCKET_STYLES = '/stic/services/DocketTemplateInfoService/addDocketTemplate?response=application/json&';
+var	WS_UPDATE_DOCKET_STYLES = '/stic/services/DocketTemplateInfoService/updateDocketTemplate?response=application/json&';
+var	WS_DELETE_DOCKET_STYLES = '/stic/services/DocketTemplateInfoService/deleteDocketTemplate?response=application/json&';
 
 // Docket Fields
-var WS_LIST_DOCKET_FIELDS = '/scaletech/services/DocketFieldsInfoServices/getAllDocketFieldsByAvailableList?response=application/json&';
+var WS_LIST_DOCKET_FIELDS = '/stic/services/DocketFieldsInfoServices/getAllDocketFieldsByAvailableList?response=application/json&';
 
 // System Config
-var WS_LIST_CONFIG_COMPANY = '/scaletech/services/CompanyInfoServices/getAllCompanyList?response=application/json&id=1&';
-var WS_UPDATE_CONFIG_COMPANY = '/scaletech/services/CompanyInfoServices/updateCompany?response=application/json&id=1&';
-var WS_LIST_CONFIG_DOCKET = '/scaletech/services/PrinterConfigurationInfoServices/getAllPrintersList?response=application/json&printerId=1&';
-var WS_UPDATE_CONFIG_DOCKET = '/scaletech/services/PrinterConfigurationInfoServices/updatePrinter?response=application/json&id=1&';
+var WS_LIST_CONFIG_COMPANY = '/stic/services/CompanyInfoServices/getAllCompanyList?response=application/json&id=1&';
+var WS_UPDATE_CONFIG_COMPANY = '/stic/services/CompanyInfoServices/updateCompany?response=application/json&id=1&';
+var WS_LIST_CONFIG_DOCKET = '/stic/services/PrinterConfigurationInfoServices/getAllPrintersList?response=application/json&printerId=1&';
+var WS_UPDATE_CONFIG_DOCKET = '/stic/services/PrinterConfigurationInfoServices/updatePrinter?response=application/json&id=1&';
 
 // Roles Data
 var CD_ROLES_LIST = [
@@ -309,38 +328,63 @@ var CD_ROLES_LIST = [
 	{ data: 'date_modified', width: '50%' }
 ];
 var FORM_ROLES_DATA = 'pages/others-role-details-form.html';
-var WS_ROLES_LIST = '/scaletech/services/RolesInfoServices/getAllRolesList?response=application/json&';
-var WS_ROLES_INSERT = '/scaletech/services/RolesInfoServices/addRoles?response=application/json&';
-var WS_ROLES_UPDATE = '/scaletech/services/RolesInfoServices/updateRoles?response=application/json&';
-var WS_ROLES_DELETE = '/scaletech/services/RolesInfoServices/updateRolesByIsDeleted?response=application/json&isDeleted=0&';
+var WS_ROLES_LIST = '/stic/services/RolesInfoServices/getAllRolesList?response=application/json&';
+var WS_ROLES_INSERT = '/stic/services/RolesInfoServices/addRoles?response=application/json&';
+var WS_ROLES_UPDATE = '/stic/services/RolesInfoServices/updateRoles?response=application/json&';
+var WS_ROLES_DELETE = '/stic/services/RolesInfoServices/updateRolesByIsDeleted?response=application/json&isDeleted=0&';
 
 // Role Modules Data
-var WS_ROLE_MODULES_LIST = '/scaletech/services/ModulesInfoServices/getAllModulesList?response=application/json&';
-var WS_ROLE_MODULES_INSERT = '/scaletech/services/RoleModulesInfoService/addRoleModules?response=application/json&'
-var WS_ROLE_MODULES_DELETE = '/scaletech/services/RoleModulesInfoService/updateRoleModulesByIsDeleted?response=application/json&isDeleted=0'
-var WS_UI_MODULES_LIST = '/scaletech/services/RoleModulesInfoService/getAllRoleModulesList?response=application/json&isDeleted=0&';
+var WS_ROLE_MODULES_LIST = '/stic/services/ModulesInfoServices/getAllModulesList?response=application/json&';
+var WS_ROLE_MODULES_INSERT = '/stic/services/RoleModulesInfoService/addRoleModules?response=application/json&'
+var WS_ROLE_MODULES_DELETE = '/stic/services/RoleModulesInfoService/updateRoleModulesByIsDeleted?response=application/json&isDeleted=0'
+var WS_UI_MODULES_LIST = '/stic/services/RoleModulesInfoService/getAllRoleModulesList?response=application/json&isDeleted=0&';
+var WS_UI_MODULES_CHECK = '/stic/services/RoleModulesInfoService/getAllModulesIdRoleIdList?response=application/json&';
 
 // Calibration
 var FORM_CALIBRATION_SPAN = 'pages/others-calibration-span-form.html';
 
 // Unique Checking
 var WS_UNIQUE_CHECK = [];
-WS_UNIQUE_CHECK['supp_code'] = '/scaletech/services/SuppliersInfoServices/getSuppliersByCodeList?response=application/json&';
-WS_UNIQUE_CHECK['cat_code'] = '/scaletech/services/CategoriesInfoService/getCategoriesByCodeList?response=application/json&';
-WS_UNIQUE_CHECK['prod_code'] = '/scaletech/services/ProductsInfoServices/getProductsByCodeList?response=application/json&';
-WS_UNIQUE_CHECK['cust_code'] = '/scaletech/services/CustomerInfoServices/getCustomersByCodeList?response=application/json&';
-WS_UNIQUE_CHECK['truck_code'] = '/scaletech/services/TrucksInfoServices/getTrucksByCodeList?response=application/json&';
-WS_UNIQUE_CHECK['role_name'] = '/scaletech/services/RolesInfoServices/getAllRolesByRoleNameList?response=application/json&';
-WS_UNIQUE_CHECK['user_name'] = '/scaletech/services/UserInfoServices/getUserByNameList?response=application/json&';
+WS_UNIQUE_CHECK['supp_code'] = '/stic/services/SuppliersInfoServices/getSuppliersByCodeList?response=application/json&';
+WS_UNIQUE_CHECK['cat_code'] = '/stic/services/CategoriesInfoService/getCategoriesByCodeList?response=application/json&';
+WS_UNIQUE_CHECK['prod_code'] = '/stic/services/ProductsInfoServices/getProductsByCodeList?response=application/json&';
+WS_UNIQUE_CHECK['cust_code'] = '/stic/services/CustomerInfoServices/getCustomersByCodeList?response=application/json&';
+WS_UNIQUE_CHECK['truck_code'] = '/stic/services/TrucksInfoServices/getTrucksByCodeList?response=application/json&';
+WS_UNIQUE_CHECK['role_name'] = '/stic/services/RolesInfoServices/getAllRolesByRoleNameList?response=application/json&';
+WS_UNIQUE_CHECK['user_name'] = '/stic/services/UserInfoServices/getUserByNameList?response=application/json&';
+
+// Button Title Attribute
+var BTN_TITLE_NEW_RECORD = 'New Data';
+var BTN_TITLE_EDIT_RECORD = 'Edit Data';
+var BTN_TITLE_DELETE_RECORD = 'Delete Data';
+var BTN_TITLE_REFRESH_RECORD = 'Refresh Data Table';
+var BTN_TITLE_COPY = 'Copy Data to Clipboard';
+var BTN_TITLE_EXPORT_CSV = 'Export Data to CSV File';
+var BTN_TITLE_EXPORT_EXCEL = 'Export Data to Excel File';
+var BTN_TITLE_EXPORT_PDF = 'Export Data to PDF File';
+var BTN_TITLE_PRINT_RECORD = 'Print Data';
+var BTN_TITLE_CHANGE_PASS = 'Change User Password';
 
 // Button Labels
-var BTN_LABEL_NEW_RECORD = '<i class="fa fa-plus"></i> New';
-var BTN_LABEL_EDIT_RECORD = '<i class="fa fa-pencil"></i> Edit';
-var BTN_LABEL_DELETE_RECORD = '<i class="fa fa-trash-o"></i> Delete';
-var BTN_LABEL_REFRESH_RECORD = '<i class="fa fa-refresh"></i> Refresh';
-var BTN_LABEL_PRINT_RECORD = '<i class="glyphicon glyphicon-print"></i> Print';
+var BTN_LABEL_NEW_RECORD = '<i class="fa fa-plus"></i>';
+var BTN_LABEL_EDIT_RECORD = '<i class="fa fa-pencil"></i>';
+var BTN_LABEL_DELETE_RECORD = '<i class="fa fa-trash-o"></i>';
+var BTN_LABEL_REFRESH_RECORD = '<i class="fa fa-refresh"></i>';
+var BTN_LABEL_ADD_ITEM = '<i class="fa fa-plus-circle"></i>';
+var BTN_LABEL_REMOVE_ITEM = '<i class="fa fa-minus-circle"></i>';
+var BTN_LABEL_COPY = '<i class="fa fa-clone"></i>';
+var BTN_LABEL_EXPORT_CSV = '<i class="fa fa-file-text-o"></i>';
+var BTN_LABEL_EXPORT_EXCEL = '<i class="fa fa-file-excel-o"></i>';
+var BTN_LABEL_EXPORT_PDF = '<i class="fa fa-file-pdf-o"></i>';
+var BTN_LABEL_PRINT_RECORD = '<i class="glyphicon glyphicon-print"></i>';
+var BTN_LABEL_CONFIRM_UPDATE = '<i class="fa fa-pencil"></i> Confirm Update';
 var BTN_LABEL_CONFIRM_DELETE = '<i class="fa fa-trash-o"></i> Confirm Delete';
-var BTN_LABEL_CANCEL_DELETE = '<i class="fa fa-ban"></i> Cancel';
+var BTN_LABEL_CONFIRM_SAVE = '<i class="fa fa-floppy-o"></i> Confirm Save';
+var BTN_LABEL_CONFIRM_LOGOUT = '<i class="fa fa-sign-out"></i> Confirm Logout';
+var BTN_LABEL_CONFIRM_FW = '<i class="fa fa-tag"></i> Confirm First Weighing';
+var BTN_LABEL_CONFIRM_SW = '<i class="fa fa-tags"></i> Confirm Second Weighing';
+var BTN_LABEL_CANCEL = '<i class="fa fa-ban"></i> Cancel';
+var BTN_LABEL_CHANGE_PASS = '<i class="fa fa-key"></i>';
 
 // Form Validation Messages
 var MSG_FV_NOTEMPTY = 'This field is required and should not be empty.';
@@ -348,47 +392,57 @@ var MSG_FV_SPECIAL_CHARS = 'Special and non alphanumeric characters are not allo
 var MSG_FV_INTEGER = 'An integer value is required for this field. (e.g. 1999)';
 var MSG_FV_FLOAT = 'The correct numeric formats are ".99", "1999.99", "1999.9" or "1999".';
 
-// Weigh Scale messages
-var MSG_TRUCK_DATA_EMPTY = 'Please add or select a <strong>Truck Code</strong> to continue.';
-var MSG_CUSTOMER_DATA_EMPTY = 'Please add or select a <strong>Customer Data</strong> to continue.';
-var MSG_FIRST_WEIGHING_CONFIRM = 'Please make sure all details provided for <strong>First Weighing</strong> are correct. Press <strong>OK</strong> to continue.';
-var MSG_SECOND_WEIGHING_CONFIRM = 'Please make sure all details provided for <strong>Second Weighing</strong> are correct. Press <strong>OK</strong> to continue.';
-var MSG_FIRST_WEIGHING_SUCCESS = '<strong>Success</strong>. The <strong>First Weighing</strong> details you have entered were <strong>successfully created</strong> in the system. Press <strong>OK</strong> to continue.';
-var MSG_SECOND_WEIGHING_SUCCESS = '<strong>Success</strong>. The <strong>Second Weighing</strong> details you have entered were <strong>successfully updated</strong> in the system. Press <strong>OK</strong> to continue.';
+// Weigh Scale 
+var MSG_TRUCK_DATA_EMPTY = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Please create a new Truck Data or select an existing Truck Data from the Truck Data Lookup to continue.</div>';
+var MSG_CUSTOMER_DATA_EMPTY = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Please create a new Customer Data or select an existing Customer Data from the Customer Data Lookup to continue.</div>';
+var MSG_CONFIRM_FIRST_WEIGHING = '<div class="alert alert-info" role="alert" style="margin-bottom: 5px;"><i class="fa fa-question-circle fa-3x fa-pull-left"></i> Please make sure all details provided for First Weighing are correct. Press Confirm First Weighing to continue.</div>';
+var MSG_CONFIRM_SECOND_WEIGHING = '<div class="alert alert-info" role="alert" style="margin-bottom: 5px;"><i class="fa fa-question-circle fa-3x fa-pull-left"></i> Please make sure all details provided for Second Weighing are correct. Press Confirm Second Weighing to continue.</div>';
+var MSG_FIRST_WEIGHING_SUCCESS = '<div class="alert alert-success" role="alert" style="margin-bottom: 5px;"><i class="fa fa-check-circle fa-3x fa-pull-left"></i>First Weighing is successful. The details you submitted were successfully encoded in the system.</div>';
+var MSG_SECOND_WEIGHING_SUCCESS = '<div class="alert alert-success" role="alert" style="margin-bottom: 5px;"><i class="fa fa-check-circle fa-3x fa-pull-left"></i>Second Weighing is successful. The details you submitted were successfully encoded in the system.</div>';
+var MSG_WEIGHING_FORM_ERROR = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The details you provided were not submitted. Change the value of the field(s) that contains errors and try again.</div>';
 
 // Message Title
 var MSG_TITLE_INFO = '<i class="fa fa-info-circle"></i> Information';
 var MSG_TITLE_ADD_REC = '<i class="fa fa-info-circle"></i> Information';
 var MSG_TITLE_EDIT_REC = '<i class="fa fa-info-circle"></i> Information';
 var MSG_TITLE_DEL_REC = '<i class="fa fa-info-circle"></i> Information';
-var MSG_TITLE_WS_ERROR = '<i class="fa fa-exclamation-circle"></i> Web Service Error';
-var MSG_TITLE_CONFIRM_LOGOUT = '<i class="fa fa-info-circle"></i> Confirm Logout';
-var MSG_TITLE_CONFIRM_SAVE = '<i class="fa fa-question-circle"></i> Confirm Update';
-var MSG_TITLE_CONFIRM_DELETE = '<i class="fa fa-question-circle"></i> Confirm Deletion';
-var MSG_TITLE_CONFIRM_FIRST_WEIGHT = '<i class="fa fa-question-circle"></i> Confirm First Weighing';
-var MSG_TITLE_CONFIRM_SECOND_WEIGHT = '<i class="fa fa-question-circle"></i> Confirm Second Weighing';
 
-// CRUD Messages
-var MSG_INFO_ADD_REC = '<strong>Success</strong>. A new record has been <strong>created</strong> in the system.';
-var MSG_INFO_EDIT_REC = '<strong>Success</strong>. The selected record was <strong>updated</strong> in the system.';
-var MSG_INFO_DEL_REC = '<strong>Success</strong>. The selected record was <strong>deleted</strong> from the system.';
-var MSG_INFO_LOGOUT_AFTER_CPASS = 'You have <strong>successfully</strong> updated your password. Please take note that you will be logged out of the system after this.'
-var MSG_INFO_WS_ERROR = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was <strong>not successful</strong> because there was an <strong>error</strong> in the Web Service response. If issue still persists, please contact your System Administrator.</div>';
-var MSG_INFO_ROLE_INVALID = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Your current role privileges does <strong>not allow</strong> you to perform this action. For more information, please contact your System Administrator.</div>';
+// CRUD 
+var MSG_INFO_ADD_REC = '<div class="alert alert-success all-middle no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-2x"></i> The new record was created successfully in the system.</div>';
+var MSG_INFO_EDIT_REC = '<div class="alert alert-success all-middle no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-2x"></i> The selected record was updated successfully in the system.</div>';
+var MSG_INFO_DEL_REC = '<div class="alert alert-success all-middle no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-2x"></i> The selected record was deleted successfully from the system.</div>';
+var MSG_INFO_LOGOUT_AFTER_CPASS = '<div class="alert alert-success no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-3x fa-pull-left"></i>You have successfully updated your password. Please take note that you will be logged out of the system after this.</div>'
+var MSG_INFO_WS_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was not successful because there was an error in the Web Service response. If issue still persists, please contact your System Administrator.</div>';
+var MSG_INFO_SAVE_CONFIG = '<div class="alert alert-success all-middle no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-3x"></i>The system\'s configuration settings were updated successfully.</div>';
+
+// Role Access
+var MSG_INFO_ROLE_INVALID = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Your current role privileges does not allow you to perform this action. Please contact your System Administrator for more information.</div>';
+var MSG_INFO_NO_MODULES_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> There are no modules currently assigned to your account. Please contact your System Administrator for more information.</div>';
+var MSG_INFO_ROLE_ACCESS_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Your current role privileges does not allow you to access this page. Please contact your System Administrator for more information.</div>';
+
+// Users
+var MSG_INFO_DEFAULT_USER_EDIT = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The user that you are about to edit is a system default user. You are not allowed to perform this action.</div>';
+var MSG_INFO_DEFAULT_USER_DELETE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The user that you are about to delete is a system default user. You are not allowed to perform this action.</div>';
+
+// License Activation
+var MSG_INFO_LICENSE_EXPIRED = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The STIC system is currently deactivated. Please upload a valid license file in the activation page to be able to use the system.</div>';
+var MSG_INFO_INVALID_FILE_FORMAT = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Please select a valid license file in this format (e.g. "companyname-yyyymmddhhmmss.lcns") and try again.</div>';
+var MSG_INFO_INVALID_LICENSE_FILE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license file you have uploaded is invalid. Please select a valid license file to start the system activation process.</div>';
+var MSG_INFO_INVALID_LICENSE_KEY = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license key you have provided is invalid, expired or might be already in use. Please contact ScaleTech for more information on this error.</div>';
+var MSG_INFO_LICENSE_NORMAL = '<div class="alert alert-success no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-3x fa-pull-left"></i> No worries! Your current license status is normal. You still have $P{daysLeft} days left before your current license expires.</div>';
+var MSG_INFO_LICENSE_WARNING = '<div class="alert alert-warning no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> You only have $P{daysLeft} days left before your current license expires. To ensure uninterrupted service and support, please contact ScaleTech and request a new license file.</div>';
+var MSG_INFO_LICENSE_DANGER = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> You only have $P{daysLeft} days left before your current license expires. To ensure uninterrupted service and support, please contact ScaleTech and request a new license file.</div>';
 
 // Confirm Messages
-var MSG_CONFIRM_LOGOUT = 'Are you sure you want to logout of the system?';
-var MSG_CONFIRM_DELETE_RECORD = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will <strong>delete</strong> the selected record from the system. Please <strong>confirm</strong> if you want to perform this action. Press <strong>Confirm Delete</strong> to continue.</div>';
-var MSG_CONFIRM_SAVE_COM_PORT = 'This will <strong>update</strong> the current Communication Port settings. Press <strong>OK</strong> to continue.';
-var MSG_CONFIRM_SAVE_CONFIG_WEIGHIN = 'This will <strong>update</strong> the current Weigh In settings. Press <strong>OK</strong> to continue.';
-var MSG_CONFIRM_SAVE_CONFIG_COMPANY = 'This will <strong>update</strong> the current Company Details settings. Press <strong>OK</strong> to continue.';
-var MSG_CONFIRM_SAVE_CONFIG_DOCKET = 'This will <strong>update</strong> the current Docket settings. Press <strong>OK</strong> to continue.';
-var MSG_CONFIRM_REMOVE_MODULES = 'This will <strong>remove</strong> all modules assigned to the selected role. Press <strong>OK</strong> to continue.';
+var MSG_CONFIRM_LOGOUT = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-question-circle fa-3x fa-pull-left"></i> Your request will log you out of the system. Please make sure all changes are saved. Press Confirm Logout to continue.</div>';
+var MSG_CONFIRM_DELETE_RECORD = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will delete the selected record from the system. Please confirm if you want to perform this action. Press Confirm Delete to continue.</div>';
+var MSG_CONFIRM_SAVE_CONFIG = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will update the current system settings. Please confirm if you want to perform this action. Press Confirm Save to continue.</div>';
+var MSG_CONFIRM_REMOVE_MODULES = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will remove all modules from the selected role. Please confirm if you want to perform this action. Press Confirm Save to continue.</div>';
 
 // Alert Messages
-var MSG_ALERT_LOGIN_FORM_ERROR = '<div class="alert alert-danger" role="alert" style="text-align: left; margin-bottom: 20px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was <strong>not submitted</strong> because of the following <strong>errors</strong>. Change the value of the field(s) that contains errors and try again.</div>';
-var MSG_ALERT_INVALID_OLD_PASS = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you requested were <strong>not submitted</strong> because you provided an <strong>invalid old password</strong>. Change the value of the field(s) that contains errors and try again.</div>';
-var MSG_ALERT_INVALID_LOGIN = '<div class="alert alert-danger" role="alert" style="text-align: left; margin-bottom: 20px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> You are <strong>not allowed</strong> to access the system. Please enter a valid <strong>Username</strong> and <strong>Password</strong> to continue.</div>';
-var MSG_ALERT_FORM_ERROR = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you requested were <strong>not submitted</strong> because of the following <strong>errors</strong>. Change the value of the field(s) that contains errors and try again.</div>';
-var MSG_ALERT_DUPLICATE_REC = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you requested were <strong>not submitted</strong> because they would create <strong>duplicate data</strong> in the system. Change the value of the field(s) that contains duplicate data and try again.</div>';
-var MSG_ALERT_WS_ERROR = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was <strong>not successful</strong> because there was an <strong>error</strong> in the Web Service response. If issue still persists, please contact your System Administrator.</div>';
+var MSG_ALERT_LOGIN_FORM_ERROR = '<div class="alert alert-danger" role="alert" style="text-align: left; margin-bottom: 20px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was not submitted. Change the value of the field(s) that contains errors and try again.</div>';
+var MSG_ALERT_INVALID_OLD_PASS = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you requested were not submitted because you provided an invalid old password. Change the value of the field(s) that contains errors and try again.</div>';
+var MSG_ALERT_INVALID_LOGIN = '<div class="alert alert-danger" role="alert" style="text-align: left; margin-bottom: 20px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> You are not allowed to access the system. Please enter a valid Username and Password to continue.</div>';
+var MSG_ALERT_FORM_ERROR = '<div class="alert alert-danger all-middle" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you requested were not submitted because of the following errors. Change the value of the field(s) that contains errors and try again.</div>';
+var MSG_ALERT_DUPLICATE_REC = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you requested were not submitted because they would create duplicate data in the system. Change the value of the field(s) that contains duplicate data and try again.</div>';
+var MSG_ALERT_WS_ERROR = '<div class="alert alert-danger" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was not successful because there was an error in the Web Service response. If issue still persists, please contact your System Administrator.</div>';

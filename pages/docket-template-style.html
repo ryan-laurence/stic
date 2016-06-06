@@ -1,5 +1,5 @@
 <div class="alert alert-info" role="alert">
-	<h5 class="no-margin-top"><i class="fa fa-info-circle"></i> <strong>Note(s):</strong></h5>
+	<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 	<ul>
 		<li><i class="fa fa-check-square-o"></i> Messages enclosed in curly brackets {Data.CompanyName} are data fields which values are retrieved from the database.</li>
 		<li><i class="fa fa-check-square-o"></i> Messages enclosed in double quotes "Company Name:" are custom defined fields and printed directly.</li>
@@ -37,17 +37,17 @@
 				</div>				
 			</div>
 			<div class="btn-group pull-left" role="group">
-				<button type="button" class="btn btn-primary" id="tools-new-style">
-					<i class="fa fa-plus" aria-hidden="true"></i> New
+				<button type="button" class="btn btn-primary" id="tools-new-style" title="New Docket Message">
+					<i class="fa fa-plus" aria-hidden="true"></i>
 				</button>
-				<button type="button" class="btn btn-primary" id="tools-edit-style" disabled>
-					<i class="fa fa-pencil" aria-hidden="true"></i> Edit
+				<button type="button" class="btn btn-primary" id="tools-edit-style" title="Edit Docket Message" disabled>
+					<i class="fa fa-pencil" aria-hidden="true"></i>
 				</button>
-				<button type="button" class="btn btn-danger" id="tools-delete-style" disabled>
-					<i class="fa fa-trash-o" aria-hidden="true"></i> Delete
+				<button type="button" class="btn btn-danger" id="tools-delete-style" title="Delete Docket Message" disabled>
+					<i class="fa fa-trash-o" aria-hidden="true"></i>
 				</button>
-				<button type="button" class="btn btn-primary" id="tools-reload-style">
-					<i class="fa fa-refresh" aria-hidden="true"></i> Refresh
+				<button type="button" class="btn btn-primary" id="tools-reload-style" title="Refresh Docket Messages">
+					<i class="fa fa-refresh" aria-hidden="true"></i>
 				</button>
 			</div>
 		</div>
@@ -247,8 +247,6 @@
 				paging: true,
 				ordering: true,
 				searching: false,
-				processing: false,
-				lengthChange: false,	
 				ajax: { 
 					dataSrc: function (json) {
 						var ds = DS_DOCKET_STYLES.split('.'),
@@ -322,8 +320,8 @@
 				BootstrapDialog.confirm({
 					type: 'type-danger',
 					btnOKLabel: BTN_LABEL_CONFIRM_DELETE,
-					btnCancelLabel: BTN_LABEL_CANCEL_DELETE,
-					title: MSG_TITLE_CONFIRM_DELETE,
+					btnCancelLabel: BTN_LABEL_CANCEL,
+					title: MSG_TITLE_INFO,
 					message: MSG_CONFIRM_DELETE_RECORD,				
 					callback: function (result) {
 						if (result) {

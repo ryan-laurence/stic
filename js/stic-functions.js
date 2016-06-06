@@ -1,58 +1,75 @@
-function dateFormat(pDate, pDateFormat){
-	/**
-	 * M d, Y = Feb 19, 2011
-	 */
-	if (pDate == null || pDate == '') {
-		alert('Date parameter must not be null / empty.');
-		return false;
-	}
-	if (pDateFormat == null || pDateFormat == '') pDateFormat = 'M d, Y'
-
-    return pDate ? pDate.dateFormat( pDateFormat ) : '';
-};
-
-function getCurrentDate() {
-	return new Date().format("yyyy-mm-dd");;
-}
-
-function getFirstDayOfMonth() {
-	var newDate = new Date();
-	var dd = '01';
-	var yy = newDate.getFullYear();
-	var curDate = newDate.format("yyyy-mm-dd");
-	curDate = curDate.substring(0, curDate.length - 2) + dd;
-	return curDate;
-}
-
-// Table Row Selection Event
-function _fnTableRowSelection(tableObject, rowObject, tableTools) {
-	tableTools = tableTools || [];
-	if ($(rowObject).hasClass('selected')) {
-		$(rowObject).removeClass('selected');
-		if (tableTools.length > 0) {
-			$.each(tableTools, function(index, tableTool) {
-				$('#' + tableTool).prop('disabled', true);
-			});
-		}
-	} else {
-		tableObject.$('tr.selected').removeClass('selected');
-		$(rowObject).addClass('selected');
-		if (tableTools.length > 0) {
-			$.each(tableTools, function(index, tableTool) {
-				$('#' + tableTool).prop('disabled', false);
-			});
-		}
-	}
-}
-
 // Global Namespace
 var STIC = {
+	
+	// Global Variables	
+	IntervalId: '',
+	CurrentPage: '',
+	
+	// License Status
+	LicenseStatus: function () {		
+		$.post(WS_LICENSE_NOTIFY, { id: 1 })
+			.done(function (results, status) {
+				var cssClass = '', 
+					dialogType = '',
+					dialogMessage = '',  
+					type = results.response.type,
+					days = results.response.days;
+				
+				// normal
+				if (type === 'NORMAL') {
+					cssClass = 'badge-normal';
+					dialogType = 'type-success';					
+					dialogMessage = MSG_INFO_LICENSE_NORMAL;		
+
+				// <= 30 days
+				} else if (type === 'WARNING') {
+					cssClass = 'badge-warning';
+					dialogType = 'type-warning';
+					dialogMessage = MSG_INFO_LICENSE_WARNING;
+				
+				// <= 7 days
+				} else if (type === 'CRITICAL') {
+					cssClass = 'badge-danger';
+					dialogType = 'type-danger';
+					dialogMessage = MSG_INFO_LICENSE_DANGER;
+				
+				// normal
+				} else {
+					cssClass = 'badge-normal';
+					dialogType = 'type-success';
+					dialogMessage = MSG_INFO_LICENSE_NORMAL;
+				}			
+
+				$('.badge').removeClass('badge-normal')
+				$('.badge').addClass(cssClass);
+				
+				// Show Notification
+				$('#link-alerts').on('click', function () {		
+					BootstrapDialog.alert({
+						type: dialogType,
+						title: MSG_TITLE_INFO,
+						message: dialogMessage
+							.replace('$P{daysLeft}', days),
+						callback: function (result) {
+							BootstrapDialog.closeAll();
+						}
+					});				
+				});
+				
+			})				
+			.fail(function () {
+				STIC.showWSError();
+			});	
+	},
 
 	// Modules Functions
 	Modules: {
 
 		// Load allowed modules to user
 		Init: function () {
+			// License Status Notification
+			STIC.LicenseStatus();
+			
 			var JSONObject = {
 				roleModuleId: STIC.User.ReadCookie('roleid')
 			};
@@ -66,7 +83,8 @@ var STIC = {
 					if (response.type === 'SUCCESS') {
 						var navItems = [], navLabel = '',
 							prevParentId = '', currParentId = '',
-							modules = response['report-list'].report;
+							report = response['report-list'].report,
+							modules = $.isArray(report) === true ? report : [report];	
 
 						// Build navigation list
 						$.each(modules, function (i, m) {
@@ -86,7 +104,7 @@ var STIC = {
 							if (m.mod_type == 'group') {
 								navItems.push(
 									'<li class="dropdown" data-mod-id="' + m.mod_id + '">' +
-										'<a href="#" class="dropdown-toggle" data-toggle="dropdown" ' +
+										'<a class="dropdown-toggle" data-toggle="dropdown" ' +
 											'role="button" aria-expanded="false">' +
 											navLabel +
 											' <span class="caret"></span>' +
@@ -96,7 +114,8 @@ var STIC = {
 							} else {
 								navItems.push(
 									'<li>' +
-										'<a href="#" ' +
+										'<a ' +
+											'data-mod-id="' + m.mod_id + '" ' +
 											'data-mod-parent="' + m.mod_parent + '" ' +
 											'data-mod-name="' + m.mod_name + '">' +
 											navLabel +
@@ -112,8 +131,9 @@ var STIC = {
 
 						// Navigation onClick Event
 						$('[data-mod-name]').on('click', function () {
-							var modName = $(this).attr('data-mod-name'),
-								 modParent = $(this).attr('data-mod-parent');
+							var modId = $(this).attr('data-mod-id'), 
+								modName = $(this).attr('data-mod-name'),
+								modParent = $(this).attr('data-mod-parent');
 
 							// Clear active modules style
 							$('#nav-wrapper')
@@ -132,7 +152,11 @@ var STIC = {
 							}
 
 							// Load module page
-							STIC.Modules.LoadPage({ modName: modName });
+							STIC.Modules.LoadPage({ 
+								modId: modId,
+								modName: modName 
+							});							
+							
 						});
 
 					// Show alert if there are no modules assigned to user
@@ -140,21 +164,60 @@ var STIC = {
 						BootstrapDialog.alert({
 							type: 'type-danger',
 							title: MSG_TITLE_INFO,
-							message: 'There are no modules currently assigned to your account. For more information, please contact your system administrator.',
-							callback: function(result) {
+							message: MSG_INFO_NO_MODULES_ERROR,
+							callback: function (result) {
 								BootstrapDialog.closeAll();
 							}
 						});
 					}
+				})
+				.fail(function () {
+					STIC.showWSError();
 				});
 		},
 
 		// Load module page
-		LoadPage: function (params) {
-			var wrapper = DEFAULT_WRAPPER_ID,
-				pageLoc = DEFAULT_PAGE_LOC,
-				pageExt = DEFAULT_PAGE_FILE_EXT;
-			$(wrapper).load(pageLoc + params.modName + pageExt);
+		LoadPage: function (params) {			
+			// Check License & Login
+			STIC.User.CheckLicense(true);	
+			
+			var data = {
+				mod_id: params.modId,
+				role_id: STIC.User.ReadCookie('roleid')
+			};			
+			
+			// Check Role Access
+			$.post(WS_UI_MODULES_CHECK, data)
+				.done(function (results, status) {
+					if (results.response.type === 'SUCCESS') {
+						var wrapper = DEFAULT_WRAPPER_ID,
+							pageLoc = DEFAULT_PAGE_LOC,
+							pageExt = DEFAULT_PAGE_FILE_EXT;
+						
+						// Clear bg process for weight scale
+						if (STIC.CurrentPage === 'weight-scale') {
+							clearInterval(STIC.IntervalId);
+							$.post(WS_SCALE_DISCONNECT);
+						}
+
+						$(wrapper).load(pageLoc + params.modName + pageExt);
+						STIC.CurrentPage = params.modName;
+						
+					} else {
+						BootstrapDialog.alert({
+							type: 'type-danger',
+							title: MSG_TITLE_INFO,
+							message: MSG_INFO_ROLE_ACCESS_ERROR,
+							callback: function (result) {
+								BootstrapDialog.closeAll();
+								window.location = DEFAULT_ROOT + 'main.html';
+							}
+						});	
+					}
+				})
+				.fail(function () {
+					STIC.showWSError();
+				});			
 		}
 	},
 
@@ -162,7 +225,7 @@ var STIC = {
 	enableButtons: function (buttons) {
 		btns = buttons || [];
 		if (btns.length > 0) {
-			$.each(btns, function(idx, btn) {
+			$.each(btns, function (idx, btn) {
 				$(btn).prop('disabled', false);
 			});
 		}
@@ -172,7 +235,7 @@ var STIC = {
 	disableButtons: function (buttons) {
 		btns = buttons || [];
 		if (btns.length > 0) {
-			$.each(btns, function(idx, btn) {
+			$.each(btns, function (idx, btn) {
 				$(btn).prop('disabled', true);
 			});
 		}
@@ -198,26 +261,33 @@ var STIC = {
 
 	// Docket Style Functions
 	DocketStyle: {
+		
+		// Destroy Message Field
 		destroyMsgField: function() {
 			$('select[data-field="dt_message"]').selectpicker('destroy');
 			$('select[data-field="dt_message"]').remove();
 			$('input[data-field="dt_message"]').remove();
 		},
+		
+		// New Message Input Field
 		newMsgInputField: function(params) {
-			var _container = params.container,
-				_defaultVal = params.defaultVal;
-			_container.append('<input type="text" class="form-control" value="' +
-				_defaultVal + '" data-field="dt_message" data-fv-notempty="true">');
+			var container = params.container,
+				defaultVal = params.defaultVal;
+			container.append('<input type="text" class="form-control" value="' +
+				defaultVal + '" data-field="dt_message" data-fv-notempty="true">');
 		},
+		
+		// New Message Select Field
 		newMsgSelectField: function(params) {
-			var _JSONUrl = params.JSONUrl,
-				_JSONData = params.JSONData,
-				_container = params.container,
-				_defaultVal = params.defaultVal;
-			$.getJSON(_JSONUrl, function(data) {
+			var JSONUrl = params.JSONUrl,
+				JSONData = params.JSONData,
+				container = params.container,
+				defaultVal = params.defaultVal;
+			
+			$.getJSON(JSONUrl, function(data) {
 				var options = [];
 				$.each(data.response, function(a, b) {
-					if (a == _JSONData) {
+					if (a == JSONData) {
 						$.each(b, function(c, d) {
 							$.each(d, function(e, f) {
 								options.push('<option value="' + f.df_id + '">' + f.df_alias + '</option>');
@@ -225,31 +295,37 @@ var STIC = {
 						});
 					}
 				});
-				_container.append('<select class="selectpicker form-control" title="-"' +
+				
+				container.append('<select class="selectpicker form-control" title="-"' +
 					' data-field="dt_message" data-fv-notempty="true" data-live-search="true" data-size="5">' +
 					options.join('') + '</select>');
+				
 				$('select[data-field="dt_message"]').selectpicker('refresh');
-				$('select[data-field="dt_message"]').selectpicker('val', _defaultVal);
+				$('select[data-field="dt_message"]').selectpicker('val', defaultVal);
 			});
 		},
+		
+		// Toggle Message Field
 		toggleMsgField: function(params) {
-			var _JSONUrl = params.JSONUrl,
-				_JSONData = params.JSONData,
-				_container = $('#message-field-box'),
-				_dataSrc = (typeof params.dataSrc != 'undefined' ? params.dataSrc : 'data'),
-				_defaultVal = (typeof params.defaultVal != 'undefined' ? params.defaultVal : '');
+			var JSONUrl = params.JSONUrl,
+				JSONData = params.JSONData,
+				container = $('#message-field-box'),
+				dataSrc = (typeof params.dataSrc != 'undefined' ? params.dataSrc : 'data'),
+				defaultVal = (typeof params.defaultVal != 'undefined' ? params.defaultVal : '');
+			
 			this.destroyMsgField();
-			if (_dataSrc == 'data') {
+			
+			if (dataSrc == 'data') {
 				this.newMsgSelectField({
-					JSONUrl: _JSONUrl,
-					JSONData: _JSONData,
-					container: _container,
-					defaultVal: _defaultVal
+					JSONUrl: JSONUrl,
+					JSONData: JSONData,
+					container: container,
+					defaultVal: defaultVal
 				});
 			} else {
 				this.newMsgInputField({
-					container: _container,
-					defaultVal: _defaultVal
+					container: container,
+					defaultVal: defaultVal
 				});
 			}
 		}
@@ -261,7 +337,13 @@ var STIC = {
 			input = $(params.formId).find('input[data-field="' + params.ukey + '"]');
 
 		// Remove error messages & styles
-		this.clearHelpBlocks({ formId: params.formId });
+		div
+			.removeClass('has-error has-feedback')
+			.removeClass('has-success has-feedback');
+		input.next('span.glyphicon, small.help-block')
+			.remove();
+		$(params.formId).find('div.alert-info')
+			.hide();
 
 		// Show duplicate error message
 		$(params.formId).prepend(MSG_ALERT_DUPLICATE_REC);
@@ -283,9 +365,9 @@ var STIC = {
 			BootstrapDialog.closeAll();
 			BootstrapDialog.alert({
 				type: 'type-danger',
-				title: MSG_TITLE_WS_ERROR,
+				title: MSG_TITLE_INFO,
 				message: MSG_INFO_WS_ERROR,
-				callback: function(result) {
+				callback: function (result) {
 					BootstrapDialog.closeAll();
 				}
 			});
@@ -297,8 +379,9 @@ var STIC = {
 		$(params.formId).find('div.form-group')
 			.removeClass('has-error has-feedback')
 			.removeClass('has-success has-feedback');
-		$(params.formId).find('div.alert, span.glyphicon, small.help-block')
+		$(params.formId).find('div.alert-danger, span.glyphicon, small.help-block')
 			.remove();
+		$(params.formId).find('div.alert-info').show();
 	},
 
 	// Form Validation
@@ -400,8 +483,10 @@ var STIC = {
 				totalErrors += fieldErrors;
 			});
 
-			if (totalErrors > 0)
+			if (totalErrors > 0) {
+				$(options.formId).find('div.alert-info').hide();
 				$(options.formId).prepend(MSG_ALERT_FORM_ERROR);
+			}
 
 			return totalErrors > 0 ? false : true;
 		}
@@ -417,16 +502,12 @@ var STIC = {
 			.done(function(result, status) {
 				// Execute callback function
 				$.isFunction(callback.func)
-					? callback.func(callback.args) : '';
-
-				// Reload DT
-				(typeof params.dt !== 'undefined'
-					? params.dt.ajax.reload() : '');
+					? callback.func(callback.args) : '';				
 
 				var response = result.response;
 
 				// on Success
-				if (response.type == 'SUCCESS') {
+				if (response.type == 'SUCCESS') {						
 					BootstrapDialog.closeAll();
 					BootstrapDialog.alert({
 						type: 'type-primary',
@@ -434,6 +515,9 @@ var STIC = {
 						message: params.message,
 						callback: function(result) {
 							BootstrapDialog.closeAll();
+							// Reload DT
+							(typeof params.dt !== 'undefined'
+								? params.dt.ajax.reload() : '');
 						}
 					});
 
@@ -541,10 +625,10 @@ var STIC = {
 	User: {
 
 		// Create Cookie
-		CreateCookie: function (name, value, days) {
-			if (days) {
+		CreateCookie: function (name, value, hours) {
+			if (hours) {
 				var date = new Date();
-				date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+				date.setTime(date.getTime() + (hours * 60 * 60 * 1000));
 				var expires = '; expires=' + date.toGMTString();
 			}
 			else var expires = '';
@@ -565,7 +649,7 @@ var STIC = {
 
 		// Erase Cookie
 		EraseCookie: function (name) {
-			this.CreateCookie(name, '', -1);
+			this.CreateCookie(name, '', -DEFAULT_COOKIE_LIFE);
 		},
 
 		// Remove from Audit Trail
@@ -585,9 +669,57 @@ var STIC = {
 					});
 			}
 		},
+		
+		// Check License
+		CheckLicense: function (logout) {
+			$.post(WS_CHECK_LICENSE, { id: 1 })
+				.done(function (results, status) {
+					if (results.response.type === 'SUCCESS') {
+						if (results.response.is_license === 'YES') {
+							STIC.User.Authenticate(logout);
+						} else {
+							BootstrapDialog.alert({
+								type: 'type-danger',
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_LICENSE_EXPIRED,
+								callback: function () {
+									BootstrapDialog.closeAll();
+									STIC.User.RemoveToContext();							
+									STIC.User.EraseCookie('userid');
+									STIC.User.EraseCookie('roleid');
+									STIC.User.EraseCookie('username');
+									window.location = DEFAULT_ROOT + 'activation.html';
+								}
+							});
+						}							
+					} else {
+						STIC.showWSError();						
+					}
+				})
+				.fail(function () {
+					STIC.showWSError();
+				});
+		}, 
+		
+		// Check if system is activated
+		CheckIfActivated: function () {
+			$.post(WS_CHECK_LICENSE, { id: 1 })
+				.done(function (results, status) {
+					if (results.response.type === 'SUCCESS') {
+						if (results.response.is_license === 'YES') {
+							window.location = DEFAULT_ROOT;				
+						} 							
+					} else {
+						STIC.showWSError();						
+					}
+				})
+				.fail(function () {
+					STIC.showWSError();
+				});			
+		},
 
 		// Check if User is valid
-		CheckIfValid: function (logout) {
+		Authenticate: function (logout) {
 			var roleId = this.ReadCookie('roleid'),
 				userId = this.ReadCookie('userid'),
 				userName = this.ReadCookie('username'),
@@ -639,8 +771,6 @@ var STIC = {
 				.removeClass('has-success has-feedback');
 			$('.login-form').find('div.form-group').find('span.glyphicon, small.help-block')
 				.remove();
-			$('.login-form').find('div.alert')
-				.remove();
 
 			// Validate user name
 			var divInputGroup = $('.login-form').find('#username').parent(),
@@ -670,7 +800,7 @@ var STIC = {
 
 			// Authenticate user
 			if (totalErrors <= 0 ) {
-				$.post(WS_USER_CHECK, { user_name: username, user_password: password })
+				$.post(WS_USER_CHECK, { user_name: username, user_password: password, id: 1 })
 					.done(function (result, status) {
 						var response = result.response;
 
@@ -679,9 +809,9 @@ var STIC = {
 							var user = response['users-list'].user;
 
 							// Create Cookies
-							STIC.User.CreateCookie('username', user.user_name, 1);
-							STIC.User.CreateCookie('userid', user.user_id, 1);
-							STIC.User.CreateCookie('roleid', user.role_id, 1);
+							STIC.User.CreateCookie('username', user.user_name, DEFAULT_COOKIE_LIFE);
+							STIC.User.CreateCookie('userid', user.user_id, DEFAULT_COOKIE_LIFE);
+							STIC.User.CreateCookie('roleid', user.role_id, DEFAULT_COOKIE_LIFE);
 
 							window.location = DEFAULT_ROOT + 'main.html';
 
@@ -693,8 +823,10 @@ var STIC = {
 								.removeClass('has-success has-feedback');
 							$('.login-form').find('div.form-group').find('span.glyphicon, small.help-block')
 								.remove();
-							$('.login-form').find('div.alert')
+							$('.login-form').find('div.alert-danger')
 								.remove();
+							$('.login-form').find('div.alert-info')
+								.hide();
 
 							// Show error messages & styles
 							$('.login-form hr:first').after(MSG_ALERT_INVALID_LOGIN);
@@ -713,7 +845,10 @@ var STIC = {
 					.fail(function () {
 						STIC.showWSError();
 					})
+					
 			} else {
+				$('.login-form').find('div.alert-danger').remove();
+				$('.login-form').find('div.alert-info').hide();				
 				$('.login-form hr:first').after(MSG_ALERT_LOGIN_FORM_ERROR);
 			}
 		},
@@ -721,8 +856,10 @@ var STIC = {
 		// Confirm Logout
 		ConfirmLogout: function () {
 			BootstrapDialog.confirm({
-				title: MSG_TITLE_CONFIRM_LOGOUT,
+				title: MSG_TITLE_INFO,
 				message: MSG_CONFIRM_LOGOUT,
+				btnOKLabel: BTN_LABEL_CONFIRM_LOGOUT,
+				btnCancelLabel: BTN_LABEL_CANCEL,
 				callback: function (result) {
 					if (result) {
 						STIC.User.Logout();
@@ -748,7 +885,7 @@ var STIC = {
 
 			// Modal Buttons
 			modalBtnSave = {
-				label: 'Save',
+				label: 'Save Changes',
 				icon: 'fa fa-floppy-o',
 				cssClass: 'btn-primary',
 				action: modalBtnSaveAction
@@ -756,7 +893,7 @@ var STIC = {
 			modalBtnCancel = {
 				label: 'Cancel',
 				icon: 'fa fa-ban',
-				cssClass: 'btn-primary',
+				cssClass: 'btn-default',
 				action: function (dialogItself) {
 					dialogItself.close();
 				}
@@ -775,7 +912,7 @@ var STIC = {
 					var modalBody = dialogItself.getModalBody();
 					modalBody.find('input[data-field]').val('');
 				},
-				buttons: [modalBtnSave, modalBtnCancel]
+				buttons: [modalBtnCancel, modalBtnSave]
 			});
 
 			// Modal Button > Save Action
@@ -856,66 +993,110 @@ var STIC = {
 
 // Load Summary Reports
 function loadSummaryReport(params) {
-	// Default Date
+	// Set Default Date
 	var today = new Date(),
-		defString = 'YYYY-MM-DD HH:mm:ss',
-		defEnd = moment(today).format(defString),
-		//defStart = moment(today).subtract(1, 'days').format(defString),
-		defStart = moment().startOf('month').format(defString),
+		defEnd = moment(today).format(DEFAULT_DATE_FORMAT),
+		defStart = moment().startOf('month').format(DEFAULT_DATE_FORMAT),
 		defWsURL = params.ws + 'dateFrom=' + defStart + '&dateTo=' + defEnd,
-		//console.log('datetime: ' + defWsURL);
-
-	// DT Button Text
-	dtBtnReloadTxt = '<i class="fa fa-refresh"></i> Refresh',
-	dtBtnPrintTxt = '<i class="glyphicon glyphicon-print"></i> Print',
-
-	// DT Button PDF Print
-	dtBtnPDFPrint = {
-		name: 'print',
-		extend: 'pdfHtml5',
-		download: 'open',
-		text: dtBtnPrintTxt,
-		title: params.title,
+	
+	// DT Buttons > Copy
+	dtBtnCopy = {
+		name: 'copy',
+		extend: 'copyHtml5',
 		className: 'btn-primary',
-		exportOptions: { columns: ':visible' },
-		customize: dtPDFPrintCustom
+		text: BTN_LABEL_COPY,
+		titleAttr: BTN_TITLE_COPY,
+		exportOptions: {
+			columns: ':visible',
+			modifier: {
+				page: 'current'
+			}
+		}
 	},
 
-	// DT Button Reload
-	dtBtnReload = {
-		name: 'reload',
-		text: dtBtnReloadTxt,
+	// DT Buttons > CSV
+	dtBtnCSV = {
+		name: 'csv',
+		extend: 'csvHtml5',
 		className: 'btn-primary',
-		action: function (e, dt, node, config) {
-			dt.ajax.reload();
+		text: BTN_LABEL_EXPORT_CSV,
+		titleAttr: BTN_TITLE_EXPORT_CSV,
+		exportOptions: {
+			columns: ':visible'
 		}
+	},
+
+	// DT Buttons > Excel
+	dtBtnExcel = {
+		name: 'excel',
+		extend: 'excelHtml5',
+		className: 'btn-primary',
+		text: BTN_LABEL_EXPORT_EXCEL,
+		titleAttr: BTN_TITLE_EXPORT_EXCEL,
+		exportOptions: {
+			columns: ':visible'
+		}
+	},
+
+	// DT Buttons > PDF
+	dtBtnPDF = {
+		name: 'pdf',
+		extend: 'pdfHtml5',
+		title: params.title,
+		className: 'btn-primary',
+		text: BTN_LABEL_EXPORT_PDF,
+		titleAttr: BTN_TITLE_EXPORT_PDF,
+		customize: dtPDFPrintCustom,
+		exportOptions: {
+			columns: ':visible'
+		}
+	},
+	
+	// DT Buttons > Web Page Print
+	dtBtnPrint = {						
+		name: 'print',
+		extend: 'print',		
+		enabled: false,
+		autoPrint: false,		
+		title: params.title,	
+		className: 'btn-primary',
+		text: BTN_LABEL_PRINT_RECORD,
+		titleAttr: BTN_TITLE_PRINT_RECORD,
+		customize: dtWebPagePrintCustom,		
+		exportOptions: { 
+			columns: ':visible' 
+		}				
 	};
 
-	// DT Initial
+	// DT Init
 	var dtSummary = $('#table-summary')
 		.DataTable({
 			pageLength: 10,
 			ordering: true,
 			searching: false,
-			processing: false,
-			lengthChange: false,
-			columns: params.cd,
-			dom: '<"dt-toolbar">B<"dt-total">Rrtip',
+			columns: params.cd,			
 			ajax: {
 				url: defWsURL,
-				dataSrc: function(json) {
+				dataSrc: function (json) {
 					var ds = params.ds.split('.'),
 						rec = json[ds[0]][ds[1]][ds[2]];
 					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
 				}
 			},
-			buttons: [dtBtnPDFPrint, dtBtnReload]
+			dom: '<"dt-toolbar">B<"dt-total">rtip',
+			buttons: [dtBtnCopy, dtBtnCSV, dtBtnExcel, dtBtnPDF, dtBtnPrint]
 		})
 		.on('draw.dt', function (e, settings, data) {
-			// Toggle Print Button
+			var btns = [
+				'copy:name', 
+				'csv:name', 
+				'excel:name', 
+				'pdf:name', 
+				'print:name'
+			];			
 			dtSummary.data().length > 0 ?
-				dtSummary.button('print:name').enable() :
-				dtSummary.button('print:name').disable();
+				dtSummary.buttons(btns).enable() :
+				dtSummary.buttons(btns).disable();
 
 			// Set Total Net Weight
 			if (params.showTotal) {
@@ -930,9 +1111,8 @@ function loadSummaryReport(params) {
 	// DT Default Sorting
 	dtSummary.column('0:visible').order('asc').draw();
 
-	// Show Total Net Weight
-	if (params.showTotal) {
-		$('div.dt-total').css('float', 'right');
+	// Total Net Weight
+	if (params.showTotal) {		
 		$('div.dt-total').html(
 			'<div class="input-group">' +
 				'<span class="input-group-addon">' + 
@@ -943,46 +1123,69 @@ function loadSummaryReport(params) {
 					'value="0.00" style="width: 150px; background: #FFFFFF;" readonly>' +
 			'</div>'
 		);
+		$('div.dt-total').css('float', 'right');
 	}
 
-	// Load Toolbar Elements
+	// Date Range Filter	
+	$('div.dt-toolbar').html(
+		'<div class="btn-toolbar" role="toolbar">' +
+			'<div class="btn-group pull-left no-padding-left form-inline" role="group" style="margin-bottom: 0px">'	+
+				'<div class="input-group date" id="dp1">' +
+					'<span class="input-group-addon"><i class="fa fa-calendar"></i> <strong>Start</strong></span>' +
+					'<input type="text" class="form-control date-lookup" id="start-date" placeholder="Select Date">' +
+				'</div>' +
+				'<div class="input-group date" id="dp2">' +
+					'<span class="input-group-addon date-lookup-label"><i class="fa fa-calendar"></i> <strong>End</strong></span>' +
+					'<input type="text" class="form-control date-lookup" id="end-date" placeholder="Select Date">' +
+				'</div>' +
+				'<button type="button" class="btn btn-primary" id="search-report" title="Search Report"><i class="fa fa-search"></i></button>' +
+				'<button type="button" class="btn btn-danger" id="reset-report" title="Reset Report"><i class="fa fa-ban"></i></button>' +
+			'</div>' +
+		'</div>' 
+	);	
 	$('div.dt-toolbar').css('float', 'left');
-	$('div.dt-buttons').css('float', 'left');
-	$('div.dt-buttons').css('padding-left', '5px');
-	$('div.dt-toolbar').load('pages/summary-date-filter.html',
-		function (response, status, xhr) {
-			var dp1 = $('#dp1'),
-				dp2 = $('#dp2'),
-				inEndDt = $('#end-date'),
-				inStartDt = $('#start-date'),
-				btnToolSearch = $('#tools-search-report');
+	$('div.dt-toolbar').css('margin-right', '5px');
+	
+	var dp1 = $('#dp1'), 
+		dp2 = $('#dp2'), 
+		inEndDt = $('#end-date'), 
+		inStartDt = $('#start-date');
 
-			// Date Picker Initial
-			dp1.datetimepicker();
-			dp2.datetimepicker();
+	// Date Picker Init
+	dp1.datetimepicker({
+		format: DEFAULT_DATE_FORMAT
+	});
+	dp2.datetimepicker({
+		format: DEFAULT_DATE_FORMAT
+	});
 
-			// Set Default Date
-			//dp1.data('DateTimePicker').date(moment(today).subtract(1, 'days'));
-			dp1.data('DateTimePicker').date(moment().startOf('month'));
-			dp2.data('DateTimePicker').date(moment(today));
+	// Set Default Date
+	dp1.data('DateTimePicker').defaultDate(defStart);
+	dp2.data('DateTimePicker').defaultDate(defEnd);
 
-			// Set Min & Max dates
-			dp1.on('dp.change', function(e) {
-				dp2.data('DateTimePicker').minDate(e.date);
-			});
-			dp2.on('dp.change', function(e) {
-				dp1.data('DateTimePicker').maxDate(e.date);
-			});
+	// Set Min & Max dates
+	dp1.on('dp.change', function (e) {
+		dp2.data('DateTimePicker').minDate(e.date);
+	});
+	dp2.on('dp.change', function (e) {
+		dp1.data('DateTimePicker').maxDate(e.date);
+	});
 
-			// Search Report
-			btnToolSearch.on('click', function() {
-				var end = moment(new Date(inEndDt.val())).format(defString),
-					start = moment(new Date(inStartDt.val())).format(defString),
-					wsURL = params.ws + 'dateFrom=' + start + '&dateTo=' + end;
-				dtSummary.ajax.url(wsURL).load();
-			});
-		});
-		
+	// Search Report
+	$('#search-report').on('click', function () {
+		var wsURL = params.ws + 
+			'dateFrom=' + inStartDt.val() + 
+			'&dateTo=' + inEndDt.val();
+		dtSummary.ajax.url(wsURL).load();
+	});
+	
+	// Reset Report
+	$('#reset-report').on('click', function () {		
+		inEndDt.val(defEnd);
+		inStartDt.val(defStart);
+		dtSummary.ajax.url(defWsURL).load();
+	});
+	
 	// Customize PDF Print Output
 	function dtPDFPrintCustom(doc) {	
 		var footerData = [];
@@ -1001,15 +1204,46 @@ function loadSummaryReport(params) {
 		});
 
 		// Set add. messages
-		var defString = 'MM/DD/YYYY hh:mm A',
-			startDate = new Date($('#start-date').val()),
-			endDate = new Date($('#end-date').val()),			
-			fromLabel = { width: 30, bold: true, text: 'From :' },			
+		var fromLabel = { width: 30, bold: true, text: 'From :' },			
 			toLabel = { width: 30, bold: true, text: 'To :' },
-			fromDate = { width: 'auto', text: moment(startDate).format(defString) },
-			toDate = { width: 'auto', text: moment(endDate).format(defString) };
+			fromDate = { width: 'auto', text: $('#start-date').val() },
+			toDate = { width: 'auto', text: $('#end-date').val() };
 		pdfDoc.content.splice(1, 0, { columns: [fromLabel, fromDate] });
 		pdfDoc.content.splice(2, 0, { columns: [toLabel, toDate] });
+	}
+	
+	// Customize Web Page Print Output
+	function dtWebPagePrintCustom(win) {
+		$(win.document.body)
+			.css('background', 'none')
+			.css('font-weight', 'normal')
+			.css('font-family', 'Monospaced');						
+		// Title
+		$(win.document.body).find('h1')								
+			.css('font-size', '16pt')
+			.css('text-align', 'center');							
+		// Message
+		$(win.document.body).find('div')							
+			.css('font-size', '11pt')
+			.css('text-align', 'left')
+			.css('margin', '20px 0px 15px 0px')
+			.html('From: ' + $('#start-date').val() + ' <br />To: ' + $('#end-date').val());						
+		// Data Table
+		$(win.document.body).find('table')
+			.removeClass('display')
+			.removeClass('compact');							
+		$(win.document.body).find('table th')
+			.css('font-size', '11pt')
+			.css('text-align', 'left')
+			.css('padding-left', '0px');							
+		$(win.document.body).find('table td')							
+			.css('font-size', '10pt')
+			.css('text-align', 'left')
+			.css('padding-left', '0px')
+			.css('padding-top', '10px')
+			.css('padding-bottom', '10px')
+			.css('font-weight', 'normal');							
+		//console.log($(win.document.body).html());
 	}
 }
 
@@ -1026,9 +1260,7 @@ function initDT_Picker(options) {
 			.DataTable({
 				pageLength: dtPl,
 				ordering: dtOd,
-				searching: true,
-				processing: false,
-				lengthChange: false,
+				searching: true,				
 				columns: dtCd,
 				dom: '<"dt-toolbar">Bfrtip',
 				ajax: {
@@ -1041,9 +1273,10 @@ function initDT_Picker(options) {
 				},
 				buttons: [{
 					name: 'reload',
-					text: '<i class="fa fa-refresh"></i> Refresh',
 					className: 'btn-primary',
-					action: function(e, dt, node, config) {
+					text: BTN_LABEL_REFRESH_RECORD,
+					titleAttr: BTN_TITLE_REFRESH_RECORD,
+					action: function (e, dt, node, config) {
 						dt.ajax.reload();
 					}
 				}]

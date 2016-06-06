@@ -1,6 +1,6 @@
 <link rel="stylesheet" href="css/bootstrap-funky-checkbox.css" />
-<div class="alert alert-info" role="alert">
-	<i class="fa fa-info-circle"></i> <strong>Note:</strong> Use this page to manage Role Access that will be assigned for each system role.
+<div class="alert alert-info all-middle" role="alert">
+	<i class="fa fa-info-circle fa-2x"></i>Use this page to manage Role Access that will be assigned for each system role.
 </div>
 <div class="well no-margin-bottom">
 	<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -76,11 +76,13 @@
 			// Call WS
 			if (checkedMods.length === 0) {
 				// Confirm Update
-				BootstrapDialog.confirm({
-					title: MSG_TITLE_CONFIRM_SAVE,
-					message: MSG_CONFIRM_REMOVE_MODULES,
-					type: BootstrapDialog.TYPE_DANGER,
-					callback: function(result) {
+				BootstrapDialog.confirm({					
+					type: 'type-danger',
+					btnOKLabel: BTN_LABEL_CONFIRM_SAVE,
+					btnCancelLabel: BTN_LABEL_CANCEL,
+					title: MSG_TITLE_INFO,
+					message: MSG_CONFIRM_REMOVE_MODULES,					
+					callback: function (result) {
 						if (result) {
 							// Build JSON object
 							JSONObject = {
@@ -124,7 +126,7 @@
 						} else {
 							BootstrapDialog.alert({
 								type: 'type-danger',
-								title: MSG_TITLE_WS_ERROR,
+								title: MSG_TITLE_INFO,
 								message: MSG_INFO_WS_ERROR,
 								callback: function() {
 									BootstrapDialog.closeAll();
@@ -135,7 +137,7 @@
 					.fail(function() {
 						BootstrapDialog.alert({
 							type: 'type-danger',
-							title: MSG_TITLE_WS_ERROR,
+							title: MSG_TITLE_INFO,
 							message: MSG_INFO_WS_ERROR,
 							callback: function() {
 								BootstrapDialog.closeAll();
