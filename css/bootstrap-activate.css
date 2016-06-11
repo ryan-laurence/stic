@@ -84,7 +84,8 @@ section[role=login] div.panel-heading {
 	text-align: left;
 }
 
-section[role=login] table.table td {
+section[role=login] table.table td,
+section[role=login] .form-group {
 	text-align: left;
 }
 
