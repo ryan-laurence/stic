@@ -674,16 +674,31 @@ var STIC = {
 		CheckLicense: function (logout) {
 			$.post(WS_CHECK_LICENSE, { id: 1 })
 				.done(function (results, status) {
-					if (results.response.type === 'SUCCESS') {
-						if (results.response.is_license === 'YES') {
+					var response = results.response,
+						licenseValid = response.is_license,
+						hdSerialValid = response.is_hd_serial_number_valid;
+					if (response.type === 'SUCCESS') {
+						if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {
 							STIC.User.Authenticate(logout);
+						} else if (hdSerialValid === 'NO') {
+							BootstrapDialog.alert({
+								type: 'type-danger',
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_INVALID_HD,
+								callback: function () {
+									STIC.User.RemoveToContext();							
+									STIC.User.EraseCookie('userid');
+									STIC.User.EraseCookie('roleid');
+									STIC.User.EraseCookie('username');
+									window.location = DEFAULT_ROOT + 'activation.html';
+								}
+							});
 						} else {
 							BootstrapDialog.alert({
 								type: 'type-danger',
 								title: MSG_TITLE_INFO,
-								message: MSG_INFO_LICENSE_EXPIRED,
+								message: MSG_INFO_SYSTEM_INACTIVE,
 								callback: function () {
-									BootstrapDialog.closeAll();
 									STIC.User.RemoveToContext();							
 									STIC.User.EraseCookie('userid');
 									STIC.User.EraseCookie('roleid');
@@ -758,9 +773,55 @@ var STIC = {
 					}
 			}
 		},
+		
+		//
+		LoginCheck: function () {
+			$.post(WS_CHECK_LICENSE, { id: 1 })
+				.done(function (results, status) {
+					var response = results.response,
+						licenseValid = response.is_license,
+						hdSerialValid = response.is_hd_serial_number_valid;
+					if (response.type === 'SUCCESS') {
+						if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {
+							STIC.User.Login();
+						} else if (hdSerialValid === 'NO') {
+							BootstrapDialog.alert({
+								type: 'type-danger',
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_INVALID_HD,
+								callback: function () {
+									STIC.User.RemoveToContext();							
+									STIC.User.EraseCookie('userid');
+									STIC.User.EraseCookie('roleid');
+									STIC.User.EraseCookie('username');
+									window.location = DEFAULT_ROOT + 'activation.html';
+								}
+							});
+						} else {
+							BootstrapDialog.alert({
+								type: 'type-danger',
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_SYSTEM_INACTIVE,
+								callback: function () {
+									STIC.User.RemoveToContext();							
+									STIC.User.EraseCookie('userid');
+									STIC.User.EraseCookie('roleid');
+									STIC.User.EraseCookie('username');
+									window.location = DEFAULT_ROOT + 'activation.html';
+								}
+							});
+						}							
+					} else {
+						STIC.showWSError();						
+					}
+				})
+				.fail(function () {
+					STIC.showWSError();
+				});
+		},
 
 		// Login
-		Login: function () {
+		Login: function () {			
 			var totalErrors = 0,
 				username = $('#username').val(),
 				password = $('#password').val();

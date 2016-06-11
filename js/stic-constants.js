@@ -188,6 +188,8 @@ var WS_CHECK_LICENSE = '/stic/services/CompanyInfoServices/checkIsLicense?respon
 var WS_LICENSE_NOTIFY = '/stic/services/CompanyInfoServices/getDaysBetweenDates?response=application/json&';
 var WS_VALIDATE_LICENSE = '/stic-admin/services/ClientsInfoServices/validateLicenseKey?response=application/json&';
 var WS_UPDATE_COMPANY_LICENSE = '/stic/services/CompanyInfoServices/updateCompanyLicenseKey?response=application/json&';
+var WS_GET_LICENSE_DETAILS = '/stic-admin/services/ClientLicensesInfoServices/getLicenseKey?response=application/json&';
+var WS_CONFIRM_LICENSE_DETAILS = '/stic-admin/services/ClientLicensesInfoServices/updateClientLicensesByConfirm?response=application/json&';
 
 // Roles Data
 var WS_LIST_ROLES = '/stic/services/RolesInfoServices/getAllRolesList?response=application/json&roleId=1&';
@@ -425,13 +427,18 @@ var MSG_INFO_DEFAULT_USER_EDIT = '<div class="alert alert-danger no-margin-botto
 var MSG_INFO_DEFAULT_USER_DELETE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The user that you are about to delete is a system default user. You are not allowed to perform this action.</div>';
 
 // License Activation
-var MSG_INFO_LICENSE_EXPIRED = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The STIC system is currently deactivated. Please upload a valid license file in the activation page to be able to use the system.</div>';
+var MSG_INFO_SYSTEM_INACTIVE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The system has been deactivated because your current license is expired. Please enter a new license key in the activation page to be able to use the system.</div>';
+var MSG_INFO_INVALID_HD = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The system has been deactivated because the current hard disk specifications are invalid. Please contact ScaleTech for more information on this error.</div>';
 var MSG_INFO_INVALID_FILE_FORMAT = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Please select a valid license file in this format (e.g. "companyname-yyyymmddhhmmss.lcns") and try again.</div>';
 var MSG_INFO_INVALID_LICENSE_FILE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license file you have uploaded is invalid. Please select a valid license file to start the system activation process.</div>';
 var MSG_INFO_INVALID_LICENSE_KEY = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license key you have provided is invalid, expired or might be already in use. Please contact ScaleTech for more information on this error.</div>';
 var MSG_INFO_LICENSE_NORMAL = '<div class="alert alert-success no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-3x fa-pull-left"></i> No worries! Your current license status is normal. You still have $P{daysLeft} days left before your current license expires.</div>';
-var MSG_INFO_LICENSE_WARNING = '<div class="alert alert-warning no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> You only have $P{daysLeft} days left before your current license expires. To ensure uninterrupted service and support, please contact ScaleTech and request a new license file.</div>';
-var MSG_INFO_LICENSE_DANGER = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> You only have $P{daysLeft} days left before your current license expires. To ensure uninterrupted service and support, please contact ScaleTech and request a new license file.</div>';
+var MSG_INFO_LICENSE_WARNING = '<div class="alert alert-warning no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> You only have $P{daysLeft} days left before your current license expires. To ensure uninterrupted service and support, please contact ScaleTech and request a new license key.</div>';
+var MSG_INFO_LICENSE_DANGER = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> You only have $P{daysLeft} days left before your current license expires. To ensure uninterrupted service and support, please contact ScaleTech and request a new license key.</div>';
+var MSG_INFO_LICENSE_EMPTY = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Please make sure that you have entered valid values for PC Number and License Key fields.</div>';
+var MSG_INFO_LICENSE_ACTIVE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license key you have provided is already activated and currently in use. Please contact ScaleTech for more information on this error.</div>';
+var MSG_INFO_LICENSE_EXPIRED = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license key you have provided is already expired. Please contact ScaleTech for more information on this error.</div>';
+var MSG_INFO_LICENSE_INVALID = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license key you have provided is invalid and does not exist in the system. Please contact ScaleTech for more information on this error.</div>';
 
 // Confirm Messages
 var MSG_CONFIRM_LOGOUT = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-question-circle fa-3x fa-pull-left"></i> Your request will log you out of the system. Please make sure all changes are saved. Press Confirm Logout to continue.</div>';
