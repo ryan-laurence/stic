@@ -39,7 +39,7 @@
 											</div>
 											<div class="form-group">												
 												<label class="control-label" for="hd_serial_number">HD Serial Number</label>
-												<input class="form-control" id="hd_serial_number" type="text" value="632AC0SST" readonly>
+												<input class="form-control" id="hd_serial_number" type="text" value="" readonly>
 											</div>
 											<div class="form-group">												
 												<label class="control-label" for="pc_number">PC Number</label>
@@ -179,7 +179,22 @@
 				// Clear Fields		
 				$('#pc_number').val('');
 				$('#license_key').val('');
+				$('#hd_serial_number').val('');
 				
+				// Get HD Serial Number
+				$.post(WS_GET_HD_SERIAL_NUM, { x: 11 })
+					.done(function (results, status) {
+						var response = results.response;
+						if (response.type === 'SUCCESS') {
+							$('#hd_serial_number').val(response.hd_serial_number)
+						} else {
+							STIC.showWSError();
+						}
+					})
+					.fail(function () {
+						STIC.showWSError();
+					})
+
 				// Clear Styles
 				var clearStyles = function () {
 					$('#step1').find('div.form-group')
