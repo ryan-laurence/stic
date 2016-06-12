@@ -190,6 +190,7 @@ var WS_VALIDATE_LICENSE = '/stic-admin/services/ClientsInfoServices/validateLice
 var WS_UPDATE_COMPANY_LICENSE = '/stic/services/CompanyInfoServices/updateCompanyLicenseKey?response=application/json&';
 var WS_GET_LICENSE_DETAILS = '/stic-admin/services/ClientLicensesInfoServices/getLicenseKey?response=application/json&';
 var WS_CONFIRM_LICENSE_DETAILS = '/stic-admin/services/ClientLicensesInfoServices/updateClientLicensesByConfirm?response=application/json&';
+var WS_GET_HD_SERIAL_NUM = '/stic/services/CompanyInfoServices/getHardDiskSerialNumber?response=application/json&';
 
 // Roles Data
 var WS_LIST_ROLES = '/stic/services/RolesInfoServices/getAllRolesList?response=application/json&roleId=1&';
@@ -345,6 +346,9 @@ var WS_UI_MODULES_CHECK = '/stic/services/RoleModulesInfoService/getAllModulesId
 // Calibration
 var FORM_CALIBRATION_SPAN = 'pages/others-calibration-span-form.html';
 
+// Backup DB
+var WS_BACKUP_DB = '/stic/services/CompanyInfoServices/backUpDatabase?response=application/json&id=1&';
+
 // Unique Checking
 var WS_UNIQUE_CHECK = [];
 WS_UNIQUE_CHECK['supp_code'] = '/stic/services/SuppliersInfoServices/getSuppliersByCodeList?response=application/json&';
@@ -425,6 +429,9 @@ var MSG_INFO_ROLE_ACCESS_ERROR = '<div class="alert alert-danger no-margin-botto
 // Users
 var MSG_INFO_DEFAULT_USER_EDIT = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The user that you are about to edit is a system default user. You are not allowed to perform this action.</div>';
 var MSG_INFO_DEFAULT_USER_DELETE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The user that you are about to delete is a system default user. You are not allowed to perform this action.</div>';
+
+var MSG_INFO_BACKUP_DB_OK = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The STIC database was backed up successfully. Please refer to the backup history table for more information.</div>';
+var MSG_INFO_BACKUP_DB_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Unable to back up the STIC database. Please refer to the backup history table for more information.</div>';
 
 // License Activation
 var MSG_INFO_SYSTEM_INACTIVE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The system has been deactivated because your current license is expired. Please enter a new license key in the activation page to be able to use the system.</div>';

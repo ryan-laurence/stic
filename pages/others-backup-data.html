@@ -63,12 +63,33 @@
 			name: 'backup',
 			text: dtBckDataTxt,
 			className: 'btn-primary',
-			action: function(e, dt, node, config) {
-				BootstrapDialog.alert({
-					type: 'type-danger',
-					title: MSG_TITLE_INFO,
-					message: 'Call WS to trigger Backup.'
-				});
+			action: function(e, dt, node, config) {				
+				$.post(WS_BACKUP_DB, { user: STIC.User.ReadCookie('username') })
+					.done(function (results, status) {
+						var response = results.response;
+						if (response.type === 'SUCCESS') {
+							BootstrapDialog.alert({
+								type: 'type-primary',
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_BACKUP_DB_OK,
+								callback: function () {
+									// reload DT
+								}
+							});
+						} else {
+							BootstrapDialog.alert({
+								type: 'type-danger',
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_BACKUP_DB_ERROR,
+								callback: function () {
+									// reload DT
+								}
+							});
+						}
+					})
+					.fail(function () {
+						STIC.showWSError();
+					})
 			}
 		},
 		
