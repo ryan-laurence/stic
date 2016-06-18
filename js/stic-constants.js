@@ -47,7 +47,10 @@ var WS_FIRST_WEIGHING_INSERT = '/stic/services/WeightReadingInfoServices/addWeig
 var WS_FIRST_WEIGHING_DELETE = '/stic/services/WeightReadingInfoServices/deleteWeighReadingById?response=application/json&';
 var WS_SECOND_WEIGHING_UPDATE = '/stic/services/WeightReadingInfoServices/updateWeightReadings?response=application/json&';
 var WS_CUST_PRODUCT_INSERT = '/stic/services/ProductsInfoServices/addProductsAndCustomerProducts?response=application/json&'
+
+var WS_SCALE_INIT = '/stic/services/ScaleReaderInfoServices/initReader';
 var WS_SCALE_DISCONNECT = '/stic/services/ScaleReaderInfoServices/disconnect';
+var WS_SCALE_READER = '/stic/services/ScaleReaderInfoServices/readScaleReading?response=application/json';
 var WS_DOCKET_PRINT = '/stic/DocketPrintReportService?';
 
 // Supplier Data
@@ -345,9 +348,22 @@ var WS_UI_MODULES_CHECK = '/stic/services/RoleModulesInfoService/getAllModulesId
 
 // Calibration
 var FORM_CALIBRATION_SPAN = 'pages/others-calibration-span-form.html';
+var WS_CALIBRATION_ZERO = '/stic/services/ScaleReaderInfoServices/calibrateSpanToZero?response=application/json&';
+var WS_CALIBRATION_SPAN = '/stic/services/ScaleReaderInfoServices/calibrateSpanToNumber?response=application/json&';
 
-// Backup DB
+// Backup & Restore DB
+var CD_DB_HISTORY = [
+	{ data: 'id', name: 'id', visible: false, searchable: false },	
+	{ data: 'date_process', name: 'date_process', width: '25%' },
+	{ data: 'status', name: 'status', width: '25%' },
+	{ data: 'database_file', name: 'database_file', width: '25%' },
+	{ data: 'user', name: 'user', width: '25%' }	
+];
+var DS_DB_HISTORY = 'response.database-list.database';
 var WS_BACKUP_DB = '/stic/services/CompanyInfoServices/backUpDatabase?response=application/json&id=1&';
+var WS_RESTORE_DB = '/stic/services/CompanyInfoServices/restoreDatabase?response=application/json&';
+var WS_BACKUP_DB_HISTORY = '/stic/services/CompanyInfoServices/getAllDatabaseHistoryByTypeDateList?response=application/json&type=BACKUP&';
+var WS_RESTORE_DB_HISTORY = '/stic/services/CompanyInfoServices/getAllDatabaseHistoryByTypeDateList?response=application/json&type=RESTORE&';
 
 // Unique Checking
 var WS_UNIQUE_CHECK = [];
@@ -370,6 +386,8 @@ var BTN_TITLE_EXPORT_EXCEL = 'Export Data to Excel File';
 var BTN_TITLE_EXPORT_PDF = 'Export Data to PDF File';
 var BTN_TITLE_PRINT_RECORD = 'Print Data';
 var BTN_TITLE_CHANGE_PASS = 'Change User Password';
+var BTN_TITLE_BACKUP_DB = 'Backup Database';
+var BTN_TITLE_RESTORE_DB = 'Restore Database';
 
 // Button Labels
 var BTN_LABEL_NEW_RECORD = '<i class="fa fa-plus"></i>';
@@ -389,8 +407,13 @@ var BTN_LABEL_CONFIRM_SAVE = '<i class="fa fa-floppy-o"></i> Confirm Save';
 var BTN_LABEL_CONFIRM_LOGOUT = '<i class="fa fa-sign-out"></i> Confirm Logout';
 var BTN_LABEL_CONFIRM_FW = '<i class="fa fa-tag"></i> Confirm First Weighing';
 var BTN_LABEL_CONFIRM_SW = '<i class="fa fa-tags"></i> Confirm Second Weighing';
+var BTN_LABEL_CONFIRM_BACKUP = '<i class="fa fa-floppy-o"></i> Confirm Backup';
+var BTN_LABEL_CONFIRM_RESTORE = '<i class="fa fa-undo"></i> Confirm Restore';
+var BTN_LABEL_CONFIRM_CAL_ZERO = '<i class="fa fa-undo"></i> Confirm Zero';
 var BTN_LABEL_CANCEL = '<i class="fa fa-ban"></i> Cancel';
 var BTN_LABEL_CHANGE_PASS = '<i class="fa fa-key"></i>';
+var BTN_LABEL_BACKUP_DB = '<i class="fa fa-floppy-o"></i>';
+var BTN_LABEL_RESTORE_DB = '<i class="fa fa-undo"></i>';
 
 // Form Validation Messages
 var MSG_FV_NOTEMPTY = 'This field is required and should not be empty.';
@@ -432,6 +455,14 @@ var MSG_INFO_DEFAULT_USER_DELETE = '<div class="alert alert-danger no-margin-bot
 
 var MSG_INFO_BACKUP_DB_OK = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The STIC database was backed up successfully. Please refer to the backup history table for more information.</div>';
 var MSG_INFO_BACKUP_DB_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Unable to back up the STIC database. Please refer to the backup history table for more information.</div>';
+var MSG_INFO_RESTORE_DB_OK = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The STIC database was restored successfully. Please refer to the restore history table for more information.</div>';
+var MSG_INFO_RESTORE_DB_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Unable to restore the STIC database. Please refer to the restore history table for more information.</div>';
+
+var MSG_INFO_CALIBRATE_ZERO_OK = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-2x fa-pull-left"></i> The weighing indicator has been successfully calibrated to zero value.</div>';
+var MSG_INFO_CALIBRATE_ZERO_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> An error occurred while calibrating the weighing indicator to zero value. Please try again.</div>';
+
+var MSG_INFO_CALIBRATE_SPAN_OK = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The weighing indicator has been successfully calibrated to the weight value of the current makeweight.</div>';
+var MSG_INFO_CALIBRATE_SPAN_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> An error occurred while calibrating the weighing indicator to the weight value of the current makeweight. Please try again.</div>';
 
 // License Activation
 var MSG_INFO_SYSTEM_INACTIVE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The system has been deactivated because your current license is expired. Please enter a new license key in the activation page to be able to use the system.</div>';
@@ -452,6 +483,9 @@ var MSG_CONFIRM_LOGOUT = '<div class="alert alert-info no-margin-bottom" role="a
 var MSG_CONFIRM_DELETE_RECORD = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will delete the selected record from the system. Please confirm if you want to perform this action. Press Confirm Delete to continue.</div>';
 var MSG_CONFIRM_SAVE_CONFIG = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will update the current system settings. Please confirm if you want to perform this action. Press Confirm Save to continue.</div>';
 var MSG_CONFIRM_REMOVE_MODULES = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will remove all modules from the selected role. Please confirm if you want to perform this action. Press Confirm Save to continue.</div>';
+var MSG_CONFIRM_RESTORE_DB = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will restore the database from a backup copy. Please confirm if you want to perform this action. Press Confirm Restore to continue.</div>';
+var MSG_CONFIRM_BACKUP_DB = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will create a backup copy of the database. Please confirm if you want to perform this action. Press Confirm Backup to continue.</div>';
+var MSG_CONFIRM_CAL_ZERO = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Please confirm there is no makeweight on the platform scale and assure the current weight value of the platform scale is zero. Press Confirm Zero to continue.</div>';
 
 // Alert Messages
 var MSG_ALERT_LOGIN_FORM_ERROR = '<div class="alert alert-danger" role="alert" style="text-align: left; margin-bottom: 20px;"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was not submitted. Change the value of the field(s) that contains errors and try again.</div>';

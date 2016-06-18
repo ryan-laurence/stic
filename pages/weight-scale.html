@@ -1390,14 +1390,12 @@
 		
 		// Init Reader
 		$.post(WS_SCALE_DISCONNECT);
-		$.post('/stic/services/ScaleReaderInfoServices/initReader', { compId: 1 });
-
-		var scaleReaderUrl = '/stic/services/ScaleReaderInfoServices/readScaleReading?response=application/json';
+		$.post(WS_SCALE_INIT, { compId: 1 });
 
 		// Read Reading Scale.
 		STIC.IntervalId = setInterval(function() {
 			$.ajax({
-				url: scaleReaderUrl
+				url: WS_SCALE_READER
 				,type: 'GET'
 				,success: function(data,tx) {
 					//console.log(data);
@@ -1427,7 +1425,7 @@
 					}
 				}
 			});
-		}, 5000); // every 1sec
+		}, 1000); // every 1sec
 		
 		/**********************************************************************************************************************************************/
 

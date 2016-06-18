@@ -195,7 +195,7 @@ var STIC = {
 							pageExt = DEFAULT_PAGE_FILE_EXT;
 						
 						// Clear bg process for weight scale
-						if (STIC.CurrentPage === 'weight-scale') {
+						if (STIC.CurrentPage === 'weight-scale' || STIC.CurrentPage === 'others-calibration') {
 							clearInterval(STIC.IntervalId);
 							$.post(WS_SCALE_DISCONNECT);
 						}

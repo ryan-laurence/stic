@@ -6,9 +6,9 @@
 		<div class="panel-body">
 			<div class="row">
 				<div class="weight-lcd">
-					<div class="weight-reading">+0.00</div>
+					<div id="weight-reading" class="weight-reading">+0.00</div>
 					<div class="weight-info">
-						<div class="weight-unit">kg</div>
+						<div id="weight-unit" class="weight-unit">kg</div>
 					</div>
 				</div>
 			</div>
@@ -29,16 +29,89 @@
 	</div>
 </div>
 <script>
-	$(function() {		
+	$(function() {	
+		//  Scale Reader
+		$(document).ready(function () {
+			/**********************************************************************************************************************************************/
+			
+			/*// Sample Indicator
+			var random = function (max, min) {
+					return ((Math.random() * (max - min)) + min).toFixed(2);
+			};	
+			
+			STIC.IntervalId = setInterval(function () {
+				var rand = '+' + random(41000, 5000)
+					.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+				$('#weight-reading').text(rand.toString());
+			}, 1000);*/					
+			
+			/**********************************************************************************************************************************************/
+		
+			// Init Reader
+			$.post(WS_SCALE_DISCONNECT);
+			$.post(WS_SCALE_INIT, { compId: 1 });
+			
+			// Read Reading Scale.
+			STIC.IntervalId = setInterval(function() {
+				$.ajax({
+					url: WS_SCALE_READER
+					,type: 'GET'
+					,success: function(data,tx) {
+						var netWg = data['response']['readData-list']['readdata']['read-weight'];
+						var st = data['response']['readData-list']['readdata']['read-status1'];
+						var gs = data['response']['readData-list']['readdata']['read-status2'];
+						var unit = data['response']['readData-list']['readdata']['read-unitType'];
+
+						var netWeight = netWg.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+						$('#weight-reading').text(netWeight.toString());
+						$('#weight-unit').text(unit);		
+					}
+				});
+			}, 1000); // every 1sec
+			
+			/**********************************************************************************************************************************************/
+		});
+	
 		// Zero
 		$('#calibrate-zero').on('click', function () {
-			BootstrapDialog.alert({
-				size: 'size-small',
+			BootstrapDialog.confirm({
 				type: 'type-danger',
+				btnOKLabel: BTN_LABEL_CONFIRM_CAL_ZERO,
+				btnCancelLabel: BTN_LABEL_CANCEL,
 				title: MSG_TITLE_INFO,
-				message: 'Call WS for Zero.',
-				callback: function () {
-					BootstrapDialog.closeAll();
+				message: MSG_CONFIRM_CAL_ZERO,
+				callback: function (result) {
+					if (result) {
+						waitingDialog.show();
+						$.post(WS_CALIBRATION_ZERO, { compId: 1 })
+							.done(function (results, status) {
+								waitingDialog.hide();
+								var response = results.response;
+								if (response.type === 'SUCCESS') {
+									BootstrapDialog.alert({
+										type: 'type-primary',
+										title: MSG_TITLE_INFO,
+										message: MSG_INFO_CALIBRATE_ZERO_OK,
+										callback: function () {
+											//
+										}
+									});
+								} else {
+									BootstrapDialog.alert({
+										type: 'type-danger',
+										title: MSG_TITLE_INFO,
+										message: MSG_INFO_CALIBRATE_ZERO_ERROR,
+										callback: function () {
+											//
+										}
+									});
+								}
+							})
+							.fail(function () {
+								waitingDialog.hide();
+								STIC.showWSError();
+							})
+					}
 				}
 			});
 		});
@@ -103,7 +176,35 @@
 
 				// Proceed if form is valid
 				if (isValid) {
-				
+					waitingDialog.show();
+					$.post(WS_CALIBRATION_SPAN, { compId: 1, spanToNumber: $('input[data-field="weight_value"]').val() })
+						.done(function (results, status) {
+							waitingDialog.hide();
+							var response = results.response;
+							if (response.type === 'SUCCESS') {
+								BootstrapDialog.alert({
+									type: 'type-primary',
+									title: MSG_TITLE_INFO,
+									message: MSG_INFO_CALIBRATE_SPAN_OK,
+									callback: function () {
+										//
+									}
+								});
+							} else {
+								BootstrapDialog.alert({
+									type: 'type-danger',
+									title: MSG_TITLE_INFO,
+									message: MSG_INFO_CALIBRATE_SPAN_ERROR,
+									callback: function () {
+										//
+									}
+								});
+							}
+						})
+						.fail(function () {
+							waitingDialog.hide();
+							STIC.showWSError();
+						})
 				}
 			}
 		});	
