@@ -150,7 +150,7 @@ function toggleWeightScaleFields(options) {
 	switch(options.status) {
 		case 'FIRST_WEIGHT_IN':
 			// LCD 
-			$('#weight-status').text('stable');			
+			//$('#weight-status').text('stable');			
 			$('.weight-stage .txt1').html('<img src="images/numeric-1-box-outline.png">');
 			
 			// Main Buttons
@@ -192,7 +192,7 @@ function toggleWeightScaleFields(options) {
 		
 		case 'SECOND_WEIGHT_IN':
 			// LCD
-			$('#weight-status').text('stable');			
+			//$('#weight-status').text('stable');			
 			$('.weight-stage .txt1').html('<img src="images/numeric-2-box-outline.png">');
 			
 			// Main Buttons
@@ -234,7 +234,7 @@ function toggleWeightScaleFields(options) {
 			$('input[data-stage="second"][data-type="varchar"]').addClass('bg-white');
 			break;
 		
-		case 'CANCEL_WEIGHT_IN':
+		case 'CANCEL_WEIGHT_IN':			
 			// LCD
 			$('#weight-reading').text('+0.00');
 			$('#weight-status').text('inactive');

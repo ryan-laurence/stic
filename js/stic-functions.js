@@ -4,6 +4,7 @@ var STIC = {
 	// Global Variables	
 	IntervalId: '',
 	CurrentPage: '',
+	CurrentPageId: '',
 	
 	// License Status
 	LicenseStatus: function () {		
@@ -68,7 +69,7 @@ var STIC = {
 		// Load allowed modules to user
 		Init: function () {
 			// License Status Notification
-			STIC.LicenseStatus();
+			//STIC.LicenseStatus();
 			
 			var JSONObject = {
 				roleModuleId: STIC.User.ReadCookie('roleid')
@@ -197,11 +198,11 @@ var STIC = {
 						// Clear bg process for weight scale
 						if (STIC.CurrentPage === 'weight-scale' || STIC.CurrentPage === 'others-calibration') {
 							clearInterval(STIC.IntervalId);
-							$.post(WS_SCALE_DISCONNECT);
 						}
 
-						$(wrapper).load(pageLoc + params.modName + pageExt);
+						$(wrapper).load(pageLoc + params.modName + pageExt);						
 						STIC.CurrentPage = params.modName;
+						STIC.CurrentPageId = params.modId;
 						
 					} else {
 						BootstrapDialog.alert({
@@ -219,6 +220,31 @@ var STIC = {
 					STIC.showWSError();
 				});			
 		}
+	},
+	
+	// Connect to Scale Reader
+	openScaleReader() {
+		// Clear Interval BG Process
+		clearInterval(STIC.IntervalId)		
+		
+		// Disconnect Scale Reader		
+		$.post(WS_SCALE_DISCONNECT, { compId: 1 })
+			.done(function(results, status) {
+				
+				// Init Scale Reader
+				$.post(WS_SCALE_INIT, { compId: 1 })
+					.done(function(results, status) {
+						var response = results.response;
+						if (response.type === 'SUCCESS') {										
+							
+						} else {
+							STIC.ISRError();										
+						}									
+					})
+					.fail(function () {
+						STIC.ISRError();
+					});
+			})		
 	},
 
 	// Enable Buttons
@@ -372,6 +398,15 @@ var STIC = {
 				}
 			});
 		}
+	},
+	
+	// Show Scale Reader Init Error
+	ISRError: function () {
+		BootstrapDialog.alert({
+			type: 'type-danger',
+			title: MSG_TITLE_INFO,
+			message: MSG_INFO_ISR_ERROR
+		});
 	},
 
 	// Remove error messages & styles
@@ -875,7 +910,7 @@ var STIC = {
 							STIC.User.CreateCookie('roleid', user.role_id, DEFAULT_COOKIE_LIFE);
 
 							window.location = DEFAULT_ROOT + 'main.html';
-
+								
 						// Not Authorized
 						} else {
 							// Clear error messages & styles
@@ -922,7 +957,7 @@ var STIC = {
 				btnOKLabel: BTN_LABEL_CONFIRM_LOGOUT,
 				btnCancelLabel: BTN_LABEL_CANCEL,
 				callback: function (result) {
-					if (result) {
+					if (result) {						
 						STIC.User.Logout();
 					}
 				}
@@ -931,11 +966,18 @@ var STIC = {
 
 		// Logout
 		Logout: function () {
+			BootstrapDialog.closeAll();
 			this.RemoveToContext();
 			this.EraseCookie('username');
 			this.EraseCookie('userid');
 			this.EraseCookie('roleid');
-			window.location = DEFAULT_ROOT;
+			
+			// Disconnect Scale Reader
+			clearInterval(STIC.IntervalId)
+			$.post(WS_SCALE_DISCONNECT, { compId: 1 }, 
+				function(results, status) {
+					window.location = DEFAULT_ROOT;				
+				});			
 		},
 
 		// Change Password

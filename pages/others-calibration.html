@@ -9,6 +9,7 @@
 					<div id="weight-reading" class="weight-reading">+0.00</div>
 					<div class="weight-info">
 						<div id="weight-unit" class="weight-unit">kg</div>
+						<div id="weight-status"class="weight-status">inactive</div>
 					</div>
 				</div>
 			</div>
@@ -46,29 +47,37 @@
 			}, 1000);*/					
 			
 			/**********************************************************************************************************************************************/
-		
-			// Init Reader
-			$.post(WS_SCALE_DISCONNECT);
-			$.post(WS_SCALE_INIT, { compId: 1 });
 			
-			// Read Reading Scale.
-			STIC.IntervalId = setInterval(function() {
-				$.ajax({
-					url: WS_SCALE_READER
-					,type: 'GET'
-					,success: function(data,tx) {
-						var netWg = data['response']['readData-list']['readdata']['read-weight'];
-						var st = data['response']['readData-list']['readdata']['read-status1'];
-						var gs = data['response']['readData-list']['readdata']['read-status2'];
-						var unit = data['response']['readData-list']['readdata']['read-unitType'];
-
-						var netWeight = netWg.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-						$('#weight-reading').text(netWeight.toString());
-						$('#weight-unit').text(unit);		
-					}
-				});
-			}, 1000); // every 1sec
-			
+			// Read Scale Reader
+			var isCompleted = true;	
+			STIC.IntervalId = setInterval(function () {		
+				if(isCompleted) {
+					isCompleted = false;
+					$.get(WS_SCALE_READER)
+						.done(function (data, status) {
+							isCompleted = true;	
+							if (data.response.type === 'SUCCESS') {
+								$('.weight-lcd').removeClass('lcd-error');
+								var response = data['response']['readData-list']['readdata'],
+									netWeight = response['read-weight'].replace(/\s/g, '');
+								$('#weight-reading').text(netWeight.toString());
+								$('#weight-unit').text(response['read-unitType']);
+								$('#weight-status').text(response['read-status1']);		
+							} else {
+								$('#weight-reading').text('+0.00');
+								$('#weight-status').text('error');
+								$('.weight-lcd').addClass('lcd-error');
+							}
+						})
+						.fail(function () {
+							isCompleted = true;	
+							$('#weight-reading').text('+0.00');
+							$('#weight-status').text('error');
+							$('.weight-lcd').addClass('lcd-error');
+						});			
+				}
+			}, SR_INTERVAL); 
+				
 			/**********************************************************************************************************************************************/
 		});
 	

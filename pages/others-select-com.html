@@ -7,7 +7,7 @@
 			<div class="panel-body">
 				<form class="form-horizontal well no-margin-bottom">
 					<div class="form-group">
-						<label for="inputCommunication" class="col-md-4 control-label">Communication </label>
+						<label for="inputCommunication" class="col-md-4 control-label">Comm Port </label>
 						<div class="col-md-7 no-padding-left">
 							<select class="form-control" data-field="port">
 								<option value="COM1" selected>COM1</option>
@@ -29,7 +29,7 @@
 								<option value="38400">38400</option>
 							</select>
 						</div>
-					</div>		
+					</div>
 					<input type="hidden" data-field="id">
 					<input type="hidden" data-field="delay_time_second">
 					<input type="hidden" data-field="minimum_truck_weight">
@@ -41,7 +41,7 @@
 					<input type="hidden" data-field="contact_person">
 					<input type="hidden" data-field="company_name">
 					<input type="hidden" data-field="company_address">
-					<hr>					
+					<hr>
 					<div class="btn-toolbar" role="toolbar" aria-label="button groups">
 						<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
 							<button class="btn btn-primary" type="button" id="reset-com-port"><i class="fa fa-ban"></i> Cancel</button>
@@ -49,75 +49,10 @@
 						<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
 							<button class="btn btn-primary" type="button" id="save-com-port"><i class="fa fa-floppy-o"></i> Save</button>
 						</div>
-					</div>	
-				</form>				
+					</div>
+				</form>
 			</div>
 		</div>
 	</div>
 </div>
-<script>
-	$(function() {	
-		$('select[data-field="port"]').selectpicker();
-		$('select[data-field="baudrate"]').selectpicker();
-	
-		// Pre Load Values
-		function loadComPort() {
-			$.get(WS_LIST_CONFIG_COMPANY, function(data) { 
-				$.each(data.response, function(a, b) {
-					if (a == 'company-list') {
-						$.each(b, function(c, d) {		
-							$.each(d, function(e, f) {	
-								$('input[data-field="' + e + '"]').val(f);
-							});	
-							var pb = d.port_baudrate,
-								pbx = pb.split('=');
-							$('select[data-field="port"]').val(pbx[0]);
-							$('select[data-field="baudrate"]').val(pbx[1]);
-							$('select[data-field="port"]').selectpicker('val', pbx[0]);
-							$('select[data-field="baudrate"]').selectpicker('val', pbx[1]);
-						});
-					}
-				});		
-			});		
-		}		
-		loadComPort();
-		
-		// Save
-		$('#save-com-port').on('click', function () {
-			BootstrapDialog.confirm({
-				type: 'type-danger',				
-				title: MSG_TITLE_INFO,
-				message: MSG_CONFIRM_SAVE_CONFIG,
-				btnOKLabel: BTN_LABEL_CONFIRM_SAVE,
-				btnCancelLabel: BTN_LABEL_CANCEL,
-				callback: function(result) {
-					if (result) {
-						var jsonString = '',
-							jsonObject = {},
-							port = $('select[data-field="port"]').val(),
-							baudrate =  $('select[data-field="baudrate"]').val();								
-						$('input[data-field="port_baudrate"]').val(port + '=' + baudrate);
-						$.each($('input[data-field]'), function(index, formElement) {
-							var postString = '{"' + $(formElement).attr('data-field') + '":"' + $(formElement).val() + '"}';
-							$.extend(jsonObject, $.parseJSON(postString)); 
-						});
-						jsonString = 'companyInfo=' + JSON.stringify(jsonObject);
-						$.post(WS_UPDATE_CONFIG_COMPANY, jsonString, function(data, status){
-							BootstrapDialog.alert({
-								type: 'type-primary',
-								title: MSG_TITLE_INFO,
-								message: MSG_INFO_SAVE_CONFIG								
-							});
-							loadComPort();
-						});
-					} 
-				}
-			});
-		});
-		
-		// Reset
-		$('#reset-com-port').on('click', function() {
-			loadComPort();
-		});
-	});
-</script>
+<script type="text/javascript" src="js/others-select-com.js"></script>

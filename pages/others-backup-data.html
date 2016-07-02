@@ -112,12 +112,6 @@
 				},
 				dom: '<"dt-toolbar">Bfrtip',
 				buttons: [dtBtnBackup, dtBtnReload]
-			})
-			.on('draw.dt', function (e, settings, data) {
-				var btns = ['backup:name'];			
-				dtHistory.data().length > 0 ?
-					dtHistory.buttons(btns).enable() :
-					dtHistory.buttons(btns).disable();
 			});
 
 		// DT Default Sorting

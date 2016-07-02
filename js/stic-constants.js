@@ -31,6 +31,7 @@ var DEFAULT_DT_SETTINGS = {
 }
 
 // Weighing Screen
+var SR_INTERVAL = 1000;
 var CD_TRUCK_IN_LIST = [
 	{ data: 'wr_id', visible: false, searchable: false, orderable: false },
 	{ data: 'truck_code' },
@@ -48,8 +49,8 @@ var WS_FIRST_WEIGHING_DELETE = '/stic/services/WeightReadingInfoServices/deleteW
 var WS_SECOND_WEIGHING_UPDATE = '/stic/services/WeightReadingInfoServices/updateWeightReadings?response=application/json&';
 var WS_CUST_PRODUCT_INSERT = '/stic/services/ProductsInfoServices/addProductsAndCustomerProducts?response=application/json&'
 
-var WS_SCALE_INIT = '/stic/services/ScaleReaderInfoServices/initReader';
-var WS_SCALE_DISCONNECT = '/stic/services/ScaleReaderInfoServices/disconnect';
+var WS_SCALE_INIT = '/stic/services/ScaleReaderInfoServices/initReader?response=application/json';
+var WS_SCALE_DISCONNECT = '/stic/services/ScaleReaderInfoServices/disconnect?response=application/json';
 var WS_SCALE_READER = '/stic/services/ScaleReaderInfoServices/readScaleReading?response=application/json';
 var WS_DOCKET_PRINT = '/stic/DocketPrintReportService?';
 
@@ -443,6 +444,7 @@ var MSG_INFO_DEL_REC = '<div class="alert alert-success all-middle no-margin-bot
 var MSG_INFO_LOGOUT_AFTER_CPASS = '<div class="alert alert-success no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-3x fa-pull-left"></i>You have successfully updated your password. Please take note that you will be logged out of the system after this.</div>'
 var MSG_INFO_WS_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was not successful because there was an error in the Web Service response. If issue still persists, please contact your System Administrator.</div>';
 var MSG_INFO_SAVE_CONFIG = '<div class="alert alert-success all-middle no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-3x"></i>The system\'s configuration settings were updated successfully.</div>';
+var MSG_INFO_ISR_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> An error occured while connecting to the platform scale. Please check if the connection to the platform scale is configured properly. Press F5 or reload the page to try again.</div>';
 
 // Role Access
 var MSG_INFO_ROLE_INVALID = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Your current role privileges does not allow you to perform this action. Please contact your System Administrator for more information.</div>';
@@ -458,11 +460,11 @@ var MSG_INFO_BACKUP_DB_ERROR = '<div class="alert alert-danger no-margin-bottom"
 var MSG_INFO_RESTORE_DB_OK = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The STIC database was restored successfully. Please refer to the restore history table for more information.</div>';
 var MSG_INFO_RESTORE_DB_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Unable to restore the STIC database. Please refer to the restore history table for more information.</div>';
 
-var MSG_INFO_CALIBRATE_ZERO_OK = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-2x fa-pull-left"></i> The weighing indicator has been successfully calibrated to zero value.</div>';
-var MSG_INFO_CALIBRATE_ZERO_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> An error occurred while calibrating the weighing indicator to zero value. Please try again.</div>';
+var MSG_INFO_CALIBRATE_ZERO_OK = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-2x fa-pull-left"></i> The platform scale has been successfully calibrated to zero value.</div>';
+var MSG_INFO_CALIBRATE_ZERO_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> An error occurred while calibrating the platform scale to zero value. Please try again.</div>';
 
-var MSG_INFO_CALIBRATE_SPAN_OK = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The weighing indicator has been successfully calibrated to the weight value of the current makeweight.</div>';
-var MSG_INFO_CALIBRATE_SPAN_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> An error occurred while calibrating the weighing indicator to the weight value of the current makeweight. Please try again.</div>';
+var MSG_INFO_CALIBRATE_SPAN_OK = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The platform scale has been successfully calibrated to the weight value of the current makeweight.</div>';
+var MSG_INFO_CALIBRATE_SPAN_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> An error occurred while calibrating the platform scale to the weight value of the current makeweight. Please try again.</div>';
 
 // License Activation
 var MSG_INFO_SYSTEM_INACTIVE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The system has been deactivated because your current license is expired. Please enter a new license key in the activation page to be able to use the system.</div>';

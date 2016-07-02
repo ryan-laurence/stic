@@ -238,7 +238,7 @@
 				</div>
 			</div>
 			<div class="form-horizontal no-margin-bottom" style="width: 180px; float: right;">
-				<button id="first-weighing" class="btn btn-primary btn-lg" data-type="button" disabled
+				<button id="first-weighing" class="btn btn-success btn-lg" data-type="button" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -249,7 +249,7 @@
 					<img src="images/numeric-1-box-outline.png">
 					<p>First Weighing</p>
 				</button>
-				<button id="second-weighing" class="btn btn-primary btn-lg" data-type="button" disabled
+				<button id="second-weighing" class="btn btn-warning btn-lg" data-type="button" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -271,7 +271,7 @@
 					<i class="fa fa-ban fa-3x" style="margin-top: 5px"></i>
 					<p>Cancel</p>
 				</button>
-				<button id="reprint-docket" class="btn btn-primary btn-lg no-margin-bottom" data-type="button" disabled
+				<button id="reprint-docket" class="btn btn-info btn-lg no-margin-bottom" data-type="button" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -742,9 +742,10 @@
 			$('#wr_id').val(selected_row.data().wr_id);
 			$('#docket_no').val(selected_row.data().docket_no);
 			$('#truck_code').val(selected_row.data().truck_code);
-			$('#weight_unit').text(selected_row.data().weight_unit);
-			$('#weight_in_reading').val(selected_row.data().weight_in_reading
-				.replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+			//$('#weight_unit').text(selected_row.data().weight_unit);
+			//$('#weight_in_reading').val(selected_row.data().weight_in_reading
+			//	.replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+			$('#weight_in_reading').val(selected_row.data().weight_in_reading);
 			$('#truck-data-modal').modal('hide');
 			setNetWeight();
 		});
@@ -1155,21 +1156,20 @@
 						JSONString = 'weightReadingInfo=' + JSON.stringify(JSONObject);
 						var result = $.post(WS_FIRST_WEIGHING_INSERT, JSONString);
 						result.done(function (result) {
-							if (result.response.type === 'SUCCESS') {				
+							if (result.response.type === 'SUCCESS') {	
+								toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
 								// Docket Print
 								window.open('http://localhost:8080' + WS_DOCKET_PRINT 
 									+ 'wrId=' + result.response.wr_id 
-									+ '&type=A1', 'DocketPrint').focus();
-								
+									+ '&type=A1', 'DocketPrint').focus();								
 								BootstrapDialog.alert({
 									type: 'type-primary',
 									title: MSG_TITLE_INFO,
 									message: MSG_FIRST_WEIGHING_SUCCESS,
 									callback: function() {
-										BootstrapDialog.closeAll();
+										BootstrapDialog.closeAll();												
 									}
-								});
-								toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+								});								
 							} else {
 								STIC.showWSError();
 							}
@@ -1275,6 +1275,7 @@
 							var result = $.post(WS_SECOND_WEIGHING_UPDATE, JSONString);
 							result.done(function (results) {
 								if (results.response.type === 'SUCCESS') {
+									toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
 									// Docket Print
 									window.open('http://localhost:8080' + WS_DOCKET_PRINT 
 										+ 'wrId=' + $('#wr_id').val()
@@ -1287,8 +1288,7 @@
 										callback: function () {
 											BootstrapDialog.closeAll();
 										}
-									});
-									toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+									});									
 								} else {
 									STIC.showWSError();
 								}
@@ -1337,10 +1337,7 @@
 
 	//  Scale Reader
 	$(document).ready(function () {
-		var random = function (max, min) {
-				return ((Math.random() * (max - min)) + min).toFixed(2);
-		};
-
+	
 		// Unit Price onKeyDown
 		$('#unit_price').on('keydown', function (e) {
 			var self = this;
@@ -1368,7 +1365,12 @@
 		/**********************************************************************************************************************************************/
 		
 		// Sample Indicator
-		/*STIC.IntervalId = setInterval(function () {
+		/*
+		var random = function (max, min) {
+				return ((Math.random() * (max - min)) + min).toFixed(2);
+		};
+		
+		STIC.IntervalId = setInterval(function () {
 			var rand = '+' + random(41000, 5000)
 				.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
@@ -1388,52 +1390,50 @@
 		
 		/**********************************************************************************************************************************************/
 		
-		// Init Reader
-		$.post(WS_SCALE_DISCONNECT);
-		$.post(WS_SCALE_INIT, { compId: 1 });
-
-		// Read Reading Scale.
-		STIC.IntervalId = setInterval(function() {
-			$.ajax({
-				url: WS_SCALE_READER
-				,type: 'GET'
-				,success: function(data,tx) {
-					//console.log(data);
-					var netWg = data['response']['readData-list']['readdata']['read-weight'];
-					var st = data['response']['readData-list']['readdata']['read-status1'];
-					var gs = data['response']['readData-list']['readdata']['read-status2'];
-					var unit = data['response']['readData-list']['readdata']['read-unitType'];
-
-					//$('#weight-reading').text(netWg);
-					var netWeight = netWg.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-					//var netWeight = netWg;
-					$('#weight-reading').text(netWeight.toString());
-					$('#weight-unit').text(unit);
-					$('#weight-status').text(st);				
-
-					// 2nd Weighing
-					if ($('#wr_id').val() != '') {
-						//$('#weight-reading').text(netWeight.toString());
-						$('#weight_out_reading').val(netWeight.replace('+', ''));
-						setNetWeight();
-						setTotalPrice();
-
-					// 1st Weighing
-					} else if ($('#truck_code').val() != '') {
-						//$('#weight-reading').text(netWeight.toString());
-						$('#weight_in_reading').val(netWeight.replace('+', ''));
-					}
-				}
-			});
-		}, 1000); // every 1sec
+		// Read Scale Reader
+		var isCompleted = true;	
+		STIC.IntervalId = setInterval(function () {		
+			if(isCompleted) {
+				isCompleted = false;				
+				$.get(WS_SCALE_READER)
+					.done(function (data, status) {
+						isCompleted = true;	
+						if (data.response.type === 'SUCCESS') {
+							$('.weight-lcd').removeClass('lcd-error');
+							var response = data['response']['readData-list']['readdata'],
+								netWeight = response['read-weight'].replace(/\s/g, '');
+							$('#weight-reading').text(netWeight.toString());
+							$('#weight-unit').text(response['read-unitType']);
+							$('#weight-status').text(response['read-status1']);		
+							// 2nd Weighing
+							if ($('#wr_id').val() != '') {
+								$('#weight_out_reading').val(netWeight.replace(/[\s\+]/g, ''));
+								setNetWeight();
+								setTotalPrice();
+							// 1st Weighing
+							} else if ($('#truck_code').val() != '') {
+								$('#weight_in_reading').val(netWeight.replace(/[\s\+]/g, ''));
+							}						
+						} else {
+							$('#weight-reading').text('+0.00');
+							$('#weight-status').text('error');
+							$('.weight-lcd').addClass('lcd-error');
+						}				
+					})
+					.fail(function () {
+						isCompleted = true;	
+						$('#weight-reading').text('+0.00');
+						$('#weight-status').text('error');
+						$('.weight-lcd').addClass('lcd-error');
+					});			
+			} 			
+		}, SR_INTERVAL); 
 		
 		/**********************************************************************************************************************************************/
 
 		// Cancel Weighing Button Click Event
 		$('#cancel-weighing').on('click', function() {
-			toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
-			clearInterval(STIC.IntervalId);
-			$.post(WS_SCALE_DISCONNECT);			
+			toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });			
 		});
 		
 	});
