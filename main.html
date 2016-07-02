@@ -14,20 +14,21 @@
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
 		<link rel="stylesheet" href="css/digital-style.css" />
 		<link rel="stylesheet" href="css/stic-custom.css" />	
+		<link href="css/full-slider.css" rel="stylesheet">
   </head>
   <body>
-		<nav class="navbar navbar-inverse">
+		<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
 			<div class="container">
 				<div id="navbar" class="collapse navbar-collapse">
 					<img id="stclogo" alt="" src="images/stclogo.png" >
 					<ul class="nav navbar-nav" id="nav-wrapper"></ul>
 					<ul class="nav navbar-nav navbar-right">
-						<li>
+						<!--li>
 							<a id="link-alerts">
 								<i class="fa fa-bell"></i> 
 								<span class="badge badge-normal">1</span>
 							</a>
-						</li>
+						</li-->
 						<li>
 							<a id="link-user">
 								<i class="fa fa-user"></i> 
@@ -43,16 +44,38 @@
 				</div>
 			</div>
 		</nav>
-		<div class="container" id="main-wrapper">
-		<h1 style="color: #FFFFFF; padding-top: 100px;">We believe in </h1>
-			<ul class="tagline">
-				<li>Quality of Product</li>
-				<li>Precision in Manufacturing</li>
-				<li>Timely delivery</li>
-				<li>Quality and Perfect<br>After Service</li>
-				<li>Customer Satisfaction</li>
-			</ul>
-		</div>
+		<!-- Full Page Image Background Carousel Header -->
+    <header id="main-wrapper" class="carousel slide carousel-fade" data-ride="carousel">
+			<!-- Indicators -->
+			<ol class="carousel-indicators">
+				<li data-target="#main-wrapper" data-slide-to="0" class="active"></li>
+				<li data-target="#main-wrapper" data-slide-to="1"></li>
+				<li data-target="#main-wrapper" data-slide-to="2"></li>
+			</ol>
+			<!-- Wrapper for Slides -->
+			<div class="carousel-inner">
+				<div class="item active">
+					<!-- Set the first background image using inline CSS below. -->
+					<div class="fill" style="background-image:url('images/slider/cover.png');"></div>						
+				</div>
+					<div class="item">
+						<!-- Set the second background image using inline CSS below. -->
+						<div class="fill" style="background-image:url('images/slider/products.png');"></div>
+					</div>
+					<div class="item">
+						<!-- Set the third background image using inline CSS below. -->
+						<div class="fill" style="background-image:url('images/slider/digital.png');"></div>
+					</div>
+			</div>
+			<!-- Controls -->
+			<a class="left carousel-control" href="#main-wrapper" data-slide="prev">
+				<span class="icon-prev"></span>
+			</a>
+			<a class="right carousel-control" href="#main-wrapper" data-slide="next">
+				<span class="icon-next"></span>
+			</a>
+    </header>		
+		<div class="container" id=""></div>
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/jquery-widget.min.js"></script>
 		<script type="text/javascript" src="js/dt.min.js"></script>
@@ -106,7 +129,15 @@
 
 				// Set DT Defaults
 				$.extend(true, $.fn.dataTable.defaults, DEFAULT_DT_SETTINGS);
+				
+				// Connect to Scale Reader
+				STIC.openScaleReader();
 			});
+			
+			<!-- Script to Activate the Carousel -->
+			$('.carousel').carousel({
+				interval: 7000 //changes the speed
+			})
 		</script>
 	</body>
 </html>
