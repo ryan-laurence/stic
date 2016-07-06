@@ -7,7 +7,7 @@
 						 outline:	none;
 }
 
-.form-control {
+.login-form .form-control {
   position: relative;
   font-size: 16px;
   height: auto;
