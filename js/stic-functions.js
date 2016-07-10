@@ -1,250 +1,242 @@
 // Global Namespace
 var STIC = {
-	
-	// Global Variables	
-	IntervalId: '',
-	CurrentPage: '',
-	CurrentPageId: '',
-	
-	// License Status
-	LicenseStatus: function () {		
-		$.post(WS_LICENSE_NOTIFY, { id: 1 })
-			.done(function (results, status) {
-				var cssClass = '', 
-					dialogType = '',
-					dialogMessage = '',  
-					type = results.response.type,
-					days = results.response.days;
-				
-				// normal
-				if (type === 'NORMAL') {
-					cssClass = 'badge-normal';
-					dialogType = 'type-success';					
-					dialogMessage = MSG_INFO_LICENSE_NORMAL;		
 
-				// <= 30 days
-				} else if (type === 'WARNING') {
-					cssClass = 'badge-warning';
-					dialogType = 'type-warning';
-					dialogMessage = MSG_INFO_LICENSE_WARNING;
-				
-				// <= 7 days
-				} else if (type === 'CRITICAL') {
-					cssClass = 'badge-danger';
-					dialogType = 'type-danger';
-					dialogMessage = MSG_INFO_LICENSE_DANGER;
-				
-				// normal
-				} else {
-					cssClass = 'badge-normal';
-					dialogType = 'type-success';
-					dialogMessage = MSG_INFO_LICENSE_NORMAL;
-				}			
+	// Interval ID Process for Scale Reader
+	INTERVAL_ID: "",
 
-				$('.badge').removeClass('badge-normal')
-				$('.badge').addClass(cssClass);
-				
-				// Show Notification
-				$('#link-alerts').on('click', function () {		
-					BootstrapDialog.alert({
-						type: dialogType,
-						title: MSG_TITLE_INFO,
-						message: dialogMessage
-							.replace('$P{daysLeft}', days),
-						callback: function (result) {
-							BootstrapDialog.closeAll();
-						}
-					});				
+	// Current Module Page
+	CURRENT_PAGE: "",
+
+	// Current Module Page ID
+	CURRENT_PAGEID: "",
+
+	// Load index page
+	loadIndex: function(pageType) {
+		$(DFLT_CTNR_ID).html("");
+		$(DFLT_CTNR_ID).load(DFLT_PAGE_DIR + pageType + DFLT_PAGE_EXT, function() {
+			if (pageType == 'main') {
+				$("#current-user").text(STIC.User.ReadCookie("username"));
+			}			
+		});
+	},
+	
+	// Load navigation bar
+	loadNavBar: function() {
+		$.getJSON(WS_UI_MODULES_LIST, {
+			roleModuleId: STIC.User.ReadCookie('roleid')
+		})
+		.done(function(results, status) {
+			var response = results.response;
+			if (response.type === 'SUCCESS') {
+				var navItems = [], 
+					navLabel = '',
+					prevParentId = '', 
+					currParentId = '',
+					report = response['report-list'].report,
+					modules = $.isArray(report) === true ? report : [report];
+				$.each(modules, function(i, m) {
+					currParentId = m.mod_parent;
+					navLabel = m.mod_icon != '' ?
+						'<i class="' + m.mod_icon + '"></i> ' + m.mod_label :
+						m.mod_label;
+					if (prevParentId != '' && currParentId > prevParentId) {
+						navItems.push('</ul></li>');
+					} else if (prevParentId != '' && currParentId == '') {
+						navItems.push('</ul></li>');
+					}
+					if (m.mod_type == 'group') {
+						navItems.push(
+							'<li class="dropdown" data-mod-id="' + m.mod_id + '">' +
+								'<a class="dropdown-toggle" data-toggle="dropdown" ' +
+									'role="button" aria-expanded="false">' +
+									navLabel +
+									' <span class="caret"></span>' +
+								'</a>' +
+								'<ul class="dropdown-menu" role="menu">'
+						);
+					} else {
+						navItems.push(
+							'<li>' +
+								'<a ' +
+									'data-mod-id="' + m.mod_id + '" ' +
+									'data-mod-parent="' + m.mod_parent + '" ' +
+									'data-mod-name="' + m.mod_name + '">' +
+									navLabel +
+								'</a>' +
+							'</li>');
+					}
+					prevParentId = currParentId;
 				});
-				
-			})				
-			.fail(function () {
-				STIC.showWSError();
-			});	
+				$('#nav-wrapper').html(navItems.join(''));
+				$('[data-mod-name]').on('click', function() {
+					var modParent = $(this).attr('data-mod-parent');
+					$('#nav-wrapper')
+						.find('li.active')
+						.removeClass('active');
+					if (modParent != '') {
+						$('#nav-wrapper')
+							.find('li[data-mod-id="' + modParent + '"]')
+							.addClass('active');
+					} else {
+						$(this)
+							.parent()
+							.addClass('active');
+					}
+					STIC.loadModule({
+						modId: $(this).attr('data-mod-id'),
+						modName: $(this).attr('data-mod-name')
+					});
+				});
+			} else {
+				BootstrapDialog.alert({
+					type: 'type-danger',
+					title: MSG_TITLE_INFO,
+					message: MSG_INFO_NO_MODULES_ERROR
+				});
+			}
+		})
+		.fail(function() {
+			STIC.showWSError();
+		});
 	},
 
-	// Modules Functions
-	Modules: {
-
-		// Load allowed modules to user
-		Init: function () {
-			// License Status Notification
-			//STIC.LicenseStatus();
-			
-			var JSONObject = {
-				roleModuleId: STIC.User.ReadCookie('roleid')
-			};
-
-			// Call WS to get allowed modules
-			$.getJSON(WS_UI_MODULES_LIST, JSONObject)
-				.done(function (results, status) {
-					var response = results.response;
-
-					// Proceed if there are allowed modules to user
-					if (response.type === 'SUCCESS') {
-						var navItems = [], navLabel = '',
-							prevParentId = '', currParentId = '',
-							report = response['report-list'].report,
-							modules = $.isArray(report) === true ? report : [report];	
-
-						// Build navigation list
-						$.each(modules, function (i, m) {
-							currParentId = m.mod_parent;
-							navLabel = m.mod_icon != '' ?
-								'<i class="' + m.mod_icon + '"></i> ' + m.mod_label :
-								m.mod_label;
-
-							// Set drop down menu closing tags
-							if (prevParentId != '' && currParentId > prevParentId) {
-								navItems.push('</ul></li>');
-							} else if (prevParentId != '' && currParentId == '') {
-								navItems.push('</ul></li>');
-							}
-
-							// Set navigation list
-							if (m.mod_type == 'group') {
-								navItems.push(
-									'<li class="dropdown" data-mod-id="' + m.mod_id + '">' +
-										'<a class="dropdown-toggle" data-toggle="dropdown" ' +
-											'role="button" aria-expanded="false">' +
-											navLabel +
-											' <span class="caret"></span>' +
-										'</a>' +
-										'<ul class="dropdown-menu" role="menu">'
-								);
-							} else {
-								navItems.push(
-									'<li>' +
-										'<a ' +
-											'data-mod-id="' + m.mod_id + '" ' +
-											'data-mod-parent="' + m.mod_parent + '" ' +
-											'data-mod-name="' + m.mod_name + '">' +
-											navLabel +
-										'</a>' +
-									'</li>');
-							}
-
-							prevParentId = currParentId;
-						});
-
-						// Append Navigation List
-						$('#nav-wrapper').html(navItems.join(''));
-
-						// Navigation onClick Event
-						$('[data-mod-name]').on('click', function () {
-							var modId = $(this).attr('data-mod-id'), 
-								modName = $(this).attr('data-mod-name'),
-								modParent = $(this).attr('data-mod-parent');
-
-							// Clear active modules style
-							$('#nav-wrapper')
-								.find('li.active')
-								.removeClass('active');
-
-							// Set active module style
-							if (modParent != '') {
-								$('#nav-wrapper')
-									.find('li[data-mod-id="' + modParent + '"]')
-									.addClass('active');
-							} else {
-								$(this)
-									.parent()
-									.addClass('active');
-							}
-
-							// Load module page
-							STIC.Modules.LoadPage({ 
-								modId: modId,
-								modName: modName 
-							});							
-							
-						});
-
-					// Show alert if there are no modules assigned to user
-					} else {
-						BootstrapDialog.alert({
-							type: 'type-danger',
-							title: MSG_TITLE_INFO,
-							message: MSG_INFO_NO_MODULES_ERROR,
-							callback: function (result) {
-								BootstrapDialog.closeAll();
-							}
-						});
-					}
-				})
-				.fail(function () {
-					STIC.showWSError();
-				});
-		},
-
-		// Load module page
-		LoadPage: function (params) {			
-			// Check License & Login
-			STIC.User.CheckLicense(true);	
-			
-			var data = {
+	// Load module page
+	loadModule: function(params) {
+		STIC.validateUser(true, function(response) {
+			$.post(WS_UI_MODULES_CHECK, {
 				mod_id: params.modId,
 				role_id: STIC.User.ReadCookie('roleid')
-			};			
-			
-			// Check Role Access
-			$.post(WS_UI_MODULES_CHECK, data)
-				.done(function (results, status) {
-					if (results.response.type === 'SUCCESS') {
-						var wrapper = DEFAULT_WRAPPER_ID,
-							pageLoc = DEFAULT_PAGE_LOC,
-							pageExt = DEFAULT_PAGE_FILE_EXT;
-						
-						// Clear bg process for weight scale
-						if (STIC.CurrentPage === 'weight-scale' || STIC.CurrentPage === 'others-calibration') {
-							clearInterval(STIC.IntervalId);
-						}
-
-						$(wrapper).load(pageLoc + params.modName + pageExt);						
-						STIC.CurrentPage = params.modName;
-						STIC.CurrentPageId = params.modId;
-						
-					} else {
-						BootstrapDialog.alert({
-							type: 'type-danger',
-							title: MSG_TITLE_INFO,
-							message: MSG_INFO_ROLE_ACCESS_ERROR,
-							callback: function (result) {
-								BootstrapDialog.closeAll();
-								window.location = DEFAULT_ROOT + 'main.html';
-							}
-						});	
-					}
-				})
-				.fail(function () {
-					STIC.showWSError();
-				});			
-		}
+			})
+			.done(function(results, status) {
+				if (results.response.type === 'SUCCESS') {
+					if (STIC.CURRENT_PAGE === 'weight-scale' ||
+						STIC.CURRENT_PAGE === 'others-calibration') {
+						clearInterval(STIC.INTERVAL_ID);
+					}					
+					$(DFLT_WRPR_ID).load(DFLT_PAGE_DIR + params.modName + DFLT_PAGE_EXT, function() {
+						console.log($(DFLT_WRPR_ID).html())
+					});
+					STIC.CURRENT_PAGE = params.modName;
+					STIC.CURRENT_PAGEID = params.modId;
+				} else {
+					BootstrapDialog.alert({
+						type: 'type-danger',
+						title: MSG_TITLE_INFO,
+						message: MSG_INFO_ROLE_ACCESS_ERROR
+					});
+				}
+			})
+			.fail(function() {
+				STIC.showWSError();
+			});		
+		});
 	},
 	
+	// Redirect to activation page
+	loadActivate: function() {
+		STIC.User.RemoveToContext();
+		STIC.User.EraseCookie('userid');
+		STIC.User.EraseCookie('roleid');
+		STIC.User.EraseCookie('username');
+		window.location = DFLT_ROOT + 'activation.html';
+	},
+	
+	// Check License, User Session
+	validateUser: function(logout, callback) {
+		// Check License
+		$.post(WS_CHECK_LICENSE, { id: 1 })
+		.done(function(results, status) {
+			var response = results.response,
+				licenseValid = response.is_license,
+				hdSerialValid = response.is_hd_serial_number_valid;
+			if (response.type === 'SUCCESS') {
+				if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {
+					// Check User Session					
+					var roleId = STIC.User.ReadCookie('roleid'),
+						userId = STIC.User.ReadCookie('userid'),
+						userName = STIC.User.ReadCookie('username'),
+						forceLogOut = typeof logout !== 'undefined'
+							? logout : true;
+
+					if (roleId !== null && userId !== null && userName !== null) {
+						var JSONObject = {
+							user_id: userId,
+							user_name: userName
+						};
+
+						// Call WS Validation
+						$.post(WS_USER_AUTHENTICATE, JSONObject)
+							.done(function (results, status) {
+								if (results.response.type === 'SUCCESS') {
+
+									if (forceLogOut === false) {
+										STIC.loadIndex('main');
+									}
+									
+									$.isFunction(callback) ? callback({ type: 'SUCCESS'}) : '';
+								
+								} else {
+									if (forceLogOut)
+										STIC.User.Logout();
+								}
+							})
+							.fail(function () {
+								STIC.showWSError();
+							});
+					} else {
+							STIC.User.Logout();
+					}
+				
+				
+				
+				
+				
+				} else if (hdSerialValid === 'NO') {
+					BootstrapDialog.alert({
+						type: 'type-danger',
+						title: MSG_TITLE_INFO,
+						message: MSG_INFO_INVALID_HD,
+						callback: function () {
+							this.loadActivate();
+						}
+					});
+				} else {
+					BootstrapDialog.alert({
+						type: 'type-danger',
+						title: MSG_TITLE_INFO,
+						message: MSG_INFO_SYSTEM_INACTIVE,
+						callback: function () {
+							this.loadActivate();
+						}
+					});
+				}
+			} else {
+				STIC.showWSError();
+			}
+		})
+		.fail(function () {
+			STIC.showWSError();
+		});
+	},
+
 	// Connect to Scale Reader
 	openScaleReader() {
-		// Clear Interval BG Process
-		clearInterval(STIC.IntervalId)		
-		
-		// Disconnect Scale Reader		
+		clearInterval(STIC.INTERVAL_ID)
 		$.post(WS_SCALE_DISCONNECT, { compId: 1 })
+		.done(function(results, status) {
+			$.post(WS_SCALE_INIT, { compId: 1 })
 			.done(function(results, status) {
-				
-				// Init Scale Reader
-				$.post(WS_SCALE_INIT, { compId: 1 })
-					.done(function(results, status) {
-						var response = results.response;
-						if (response.type === 'SUCCESS') {										
-							
-						} else {
-							STIC.ISRError();										
-						}									
-					})
-					.fail(function () {
-						STIC.ISRError();
-					});
-			})		
+				var response = results.response;
+				if (response.type === 'SUCCESS') {
+					// do nothing
+				} else {
+					STIC.ISRError();
+				}
+			})
+			.fail(function() {
+				STIC.ISRError();
+			});
+		})
 	},
 
 	// Enable Buttons
@@ -287,14 +279,14 @@ var STIC = {
 
 	// Docket Style Functions
 	DocketStyle: {
-		
+
 		// Destroy Message Field
 		destroyMsgField: function() {
 			$('select[data-field="dt_message"]').selectpicker('destroy');
 			$('select[data-field="dt_message"]').remove();
 			$('input[data-field="dt_message"]').remove();
 		},
-		
+
 		// New Message Input Field
 		newMsgInputField: function(params) {
 			var container = params.container,
@@ -302,14 +294,14 @@ var STIC = {
 			container.append('<input type="text" class="form-control" value="' +
 				defaultVal + '" data-field="dt_message" data-fv-notempty="true">');
 		},
-		
+
 		// New Message Select Field
 		newMsgSelectField: function(params) {
 			var JSONUrl = params.JSONUrl,
 				JSONData = params.JSONData,
 				container = params.container,
 				defaultVal = params.defaultVal;
-			
+
 			$.getJSON(JSONUrl, function(data) {
 				var options = [];
 				$.each(data.response, function(a, b) {
@@ -321,16 +313,16 @@ var STIC = {
 						});
 					}
 				});
-				
+
 				container.append('<select class="selectpicker form-control" title="-"' +
 					' data-field="dt_message" data-fv-notempty="true" data-live-search="true" data-size="5">' +
 					options.join('') + '</select>');
-				
+
 				$('select[data-field="dt_message"]').selectpicker('refresh');
 				$('select[data-field="dt_message"]').selectpicker('val', defaultVal);
 			});
 		},
-		
+
 		// Toggle Message Field
 		toggleMsgField: function(params) {
 			var JSONUrl = params.JSONUrl,
@@ -338,9 +330,9 @@ var STIC = {
 				container = $('#message-field-box'),
 				dataSrc = (typeof params.dataSrc != 'undefined' ? params.dataSrc : 'data'),
 				defaultVal = (typeof params.defaultVal != 'undefined' ? params.defaultVal : '');
-			
+
 			this.destroyMsgField();
-			
+
 			if (dataSrc == 'data') {
 				this.newMsgSelectField({
 					JSONUrl: JSONUrl,
@@ -399,7 +391,7 @@ var STIC = {
 			});
 		}
 	},
-	
+
 	// Show Scale Reader Init Error
 	ISRError: function () {
 		BootstrapDialog.alert({
@@ -537,12 +529,12 @@ var STIC = {
 			.done(function(result, status) {
 				// Execute callback function
 				$.isFunction(callback.func)
-					? callback.func(callback.args) : '';				
+					? callback.func(callback.args) : '';
 
 				var response = result.response;
 
 				// on Success
-				if (response.type == 'SUCCESS') {						
+				if (response.type == 'SUCCESS') {
 					BootstrapDialog.closeAll();
 					BootstrapDialog.alert({
 						type: 'type-primary',
@@ -567,20 +559,20 @@ var STIC = {
 				STIC.showWSError({ formId: params.formId });
 			});
 	},
-	
+
 	// Report Functions
 	Report: {
-		
+
 		// Format Number
 		FormatNumber: function (sum) {
 			return sum.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		},
-		
+
 		// Set PDF Styles
 		SetPDFStyles: function (params) {
-			var doc = params.doc,			
+			var doc = params.doc,
 				footerData = params.footerData || [];
-			
+
 			// Get Column Widths & Set Footer Columns
 			var widths = [], footerCols = [];
 			$.each(params.cd, function (idx, column) {
@@ -601,16 +593,16 @@ var STIC = {
 									style: 'tableFooter',
 									alignment: 'left'
 								});
-							} 
+							}
 						});
 						if (hasMatch === 0)
 							footerCols.push({ text: '' });
 					} else {
 						footerCols.push({ text: '' });
-					}					
+					}
 				}
-			});		
-			
+			});
+
 			// Default Styles
 			doc.defaultStyle.columnGap = 5;
 
@@ -647,13 +639,13 @@ var STIC = {
 				paddingTop: function (i, node) { return 6; },
 				paddingBottom: function (i, node) { return 6; }
 			};
-			
+
 			// Table Footer
 			var rowCount = doc.content[1]['table']['body'].length;
 			doc.content[1]['table']['body'].splice(rowCount, 0, footerCols);
-			
+
 			return doc;
-		}		
+		}
 	},
 
 	// User Functions
@@ -684,7 +676,7 @@ var STIC = {
 
 		// Erase Cookie
 		EraseCookie: function (name) {
-			this.CreateCookie(name, '', -DEFAULT_COOKIE_LIFE);
+			this.CreateCookie(name, '', -DFLT_CKIE_LIFE);
 		},
 
 		// Remove from Audit Trail
@@ -704,9 +696,9 @@ var STIC = {
 					});
 			}
 		},
-		
+
 		// Check License
-		CheckLicense: function (logout) {
+		CheckLicense: function (logout, callback) {
 			$.post(WS_CHECK_LICENSE, { id: 1 })
 				.done(function (results, status) {
 					var response = results.response,
@@ -714,18 +706,20 @@ var STIC = {
 						hdSerialValid = response.is_hd_serial_number_valid;
 					if (response.type === 'SUCCESS') {
 						if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {
-							STIC.User.Authenticate(logout);
+							/*$.isFunction(callback)
+								? callback(response) : '';*/
+							STIC.User.Authenticate(logout, callback);
 						} else if (hdSerialValid === 'NO') {
 							BootstrapDialog.alert({
 								type: 'type-danger',
 								title: MSG_TITLE_INFO,
 								message: MSG_INFO_INVALID_HD,
 								callback: function () {
-									STIC.User.RemoveToContext();							
+									STIC.User.RemoveToContext();
 									STIC.User.EraseCookie('userid');
 									STIC.User.EraseCookie('roleid');
 									STIC.User.EraseCookie('username');
-									window.location = DEFAULT_ROOT + 'activation.html';
+									window.location = DFLT_ROOT + 'activation.html';
 								}
 							});
 						} else {
@@ -734,46 +728,46 @@ var STIC = {
 								title: MSG_TITLE_INFO,
 								message: MSG_INFO_SYSTEM_INACTIVE,
 								callback: function () {
-									STIC.User.RemoveToContext();							
+									STIC.User.RemoveToContext();
 									STIC.User.EraseCookie('userid');
 									STIC.User.EraseCookie('roleid');
 									STIC.User.EraseCookie('username');
-									window.location = DEFAULT_ROOT + 'activation.html';
+									window.location = DFLT_ROOT + 'activation.html';
 								}
 							});
-						}							
+						}
 					} else {
-						STIC.showWSError();						
+						STIC.showWSError();
 					}
 				})
 				.fail(function () {
 					STIC.showWSError();
 				});
-		}, 
-		
+		},
+
 		// Check if system is activated
 		CheckIfActivated: function () {
 			$.post(WS_CHECK_LICENSE, { id: 1 })
 				.done(function (results, status) {
 					if (results.response.type === 'SUCCESS') {
 						if (results.response.is_license === 'YES') {
-							window.location = DEFAULT_ROOT;				
-						} 							
+							window.location = DFLT_ROOT;
+						}
 					} else {
-						STIC.showWSError();						
+						STIC.showWSError();
 					}
 				})
 				.fail(function () {
 					STIC.showWSError();
-				});			
+				});
 		},
 
 		// Check if User is valid
-		Authenticate: function (logout) {
+		Authenticate: function (logout, callback) {
 			var roleId = this.ReadCookie('roleid'),
 				userId = this.ReadCookie('userid'),
 				userName = this.ReadCookie('username'),
-				forceLogOut = typeof logout !== 'undefined' 
+				forceLogOut = typeof logout !== 'undefined'
 					? logout : true;
 
 			if (roleId !== null && userId !== null && userName !== null) {
@@ -786,9 +780,10 @@ var STIC = {
 				$.post(WS_USER_AUTHENTICATE, JSONObject)
 					.done(function (results, status) {
 						if (results.response.type === 'SUCCESS') {
-							$('#current-user').text(userName);
-							if (!forceLogOut)
-								window.location = DEFAULT_ROOT + 'main.html';
+							//console.log(forceLogOut)
+							if (forceLogOut === false) {
+								STIC.loadIndex('main');
+							}
 						} else {
 							if (forceLogOut)
 								this.Logout();
@@ -798,17 +793,18 @@ var STIC = {
 						STIC.showWSError();
 					});
 			} else {
-					if (forceLogOut) {
+					this.Logout();
+					/*if (forceLogOut) {
 						this.Logout();
 					} else {
 						this.RemoveToContext();
 						this.EraseCookie('username');
 						this.EraseCookie('userid');
 						this.EraseCookie('roleid');
-					}
+					}*/
 			}
 		},
-		
+
 		//
 		LoginCheck: function () {
 			$.post(WS_CHECK_LICENSE, { id: 1 })
@@ -825,11 +821,11 @@ var STIC = {
 								title: MSG_TITLE_INFO,
 								message: MSG_INFO_INVALID_HD,
 								callback: function () {
-									STIC.User.RemoveToContext();							
+									STIC.User.RemoveToContext();
 									STIC.User.EraseCookie('userid');
 									STIC.User.EraseCookie('roleid');
 									STIC.User.EraseCookie('username');
-									window.location = DEFAULT_ROOT + 'activation.html';
+									window.location = DFLT_ROOT + 'activation.html';
 								}
 							});
 						} else {
@@ -838,16 +834,16 @@ var STIC = {
 								title: MSG_TITLE_INFO,
 								message: MSG_INFO_SYSTEM_INACTIVE,
 								callback: function () {
-									STIC.User.RemoveToContext();							
+									STIC.User.RemoveToContext();
 									STIC.User.EraseCookie('userid');
 									STIC.User.EraseCookie('roleid');
 									STIC.User.EraseCookie('username');
-									window.location = DEFAULT_ROOT + 'activation.html';
+									window.location = DFLT_ROOT + 'activation.html';
 								}
 							});
-						}							
+						}
 					} else {
-						STIC.showWSError();						
+						STIC.showWSError();
 					}
 				})
 				.fail(function () {
@@ -856,7 +852,7 @@ var STIC = {
 		},
 
 		// Login
-		Login: function () {			
+		Login: function () {
 			var totalErrors = 0,
 				username = $('#username').val(),
 				password = $('#password').val();
@@ -905,12 +901,12 @@ var STIC = {
 							var user = response['users-list'].user;
 
 							// Create Cookies
-							STIC.User.CreateCookie('username', user.user_name, DEFAULT_COOKIE_LIFE);
-							STIC.User.CreateCookie('userid', user.user_id, DEFAULT_COOKIE_LIFE);
-							STIC.User.CreateCookie('roleid', user.role_id, DEFAULT_COOKIE_LIFE);
+							STIC.User.CreateCookie('username', user.user_name, DFLT_CKIE_LIFE);
+							STIC.User.CreateCookie('userid', user.user_id, DFLT_CKIE_LIFE);
+							STIC.User.CreateCookie('roleid', user.role_id, DFLT_CKIE_LIFE);
 
-							window.location = DEFAULT_ROOT + 'main.html';
-								
+							STIC.loadIndex('main');
+
 						// Not Authorized
 						} else {
 							// Clear error messages & styles
@@ -941,10 +937,10 @@ var STIC = {
 					.fail(function () {
 						STIC.showWSError();
 					})
-					
+
 			} else {
 				$('.login-form').find('div.alert-danger').remove();
-				$('.login-form').find('div.alert-info').hide();				
+				$('.login-form').find('div.alert-info').hide();
 				$('.login-form hr:first').after(MSG_ALERT_LOGIN_FORM_ERROR);
 			}
 		},
@@ -957,7 +953,7 @@ var STIC = {
 				btnOKLabel: BTN_LABEL_CONFIRM_LOGOUT,
 				btnCancelLabel: BTN_LABEL_CANCEL,
 				callback: function (result) {
-					if (result) {						
+					if (result) {
 						STIC.User.Logout();
 					}
 				}
@@ -971,13 +967,13 @@ var STIC = {
 			this.EraseCookie('username');
 			this.EraseCookie('userid');
 			this.EraseCookie('roleid');
-			
+
 			// Disconnect Scale Reader
-			clearInterval(STIC.IntervalId)
-			$.post(WS_SCALE_DISCONNECT, { compId: 1 }, 
+			clearInterval(STIC.INTERVAL_ID)
+			$.post(WS_SCALE_DISCONNECT, { compId: 1 },
 				function(results, status) {
-					window.location = DEFAULT_ROOT;				
-				});			
+					STIC.loadIndex('login');
+				});
 		},
 
 		// Change Password
@@ -1098,10 +1094,10 @@ var STIC = {
 function loadSummaryReport(params) {
 	// Set Default Date
 	var today = new Date(),
-		defEnd = moment(today).format(DEFAULT_DATE_FORMAT),
-		defStart = moment().startOf('month').format(DEFAULT_DATE_FORMAT),
+		defEnd = moment(today).format(DFLT_DATE_FRMT),
+		defStart = moment().startOf('month').format(DFLT_DATE_FRMT),
 		defWsURL = params.ws + 'dateFrom=' + defStart + '&dateTo=' + defEnd,
-	
+
 	// DT Buttons > Copy
 	dtBtnCopy = {
 		name: 'copy',
@@ -1154,21 +1150,21 @@ function loadSummaryReport(params) {
 			columns: ':visible'
 		}
 	},
-	
+
 	// DT Buttons > Web Page Print
-	dtBtnPrint = {						
+	dtBtnPrint = {
 		name: 'print',
-		extend: 'print',		
+		extend: 'print',
 		enabled: false,
-		autoPrint: false,		
-		title: params.title,	
+		autoPrint: false,
+		title: params.title,
 		className: 'btn-primary',
 		text: BTN_LABEL_PRINT_RECORD,
 		titleAttr: BTN_TITLE_PRINT_RECORD,
-		customize: dtWebPagePrintCustom,		
-		exportOptions: { 
-			columns: ':visible' 
-		}				
+		customize: dtWebPagePrintCustom,
+		exportOptions: {
+			columns: ':visible'
+		}
 	};
 
 	// DT Init
@@ -1177,7 +1173,7 @@ function loadSummaryReport(params) {
 			pageLength: 10,
 			ordering: true,
 			searching: false,
-			columns: params.cd,			
+			columns: params.cd,
 			ajax: {
 				url: defWsURL,
 				dataSrc: function (json) {
@@ -1191,12 +1187,12 @@ function loadSummaryReport(params) {
 		})
 		.on('draw.dt', function (e, settings, data) {
 			var btns = [
-				'copy:name', 
-				'csv:name', 
-				'excel:name', 
-				'pdf:name', 
+				'copy:name',
+				'csv:name',
+				'excel:name',
+				'pdf:name',
 				'print:name'
-			];			
+			];
 			dtSummary.data().length > 0 ?
 				dtSummary.buttons(btns).enable() :
 				dtSummary.buttons(btns).disable();
@@ -1207,7 +1203,7 @@ function loadSummaryReport(params) {
 					.column('net_weight:name')
 					.data().sum(),
 				formattedTotal = STIC.Report
-					.FormatNumber(totalNetWeight);					
+					.FormatNumber(totalNetWeight);
 				$('#total_net_weight').val(formattedTotal);			}
 		});
 
@@ -1215,10 +1211,10 @@ function loadSummaryReport(params) {
 	dtSummary.column('0:visible').order('asc').draw();
 
 	// Total Net Weight
-	if (params.showTotal) {		
+	if (params.showTotal) {
 		$('div.dt-total').html(
 			'<div class="input-group">' +
-				'<span class="input-group-addon">' + 
+				'<span class="input-group-addon">' +
 					'<i class="fa fa-calculator"></i> ' +
 					'<strong>Total Net Weight</strong>' +
 				'</span>' +
@@ -1229,7 +1225,7 @@ function loadSummaryReport(params) {
 		$('div.dt-total').css('float', 'right');
 	}
 
-	// Date Range Filter	
+	// Date Range Filter
 	$('div.dt-toolbar').html(
 		'<div class="btn-toolbar" role="toolbar">' +
 			'<div class="btn-group pull-left no-padding-left form-inline" role="group" style="margin-bottom: 0px">'	+
@@ -1244,22 +1240,22 @@ function loadSummaryReport(params) {
 				'<button type="button" class="btn btn-primary" id="search-report" title="Search Report"><i class="fa fa-search"></i></button>' +
 				'<button type="button" class="btn btn-danger" id="reset-report" title="Reset Report"><i class="fa fa-ban"></i></button>' +
 			'</div>' +
-		'</div>' 
-	);	
+		'</div>'
+	);
 	$('div.dt-toolbar').css('float', 'left');
 	$('div.dt-toolbar').css('margin-right', '5px');
-	
-	var dp1 = $('#dp1'), 
-		dp2 = $('#dp2'), 
-		inEndDt = $('#end-date'), 
+
+	var dp1 = $('#dp1'),
+		dp2 = $('#dp2'),
+		inEndDt = $('#end-date'),
 		inStartDt = $('#start-date');
 
 	// Date Picker Init
 	dp1.datetimepicker({
-		format: DEFAULT_DATE_FORMAT
+		format: DFLT_DATE_FRMT
 	});
 	dp2.datetimepicker({
-		format: DEFAULT_DATE_FORMAT
+		format: DFLT_DATE_FRMT
 	});
 
 	// Set Default Date
@@ -1276,21 +1272,21 @@ function loadSummaryReport(params) {
 
 	// Search Report
 	$('#search-report').on('click', function () {
-		var wsURL = params.ws + 
-			'dateFrom=' + inStartDt.val() + 
+		var wsURL = params.ws +
+			'dateFrom=' + inStartDt.val() +
 			'&dateTo=' + inEndDt.val();
 		dtSummary.ajax.url(wsURL).load();
 	});
-	
+
 	// Reset Report
-	$('#reset-report').on('click', function () {		
+	$('#reset-report').on('click', function () {
 		inEndDt.val(defEnd);
 		inStartDt.val(defStart);
 		dtSummary.ajax.url(defWsURL).load();
 	});
-	
+
 	// Customize PDF Print Output
-	function dtPDFPrintCustom(doc) {	
+	function dtPDFPrintCustom(doc) {
 		var footerData = [];
 		if (params.showTotal) {
 			footerData.push(
@@ -1303,49 +1299,49 @@ function loadSummaryReport(params) {
 		var pdfDoc = STIC.Report.SetPDFStyles({
 			doc: doc,
 			cd: params.cd,
-			footerData: footerData		
+			footerData: footerData
 		});
 
 		// Set add. messages
-		var fromLabel = { width: 30, bold: true, text: 'From :' },			
+		var fromLabel = { width: 30, bold: true, text: 'From :' },
 			toLabel = { width: 30, bold: true, text: 'To :' },
 			fromDate = { width: 'auto', text: $('#start-date').val() },
 			toDate = { width: 'auto', text: $('#end-date').val() };
 		pdfDoc.content.splice(1, 0, { columns: [fromLabel, fromDate] });
 		pdfDoc.content.splice(2, 0, { columns: [toLabel, toDate] });
 	}
-	
+
 	// Customize Web Page Print Output
 	function dtWebPagePrintCustom(win) {
 		$(win.document.body)
 			.css('background', 'none')
 			.css('font-weight', 'normal')
-			.css('font-family', 'Monospaced');						
+			.css('font-family', 'Monospaced');
 		// Title
-		$(win.document.body).find('h1')								
+		$(win.document.body).find('h1')
 			.css('font-size', '16pt')
-			.css('text-align', 'center');							
+			.css('text-align', 'center');
 		// Message
-		$(win.document.body).find('div')							
+		$(win.document.body).find('div')
 			.css('font-size', '11pt')
 			.css('text-align', 'left')
 			.css('margin', '20px 0px 15px 0px')
-			.html('From: ' + $('#start-date').val() + ' <br />To: ' + $('#end-date').val());						
+			.html('From: ' + $('#start-date').val() + ' <br />To: ' + $('#end-date').val());
 		// Data Table
 		$(win.document.body).find('table')
 			.removeClass('display')
-			.removeClass('compact');							
+			.removeClass('compact');
 		$(win.document.body).find('table th')
 			.css('font-size', '11pt')
 			.css('text-align', 'left')
-			.css('padding-left', '0px');							
-		$(win.document.body).find('table td')							
+			.css('padding-left', '0px');
+		$(win.document.body).find('table td')
 			.css('font-size', '10pt')
 			.css('text-align', 'left')
 			.css('padding-left', '0px')
 			.css('padding-top', '10px')
 			.css('padding-bottom', '10px')
-			.css('font-weight', 'normal');							
+			.css('font-weight', 'normal');
 		//console.log($(win.document.body).html());
 	}
 }
@@ -1358,12 +1354,12 @@ function initDT_Picker(options) {
 		dtWs = options.ws,
 		dtDomId = options.domId,
 		dtOd = (typeof options.od != 'undefined' ? options.od : true)
-		dtPl = (typeof options.pl != 'undefined' ? options.pl : DEFAULT_PAGE_LENGTH);
+		dtPl = (typeof options.pl != 'undefined' ? options.pl : DFLT_PAGE_SIZE);
 		dt = $('#' + dtDomId)
 			.DataTable({
 				pageLength: dtPl,
 				ordering: dtOd,
-				searching: true,				
+				searching: true,
 				columns: dtCd,
 				dom: '<"dt-toolbar">Bfrtip',
 				ajax: {

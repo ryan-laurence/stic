@@ -19,10 +19,11 @@ $(function() {
 					var jsonObject = {}, jsonString = '';
 					$('input[data-field="port_baudrate"]').val(
 						$('select[data-field="port"]').val() + '=' +
-						$('select[data-field="baudrate"]').val()
+							$('select[data-field="baudrate"]').val()
 					);
 					$.each($('input[data-field]'), function(index, elem) {
-						var postString = '{"' + $(elem).attr('data-field') + '":"' + $(elem).val() + '"}';
+						var postString = '{"' + $(elem).attr('data-field') + '":"' + 
+							$(elem).val() + '"}';
 						$.extend(jsonObject, $.parseJSON(postString));
 					});
 					jsonString = 'companyInfo=' + JSON.stringify(jsonObject);

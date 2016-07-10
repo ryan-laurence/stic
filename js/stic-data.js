@@ -23,8 +23,12 @@
 	*/
 function loadEditData(params) {
 	// Modal Form Options
-	var modalFrmContent = $('<div></div>').load(params.formSrc),
-	modalNewTitle = BTN_LABEL_NEW_RECORD + ' New ' + params.modTitle,
+	var modalFrmContent = '';
+	if (params.formSrc !== '') {
+		modalFrmContent = $('<div></div>').load(params.formSrc);
+	}
+
+	var modalNewTitle = BTN_LABEL_NEW_RECORD + ' New ' + params.modTitle,
 	modalEditTitle = BTN_LABEL_EDIT_RECORD + ' Edit ' + params.modTitle,
 
 	// Modal Buttons > Save
@@ -187,7 +191,7 @@ function loadEditData(params) {
 			ordering: true,
 			searching: true,
 			dom: '<"dt-toolbar">Bfrtip',
-			pageLength: DEFAULT_PAGE_LENGTH,
+			pageLength: DFLT_PAGE_SIZE,
 			columns: params.cd,
 			ajax: {
 				url: params.wsList,
