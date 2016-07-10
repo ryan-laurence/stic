@@ -120,7 +120,7 @@
 				ajax: {
 					url: WS_SUMMARY_CUSTOM_DOCKET,
 					dataSrc: function (json) {
-						var ds = DEFAULT_DS_REPORTS.split('.'),
+						var ds = DFLT_DS_RPTS.split('.'),
 							rec = json[ds[0]][ds[1]][ds[2]];
 						return ($.isArray(rec) === true ? rec :(rec !== '' ? [rec] : []));
 					}
