@@ -235,7 +235,7 @@ function loadEditData(params) {
 			ordering: true,
 			searching: true,
 			dom: '<"dt-toolbar">Bfrtip',
-			pageLength: DEFAULT_PAGE_LENGTH,
+			pageLength: DFLT_PAGE_SIZE,
 			columns: params.cd,
 			ajax: {
 				url: params.wsList,

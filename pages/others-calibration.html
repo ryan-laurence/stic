@@ -40,7 +40,7 @@
 					return ((Math.random() * (max - min)) + min).toFixed(2);
 			};	
 			
-			STIC.IntervalId = setInterval(function () {
+			STIC.INTERVAL_ID = setInterval(function () {
 				var rand = '+' + random(41000, 5000)
 					.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 				$('#weight-reading').text(rand.toString());
@@ -50,7 +50,7 @@
 			
 			// Read Scale Reader
 			var isCompleted = true;	
-			STIC.IntervalId = setInterval(function () {		
+			STIC.INTERVAL_ID = setInterval(function () {		
 				if(isCompleted) {
 					isCompleted = false;
 					$.get(WS_SCALE_READER)

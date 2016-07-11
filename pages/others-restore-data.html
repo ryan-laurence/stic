@@ -66,8 +66,8 @@
 	$(function() {
 		// Set Default Date
 		var today = new Date(),
-			defEnd = moment(today).format(DEFAULT_DATE_FORMAT),
-			defStart = moment().startOf('month').format(DEFAULT_DATE_FORMAT),
+			defEnd = moment(today).format(DFLT_DATE_FRMT),
+			defStart = moment().startOf('month').format(DFLT_DATE_FRMT),
 			defWsURL = WS_RESTORE_DB_HISTORY 
 				+ 'dateFrom=' + moment().startOf('month').format('YYYY-MM-DD') 
 				+ '&dateTo=' + moment(today).format('YYYY-MM-DD');
@@ -83,8 +83,8 @@
 			className: 'btn-primary',
 			action: function(e, dt, node, config) {
 				var today2 = new Date(),
-						defEnd2 = moment(today2).format(DEFAULT_DATE_FORMAT),
-						defStart2 = moment().startOf('month').format(DEFAULT_DATE_FORMAT);			
+						defEnd2 = moment(today2).format(DFLT_DATE_FRMT),
+						defStart2 = moment().startOf('month').format(DFLT_DATE_FRMT);			
 			
 				// Backup Data Lookup DT 
 				if ($.fn.DataTable.isDataTable('#table-history-backup')) {
@@ -137,10 +137,10 @@
 
 					// Date Picker Init
 					dp3.datetimepicker({
-						format: DEFAULT_DATE_FORMAT
+						format: DFLT_DATE_FRMT
 					});
 					dp4.datetimepicker({
-						format: DEFAULT_DATE_FORMAT
+						format: DFLT_DATE_FRMT
 					});
 
 					// Set Default Date
@@ -294,10 +294,10 @@
 
 		// Date Picker Init
 		dp1.datetimepicker({
-			format: DEFAULT_DATE_FORMAT
+			format: DFLT_DATE_FRMT
 		});
 		dp2.datetimepicker({
-			format: DEFAULT_DATE_FORMAT
+			format: DFLT_DATE_FRMT
 		});
 
 		// Set Default Date
