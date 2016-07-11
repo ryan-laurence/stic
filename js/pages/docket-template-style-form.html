@@ -1,0 +1,103 @@
+<form class="form-horizontal well no-margin-bottom" id="docketStylesForm">
+	<input type="hidden" data-field="dt_id">
+	<input type="hidden" data-field="dt_field">
+	<div class="row">
+		<div class="col-md-6 no-padding-right">
+			<div class="form-group">
+				<label class="control-label" for="dt_type">Docket Type</label>
+				<input type="text" class="form-control" data-field="dt_type" disabled>				
+			</div>
+		</div>
+		<div class="col-md-6 no-padding-left">
+			<div class="form-group">
+				<label class="control-label" for="dt_source">Data Source</label>
+				<select class="form-control" data-field="dt_source">
+					<option value="data" selected>Data Field</option>
+					<option value="custom">Custom Field</option>
+				</select>
+			</div>
+		</div>			
+	</div>
+	<div class="row">
+		<div class="col-md-6 no-padding-right">
+			<div class="form-group" id="message-field-box">
+				<label class="control-label" for="dt_message">Message</label>
+			</div>
+		</div>
+		<div class="col-md-6 no-padding-left">
+			<div class="form-group">
+				<label class="control-label" for="dt_font_size">Font Size</label>
+				<input type="text" class="form-control" 
+					data-field="dt_font_size" 
+					data-fv-notempty="true"
+					data-fv-integer="true">
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 no-padding-right">
+			<div class="form-group no-margin-bottom">
+				<label class="control-label" for="dt_row">Row</label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 no-padding-right">
+			<div class="form-group">
+				<input type="text" class="form-control" 
+					data-field="dt_row"
+					data-fv-notempty="true"
+					data-fv-integer="true">
+			</div>
+		</div>
+		<div class="col-md-6 no-padding-left">
+			<div class="form-group">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" data-field="dt_font_uppercase"> <strong>Make Message Uppercase</strong>
+					</label>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 no-padding-right">
+			<div class="form-group no-margin-bottom">
+				<label class="control-label" for="dt_column">Column</label>
+			</div>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-6 no-padding-right">			
+			<div class="form-group">
+				<input type="text" class="form-control" 
+					data-field="dt_column"
+					data-fv-notempty="true"
+					data-fv-integer="true">
+			</div>
+		</div>
+		<div class="col-md-6 no-padding-left">
+			<div class="form-group">
+				<div class="checkbox">
+					<label>
+						<input type="checkbox" data-field="dt_font_underline"> <strong>Add Underline to Message</strong>
+					</label>
+				</div>
+			</div>			
+		</div>
+	</div>
+</form>
+<script>
+	$(function() {
+		$('select[data-field="dt_source"]').selectpicker();
+		$('select[data-field="dt_source"]').on('change', function() {
+			STIC.clearHelpBlocks({ formId: '#docketStylesForm' });
+			STIC.DocketStyle.toggleMsgField({			
+				JSONUrl: WS_LIST_DOCKET_FIELDS + '&available=' + $('input[data-field="dt_type"]').val(),
+				JSONData: 'report-list',
+				dataSrc: $(this).val(),
+				defaultVal: ''
+			});
+		});
+	});
+</script>

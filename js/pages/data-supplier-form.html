@@ -1,0 +1,28 @@
+<form class="form-horizontal well no-margin-bottom" id="dataSupplierForm">
+	<input type="hidden" data-field="supp_id">
+	<div class="alert alert-info all-middle" role="alert">
+		<i class="fa fa-info-circle fa-2x"></i>Supplier Code should be unique within the system.
+	</div>
+	<div class="form-group">
+		<label class="control-label" for="supp_code">Supplier Code</label>
+		<input type="text" class="form-control" placeholder="Enter Supplier Code"
+			data-field="supp_code"
+			data-fv-notempty="true"
+			data-fv-specialchars="true"
+			data-fv-stringlength="true"
+			data-fv-stringlength-max="10"
+			data-fv-stringlength-msg="Supplier Code must be less than 10 characters."
+			data-fv-unique="true"
+			data-fv-unique-msg="Supplier Code already exists in the system.">
+	</div>
+	<div class="form-group">
+		<label class="control-label" for="supp_name">Supplier Name</label>
+		<input type="text" class="form-control" placeholder="Enter Supplier Name"
+			data-field="supp_name"
+			data-fv-notempty="true"
+			data-fv-specialchars="true"
+			data-fv-stringlength="true"
+			data-fv-stringlength-max="40"
+			data-fv-stringlength-msg="Supplier Name must be less than 40 characters.">
+	</div>
+</form>

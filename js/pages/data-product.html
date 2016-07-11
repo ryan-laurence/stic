@@ -1,0 +1,49 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-pencil-square-o"></i> Product Data
+	</div>
+	<div class="panel-body">
+		<div class="alert alert-info" role="alert">
+			<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
+			<ul>
+				<li><i class="fa fa-check-square-o"></i> All Product Data listed here will be available for selection in the Weighing Scale form.</li>
+				<li><i class="fa fa-check-square-o"></i> Use this page to manage Product Data that are available in the system.</li>
+			</ul>
+		</div>
+		<div class="panel panel-default no-margin-bottom">
+			<div class="panel-body">
+				<table class="display compact" id="table-data">
+					<thead>
+						<tr>
+							<th class="text-left">Product ID</th>
+							<th class="text-left">Product Code</th>
+							<th class="text-left">Product Name</th>
+							<th class="text-left">Unit Price</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="js/stic-data.js"></script>
+<script>
+	$(function() {
+		loadEditData({
+			pkey: 'prod_id',
+			objectId: 'prodInfo',
+			modTitle: 'Product Data',
+			formId: '#dataProductForm',
+			formSrc: FORM_CUST_PRODUCT_DATA,
+			showAllBtns: true,
+			cd: CD_PRODUCT_LIST,
+			ds: DS_PRODUCT_LIST,
+			wsList: WS_PRODUCT_LIST,
+			wsInsert: WS_PRODUCT_INSERT,
+			wsUpdate: WS_PRODUCT_UPDATE,
+			wsDelete: WS_PRODUCT_DELETE
+		});
+	});
+</script>

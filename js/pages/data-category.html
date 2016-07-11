@@ -1,0 +1,49 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-pencil-square-o"></i> Category Data
+	</div>
+	<div class="panel-body">
+		<div class="alert alert-info" role="alert">
+			<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
+			<ul>
+				<li><i class="fa fa-check-square-o"></i> All Category Data listed here will be available for tagging specific Product Data.</li>
+				<li><i class="fa fa-check-square-o"></i> Use this page to manage Category Data that are available in the system.</li>
+			</ul>
+		</div>
+		<div class="panel panel-default no-margin-bottom">
+			<div class="panel-body">
+				<table class="display compact" id="table-data">
+					<thead>
+						<tr>
+							<th class="text-left">Category ID</th>
+							<th class="text-left">Category Code</th>
+							<th class="text-left">Category Name</th>
+							<th class="text-left">Date Modified</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="js/stic-data.js"></script>
+<script>
+	$(function() {
+		loadEditData({
+			pkey: 'cat_id',
+			objectId: 'cateInfo',
+			modTitle: 'Category Data',
+			formId: '#dataCategoryForm',
+			formSrc: FORM_CATEGORY_DATA,
+			showAllBtns: true,
+			cd: CD_CATEGORY_LIST,
+			ds: DS_CATEGORY_LIST,
+			wsList: WS_CATEGORY_LIST,
+			wsInsert: WS_CATEGORY_INSERT,
+			wsUpdate: WS_CATEGORY_UPDATE,
+			wsDelete: WS_CATEGORY_DELETE
+		});
+	});
+</script>

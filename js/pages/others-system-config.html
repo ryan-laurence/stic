@@ -1,0 +1,46 @@
+<div class="row" style="margin-top: 20px;">
+	<div class="col-md-8 col-centered">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<i class="fa fa-cog"></i> System Config
+			</div>
+			<div class="panel-body">
+				<ul class="nav nav-tabs" id="tab-system" style="margin-bottom: 15px;">
+					<li data-target="#tab-system-content" data-toggle="tab-system" data-url="pages/others-config-weighin.html">
+						<a href="#"><i class="fa fa-balance-scale"></i> Weigh In</a>
+					</li>
+					<li data-target="#tab-system-content" data-toggle="tab-system" data-url="pages/others-config-company.html">
+						<a href="#"><i class="fa fa-building-o"></i> Company Details</a>
+					</li>
+					<li data-target="#tab-system-content" data-toggle="tab-system" data-url="pages/others-config-docket.html">
+						<a href="#"><i class="fa fa-file-text-o"></i> Docket</a>
+					</li>
+				</ul>
+				<div id="tab-system-content"></div>		
+			</div>			
+		</div>
+	</div>
+</div>
+<script>
+	$(function () {	
+		var first_tab = $('#tab-system li:first-child'),
+			all_tabs = $('#tab-system li[data-toggle="tab-system"]');
+
+		$(all_tabs).on('click', function (e) {
+			var source = $(this).attr('data-url'),
+				target = $(this).attr('data-target');			
+			
+			$.get(source, function (data) {
+				$(target).html(data);				
+			});
+			
+			$(all_tabs).removeClass('active');
+			$(all_tabs).children('a').removeClass('make-bold');
+			
+			$(this).addClass('active');
+			$(this).children('a').addClass('make-bold');
+		});
+
+		$(first_tab).trigger('click');
+	});
+</script>

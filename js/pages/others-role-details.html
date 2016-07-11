@@ -1,0 +1,41 @@
+<div class="alert alert-info" role="alert">
+	<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
+	<ul>
+		<li><i class="fa fa-check-square-o"></i> Use this page to manage Role Data that will be assigned for each system user.</li>
+		<li><i class="fa fa-check-square-o"></i> Edit and Delete functions are disabled for system default roles.</li>
+	</ul>
+</div>
+<div class="panel panel-default no-margin-bottom">
+	<div class="panel-body">	
+		<table class="display compact" id="table-data">
+			<thead>
+				<tr>
+					<th class="text-left">Role ID</th>
+					<th class="text-left">Role Name</th>
+					<th class="text-left">Date Modified</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript" src="js/stic-data.js"></script>
+<script>
+	$(function() {
+		loadEditData({
+			pkey: 'role_id',
+			objectId: 'roleInfo',
+			modTitle: 'Role Data',
+			formId: '#dataRolesForm',
+			formSrc: FORM_ROLES_DATA,
+			showAllBtns: true,
+			cd: CD_ROLES_LIST,
+			ds: DFLT_DS_RPTS,
+			wsList: WS_ROLES_LIST,
+			wsInsert: WS_ROLES_INSERT,
+			wsUpdate: WS_ROLES_UPDATE,
+			wsDelete: WS_ROLES_DELETE
+		});
+	});
+</script>

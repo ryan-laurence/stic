@@ -1,0 +1,41 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<i class="fa fa-table"></i> Reprint Count Summary
+	</div>
+	<div class="panel-body">
+		<div class="alert alert-info" role="alert">
+			<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
+			<ul>
+				<li><i class="fa fa-check-square-o"></i> Choose the starting and ending date with time period that you needed for the summary report to be generated.</li>
+				<li><i class="fa fa-check-square-o"></i> Click the "Print" button to have a printed copy of the summary report.</li>
+			</ul>
+		</div>
+		<div class="panel panel-default no-margin-bottom">
+			<div class="panel-body">
+				<table class="display compact" id="table-summary">
+					<thead>
+						<tr>
+							<th class="text-left">Date</th>
+							<th class="text-left">Docket No.</th>
+							<th class="text-left">No. of Copy</th>
+							<th class="text-left">User</th>
+						</tr>
+					</thead>
+					<tbody>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+	$(function () {
+		loadSummaryReport({		
+			showTotal: false,
+			ds: DFLT_DS_RPTS,
+			cd: CD_SUMMARY_REPRINT_COUNT,
+			ws: WS_SUMMARY_REPRINT_COUNT,
+			title: REPORT_TITLE_REPRINT_COUNT
+		});
+	});
+</script>

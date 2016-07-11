@@ -1,0 +1,117 @@
+<form class="form-horizontal well no-margin-bottom" id="dataConfigCompanyForm">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="form-group">
+				<label class="control-label" for="contact_person">Contact Person</label>
+				<input type="text" class="form-control" 
+					data-field="contact_person"
+					data-fv-notempty="true"
+					data-fv-stringlength="true"
+					data-fv-stringlength-max="50"
+					data-fv-stringlength-msg="Bridge Code must be less than 50 characters.">
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="company_name">Company Name</label>
+				<input type="text" class="form-control" 
+					data-field="company_name"
+					data-fv-notempty="true"
+					data-fv-stringlength="true"
+					data-fv-stringlength-max="100"
+					data-fv-stringlength-msg="Company Name must be less than 100 characters.">
+			</div>
+			<div class="form-group">
+				<label class="control-label" for="company_address">Address</label>
+				<input type="text" class="form-control" 
+					data-field="company_address"
+					data-fv-notempty="true"
+					data-fv-stringlength="true"
+					data-fv-stringlength-max="200"
+					data-fv-stringlength-msg="Address must be less than 200 characters.">
+			</div>
+		</div>
+	</div>
+	<input type="hidden" data-field="id">
+	<input type="hidden" data-field="delay_time_second">
+	<input type="hidden" data-field="minimum_truck_weight">
+	<input type="hidden" data-field="zero_range">
+	<input type="hidden" data-field="bridge_code">
+	<input type="hidden" data-field="current_docket_number">
+	<input type="hidden" data-field="port_baudrate">
+	<input type="hidden" data-field="weight_unit">		
+	<hr>					
+	<div class="btn-toolbar" role="toolbar" aria-label="button groups">
+		<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+			<button class="btn btn-primary" type="button" id="reset-config"><i class="fa fa-ban"></i> Cancel</button>
+		</div>
+		<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+			<button class="btn btn-primary" type="button" id="save-config"><i class="fa fa-floppy-o"></i> Save</button>
+		</div>
+	</div>		
+</form>	
+<script>
+	$(function() {
+		// Pre Load Values
+		function loadCompanyDetails() {
+			$.get(WS_LIST_CONFIG_COMPANY, function(data) { 
+				$.each(data.response, function(a, b) {
+					if (a == 'company-list') {
+						$.each(b, function(c, d) {		
+							$.each(d, function(e, f) {	
+								$('input[data-field="' + e + '"]').val(f);
+							});							
+						});
+					}
+				});		
+			});		
+		}		
+		loadCompanyDetails();
+
+		// Save
+		$('#save-config').on('click', function() {
+			var isValid = STIC.FormValidation({ 
+				formId: '#dataConfigCompanyForm' 
+			});		
+			if (isValid) {
+				BootstrapDialog.confirm({
+					type: 'type-danger',
+					btnOKLabel: BTN_LABEL_CONFIRM_SAVE,
+					btnCancelLabel: BTN_LABEL_CANCEL,
+					title: MSG_TITLE_INFO,
+					message: MSG_CONFIRM_SAVE_CONFIG,				
+					callback: function(result) {
+						if (result) {
+							var jsonString = '',
+								jsonObject = {};							
+							$.each($('input[data-field]'), function(index, formElement) {
+								var postString = '{"' + $(formElement).attr('data-field') + '":"' + $(formElement).val() + '"}';
+								$.extend(jsonObject, $.parseJSON(postString)); 
+							});
+							jsonString = 'companyInfo=' + JSON.stringify(jsonObject);
+							$.post(WS_UPDATE_CONFIG_COMPANY, jsonString, function(data, status){
+								BootstrapDialog.alert({
+									type: 'type-primary',
+									title: MSG_TITLE_INFO,
+									message: MSG_INFO_SAVE_CONFIG
+								});
+								loadCompanyDetails();
+							});
+						}
+						STIC.FormValidation({ 
+							clearHelpBlocks: true,
+							formId: '#dataConfigCompanyForm'
+						});	
+					}
+				});
+			}
+		});
+		
+		// Reset
+		$('#reset-config').on('click', function() {
+			STIC.FormValidation({ 
+				clearHelpBlocks: true,
+				formId: '#dataConfigCompanyForm'
+			});	
+			loadCompanyDetails();
+		});
+	});
+</script>

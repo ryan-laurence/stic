@@ -1,0 +1,76 @@
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container">
+		<div id="navbar" class="collapse navbar-collapse">
+			<img id="stclogo" alt="" src="images/stclogo.png" >
+			<ul class="nav navbar-nav" id="nav-wrapper"></ul>
+			<ul class="nav navbar-nav navbar-right">
+				<li>
+					<a id="link-user">
+						<i class="fa fa-user"></i> 
+						<span id="current-user" style="font-weight: bold">default</span>
+					</a>
+				</li>
+				<li>
+				 <a id="link-exit">
+					<i class="fa fa-sign-out"></i> Logout
+				 </a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
+<!-- Full Page Image Background Carousel Header -->
+<header id="main-wrapper" class="carousel slide carousel-fade" data-ride="carousel">
+	<!-- Indicators -->
+	<ol class="carousel-indicators">
+		<li data-target="#main-wrapper" data-slide-to="0" class="active"></li>
+		<li data-target="#main-wrapper" data-slide-to="1"></li>
+		<li data-target="#main-wrapper" data-slide-to="2"></li>
+	</ol>
+	<!-- Wrapper for Slides -->
+	<div class="carousel-inner">
+		<div class="item active">
+			<!-- Set the first background image using inline CSS below. -->
+			<div class="fill" style="background-image:url('images/slider/cover.png');"></div>						
+		</div>
+		<div class="item">
+			<!-- Set the second background image using inline CSS below. -->
+			<div class="fill" style="background-image:url('images/slider/products.png');"></div>
+		</div>
+		<div class="item">
+			<!-- Set the third background image using inline CSS below. -->
+			<div class="fill" style="background-image:url('images/slider/digital.png');"></div>
+		</div>
+	</div>
+	<!-- Controls -->
+	<a class="left carousel-control" href="#main-wrapper" data-slide="prev">
+		<span class="icon-prev"></span>
+	</a>
+	<a class="right carousel-control" href="#main-wrapper" data-slide="next">
+		<span class="icon-next"></span>
+	</a>
+</header>		
+<script type="text/javascript">
+	$(function () {		
+		// Load allowed modules
+		STIC.loadNavBar();			
+		
+		// Change Password
+		$('#link-user').on('click', function () {
+			STIC.User.ChangePassword();
+		});
+
+		// Logout
+		$('#link-exit').on('click', function () {
+			STIC.User.ConfirmLogout();
+		});	
+		
+		// Connect to Scale Reader
+		STIC.openScaleReader();	
+	});
+	
+	<!-- Script to Activate the Carousel -->
+	$('.carousel').carousel({
+		interval: 7000 //changes the speed
+	})
+</script>

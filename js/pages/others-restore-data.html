@@ -1,0 +1,330 @@
+<div class="alert alert-info" role="alert">
+	<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
+	<ul>
+		<li><i class="fa fa-check-square-o"></i> Listed here are restore data logs that were triggered by the system administrator.</li>
+		<li><i class="fa fa-check-square-o"></i> To start the restore data process, click the <strong>Restore Database</strong> button below.</li>
+	</ul>
+</div>
+<div class="panel panel-default no-margin-bottom">
+	<div class="panel-body">
+		<table class="display compact" id="table-history-restore">
+			<thead>
+				<tr>
+					<th class="text-left">Restore ID</th>					
+					<th class="text-left">Restore Time</th>
+					<th class="text-left">Restore Status</th>
+					<th class="text-left">Restore File</th>
+					<th class="text-left">Triggered By</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="backup-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-floppy-o"></i> Backup Data Lookup
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-info" role="alert">
+					<i class="fa fa-info-circle fa-4x fa-pull-left"></i>
+					<ul>
+						<li><i class="fa fa-check-square-o"></i> Listed here are backup data logs that were triggered by the system administrator and scheduler.</li>
+						<li><i class="fa fa-check-square-o"></i> Select a backup data log below then click the <strong>Select Item</strong> button.</li>
+						<li><i class="fa fa-check-square-o"></i> After starting the restore data process, you will be logged out of the system.</li>
+					</ul>
+				</div>
+				<div class="panel panel-default no-margin-bottom">
+					<div class="panel-body">
+						<table class="display compact" id="table-history-backup" width="100%">
+							<thead>
+								<tr>
+									<th class="text-left">Backup ID</th>					
+									<th class="text-left">Backup Time</th>
+									<th class="text-left">Backup Status</th>
+									<th class="text-left">Backup File</th>
+									<th class="text-left">Triggered By</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+				<button type="button" class="btn btn-primary" id="select-item" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
+			</div>
+		</div>
+	</div>
+</div>
+<script>
+	$(function() {
+		// Set Default Date
+		var today = new Date(),
+			defEnd = moment(today).format(DFLT_DATE_FRMT),
+			defStart = moment().startOf('month').format(DFLT_DATE_FRMT),
+			defWsURL = WS_RESTORE_DB_HISTORY 
+				+ 'dateFrom=' + moment().startOf('month').format('YYYY-MM-DD') 
+				+ '&dateTo=' + moment(today).format('YYYY-MM-DD');
+				
+		var dtBackup;
+		var dtBtnLookupTxt = '<i class="fa fa-undo"></i>',
+		
+		// DT Buttons > Backup Data Lookup
+		dtBtnLookup = {
+			name: 'lookup',
+			text: dtBtnLookupTxt,
+			titleAttr: 'Click to open Backup Data Lookup',
+			className: 'btn-primary',
+			action: function(e, dt, node, config) {
+				var today2 = new Date(),
+						defEnd2 = moment(today2).format(DFLT_DATE_FRMT),
+						defStart2 = moment().startOf('month').format(DFLT_DATE_FRMT);			
+			
+				// Backup Data Lookup DT 
+				if ($.fn.DataTable.isDataTable('#table-history-backup')) {
+					$('#end-date2').val(defEnd2);
+					$('#start-date2').val(defStart2);
+					var wsURL = WS_BACKUP_DB_HISTORY 
+						+ 'dateFrom=' + moment().startOf('month').format('YYYY-MM-DD') 
+						+ '&dateTo=' + moment(today2).format('YYYY-MM-DD');					
+					dtBackup.ajax.url(wsURL).load();
+					dtBackup.column('0:visible').order('desc').draw();
+					$('#select-item').prop('disabled', true);
+				} else {
+					// Backup Data Lookup DT	
+					dtBackup = initDT_Picker({
+						pl: 5,
+						ds: DS_DB_HISTORY,
+						cd: CD_DB_HISTORY,
+						ws: WS_BACKUP_DB_HISTORY
+							+ 'dateFrom=' + moment().startOf('month').format('YYYY-MM-DD') 
+							+ '&dateTo=' + moment(today).format('YYYY-MM-DD'),
+						domId: 'table-history-backup'
+					});				
+
+					dtBackup.column('0:visible').order('desc').draw();
+					
+					// Date Range Filter	
+					$('#table-history-backup_wrapper div.dt-toolbar').html(
+						'<div class="btn-toolbar" role="toolbar">' +
+							'<div class="btn-group pull-left no-padding-left form-inline" role="group" style="margin-bottom: 0px">'	+
+								'<div class="input-group date" id="dp3">' +
+									'<span class="input-group-addon"><i class="fa fa-calendar"></i> <strong>Start</strong></span>' +
+									'<input type="text" class="form-control date-lookup" id="start-date2" placeholder="Select Date">' +
+								'</div>' +
+								'<div class="input-group date" id="dp4">' +
+									'<span class="input-group-addon date-lookup-label"><i class="fa fa-calendar"></i> <strong>End</strong></span>' +
+									'<input type="text" class="form-control date-lookup" id="end-date2" placeholder="Select Date">' +
+								'</div>' +
+								'<button type="button" class="btn btn-primary" id="search-report" title="Search Backup Logs"><i class="fa fa-search"></i></button>' +
+								'<button type="button" class="btn btn-danger" id="reset-report" title="Clear Search Criteria"><i class="fa fa-ban"></i></button>' +
+							'</div>' +
+						'</div>' 
+					);	
+					$('div.dt-toolbar').css('float', 'left');
+					$('div.dt-toolbar').css('margin-right', '5px');				
+					
+					var dp3 = $('#dp3'), 
+						dp4 = $('#dp4'), 
+						inEndDt2 = $('#end-date2'), 
+						inStartDt2 = $('#start-date2');
+
+					// Date Picker Init
+					dp3.datetimepicker({
+						format: DFLT_DATE_FRMT
+					});
+					dp4.datetimepicker({
+						format: DFLT_DATE_FRMT
+					});
+
+					// Set Default Date
+					dp3.data('DateTimePicker').defaultDate(defStart2);
+					dp4.data('DateTimePicker').defaultDate(defEnd2);
+
+					// Set Min & Max dates
+					dp3.on('dp.change', function (e) {
+						dp4.data('DateTimePicker').minDate(e.date);
+					});
+					dp4.on('dp.change', function (e) {
+						dp3.data('DateTimePicker').maxDate(e.date);
+					});
+					
+					// Search Report
+					$('#backup-data-modal #search-report').on('click', function () {
+						var wsURL = WS_BACKUP_DB_HISTORY + 
+							'dateFrom=' + moment(new Date(inStartDt2.val())).format('YYYY-MM-DD') + 
+							'&dateTo=' + moment(new Date(inEndDt2.val())).format('YYYY-MM-DD');
+						dtBackup.ajax.url(wsURL).load();
+					});
+					
+					// Reset Report
+					$('#backup-data-modal #reset-report').on('click', function () {		
+						inEndDt2.val(defEnd2);
+						inStartDt2.val(defStart2);
+						var wsURL = WS_BACKUP_DB_HISTORY 
+							+ 'dateFrom=' + moment().startOf('month').format('YYYY-MM-DD') 
+							+ '&dateTo=' + moment(today2).format('YYYY-MM-DD');					
+						dtBackup.ajax.url(wsURL).load();
+					});								
+
+					// Backup Data Lookup > DT Row Click Event
+					$('#table-history-backup tbody').on( 'click', 'tr', function () {
+						STIC.dtToggleRowSelect({
+							row: this,
+							table: dtBackup,
+							pid: 'id',
+							buttons: ['#select-item']
+						});
+					});
+
+					// Backup Data Lookup > Select Item
+					$('#backup-data-modal #select-item').on('click', function () {						
+						var selected_row = dtBackup.row('.selected');
+						$('#backup-data-modal').modal('hide');
+						BootstrapDialog.confirm({
+							type: 'type-danger',
+							btnOKLabel: BTN_LABEL_CONFIRM_RESTORE,
+							btnCancelLabel: BTN_LABEL_CANCEL,
+							title: MSG_TITLE_INFO,
+							message: MSG_CONFIRM_RESTORE_DB,
+							callback: function (result) {
+								if (result) {
+									waitingDialog.show();
+									$.post(WS_RESTORE_DB, { id: selected_row.data().id, user: STIC.User.ReadCookie('username') })
+										.done(function (results, status) {
+											waitingDialog.hide();
+											var response = results.response;
+											if (response.type === 'SUCCESS') {
+												BootstrapDialog.alert({
+													type: 'type-primary',
+													title: MSG_TITLE_INFO,
+													message: MSG_INFO_RESTORE_DB_OK,
+													callback: function () {
+														dtHistory.ajax.reload();
+													}
+												});
+											} else {
+												BootstrapDialog.alert({
+													type: 'type-danger',
+													title: MSG_TITLE_INFO,
+													message: MSG_INFO_RESTORE_DB_ERROR,
+													callback: function () {
+														dtHistory.ajax.reload();
+													}
+												});
+											}
+										})
+										.fail(function () {
+											waitingDialog.hide();
+											STIC.showWSError();
+										})
+								}
+							}
+						});
+					});
+				}	
+				
+				$('#backup-data-modal').modal('show');
+			}
+		},
+		
+		// DT Buttons > Refresh
+		dtBtnReload = {
+			name: 'reload',
+			className: 'btn-primary',
+			text: BTN_LABEL_REFRESH_RECORD,
+			titleAttr: BTN_TITLE_REFRESH_RECORD,
+			action: function (e, dt, node, config) {
+				dt.ajax.reload();
+			}
+		};
+
+		// DT
+		var dtHistory = $('#table-history-restore')		
+			.DataTable({
+				pageLength: 10,
+				ordering: true,
+				searching: true,
+				columns: CD_DB_HISTORY,			
+				ajax: {
+					url: defWsURL,
+					dataSrc: function (json) {
+						var ds = DS_DB_HISTORY.split('.'),
+							rec = json[ds[0]][ds[1]][ds[2]];
+						return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+					}
+				},
+				dom: '<"dt-toolbar">Bfrtip',
+				buttons: [dtBtnLookup, dtBtnReload]
+			});
+
+		// DT Default Sorting
+		dtHistory.column('0:visible').order('desc').draw();
+		
+		// Date Range Filter	
+		$('#table-history-restore_wrapper div.dt-toolbar').html(
+			'<div class="btn-toolbar" role="toolbar">' +
+				'<div class="btn-group pull-left no-padding-left form-inline" role="group" style="margin-bottom: 0px">'	+
+					'<div class="input-group date" id="dp1">' +
+						'<span class="input-group-addon"><i class="fa fa-calendar"></i> <strong>Start</strong></span>' +
+						'<input type="text" class="form-control date-lookup" id="start-date" placeholder="Select Date">' +
+					'</div>' +
+					'<div class="input-group date" id="dp2">' +
+						'<span class="input-group-addon date-lookup-label"><i class="fa fa-calendar"></i> <strong>End</strong></span>' +
+						'<input type="text" class="form-control date-lookup" id="end-date" placeholder="Select Date">' +
+					'</div>' +
+					'<button type="button" class="btn btn-primary" id="search-report" title="Search Restore Logs"><i class="fa fa-search"></i></button>' +
+					'<button type="button" class="btn btn-danger" id="reset-report" title="Clear Search Criteria"><i class="fa fa-ban"></i></button>' +
+				'</div>' +
+			'</div>' 
+		);	
+		$('div.dt-toolbar').css('float', 'left');
+		$('div.dt-toolbar').css('margin-right', '5px');
+		
+		var dp1 = $('#dp1'), 
+			dp2 = $('#dp2'), 
+			inEndDt = $('#end-date'), 
+			inStartDt = $('#start-date');
+
+		// Date Picker Init
+		dp1.datetimepicker({
+			format: DFLT_DATE_FRMT
+		});
+		dp2.datetimepicker({
+			format: DFLT_DATE_FRMT
+		});
+
+		// Set Default Date
+		dp1.data('DateTimePicker').defaultDate(defStart);
+		dp2.data('DateTimePicker').defaultDate(defEnd);
+
+		// Set Min & Max dates
+		dp1.on('dp.change', function (e) {
+			dp2.data('DateTimePicker').minDate(e.date);
+		});
+		dp2.on('dp.change', function (e) {
+			dp1.data('DateTimePicker').maxDate(e.date);
+		});
+
+		// Search Report
+		$('#search-report').on('click', function () {
+			var wsURL = WS_RESTORE_DB_HISTORY + 
+				'dateFrom=' + moment(new Date(inStartDt.val())).format('YYYY-MM-DD') + 
+				'&dateTo=' + moment(new Date(inEndDt.val())).format('YYYY-MM-DD');
+			dtHistory.ajax.url(wsURL).load();
+		});
+		
+		// Reset Report
+		$('#reset-report').on('click', function () {		
+			inEndDt.val(defEnd);
+			inStartDt.val(defStart);
+			dtHistory.ajax.url(defWsURL).load();
+		});
+	});
+</script>

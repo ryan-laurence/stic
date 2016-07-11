@@ -1,0 +1,80 @@
+<div class="alert alert-info" role="alert">
+	<i class="fa fa-info-circle fa-4x fa-pull-left"></i>	
+	<ul>			
+		<li><i class="fa fa-check-square-o"></i> Data Fields under docket type "A1" will be available for printing in First Weighing.</li>
+		<li><i class="fa fa-check-square-o"></i> Data Fields under docket type "A2" will be available for printing in Second Weighing only.</li>
+		<li><i class="fa fa-check-square-o"></i> Max Length means the maximum print length allowed per data field by the printer.</li>
+	</ul>
+</div>
+<div class="panel panel-default no-margin-bottom">
+	<div class="panel-body">	
+		<form class="form-horizontal no-margin-left">
+			<div class="form-group" style="margin-left: 0px;">
+				<label class="control-label col-sm-2 no-padding-left" for="selectDocketType" style="text-align: left; width: 100px;">Docket Type</label>
+				<div class="col-sm-2 no-padding-left" style="width: 150px;">
+					<select class="form-control" id="select-docket-type">
+						<option value="A1" selected>A1</option>
+						<option value="A2">A2</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		<table class="display compact" id="table-data" style="margin-top: 15px;">
+			<thead>
+				<tr>
+					<th class="text-left">Data ID</th>
+					<th class="text-left">Data Alias</th>
+					<th class="text-left">Source Field</th>
+					<th class="text-left">Source Table</th>
+					<th class="text-left">Max Length</th>
+					<th class="text-left">Data Type</th>
+					<th class="text-left">Format</th>					
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script>
+	$(function() {		
+		$('#select-docket-type').selectpicker();
+	
+		// Docket Field columns
+		var cd_fields = [
+			{ "data": "df_id", "visible": false },
+			{ "data": "df_alias" },
+			{ "data": "df_src_field" },
+			{ "data": "df_src_table" },
+			{ "data": "df_length" },
+			{ "data": "df_format" },
+			{ "data": "df_type" }
+		];	
+	
+		// Docket Field Table
+		var dt_docket_fields = $('#table-data')
+			.DataTable({	
+				'info': true,
+				'paging': true,
+				'ordering': true,
+				'searching': false,
+				'lengthChange': false,
+				'columns': cd_fields,
+				'ajax': { 
+					'url': WS_LIST_DOCKET_FIELDS + 'available=A1', 
+					'dataSrc': DFLT_DS_RPTS 
+				}			
+			});
+		
+		// DT Default Sorting
+		dt_docket_fields
+			.column('0:visible')
+			.order('asc')
+			.draw();  
+		
+		// Select Docket Type
+		$('#select-docket-type').on('change', function() {		
+			dt_docket_fields.ajax.url(WS_LIST_DOCKET_FIELDS + 'available=' + $(this).val()).load();
+		});
+	});
+</script>
