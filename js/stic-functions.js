@@ -12,8 +12,8 @@ var STIC = {
 
 	// Load index page
 	loadIndex: function(pageType) {
-		$(DFLT_CTNR_ID).html("");
-		$(DFLT_CTNR_ID).load(DFLT_PAGE_DIR + pageType + DFLT_PAGE_EXT, function() {
+		$(document.body).html("");
+		$(document.body).load(DFLT_PAGE_DIR + pageType + DFLT_PAGE_EXT, function() {
 			if (pageType == 'main') {
 				$("#current-user").text(STIC.User.ReadCookie("username"));
 			}			
