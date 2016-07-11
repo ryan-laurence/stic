@@ -6,7 +6,6 @@ var DFLT_PAGE_EXT = '.html';
 var DFLT_PAGE_DIR = 'pages/';
 var DFLT_DATE_FRMT = 'MM/DD/YYYY';
 var DFLT_WRPR_ID = '#main-wrapper';
-var DFLT_CTNR_ID = '#main-container';
 var DFLT_DS = 'response.record-list.record';
 var DFLT_DS_RPTS = 'response.report-list.report';
 
