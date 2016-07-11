@@ -50,10 +50,6 @@
 	font-weight: bold;
 }
 
-.lcd-error {
-	background: #a94442 !important; 
-}
-
 .form-control.date-lookup {
 	width: 105px !important; 
 	border-top-right-radius: 0px;
