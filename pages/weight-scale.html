@@ -1156,12 +1156,12 @@
 						JSONString = 'weightReadingInfo=' + JSON.stringify(JSONObject);
 						var result = $.post(WS_FIRST_WEIGHING_INSERT, JSONString);
 						result.done(function (result) {
-							if (result.response.type === 'SUCCESS') {	
-								toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+							if (result.response.type === 'SUCCESS') {									
 								// Docket Print
 								window.open('http://localhost:8080' + WS_DOCKET_PRINT 
 									+ 'wrId=' + result.response.wr_id 
-									+ '&type=A1', 'DocketPrint').focus();								
+									+ '&type=A1', 'DocketPrint').focus();
+								toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
 								BootstrapDialog.alert({
 									type: 'type-primary',
 									title: MSG_TITLE_INFO,
@@ -1274,13 +1274,12 @@
 							JSONString = 'weightReadingInfo=' + JSON.stringify(JSONObject);
 							var result = $.post(WS_SECOND_WEIGHING_UPDATE, JSONString);
 							result.done(function (results) {
-								if (results.response.type === 'SUCCESS') {
-									toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+								if (results.response.type === 'SUCCESS') {									
 									// Docket Print
 									window.open('http://localhost:8080' + WS_DOCKET_PRINT 
 										+ 'wrId=' + $('#wr_id').val()
 										+ '&type=A2', 'DocketPrint').focus();	
-									
+									toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
 									BootstrapDialog.alert({
 										type: 'type-primary',
 										title: MSG_TITLE_INFO,
