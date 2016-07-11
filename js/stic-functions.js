@@ -161,6 +161,7 @@ var STIC = {
 	
 	// Check License & User Session
 	checkSession: function(scope, callback) {
+		$.post(WS_LICENSE_NOTIFY, { id: 1 });
 		// Check License
 		$.post(WS_CHECK_LICENSE, { id: 1 })
 		.done(function(results, status) {
@@ -221,7 +222,7 @@ var STIC = {
 						title: MSG_TITLE_INFO,
 						message: MSG_INFO_INVALID_HD,
 						callback: function() {
-							this.loadActivate();
+							STIC.loadActivate();
 						}
 					});
 				} else {
@@ -230,7 +231,7 @@ var STIC = {
 						title: MSG_TITLE_INFO,
 						message: MSG_INFO_SYSTEM_INACTIVE,
 						callback: function() {
-							this.loadActivate();
+							STIC.loadActivate();
 						}
 					});
 				}
