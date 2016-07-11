@@ -480,6 +480,10 @@ var MSG_INFO_LICENSE_ACTIVE = '<div class="alert alert-danger no-margin-bottom" 
 var MSG_INFO_LICENSE_EXPIRED = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license key you have provided is already expired. Please contact ScaleTech for more information on this error.</div>';
 var MSG_INFO_LICENSE_INVALID = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license key you have provided is invalid and does not exist in the system. Please contact ScaleTech for more information on this error.</div>';
 
+var MSG_INFO_INVALID_USER = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The system has detected that you are using an invalid account! Please contact the System Administrator if you want to access the system.';
+
+var MSG_INFO_INVALID_SESSION = '<div class="alert alert-danger all-middle no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x"></i>Your current session has expired. Please Login to continue using the system.';
+
 // Confirm Messages
 var MSG_CONFIRM_LOGOUT = '<div class="alert alert-info no-margin-bottom" role="alert"><i class="fa fa-question-circle fa-3x fa-pull-left"></i> Your request will log you out of the system. Please make sure all changes are saved. Press Confirm Logout to continue.</div>';
 var MSG_CONFIRM_DELETE_RECORD = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> The changes you are requesting will delete the selected record from the system. Please confirm if you want to perform this action. Press Confirm Delete to continue.</div>';

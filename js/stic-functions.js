@@ -9,14 +9,23 @@ var STIC = {
 
 	// Current Module Page ID
 	CURRENT_PAGEID: "",
+	
+	// Flag for Ajax Loader
+	SHOW_PROGRESS: true,
 
 	// Load index page
 	loadIndex: function(pageType) {
+		if (pageType == 'activate') {
+			STIC.User.RemoveToContext();
+			STIC.User.EraseCookie('userid');
+			STIC.User.EraseCookie('roleid');
+			STIC.User.EraseCookie('username');
+		}		
 		$(document.body).html("");
 		$(document.body).load(DFLT_PAGE_DIR + pageType + DFLT_PAGE_EXT, function() {
 			if (pageType == 'main') {
 				$("#current-user").text(STIC.User.ReadCookie("username"));
-			}			
+			}
 		});
 	},
 	
@@ -102,7 +111,7 @@ var STIC = {
 
 	// Load module page
 	loadModule: function(params) {
-		STIC.validateUser(true, function(response) {
+		STIC.checkSession('mod', function(response) {
 			$.post(WS_UI_MODULES_CHECK, {
 				mod_id: params.modId,
 				role_id: STIC.User.ReadCookie('roleid')
@@ -112,9 +121,11 @@ var STIC = {
 					if (STIC.CURRENT_PAGE === 'weight-scale' ||
 						STIC.CURRENT_PAGE === 'others-calibration') {
 						clearInterval(STIC.INTERVAL_ID);
-					}					
+					}								
+					STIC.SHOW_PROGRESS = params.modName === 'weight-scale' || 
+						params.modName === 'others-calibration' ? false : true;						
 					$(DFLT_WRPR_ID).load(DFLT_PAGE_DIR + params.modName + DFLT_PAGE_EXT, function() {
-						console.log($(DFLT_WRPR_ID).html())
+
 					});
 					STIC.CURRENT_PAGE = params.modName;
 					STIC.CURRENT_PAGEID = params.modId;
@@ -131,7 +142,7 @@ var STIC = {
 			});		
 		});
 	},
-	
+
 	// Redirect to activation page
 	loadActivate: function() {
 		STIC.User.RemoveToContext();
@@ -141,62 +152,75 @@ var STIC = {
 		window.location = DFLT_ROOT + 'activation.html';
 	},
 	
-	// Check License, User Session
-	validateUser: function(logout, callback) {
+	// Verify if all cookies are active
+	checkUserCookies: function() {
+		return STIC.User.ReadCookie('roleid') !== null 
+			&& STIC.User.ReadCookie('userid') !== null 
+			&& STIC.User.ReadCookie('username') !== null;
+	},
+	
+	// Check License & User Session
+	checkSession: function(scope, callback) {
 		// Check License
 		$.post(WS_CHECK_LICENSE, { id: 1 })
 		.done(function(results, status) {
 			var response = results.response,
 				licenseValid = response.is_license,
 				hdSerialValid = response.is_hd_serial_number_valid;
+			// License is valid
 			if (response.type === 'SUCCESS') {
-				if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {
-					// Check User Session					
-					var roleId = STIC.User.ReadCookie('roleid'),
-						userId = STIC.User.ReadCookie('userid'),
-						userName = STIC.User.ReadCookie('username'),
-						forceLogOut = typeof logout !== 'undefined'
-							? logout : true;
-
-					if (roleId !== null && userId !== null && userName !== null) {
-						var JSONObject = {
-							user_id: userId,
-							user_name: userName
-						};
-
-						// Call WS Validation
-						$.post(WS_USER_AUTHENTICATE, JSONObject)
-							.done(function (results, status) {
-								if (results.response.type === 'SUCCESS') {
-
-									if (forceLogOut === false) {
-										STIC.loadIndex('main');
-									}
-									
-									$.isFunction(callback) ? callback({ type: 'SUCCESS'}) : '';
-								
-								} else {
-									if (forceLogOut)
+				// License & HD Serial is valid
+				if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {		
+					// Cookies are still active
+					if (STIC.checkUserCookies()) {
+						// Check User 		
+						$.post(WS_USER_AUTHENTICATE, {
+							user_id: STIC.User.ReadCookie('userid'),
+							user_name: STIC.User.ReadCookie('username')
+						})
+						.done(function(results, status) {
+							// User is valid
+							if (results.response.type === 'SUCCESS') {
+								if (scope === 'idx') 
+									STIC.loadIndex('main');					
+								$.isFunction(callback) ? callback({ type: 'SUCCESS'}) : '';
+							// User is invalid
+							} else {
+								BootstrapDialog.alert({
+									type: 'type-danger',
+									title: MSG_TITLE_INFO,
+									message: MSG_INFO_INVALID_USER,
+									callback: function() {
 										STIC.User.Logout();
-								}
-							})
-							.fail(function () {
-								STIC.showWSError();
-							});
+									}
+								});								
+							}
+						})
+						.fail(function () {
+							STIC.showWSError();
+						});
+					// Cookies are expired
 					} else {
+						if (scope === 'mod') {
+							BootstrapDialog.alert({
+								type: 'type-danger',
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_INVALID_SESSION,
+								callback: function() {
+									STIC.User.Logout();
+								}
+							});			
+						} else {
 							STIC.User.Logout();
+						}						
 					}
-				
-				
-				
-				
-				
-				} else if (hdSerialValid === 'NO') {
+				// HD Serial is invalid
+				} else if (hdSerialValid === 'NO') {					
 					BootstrapDialog.alert({
 						type: 'type-danger',
 						title: MSG_TITLE_INFO,
 						message: MSG_INFO_INVALID_HD,
-						callback: function () {
+						callback: function() {
 							this.loadActivate();
 						}
 					});
@@ -205,7 +229,7 @@ var STIC = {
 						type: 'type-danger',
 						title: MSG_TITLE_INFO,
 						message: MSG_INFO_SYSTEM_INACTIVE,
-						callback: function () {
+						callback: function() {
 							this.loadActivate();
 						}
 					});
@@ -820,7 +844,7 @@ var STIC = {
 								type: 'type-danger',
 								title: MSG_TITLE_INFO,
 								message: MSG_INFO_INVALID_HD,
-								callback: function () {
+								callback: function() {
 									STIC.User.RemoveToContext();
 									STIC.User.EraseCookie('userid');
 									STIC.User.EraseCookie('roleid');
@@ -833,7 +857,7 @@ var STIC = {
 								type: 'type-danger',
 								title: MSG_TITLE_INFO,
 								message: MSG_INFO_SYSTEM_INACTIVE,
-								callback: function () {
+								callback: function() {
 									STIC.User.RemoveToContext();
 									STIC.User.EraseCookie('userid');
 									STIC.User.EraseCookie('roleid');
@@ -846,7 +870,7 @@ var STIC = {
 						STIC.showWSError();
 					}
 				})
-				.fail(function () {
+				.fail(function() {
 					STIC.showWSError();
 				});
 		},
