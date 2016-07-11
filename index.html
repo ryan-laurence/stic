@@ -44,8 +44,20 @@
 		<script type="text/javascript" src="js/stic-functions.js"></script>
 		<script type="text/javascript">
 			$(function () { 
-				STIC.User.CheckLicense(false); 
-				$.extend(true, $.fn.dataTable.defaults, DFLT_DT_CONF);			
+				// Progress Bar Start
+				$(document).ajaxStart(function () {
+					//if (STIC.SHOW_PROGRESS)
+						//waitingDialog.show();
+				});
+
+				// Progress Bar End
+				$(document).ajaxStop(function () {
+					//waitingDialog.hide();
+				});
+			
+				STIC.checkSession('idx', function(response) {
+					$.extend(true, $.fn.dataTable.defaults, DFLT_DT_CONF);			
+				});				
 			});
 		</script>
 	</body>

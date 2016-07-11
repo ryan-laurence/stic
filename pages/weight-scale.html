@@ -13,6 +13,7 @@
 				<div class="weight-stage">
 					<div class="txt1"><img src="images/numeric-0-box-outline.png"></div>
 				</div>
+				<div class="weight-error"></div>
 			</div>
 		</div>
 		<hr>
@@ -1398,7 +1399,7 @@
 					.done(function (data, status) {
 						isCompleted = true;	
 						if (data.response.type === 'SUCCESS') {
-							$('.weight-lcd').removeClass('lcd-error');
+							$('.weight-lcd .weight-error').hide();
 							var response = data['response']['readData-list']['readdata'],
 								netWeight = response['read-weight'].replace(/\s/g, '');
 							$('#weight-reading').text(netWeight.toString());
@@ -1414,16 +1415,12 @@
 								$('#weight_in_reading').val(netWeight.replace(/[\s\+]/g, ''));
 							}						
 						} else {
-							$('#weight-reading').text('+0.00');
-							$('#weight-status').text('error');
-							$('.weight-lcd').addClass('lcd-error');
+							$('.weight-lcd .weight-error').show();
 						}				
 					})
 					.fail(function () {
 						isCompleted = true;	
-						$('#weight-reading').text('+0.00');
-						$('#weight-status').text('error');
-						$('.weight-lcd').addClass('lcd-error');
+						$('.weight-lcd .weight-error').show();
 					});			
 			} 			
 		}, SR_INTERVAL); 

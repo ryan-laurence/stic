@@ -11,6 +11,7 @@
 						<div id="weight-unit" class="weight-unit">kg</div>
 						<div id="weight-status"class="weight-status">inactive</div>
 					</div>
+					<div class="weight-error"></div>
 				</div>
 			</div>
 			<hr>
@@ -49,7 +50,8 @@
 			/**********************************************************************************************************************************************/
 			
 			// Read Scale Reader
-			var isCompleted = true;	
+			var isCompleted = true,
+				buttons = ['#calibrate-zero', '#calibrate-span'];	
 			STIC.INTERVAL_ID = setInterval(function () {		
 				if(isCompleted) {
 					isCompleted = false;
@@ -57,23 +59,22 @@
 						.done(function (data, status) {
 							isCompleted = true;	
 							if (data.response.type === 'SUCCESS') {
-								$('.weight-lcd').removeClass('lcd-error');
+								$('.weight-lcd .weight-error').hide();
+								STIC.enableButtons(buttons);
 								var response = data['response']['readData-list']['readdata'],
 									netWeight = response['read-weight'].replace(/\s/g, '');
 								$('#weight-reading').text(netWeight.toString());
 								$('#weight-unit').text(response['read-unitType']);
 								$('#weight-status').text(response['read-status1']);		
-							} else {
-								$('#weight-reading').text('+0.00');
-								$('#weight-status').text('error');
-								$('.weight-lcd').addClass('lcd-error');
+							} else {								
+								$('.weight-lcd .weight-error').show();
+								STIC.disableButtons(buttons);
 							}
 						})
 						.fail(function () {
 							isCompleted = true;	
-							$('#weight-reading').text('+0.00');
-							$('#weight-status').text('error');
-							$('.weight-lcd').addClass('lcd-error');
+							$('.weight-lcd .weight-error').show();
+							STIC.disableButtons(buttons);
 						});			
 				}
 			}, SR_INTERVAL); 
