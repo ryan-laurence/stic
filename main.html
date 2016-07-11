@@ -115,7 +115,7 @@
 				STIC.User.CheckLicense(true);
 
 				// Load allowed modules
-				STIC.Modules.Init();			
+				STIC.loadNavBar();			
 				
 				// Change Password
 				$('#link-user').on('click', function () {
@@ -128,7 +128,7 @@
 				});
 
 				// Set DT Defaults
-				$.extend(true, $.fn.dataTable.defaults, DEFAULT_DT_SETTINGS);
+				$.extend(true, $.fn.dataTable.defaults, DFLT_DT_CONF);
 				
 				// Connect to Scale Reader
 				STIC.openScaleReader();

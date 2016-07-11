@@ -681,7 +681,7 @@
 			});
 			dtSWT = initDT_Picker({
 				pl: 5,				
-				ds: DEFAULT_DATASOURCE,
+				ds: DFLT_DS,
 				cd: CD_TRUCK_IN_LIST,
 				ws: WS_CHECK_TRUCK_CODE_LIST,
 				domId: 'table-truck-second'
@@ -1156,12 +1156,12 @@
 						JSONString = 'weightReadingInfo=' + JSON.stringify(JSONObject);
 						var result = $.post(WS_FIRST_WEIGHING_INSERT, JSONString);
 						result.done(function (result) {
-							if (result.response.type === 'SUCCESS') {	
-								toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+							if (result.response.type === 'SUCCESS') {									
 								// Docket Print
 								window.open('http://localhost:8080' + WS_DOCKET_PRINT 
 									+ 'wrId=' + result.response.wr_id 
-									+ '&type=A1', 'DocketPrint').focus();								
+									+ '&type=A1', 'DocketPrint').focus();
+								toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
 								BootstrapDialog.alert({
 									type: 'type-primary',
 									title: MSG_TITLE_INFO,
@@ -1274,13 +1274,12 @@
 							JSONString = 'weightReadingInfo=' + JSON.stringify(JSONObject);
 							var result = $.post(WS_SECOND_WEIGHING_UPDATE, JSONString);
 							result.done(function (results) {
-								if (results.response.type === 'SUCCESS') {
-									toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+								if (results.response.type === 'SUCCESS') {									
 									// Docket Print
 									window.open('http://localhost:8080' + WS_DOCKET_PRINT 
 										+ 'wrId=' + $('#wr_id').val()
 										+ '&type=A2', 'DocketPrint').focus();	
-									
+									toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
 									BootstrapDialog.alert({
 										type: 'type-primary',
 										title: MSG_TITLE_INFO,
@@ -1370,7 +1369,7 @@
 				return ((Math.random() * (max - min)) + min).toFixed(2);
 		};
 		
-		STIC.IntervalId = setInterval(function () {
+		STIC.INTERVAL_ID = setInterval(function () {
 			var rand = '+' + random(41000, 5000)
 				.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 
@@ -1392,7 +1391,7 @@
 		
 		// Read Scale Reader
 		var isCompleted = true;	
-		STIC.IntervalId = setInterval(function () {		
+		STIC.INTERVAL_ID = setInterval(function () {		
 			if(isCompleted) {
 				isCompleted = false;				
 				$.get(WS_SCALE_READER)

@@ -1,16 +1,16 @@
 // Default Constants
-var DEFAULT_ROOT = '/stic/';
-var DEFAULT_COOKIE_LIFE = 3;
-var DEFAULT_PAGE_LENGTH = 10;
-var DEFAULT_PAGE_LOC = 'pages/';
-var DEFAULT_PAGE_FILE_EXT = '.html';
-var DEFAULT_DATE_FORMAT = 'MM/DD/YYYY';
-var DEFAULT_WRAPPER_ID = '#main-wrapper';
-var DEFAULT_DS_REPORTS = 'response.report-list.report';
-var DEFAULT_DATASOURCE = 'response.record-list.record';
+var DFLT_ROOT = '/stic/';
+var DFLT_CKIE_LIFE = 3;
+var DFLT_PAGE_SIZE = 10;
+var DFLT_PAGE_EXT = '.html';
+var DFLT_PAGE_DIR = 'pages/';
+var DFLT_DATE_FRMT = 'MM/DD/YYYY';
+var DFLT_WRPR_ID = '#main-wrapper';
+var DFLT_DS = 'response.record-list.record';
+var DFLT_DS_RPTS = 'response.report-list.report';
 
 // Default DataTables Settings
-var DEFAULT_DT_SETTINGS = {
+var DFLT_DT_CONF = {
 	processing: true,
 	lengthChange: false,
 	pagingType: 'full',

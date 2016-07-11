@@ -11,7 +11,7 @@
 	</head>
 	<body class="login-page">
 		<div class="container">		
-			<div class="row" id="pwd-container">
+			<div class="row">
 				<div class="col-md-8 col-centered">
 					<section class="login-form" role="login">							
 						<img src="images/vendor-logo.png" class="img-responsive" alt="" />			
@@ -400,7 +400,7 @@
 									message: MSG_INFO_INVALID_LICENSE_KEY,
 									callback: function (result) {
 										BootstrapDialog.closeAll();
-										window.location = DEFAULT_ROOT + 'activation.html';
+										window.location = DFLT_ROOT + 'activation.html';
 									}
 								});
 							}
@@ -410,7 +410,7 @@
 				
 				// Get Started
 				$('#get-started').on('click', function () {						
-					window.location = DEFAULT_ROOT;
+					window.location = DFLT_ROOT;
 				});
 			});
 		</script>

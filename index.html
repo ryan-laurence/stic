@@ -2,77 +2,50 @@
 <html lang="en">
 	<head>
 		<title>STIC System 2.0</title>
-		<link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
 		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="css/bootstrap-select.min.css" />
 		<link rel="stylesheet" href="css/bootstrap-dialog.css" />
 		<link rel="stylesheet" href="css/bootstrap-login.css" />
+		<link rel="stylesheet" href="css/bootstrap-datetimepicker.min.css" />
+		<link rel="stylesheet" href="css/dt.css" />
+		<link rel="stylesheet" href="css/dt-colreorder.min.css" />
+		<link rel="stylesheet" href="css/dt-buttons.css" />
+		<link rel="stylesheet" href="css/dt-buttons-bootstrap.css" />
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
-		<link rel="stylesheet" href="css/stic-custom.css" />
+		<link rel="stylesheet" href="css/digital-style.css" />
+		<link rel="stylesheet" href="css/stic-custom.css" />	
+		<link rel="stylesheet" href="css/full-slider.css">
 	</head>
-	<body class="login-page">
-		<div class="container">
-			<div class="row" id="pwd-container">
-				<div class="col-md-5 col-centered">
-					<section class="login-form" role="login">
-						<img src="images/vendor-logo.png" class="img-responsive" alt="" />
-						<hr>
-						<div class="alert alert-info" role="alert" style="text-align: left; margin-bottom: 20px;">
-							<i class="fa fa-info-circle fa-4x fa-pull-left"></i> Enter your Username and Password. In case of forgotten password, please contact your System Administrator.
-						</div>
-						<div class="form-group">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-user"></i>
-								</span>
-								<input class="form-control input-lg" placeholder="Username" id="username" type="text" autofocus>
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="input-group">
-								<span class="input-group-addon">
-									<i class="fa fa-lock"></i>
-								</span>
-								<input class="form-control input-lg" placeholder="Password" id="password" type="password" autofocus>
-							</div>
-						</div>
-						<button type="button" name="go" class="btn btn-primary btn-block" id="btnLogin"><!-- <i class="fa fa-sign-in"></i> -->Login</button>
-						<hr>
-						<div class="login-footer">
-							<div style="font-weight: bold">Scaletech International Corporation</div>
-							<div>3050 F. Bautista St. Bo. Ugong, Valenzuela City</div>
-							<div>Phone: 983-7895/96, Fax: 444-0592</div>
-							<div>Email: scaletech_intl_corp@lycos.com</div>
-						</div>
-					</section>
-				</div>
-			</div>
-		</div>
+	<body>
+		<div id="main-container"></div>
 		<script type="text/javascript" src="js/jquery.min.js"></script>
 		<script type="text/javascript" src="js/jquery-widget.min.js"></script>
+		<script type="text/javascript" src="js/dt.min.js"></script>
+		<script type="text/javascript" src="js/dt-sum.js"></script>
+		<script type="text/javascript" src="js/dt-colreorder.min.js"></script>
+		<script type="text/javascript" src="js/dt-buttons.min.js"></script>
+		<script type="text/javascript" src="js/jszip.min.js"></script>		
+		<script type="text/javascript" src="js/pdfmake.min.js"></script>
+		<script type="text/javascript" src="js/vfs_fonts.js"></script>
+		<script type="text/javascript" src="js/dt-buttons-print.min.js"></script>
+		<script type="text/javascript" src="js/dt-buttons-html5.min.js"></script>
+		<script type="text/javascript" src="js/dt-buttons-bootstrap.min.js"></script>
+		<script type="text/javascript" src="js/moment.min.js"></script>
+		<script type="text/javascript" src="js/transition.js"></script>
+		<script type="text/javascript" src="js/collapse.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-datetimepicker.min.js"></script>
+		<script type="text/javascript" src="js/bootstrap-select.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-waitingfor.js"></script>
+		<script type="text/javascript" src="js/jquery-formatDateTime.min.js"></script>
 		<script type="text/javascript" src="js/stic-constants.js"></script>
 		<script type="text/javascript" src="js/stic-functions.js"></script>
 		<script type="text/javascript">
-			$(function () {
-				// Progress Bar Start
-				$(document).ajaxStart(function () {
-					//waitingDialog.show();
-				});
-
-				// Progress Bar End
-				$(document).ajaxStop(function () {
-					//waitingDialog.hide();
-				});
-
-				// Check if Logged in already
-				STIC.User.CheckLicense(false);
-
-				// Login Button action
-				$('#btnLogin').on('click', function () {
-					STIC.User.LoginCheck();
-				});
+			$(function () { 
+				STIC.User.CheckLicense(false); 
+				$.extend(true, $.fn.dataTable.defaults, DFLT_DT_CONF);			
 			});
 		</script>
 	</body>
