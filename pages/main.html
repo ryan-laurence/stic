@@ -67,6 +67,8 @@
 		
 		// Connect to Scale Reader
 		STIC.openScaleReader();	
+		
+		$.extend(true, $.fn.dataTable.defaults, DFLT_DT_CONF);		
 	});
 	
 	<!-- Script to Activate the Carousel -->

@@ -250,11 +250,66 @@ function loadEditData(params) {
 			}
 		}
 	});
+	
+	// Destroy Prod Cat Select
+	var destroyPCField = function() {
+		$('select[data-field="cat_id"]').selectpicker('destroy');
+		$('select[data-field="cat_id"]').remove();
+	};
+	
+	// Create Prod Cat Select
+	var newPCSelectField = function(params) {
+		var JSONUrl = params.JSONUrl,
+			JSONData = params.JSONData,
+			container = params.container,
+			defaultId = params.defaultId;
+
+		// Build select options
+		$.getJSON(JSONUrl, function(data) {
+			var options = [];
+			$.each(data.response, function(a, b) {
+				if (a == JSONData) {
+					$.each(b, function(c, d) {
+						$.each(d, function(e, f) {
+							options.push('<option value="' + f.cat_id + '">' +
+								f.cat_name + '</option>');
+						});
+					});
+				}
+			});
+
+			// Create select DOM
+			destroyPCField();
+			container.append('<select class="form-control" ' +
+					'title="-" ' +
+					'data-field="cat_id" ' +
+					'data-size="5" ' +
+					'data-live-search="true" ' +
+					'data-fv-notempty="true" ' +
+					'data-fv-notempty-msg="Category is required.">' +
+					options.join('') +
+				'</select>');
+			$('select[data-field="cat_id"]').val(defaultId);
+			$('select[data-field="cat_id"]').selectpicker('refresh');
+			$('select[data-field="cat_id"]').selectpicker('val', defaultId);
+		});
+	};
 
 	// Trigger on New Modal onshown event
 	function modalNewOnShown(dialogRef) {
 		var modalBody = dialogRef.getModalBody();
 		modalBody.find('input[data-field], select[data-field]').val('');
+		
+		// For Product Data only
+		if (params.pkey == 'prod_id') {
+			destroyPCField();
+			newPCSelectField({
+				defaultId: '',
+				JSONUrl: WS_CATEGORY_LIST,
+				JSONData: 'categories-list',
+				container: $('#cat-box')
+			});
+		}
 	}
 
 	// Trigger on Edit Modal onshown event
@@ -265,6 +320,17 @@ function loadEditData(params) {
 			modalBody.find('input[data-field="' + name + '"]').val(value);
 			modalBody.find('select[data-field="' + name + '"]').val(value);
 		});
+				
+		// For Product Data only
+		if (params.pkey == 'prod_id') {		
+			destroyPCField();
+			newPCSelectField({
+				defaultId: rowData.cat_id,
+				JSONUrl: WS_CATEGORY_LIST,
+				JSONData: 'categories-list',
+				container: $('#cat-box')
+			});
+		}
 	}
 
 	// Trigger on Modal onhidden event
@@ -273,6 +339,8 @@ function loadEditData(params) {
 		modalBody.find('input[data-field]').val('');
 		modalBody.find('select[data-field]').val('');
 		STIC.clearHelpBlocks({ formId: params.formId });
+		if (params.pkey == 'prod_id')
+			destroyPCField();
 	}
 
 	// New & Edit Save Button Action
@@ -314,7 +382,7 @@ function loadEditData(params) {
 					.done(function (result, status) {
 
 						// Proceed with insert if no duplicate records found
-						if (result.response.type === 'FAILED') {
+						if (result.response.type === 'FAILED') {												
 							insertUpdateData({
 								dt: dt,
 								url: wsPost,
@@ -373,7 +441,7 @@ function loadEditData(params) {
 					title: o.title,
 					message: o.message,
 					formId: params.formId
-				});
+				});			
 			}
 		}
 	}
@@ -382,30 +450,60 @@ function loadEditData(params) {
 	function dtBtnDeleteAction(e, dt, node, config) {
 		var userRoleId = STIC.User.ReadCookie('roleid');
 		if (userRoleId === '1' || userRoleId === '2') {
-			// Confirm delete
-			BootstrapDialog.confirm({
-				type: 'type-danger',
-				btnOKLabel: BTN_LABEL_CONFIRM_DELETE,
-				btnCancelLabel: BTN_LABEL_CANCEL,
-				title: MSG_TITLE_INFO,
-				message: MSG_CONFIRM_DELETE_RECORD,
-				callback: function (result) {
-					if (result) {
-						// Build post data
-						var pkeyVal = dt.cell('.selected', 0).data(),
-							postData = $.parseJSON('{"' + params.pkey + '":"' + pkeyVal + '"}');
-
-						// Call WS
-						STIC.postData({
-							dt: dt,
-							url: params.wsDelete,
-							data: postData,
-							title: MSG_TITLE_INFO,
-							message: MSG_INFO_DEL_REC
-						});
+			// Check Category if Tagged before deleting
+			if (params.pkey === 'cat_id') {
+				$.post(WS_CATEGORY_DEL_CHECK, { 
+					cat_id: dt.cell('.selected', 0).data() 
+				})
+				.done(function(results, status) {
+					var response = results.response;
+					if (response.type === 'SUCCESS') {
+						if (response.count > 0) {
+							BootstrapDialog.alert({
+								type: 'type-danger',
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_CAT_DEL_ERROR,
+							});
+						} else {
+							showDeleteConfirm();
+						}
+					} else {
+						STIC.showWSError();
 					}
-				}
-			});
+				})
+				.fail(function () {
+					STIC.showWSError();
+				});
+			} else {
+				showDeleteConfirm();
+			}
+			
+			function showDeleteConfirm() {
+				// Confirm delete
+				BootstrapDialog.confirm({
+					type: 'type-danger',
+					btnOKLabel: BTN_LABEL_CONFIRM_DELETE,
+					btnCancelLabel: BTN_LABEL_CANCEL,
+					title: MSG_TITLE_INFO,
+					message: MSG_CONFIRM_DELETE_RECORD,
+					callback: function (result) {
+						if (result) {
+							// Build post data
+							var pkeyVal = dt.cell('.selected', 0).data(),
+								postData = $.parseJSON('{"' + params.pkey + '":"' + pkeyVal + '"}');
+
+							// Call WS
+							STIC.postData({
+								dt: dt,
+								url: params.wsDelete,
+								data: postData,
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_DEL_REC
+							});
+						}
+					}
+				});
+			}
 		} else {
 			BootstrapDialog.alert({
 				type: 'type-danger',

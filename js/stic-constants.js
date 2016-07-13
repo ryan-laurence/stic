@@ -81,6 +81,7 @@ var WS_CATEGORY_LIST = '/stic/services/CategoriesInfoService/getAllCategoriesLis
 var WS_CATEGORY_INSERT = '/stic/services/CategoriesInfoService/addCategories?response=application/json&';
 var WS_CATEGORY_UPDATE = '/stic/services/CategoriesInfoService/updateCategories?response=application/json&';
 var WS_CATEGORY_DELETE = '/stic/services/CategoriesInfoService/updateCategoriesByIsDeleted?response=application/json&isDeleted=0&';
+var WS_CATEGORY_DEL_CHECK = '/stic/services/ProductsInfoServices/checkTagCatIdList?response=application/json&';
 
 // Customer Data
 var CD_CUSTOMER_LIST = [
@@ -98,35 +99,41 @@ var WS_CUSTOMER_LIST = '/stic/services/CustomerInfoServices/getAllCustomersList?
 
 // Destination Data
 var CD_DESTINATION_LIST = [
-	{ data: 'dest_id', visible: false, searchable: false },
-	{ data: 'dest_zipcode', width: '20%' },
-	{ data: 'dest_name', width: '50%' },
-	{ data: 'dest_location', width: '30%' }
+	{ data: 'dest_id', name: 'dest_id', visible: false, searchable: false },
+	{ data: 'dest_zipcode', name: 'dest_zipcode', width: '15%' },
+	{ data: 'dest_name', name: 'dest_name', width: '35%' },
+	{ data: 'dest_location', name: 'dest_location', width: '25%' },
+	{ data: 'date_modified', name: 'date_modified', width: '25%' }
 ];
 var DS_DESTINATION_LIST = 'response.destinations-list.destination';
 var WS_DESTINATION_LIST = '/stic/services/DestinationsInfoServices/getAllDestinationsNotInCustDestList?response=application/json&';
 
 // Product Data
 var CD_PRODUCT_LIST = [
-	{ data: 'prod_id', visible: false, searchable: false },
-	{ data: 'prod_code', width: '30%' },
-	{ data: 'prod_name', width: '50%' },
-	{ data: 'unit_price', width: '20%' }
+	{ data: 'prod_id', name: 'prod_id', visible: false, searchable: false },	
+	{ data: 'prod_code', name: 'prod_code', width: '20%' },
+	{ data: 'prod_name', name: 'prod_name', width: '20%' },
+	{ data: 'unit_price', name: 'unit_price', width: '15%' },
+	{ data: 'cat_name', name: 'cat_name', width: '20%' },
+	{ data: 'date_modified', name: 'date_modified', width: '25%' }
 ];
 var DS_PRODUCT_LIST = 'response.products-list.product';
 var WS_PRODUCT_LIST = '/stic/services/ProductsInfoServices/getAllProductsList?response=application/json&';
 var WS_PRODUCT_INSERT = '/stic/services/ProductsInfoServices/addProducts?response=application/json&';
 var WS_PRODUCT_UPDATE = '/stic/services/ProductsInfoServices/updateProducts?response=application/json&';
 var WS_PRODUCT_DELETE = '/stic/services/ProductsInfoServices/updateProductsByIsDeleted?response=application/json&isDeleted=0&';
+var WS_PRODCAT_INSERT = '/stic/services/ProductCategoriesInfoServices/addProdCategories?response=application/json&';
+var WS_PRODCAT_DELETE = '/stic/services/ProductCategoriesInfoServices/updateProdCategoriesByIsDeleted?response=application/json&isDeleted=0&';
 
 // Customer Destination Data
 var CD_CUSTDEST_LIST = [
 	{ data: 'cd_id', name: 'cd_id', visible: false, searchable: false },
 	{ data: 'cust_id', name: 'cust_id', visible: false, searchable: false },
 	{ data: 'dest_id', name: 'dest_id', visible: false, searchable: false },
-	{ data: 'dest_zipcode', name: 'dest_zipcode', width: '20%' },
-	{ data: 'dest_name', name: 'dest_name', width: '50%' },
-	{ data: 'dest_location', name: 'dest_location', width: '30%' }
+	{ data: 'dest_zipcode', name: 'dest_zipcode', width: '15%' },
+	{ data: 'dest_name', name: 'dest_name', width: '35%' },
+	{ data: 'dest_location', name: 'dest_location', width: '25%' },
+	{ data: 'date_modified', name: 'date_modified', width: '25%' }
 ];
 var PICKER_CUSTDEST_DATA = 'pages/data-customer-destination-picker.html';
 var DS_CUSTDEST_LIST = 'response.custDest-list.customerDestination';
@@ -139,9 +146,11 @@ var CD_CUSTPROD_LIST = [
 	{ data: 'cp_id', name: 'cp_id', visible: false, searchable: false },
 	{ data: 'cust_id', name: 'cust_id', visible: false, searchable: false },
 	{ data: 'prod_id', name: 'prod_id', visible: false, searchable: false },
-	{ data: 'prod_code', name: 'prod_code', width: '30%' },
-	{ data: 'prod_name', name: 'prod_name', width: '50%' },
-	{ data: 'unit_price', name: 'unit_price', width: '20%' }
+	{ data: 'prod_code', name: 'prod_code', width: '20%' },
+	{ data: 'prod_name', name: 'prod_name', width: '20%' },
+	{ data: 'unit_price', name: 'unit_price', width: '15%' },
+	{ data: 'cat_name', name: 'cat_name', width: '20%' },
+	{ data: 'date_modified', name: 'date_modified', width: '25%' }
 ];
 var PICKER_CUSTPROD_DATA = 'pages/data-customer-product-picker.html';
 var DS_CUSTPROD_LIST = 'response.custProducts-list.customerProduct';
@@ -445,6 +454,7 @@ var MSG_INFO_LOGOUT_AFTER_CPASS = '<div class="alert alert-success no-margin-bot
 var MSG_INFO_WS_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> Your request was not successful because there was an error in the Web Service response. If issue still persists, please contact your System Administrator.</div>';
 var MSG_INFO_SAVE_CONFIG = '<div class="alert alert-success all-middle no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-3x"></i>The system\'s configuration settings were updated successfully.</div>';
 var MSG_INFO_ISR_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> An error occured while connecting to the platform scale. Please check if the connection to the platform scale is configured properly. Press F5 or reload the page to try again.</div>';
+var MSG_INFO_CAT_DEL_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-4x fa-pull-left"></i> You are not allowed to delete this Category because there are Products currently tagged to this record. Untag all Products first from this Category then try again.</div>';
 
 // Role Access
 var MSG_INFO_ROLE_INVALID = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Your current role privileges does not allow you to perform this action. Please contact your System Administrator for more information.</div>';

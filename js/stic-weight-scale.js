@@ -21,6 +21,50 @@ function showNewModalForm(params) {
 		}
 	};
 	
+	// Destroy Prod Cat Select
+	var destroyPCField = function() {
+		$('select[data-field="cat_id"]').selectpicker('destroy');
+		$('select[data-field="cat_id"]').remove();
+	};
+	
+	// Create Prod Cat Select
+	var newPCSelectField = function(params) {
+		var JSONUrl = params.JSONUrl,
+			JSONData = params.JSONData,
+			container = params.container,
+			defaultId = params.defaultId;
+
+		// Build select options
+		$.getJSON(JSONUrl, function(data) {
+			var options = [];
+			$.each(data.response, function(a, b) {
+				if (a == JSONData) {
+					$.each(b, function(c, d) {
+						$.each(d, function(e, f) {
+							options.push('<option value="' + f.cat_id + '">' +
+								f.cat_name + '</option>');
+						});
+					});
+				}
+			});
+
+			// Create select DOM
+			destroyPCField();
+			container.append('<select class="form-control" ' +
+					'title="-" ' +
+					'data-field="cat_id" ' +
+					'data-size="5" ' +
+					'data-live-search="true" ' +
+					'data-fv-notempty="true" ' +
+					'data-fv-notempty-msg="Category is required.">' +
+					options.join('') +
+				'</select>');
+			$('select[data-field="cat_id"]').val(defaultId);
+			$('select[data-field="cat_id"]').selectpicker('refresh');
+			$('select[data-field="cat_id"]').selectpicker('val', defaultId);
+		});
+	};
+	
 	// Trigger on New Modal onShown event
 	function btnNewOnShown(dialogRef) {
 		var modalBody = dialogRef.getModalBody(),
@@ -28,6 +72,17 @@ function showNewModalForm(params) {
 			
 		// Clear form values
 		$.each(elements, function(idx, elem) { $(elem).val(''); });
+		
+		// For Product Data only
+		if (params.objectId == 'prodInfo') {
+			destroyPCField();
+			newPCSelectField({
+				defaultId: '',
+				JSONUrl: WS_CATEGORY_LIST,
+				JSONData: 'categories-list',
+				container: $('#cat-box')
+			});
+		}
 	}		
 	
 	// Save Action
@@ -39,7 +94,7 @@ function showNewModalForm(params) {
 		if (isValid) {
 			var postString = '', JSONString = '', JSONObject = {},
 				modalBody = dialogRef.getModalBody(),
-				elements = modalBody.find('input[data-field]');
+				elements = modalBody.find('input[data-field], select[data-field]');
 				
 			var input = $(params.formId).find('input[data-fv-unique="true"]'),
 				fieldValue = $(input).val(), fieldName = $(input).attr('data-field'),
