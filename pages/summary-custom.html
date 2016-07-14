@@ -16,6 +16,7 @@
 					<thead>
 						<tr>
 							<th class="text-left">Docket No.</th>
+							<th class="text-left">Category Name</th>
 							<th class="text-left">Product Name</th>
 							<th class="text-left">Customer Name</th>
 							<th class="text-left">Truck Code</th>
@@ -38,7 +39,7 @@
 	$(function () {
 		// Report Title
 		var reportTitle = 'Weighing Record';
-		
+
 		// DT Buttons > Copy
 		dtBtnCopy = {
 			name: 'copy',
@@ -91,21 +92,21 @@
 				columns: ':visible'
 			}
 		},
-		
+
 		// DT Buttons > Web Page Print
-		dtBtnPrint = {						
+		dtBtnPrint = {
 			name: 'print',
 			extend: 'print',
 			enabled: false,
-			autoPrint: false,		
-			title: reportTitle,	
+			autoPrint: false,
+			title: reportTitle,
 			className: 'btn-primary',
 			text: BTN_LABEL_PRINT_RECORD,
 			titleAttr: BTN_TITLE_PRINT_RECORD,
-			customize: dtWebPagePrintCustom,		
-			exportOptions: { 
-				columns: ':visible' 
-			}				
+			customize: dtWebPagePrintCustom,
+			exportOptions: {
+				columns: ':visible'
+			}
 		};
 
 		// DT Initial
@@ -116,7 +117,7 @@
 				searching: false,
 				dom: '<"dt-toolbar">BRlfrtip',
 				columns: CD_SUMMARY_CUSTOM_DOCKET,
-				colReorder: { order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9] },
+				colReorder: { order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
 				ajax: {
 					url: WS_SUMMARY_CUSTOM_DOCKET,
 					dataSrc: function (json) {
@@ -129,12 +130,12 @@
 			})
 			.on('draw.dt', function (e, settings, data) {
 				var btns = [
-				'copy:name', 
-				'csv:name', 
-				'excel:name', 
-				'pdf:name', 
+				'copy:name',
+				'csv:name',
+				'excel:name',
+				'pdf:name',
 				'print:name'
-				];			
+				];
 				dtSummary.data().length > 0 ?
 					dtSummary.buttons(btns).enable() :
 					dtSummary.buttons(btns).disable();
@@ -144,39 +145,41 @@
 		$('div.dt-toolbar').css('float', 'left');
 		$('div.dt-toolbar').css('margin-right', '5px');
 		$('div.dt-toolbar').html(
-			'<div class="btn-toolbar" role="toolbar">' +			
-				'<div class="btn-group pull-left form-inline" role="group">' +		
+			'<div class="btn-toolbar" role="toolbar">' +
+				'<div class="btn-group pull-left form-inline" role="group">' +
 					'<div class="input-group">' +
-						'<span class="input-group-addon">' + 
-							'<i class="fa fa-filter" aria-hidden="true"></i> ' + 
+						'<span class="input-group-addon">' +
+							'<i class="fa fa-filter" aria-hidden="true"></i> ' +
 							'<strong>Filter By</strong>' +
 						'</span>' +
 						'<select class="selectpicker form-control" id="report-filter" data-width="150px">' +
 							'<option value="docket_no" data-index="0" data-report-title="Docket Report" selected>Docket No.</option>' +
-							'<option value="truck_code" data-index="1" data-report-title="Truck Report">Truck Code</option>' +
-							'<option value="prod_name" data-index="2" data-report-title="Product Report">Product Name</option>' +				
-							'<option value="cust_name" data-index="4" data-report-title="Customer Report">Customer Name</option>' +
-							'<option value="user_name" data-index="3" data-report-title="User Report">User</option>' +
+							'<option value="cat_name" data-index="1" data-report-title="Category Report">Category Name</option>' +
+							'<option value="prod_name" data-index="2" data-report-title="Product Report">Product Name</option>' +
+							'<option value="cust_name" data-index="3" data-report-title="Customer Report">Customer Name</option>' +
+							'<option value="truck_code" data-index="4" data-report-title="Truck Report">Truck Code</option>' +
+							'<option value="user_name" data-index="5" data-report-title="User Report">User</option>' +
 						'</select>' +
 					'</div>' +
 				'</div>' +
-				'<div class="btn-group pull-left form-inline" role="group">' +			
+				'<div class="btn-group pull-left form-inline" role="group">' +
 					'<div class="input-group">' +
 						'<input type="text" class="form-control" id="report-query" placeholder="Enter Search Value" >' +
 					'</div>' +
 					'<button type="button" class="btn btn-primary" id="search-report" title="Search Report"><i class="fa fa-search"></i></button>' +
 					'<button type="button" class="btn btn-danger" id="reset-report" title="Reset Report"><i class="fa fa-ban"></i></button>' +
 				'</div>' +
-			'</div>' 
+			'</div>'
 		);
-		
+
 		var ordering = [];
-			ordering.push([0, 1, 2, 3, 4, 5, 6, 7, 8, 9]);
-			ordering.push([3, 0, 1, 2, 4, 5, 6, 7, 8, 9]);
-			ordering.push([1, 0, 2, 3, 4, 5, 6, 7, 8, 9]);
-			ordering.push([4, 0, 1, 2, 3, 5, 6, 7, 8, 9]);
-			ordering.push([2, 0, 1, 3, 4, 5, 6, 7, 8, 9]);
-			
+			ordering.push([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+			ordering.push([1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+			ordering.push([2, 0, 1, 3, 4, 5, 6, 7, 8, 9, 10]);
+			ordering.push([3, 0, 1, 2, 4, 5, 6, 7, 8, 9, 10]);
+			ordering.push([4, 0, 1, 2, 3, 5, 6, 7, 8, 9, 10]);
+			ordering.push([5, 0, 1, 2, 3, 4, 6, 7, 8, 9, 10]);
+
 		$('#report-filter').selectpicker();
 
 		// Change ordering based on filter
@@ -200,50 +203,50 @@
 				.load();
 			}
 		});
-		
+
 		// Reset Report
-		$('#reset-report').on('click', function () {		
+		$('#reset-report').on('click', function () {
 			$('#report-query').val('');
 			$('#report-filter').val('docket_no');
 			$('#report-filter').selectpicker('refresh');
 			dtSummary.ajax.url(WS_SUMMARY_CUSTOM_DOCKET).load();
 		});
-			
+
 		// Customize PDF Print Output
-		function dtPDFPrintCustom(doc) {		
+		function dtPDFPrintCustom(doc) {
 			// Set Default Styles
 			var pdfDoc = STIC.Report.SetPDFStyles({
 				doc: doc,
-				cd: CD_SUMMARY_CUSTOM_DOCKET		
+				cd: CD_SUMMARY_CUSTOM_DOCKET
 			});
 		}
-		
+
 		// Customize Web Page Print Output
 		function dtWebPagePrintCustom(win) {
 			$(win.document.body)
 				.css('background', 'transparent')
 				.css('font-weight', 'normal')
-				.css('font-family', 'Monospaced');						
+				.css('font-family', 'Monospaced');
 			// Title
-			$(win.document.body).find('h1')								
+			$(win.document.body).find('h1')
 				.css('font-size', '16pt')
 				.css('text-align', 'center')
-				.css('margin-bottom', '20px');									
+				.css('margin-bottom', '20px');
 			// Data Table
 			$(win.document.body).find('table')
 				.removeClass('display')
-				.removeClass('compact');							
+				.removeClass('compact');
 			$(win.document.body).find('table th')
 				.css('font-size', '11pt')
 				.css('text-align', 'left')
-				.css('padding-left', '0px');							
-			$(win.document.body).find('table td')							
+				.css('padding-left', '0px');
+			$(win.document.body).find('table td')
 				.css('font-size', '10pt')
 				.css('text-align', 'left')
 				.css('padding-left', '0px')
 				.css('padding-top', '10px')
 				.css('padding-bottom', '10px')
-				.css('font-weight', 'normal');							
+				.css('font-weight', 'normal');
 		}
 	});
 </script>

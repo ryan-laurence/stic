@@ -3,18 +3,18 @@
 	<head>
 		<title>Weighing System 2.0</title>
 		<link rel="icon" href="images/favicon.ico" type="image/x-icon"/>
-		<link rel="stylesheet" href="css/bootstrap.css" />		
-		<link rel="stylesheet" href="css/bootstrap-dialog.css" />	
+		<link rel="stylesheet" href="css/bootstrap.css" />
+		<link rel="stylesheet" href="css/bootstrap-dialog.css" />
 		<link rel="stylesheet" href="css/bootstrap-activate.css" />
 		<link rel="stylesheet" href="css/font-awesome.min.css" />
-		<link rel="stylesheet" href="css/stic-custom.css" />	
+		<link rel="stylesheet" href="css/stic-custom.css" />
 	</head>
 	<body class="login-page">
-		<div class="container">		
+		<div class="container">
 			<div class="row">
 				<div class="col-md-8 col-centered">
-					<section class="login-form" role="login">							
-						<img src="images/vendor-logo.png" class="img-responsive" alt="" />			
+					<section class="login-form" role="login">
+						<img src="images/vendor-logo.png" class="img-responsive" alt="" />
 						<hr>
 						<div class="panel panel-primary no-margin-bottom">
 							<div class="panel-heading">
@@ -29,7 +29,7 @@
 											<li><a href="#step3" data-toggle_="tab" data-step="3">3. <i class="fa fa-desktop"></i> Activation Status</a></li>
 										</ul>
 									</div>
-								</div>	
+								</div>
 								<hr style="margin-top: 5px; margin-bottom: 15px;">
 								<div class="tab-content" id="tab-client">
 									<div class="tab-pane fade in active" id="step1">
@@ -37,11 +37,11 @@
 											<div class="alert alert-info" role="alert" style="text-align: left; margin-bottom: 20px;">
 												<i class="fa fa-info-circle fa-3x fa-pull-left"></i> Enter the License Key provided by ScaleTech to start the system activation. Please confirm the license details before activating the system.
 											</div>
-											<div class="form-group">												
+											<div class="form-group">
 												<label class="control-label" for="hd_serial_number">HD Serial Number</label>
 												<input class="form-control" id="hd_serial_number" type="text" value="" readonly>
 											</div>
-											<div class="form-group">												
+											<div class="form-group">
 												<label class="control-label" for="pc_number">PC Number</label>
 												<input class="form-control" placeholder="Enter PC Number" id="pc_number" type="text" value="" autofocus>
 											</div>
@@ -51,7 +51,7 @@
 											</div>
 										</form>
 										<hr style="margin-top: 15px; margin-bottom: 15px;">
-										<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-bottom: 5px;">	
+										<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-bottom: 5px;">
 											<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
 												<button type="button" class="btn btn-primary" id="validate-license-key">
 													<i class="fa fa-key"></i> Validate License Key
@@ -63,35 +63,35 @@
 										<div class=" well no-margin-bottom" style="padding: 15px">
 											<div class="alert alert-info" role="alert" style="text-align: left; margin-bottom: 20px;">
 												<i class="fa fa-info-circle fa-3x fa-pull-left"></i> Listed below are the license details from the License Key you have provided. Please confirm the following details then proceed with the system activation.
-											</div>											
+											</div>
 											<table id="confirm-info" class="table table-bordered table-striped no-margin-bottom" style="clear: both;">
 												<tbody>
 													<tr>
 														<td width="30%" class="make-bold">Client Name</td>
-														<td width="70%" data-cell="client_name"></td>														
+														<td width="70%" data-cell="client_name"></td>
 													</tr>
 													<tr>
 														<td class="make-bold">PC Number</td>
-														<td data-cell="pc_number"></td>														
+														<td data-cell="pc_number"></td>
 													</tr>
 													<tr>
 														<td class="make-bold">HD Serial Number</td>
-														<td data-cell="hd_serial_number"></td>														
+														<td data-cell="hd_serial_number"></td>
 													</tr>
 													<tr>
 														<td class="make-bold">License Key</td>
-														<td data-cell="license_key"></td>														
+														<td data-cell="license_key"></td>
 													</tr>
 													<tr>
 														<td class="make-bold">License Duration</td>
-														<td data-cell="license_duration"></td>														
-													</tr>					
+														<td data-cell="license_duration"></td>
+													</tr>
 												</tbody>
 												<input type="hidden" data-field="cl_id">
 											</table>
 										</div>
 										<hr style="margin-top: 15px; margin-bottom: 15px;">
-										<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-bottom: 5px;">	
+										<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-bottom: 5px;">
 											<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
 												<button type="button" class="btn btn-primary" id="confirm-activate">
 													<i class="fa fa-check"></i> Confirm Activation
@@ -108,41 +108,41 @@
 												<tbody>
 													<tr>
 														<td width="30%" class="make-bold">Client Name</td>
-														<td width="70%" data-cell="client_name"></td>														
+														<td width="70%" data-cell="client_name"></td>
 													</tr>
 													<tr>
 														<td class="make-bold">PC Number</td>
-														<td data-cell="pc_number"></td>														
+														<td data-cell="pc_number"></td>
 													</tr>
 													<tr>
 														<td class="make-bold">HD Serial Number</td>
-														<td data-cell="hd_serial_number"></td>														
+														<td data-cell="hd_serial_number"></td>
 													</tr>
 													<tr>
 														<td class="make-bold">License Key</td>
-														<td data-cell="license_key"></td>														
+														<td data-cell="license_key"></td>
 													</tr>
 													<tr>
 														<td class="make-bold">License Status</td>
-														<td data-cell="license_status"></td>														
+														<td data-cell="license_status"></td>
 													</tr>
 													<tr>
 														<td class="make-bold">License Duration</td>
-														<td data-cell="license_duration"></td>														
+														<td data-cell="license_duration"></td>
 													</tr>
 													<tr>
 														<td class="make-bold">Activation Date</td>
-														<td data-cell="activation_date"></td>														
-													</tr>	
+														<td data-cell="activation_date"></td>
+													</tr>
 													<tr>
 														<td class="make-bold">Expiration Date</td>
-														<td data-cell="expiration_date"></td>														
-													</tr>					
+														<td data-cell="expiration_date"></td>
+													</tr>
 												</tbody>
-											</table>											
+											</table>
 										</div>
 										<hr style="margin-top: 15px; margin-bottom: 15px;">
-										<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-bottom: 5px;">	
+										<div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups" style="margin-bottom: 5px;">
 											<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
 												<button type="button" class="btn btn-primary" id="get-started">
 													<i class="fa fa-sign-in"></i> Go to Login Page
@@ -160,27 +160,27 @@
 							<div>Phone: 983-7895/96, Fax: 444-0592</div>
 							<div>Email: scaletech_intl_corp@lycos.com</div>
 						</div>
-					</section>  
+					</section>
 				</div>
 			</div>
 		</div>
 		<script type="text/javascript" src="js/jquery.min.js"></script>
-		<script type="text/javascript" src="js/jquery-widget.min.js"></script>		
+		<script type="text/javascript" src="js/jquery-widget.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="js/bootstrap-dialog.min.js"></script>
 		<script type="text/javascript" src="js/jquery-formatDateTime.min.js"></script>
 		<script type="text/javascript" src="js/stic-constants.js"></script>
 		<script type="text/javascript" src="js/stic-functions.js"></script>
 		<script type="text/javascript">
-			$(function () { 			
+			$(function () {
 				// Check if already activated
 				STIC.User.CheckIfActivated();
-				
-				// Clear Fields		
+
+				// Clear Fields
 				$('#pc_number').val('');
 				$('#license_key').val('');
 				$('#hd_serial_number').val('');
-				
+
 				// Get HD Serial Number
 				$.post(WS_GET_HD_SERIAL_NUM, { x: 11 })
 					.done(function (results, status) {
@@ -201,54 +201,54 @@
 						.removeClass('has-error has-feedback')
 						.removeClass('has-success has-feedback');
 					$('#step1').find('div.form-group').find('span.glyphicon, small.help-block')
-						.remove();		
-				}		
-				
+						.remove();
+				}
+
 				// Show Success
 				var showSuccessStyles = function () {
-					var inputFields = $('#step1').find('.form-control');		
+					var inputFields = $('#step1').find('.form-control');
 					$.each(inputFields, function (idx, input) {
 						$(input).parent().addClass('has-success has-feedback');
 						$(input).parent().append('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
-					});					
+					});
 				}
-				
+
 				// Show Errors
 				var showErrorStyles = function () {
-					var inputFields = $('#step1').find('.form-control');		
+					var inputFields = $('#step1').find('.form-control');
 					$.each(inputFields, function (idx, input) {
 						$(input).parent().addClass('has-error has-feedback');
 						$(input).parent().append('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
-					});					
+					});
 				}
-			
+
 				// License Key Input
 				$('#validate-license-key').on('click', function () {
-				
+
 					// Check License Key
 					if ($('#pc_number').val() !== '' && $('#license_key').val()) {
-						
+
 						clearStyles();
-						
+
 						// Validate License Key
-						var JSONObject = { 
-							license_key: $('#license_key').val(), 
-							hd_serial_number: $('#hd_serial_number').val(), 
+						var JSONObject = {
+							license_key: $('#license_key').val(),
+							hd_serial_number: $('#hd_serial_number').val(),
 							pc_number: $('#pc_number').val()
 						};
-						
+
 						// Call WS
 						$.post(WS_GET_LICENSE_DETAILS, JSONObject)
 							.done(function (results, status) {
 								var response = results.response,
 									licenseDetails = response['report-list'].report,
 									licenseStatus = licenseDetails.license_status;
-									
+
 								if (response.type === 'SUCCESS') {
 									// License Key is still inactive
 									if (licenseStatus === 'Inactive') {
 										showSuccessStyles();
-										
+
 										$('#confirm-info input[data-field="cl_id"]').val(licenseDetails.cl_id);
 										$('#confirm-info td[data-cell="client_name"]').text(licenseDetails.client_name);
 										$('#confirm-info td[data-cell="pc_number"]').text(licenseDetails.pc_number);
@@ -259,11 +259,11 @@
 										$('#step1').removeClass('in');
 										$('#step1').removeClass('active');
 										$('a[href="#step1"]').parent().removeClass('active');
-										
-										$('#step2').addClass('in');				
+
+										$('#step2').addClass('in');
 										$('#step2').addClass('active');
-										$('a[href="#step2"]').parent().addClass('active');										
-									
+										$('a[href="#step2"]').parent().addClass('active');
+
 									// License Key is already active
 									} else if (licenseStatus === 'Active') {
 										showErrorStyles();
@@ -275,9 +275,9 @@
 												BootstrapDialog.closeAll();
 											}
 										});
-										
+
 									// License Key is expired
-									} else if (licenseStatus === 'Expired') {				
+									} else if (licenseStatus === 'Expired') {
 										showErrorStyles();
 										BootstrapDialog.alert({
 											type: 'type-danger',
@@ -287,7 +287,7 @@
 												BootstrapDialog.closeAll();
 											}
 										});
-										
+
 									// License Key is invalid or doesn't exist
 									} else {
 										showErrorStyles();
@@ -300,10 +300,10 @@
 											}
 										});
 									}
-									
+
 								// License Key is invalid or doesn't exist
 								} else {
-									showErrorStyles();					
+									showErrorStyles();
 									BootstrapDialog.alert({
 										type: 'type-danger',
 										title: MSG_TITLE_INFO,
@@ -314,15 +314,15 @@
 									});
 								}
 							})
-							
+
 							// Show WS Error
 							.fail(function () {
 								STIC.showWSError();
 							})
-							
+
 					// License Key is empty
 					} else {
-						showErrorStyles();		
+						showErrorStyles();
 						BootstrapDialog.alert({
 							type: 'type-danger',
 							title: MSG_TITLE_INFO,
@@ -333,52 +333,52 @@
 						});
 					}
 				});
-				
+
 				// Confirm Activation
-				$('#confirm-activate').on('click', function () {	
-					var JSONObject = { 
+				$('#confirm-activate').on('click', function () {
+					var JSONObject = {
 						cl_id: $('input[data-field="cl_id"]').val()
 					}
-					
+
 					// Validate License Key
 					$.post(WS_CONFIRM_LICENSE_DETAILS, JSONObject)
 						.done(function (results, status) {
 							var response = results.response,
 								licenseDetails = response['report-list'].report;
-						
+
 							// on Success Update Client company table
 							if (response.type === 'SUCCESS') {
 								var params = {
 									id: 1,
 									is_license: 1,
-									license_key: licenseDetails.license_key,		
-									exp_date: $.formatDateTime('yy-mm-dd', new Date(licenseDetails.expiration_date)),																											
+									license_key: licenseDetails.license_key,
+									exp_date: $.formatDateTime('yy-mm-dd', new Date(licenseDetails.expiration_date)),
 									current_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date(licenseDetails.date_modified))
 								};
-								
+
 								// Update Client company table
 								$.post(WS_UPDATE_COMPANY_LICENSE, params)
 									.done(function (results, status) {
-									
+
 										// on Success show success details
 										if (results.response.type === 'SUCCESS') {
-											$('#success-info td[data-cell="client_name"]').text(licenseDetails.client_name);											
+											$('#success-info td[data-cell="client_name"]').text(licenseDetails.client_name);
 											$('#success-info td[data-cell="pc_number"]').text(licenseDetails.pc_number);
-											$('#success-info td[data-cell="hd_serial_number"]').text(licenseDetails.hd_serial_number);											
+											$('#success-info td[data-cell="hd_serial_number"]').text(licenseDetails.hd_serial_number);
 											$('#success-info td[data-cell="license_key"]').text(licenseDetails.license_key);
 											$('#success-info td[data-cell="license_status"]').text(licenseDetails.license_status);
 											$('#success-info td[data-cell="license_duration"]').text(licenseDetails.license_duration);
 											$('#success-info td[data-cell="activation_date"]').text(licenseDetails.activation_date);
 											$('#success-info td[data-cell="expiration_date"]').text(licenseDetails.expiration_date);
-																				
-											$('#step2').removeClass('in');				
+
+											$('#step2').removeClass('in');
 											$('#step2').removeClass('active');
 											$('a[href="#step2"]').parent().removeClass('active');
-											
-											$('#step3').addClass('in');				
+
+											$('#step3').addClass('in');
 											$('#step3').addClass('active');
 											$('a[href="#step3"]').parent().addClass('active');
-										
+
 										// on Failed show WS Error
 										} else {
 											BootstrapDialog.alert({
@@ -407,9 +407,9 @@
 						});
 
 				});
-				
+
 				// Get Started
-				$('#get-started').on('click', function () {						
+				$('#get-started').on('click', function () {
 					window.location = DFLT_ROOT;
 				});
 			});
