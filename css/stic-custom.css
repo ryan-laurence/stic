@@ -51,7 +51,7 @@
 }
 
 .form-control.date-lookup {
-	width: 105px !important; 
+	width: 105px !important;
 	border-top-right-radius: 0px;
 	border-bottom-right-radius: 0px;
 	border-right-style: none;
@@ -67,8 +67,8 @@
 	margin-top: 5px;
 	margin-right: 20px;
 }
-	
-.no-shadow{  
+
+.no-shadow{
 	-webkit-box-shadow: none !important;
 	box-shadow: none !important;
 }

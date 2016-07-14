@@ -17,19 +17,19 @@
 	display: table;
 	border-radius: 4px;
 	background: linear-gradient(#000, #000);
-  width: 97%;     
+  width: 97%;
 	height: 100%;
-  -moz-box-shadow: inset 0 0 10px #323333; 
-	-webkit-box-shadow: inset 0 0 10px #323333; 
-	box-shadow: inset 0 0 10px #323333; 
-	position: relative;	
+  -moz-box-shadow: inset 0 0 10px #323333;
+	-webkit-box-shadow: inset 0 0 10px #323333;
+	box-shadow: inset 0 0 10px #323333;
+	position: relative;
 }
 
 .weight-input {
 	color: #FFFFFF;
-	background: linear-gradient(#343538, #111113);	
+	background: linear-gradient(#343538, #111113);
 }
-	
+
 .weight-lcd .weight-reading {
 	color: #FFFFFF;
 	text-shadow: #FFFFFF 0px 0px 10px !important;
@@ -48,15 +48,15 @@
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
 }
-	
+
 .weight-lcd .weight-info {
 	width: 10%;
 	font-weight: bold;
 	display: table-cell;
 	vertical-align: top;
-	padding-left: 20px; 
-	padding-right: 20px; 
-	margin-top: 0px; 
+	padding-left: 20px;
+	padding-right: 20px;
+	margin-top: 0px;
 	border-left: 1px dashed #FFFFFF;
 }
 
@@ -65,8 +65,8 @@
 	font-weight: bold;
 	display: table-cell;
 	vertical-align: middle;
-	padding-left: 20px; 
-	margin-top: 0px; 
+	padding-left: 20px;
+	margin-top: 0px;
 	border-left: 1px dashed #FFFFFF;
 }
 
@@ -80,8 +80,8 @@
 	color: #CCCCCC;
 	vertical-align: middle;
 }
-	
-.weight-lcd .weight-info .weight-unit {		
+
+.weight-lcd .weight-info .weight-unit {
 	font-size: 30px;
 	display: table-row;
 	margin-top: 0px;
