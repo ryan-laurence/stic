@@ -189,7 +189,7 @@ $.extend( Buttons.prototype, {
 		var buttons = this.s.buttons;
 		var subButtons = this.s.subButtons;
 		var i, ien, j, jen;
-		
+
 		for ( i=0, ien=buttons.length ; i<ien ; i++ ) {
 			this.removePrep( i );
 
@@ -574,7 +574,7 @@ $.extend( Buttons.prototype, {
 			config.action.call( dt.button( button ), e, dt, button, config );
 
 			$(dt.table().node()).triggerHandler( 'buttons-action.dt', [
-				dt.button( button ), dt, button, config 
+				dt.button( button ), dt, button, config
 			] );
 		};
 
@@ -868,7 +868,7 @@ $.extend( Buttons.prototype, {
 /**
  * Show / hide a background layer behind a collection
  * @param  {boolean} Flag to indicate if the background should be shown or
- *   hidden 
+ *   hidden
  * @param  {string} Class to assign to the background
  * @static
  */
@@ -944,7 +944,7 @@ Buttons.instanceSelector = function ( group, buttons )
 			ret.push( buttons[ input ].inst );
 		}
 	};
-	
+
 	process( group );
 
 	return ret;

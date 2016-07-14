@@ -799,7 +799,7 @@ $.extend( ColReorder.prototype, {
 
 		/* Save the state */
 		this.s.dt.oInstance.oApi._fnSaveState( this.s.dt );
-		
+
 		if ( this.s.reorderCallback !== null )
 		{
 			this.s.reorderCallback.call( this );

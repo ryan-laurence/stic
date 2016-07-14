@@ -15,13 +15,13 @@ var DFLT_DT_CONF = {
 	lengthChange: false,
 	pagingType: 'full',
 	language: {
-		paginate: {		
+		paginate: {
 			next: '<i class="fa fa-forward"></i>',
 			last: '<i class="fa fa-fast-forward"></i>',
 			previous: '<i class="fa fa-backward"></i>',
 			first: '<i class="fa fa-fast-backward"></i>'
 		},
-		processing: 
+		processing:
 			'<div class="indicator">' +
 				'<i class="fa fa-cog fa-spin fa-2x fa-fw margin-bottom"></i> ' +
 				'Please wait, loading data.' +
@@ -110,7 +110,7 @@ var WS_DESTINATION_LIST = '/stic/services/DestinationsInfoServices/getAllDestina
 
 // Product Data
 var CD_PRODUCT_LIST = [
-	{ data: 'prod_id', name: 'prod_id', visible: false, searchable: false },	
+	{ data: 'prod_id', name: 'prod_id', visible: false, searchable: false },
 	{ data: 'prod_code', name: 'prod_code', width: '20%' },
 	{ data: 'prod_name', name: 'prod_name', width: '20%' },
 	{ data: 'unit_price', name: 'unit_price', width: '15%' },
@@ -210,9 +210,10 @@ var WS_LIST_ROLES = '/stic/services/RolesInfoServices/getAllRolesList?response=a
 
 // Supplier Summary
 var CD_SUMMARY_SUPPLIER = [
-	{ data: 'supp_name', name: 'supp_name', width: '35%' },
-	{ data: 'prod_name', name: 'prod_name', width: '35%' },
-	{ data: 'net_weight', name: 'net_weight', width: '20%' },
+	{ data: 'supp_name', name: 'supp_name', width: '25%' },
+	{ data: 'cat_name', name: 'cat_name', width: '25%' },
+	{ data: 'prod_name', name: 'prod_name', width: '25%' },
+	{ data: 'net_weight', name: 'net_weight', width: '15%' },
 	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_SUPPLIER = 'Supplier Summary';
@@ -240,8 +241,9 @@ var WS_SUMMARY_DESTINATION = '/stic/services/WeighingReadingSummInfoServices/get
 
 // Product Summary
 var CD_SUMMARY_PRODUCT = [
-	{ data: 'prod_name', name: 'prod_name', width: '40%' },
-	{ data: 'net_weight', name: 'net_weight', width: '40%' },
+	{ data: 'cat_name', name: 'cat_name', width: '30%' },
+	{ data: 'prod_name', name: 'prod_name', width: '30%' },
+	{ data: 'net_weight', name: 'net_weight', width: '20%' },
 	{ data: 'weight_unit', name: 'weight_unit', width: '20%' }
 ];
 var REPORT_TITLE_PRODUCT = 'Product Summary';
@@ -284,10 +286,11 @@ var WS_SUMMARY_DETAILED_TRUCK = '/stic/services/WeighingReadingSummInfoServices/
 // Summary Custom
 var CD_SUMMARY_CUSTOM_DOCKET = [
 	{ data: 'docket_no', name: 'docket_no' },
+	{ data: 'cat_name', name: 'cat_name' },
 	{ data: 'prod_name', name: 'prod_name' },
 	{ data: 'cust_name', name: 'cust_name' },
 	{ data: 'truck_code', name: 'truck_code' },
-	{ data: 'user_name', name: 'user_name', width: '10%' },
+	{ data: 'user_name', name: 'user_name', width: '8%' },
 	{ data: 'weight_in_reading', name: 'weight_in_reading' },
 	{ data: 'weight_out_reading', name: 'weight_out_reading' },
 	{ data: 'net_weight', name: 'net_weight' },
@@ -363,11 +366,11 @@ var WS_CALIBRATION_SPAN = '/stic/services/ScaleReaderInfoServices/calibrateSpanT
 
 // Backup & Restore DB
 var CD_DB_HISTORY = [
-	{ data: 'id', name: 'id', visible: false, searchable: false },	
+	{ data: 'id', name: 'id', visible: false, searchable: false },
 	{ data: 'date_process', name: 'date_process', width: '25%' },
 	{ data: 'status', name: 'status', width: '25%' },
 	{ data: 'database_file', name: 'database_file', width: '25%' },
-	{ data: 'user', name: 'user', width: '25%' }	
+	{ data: 'user', name: 'user', width: '25%' }
 ];
 var DS_DB_HISTORY = 'response.database-list.database';
 var WS_BACKUP_DB = '/stic/services/CompanyInfoServices/backUpDatabase?response=application/json&id=1&';
@@ -431,7 +434,7 @@ var MSG_FV_SPECIAL_CHARS = 'Special and non alphanumeric characters are not allo
 var MSG_FV_INTEGER = 'An integer value is required for this field. (e.g. 1999)';
 var MSG_FV_FLOAT = 'The correct numeric formats are ".99", "1999.99", "1999.9" or "1999".';
 
-// Weigh Scale 
+// Weigh Scale
 var MSG_TRUCK_DATA_EMPTY = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Please create a new Truck Data or select an existing Truck Data from the Truck Data Lookup to continue.</div>';
 var MSG_CUSTOMER_DATA_EMPTY = '<div class="alert alert-danger" role="alert" style="margin-bottom: 5px;"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Please create a new Customer Data or select an existing Customer Data from the Customer Data Lookup to continue.</div>';
 var MSG_CONFIRM_FIRST_WEIGHING = '<div class="alert alert-info" role="alert" style="margin-bottom: 5px;"><i class="fa fa-question-circle fa-3x fa-pull-left"></i> Please make sure all details provided for First Weighing are correct. Press Confirm First Weighing to continue.</div>';
@@ -446,7 +449,7 @@ var MSG_TITLE_ADD_REC = '<i class="fa fa-info-circle"></i> Information';
 var MSG_TITLE_EDIT_REC = '<i class="fa fa-info-circle"></i> Information';
 var MSG_TITLE_DEL_REC = '<i class="fa fa-info-circle"></i> Information';
 
-// CRUD 
+// CRUD
 var MSG_INFO_ADD_REC = '<div class="alert alert-success all-middle no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-2x"></i> The new record was created successfully in the system.</div>';
 var MSG_INFO_EDIT_REC = '<div class="alert alert-success all-middle no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-2x"></i> The selected record was updated successfully in the system.</div>';
 var MSG_INFO_DEL_REC = '<div class="alert alert-success all-middle no-margin-bottom" role="alert"><i class="fa fa-check-circle fa-2x"></i> The selected record was deleted successfully from the system.</div>';

@@ -9,7 +9,7 @@ var STIC = {
 
 	// Current Module Page ID
 	CURRENT_PAGEID: "",
-	
+
 	// Flag for Ajax Loader
 	SHOW_PROGRESS: true,
 
@@ -20,7 +20,7 @@ var STIC = {
 			STIC.User.EraseCookie('userid');
 			STIC.User.EraseCookie('roleid');
 			STIC.User.EraseCookie('username');
-		}		
+		}
 		$(document.body).html("");
 		$(document.body).load(DFLT_PAGE_DIR + pageType + DFLT_PAGE_EXT, function() {
 			if (pageType == 'main') {
@@ -28,7 +28,7 @@ var STIC = {
 			}
 		});
 	},
-	
+
 	// Load navigation bar
 	loadNavBar: function() {
 		$.getJSON(WS_UI_MODULES_LIST, {
@@ -37,9 +37,9 @@ var STIC = {
 		.done(function(results, status) {
 			var response = results.response;
 			if (response.type === 'SUCCESS') {
-				var navItems = [], 
+				var navItems = [],
 					navLabel = '',
-					prevParentId = '', 
+					prevParentId = '',
 					currParentId = '',
 					report = response['report-list'].report,
 					modules = $.isArray(report) === true ? report : [report];
@@ -121,9 +121,9 @@ var STIC = {
 					if (STIC.CURRENT_PAGE === 'weight-scale' ||
 						STIC.CURRENT_PAGE === 'others-calibration') {
 						clearInterval(STIC.INTERVAL_ID);
-					}								
-					STIC.SHOW_PROGRESS = params.modName === 'weight-scale' || 
-						params.modName === 'others-calibration' ? false : true;						
+					}
+					STIC.SHOW_PROGRESS = params.modName === 'weight-scale' ||
+						params.modName === 'others-calibration' ? false : true;
 					$(DFLT_WRPR_ID).load(DFLT_PAGE_DIR + params.modName + DFLT_PAGE_EXT, function() {
 
 					});
@@ -139,7 +139,7 @@ var STIC = {
 			})
 			.fail(function() {
 				STIC.showWSError();
-			});		
+			});
 		});
 	},
 
@@ -151,14 +151,14 @@ var STIC = {
 		STIC.User.EraseCookie('username');
 		window.location = DFLT_ROOT + 'activation.html';
 	},
-	
+
 	// Verify if all cookies are active
 	checkUserCookies: function() {
-		return STIC.User.ReadCookie('roleid') !== null 
-			&& STIC.User.ReadCookie('userid') !== null 
+		return STIC.User.ReadCookie('roleid') !== null
+			&& STIC.User.ReadCookie('userid') !== null
 			&& STIC.User.ReadCookie('username') !== null;
 	},
-	
+
 	// Check License & User Session
 	checkSession: function(scope, callback) {
 		$.post(WS_LICENSE_NOTIFY, { id: 1 });
@@ -171,10 +171,10 @@ var STIC = {
 			// License is valid
 			if (response.type === 'SUCCESS') {
 				// License & HD Serial is valid
-				if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {		
+				if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {
 					// Cookies are still active
 					if (STIC.checkUserCookies()) {
-						// Check User 		
+						// Check User
 						$.post(WS_USER_AUTHENTICATE, {
 							user_id: STIC.User.ReadCookie('userid'),
 							user_name: STIC.User.ReadCookie('username')
@@ -182,8 +182,8 @@ var STIC = {
 						.done(function(results, status) {
 							// User is valid
 							if (results.response.type === 'SUCCESS') {
-								if (scope === 'idx') 
-									STIC.loadIndex('main');					
+								if (scope === 'idx')
+									STIC.loadIndex('main');
 								$.isFunction(callback) ? callback({ type: 'SUCCESS'}) : '';
 							// User is invalid
 							} else {
@@ -194,7 +194,7 @@ var STIC = {
 									callback: function() {
 										STIC.User.Logout();
 									}
-								});								
+								});
 							}
 						})
 						.fail(function () {
@@ -210,13 +210,13 @@ var STIC = {
 								callback: function() {
 									STIC.User.Logout();
 								}
-							});			
+							});
 						} else {
 							STIC.User.Logout();
-						}						
+						}
 					}
 				// HD Serial is invalid
-				} else if (hdSerialValid === 'NO') {					
+				} else if (hdSerialValid === 'NO') {
 					BootstrapDialog.alert({
 						type: 'type-danger',
 						title: MSG_TITLE_INFO,
