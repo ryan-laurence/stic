@@ -58,11 +58,11 @@ function loadEditData(params) {
 		action: function (e, dt, node, config) {
 			BootstrapDialog.show({
 				closable: false,
-				title: modalNewTitle,		
+				title: modalNewTitle,
 				message: modalFrmContent,
 				onshown: modalNewOnShown,
 				onhidden: modalOnHidden,
-				buttons: [modalBtnCancel, modalBtnSave]				
+				buttons: [modalBtnCancel, modalBtnSave]
 			});
 		}
 	},
@@ -205,12 +205,12 @@ function loadEditData(params) {
 		})
 		.on('draw.dt', function (e, settings, data) {
 			var btns = [
-				'copy:name', 
-				'csv:name', 
-				'excel:name', 
-				'pdf:name', 
+				'copy:name',
+				'csv:name',
+				'excel:name',
+				'pdf:name',
 				'print:name'
-			];			
+			];
 			dt.data().length > 0 ?
 				dt.buttons(btns).enable() :
 				dt.buttons(btns).disable();
@@ -250,13 +250,13 @@ function loadEditData(params) {
 			}
 		}
 	});
-	
+
 	// Destroy Prod Cat Select
 	var destroyPCField = function() {
 		$('select[data-field="cat_id"]').selectpicker('destroy');
 		$('select[data-field="cat_id"]').remove();
 	};
-	
+
 	// Create Prod Cat Select
 	var newPCSelectField = function(params) {
 		var JSONUrl = params.JSONUrl,
@@ -299,7 +299,7 @@ function loadEditData(params) {
 	function modalNewOnShown(dialogRef) {
 		var modalBody = dialogRef.getModalBody();
 		modalBody.find('input[data-field], select[data-field]').val('');
-		
+
 		// For Product Data only
 		if (params.pkey == 'prod_id') {
 			destroyPCField();
@@ -320,9 +320,9 @@ function loadEditData(params) {
 			modalBody.find('input[data-field="' + name + '"]').val(value);
 			modalBody.find('select[data-field="' + name + '"]').val(value);
 		});
-				
+
 		// For Product Data only
-		if (params.pkey == 'prod_id') {		
+		if (params.pkey == 'prod_id') {
 			destroyPCField();
 			newPCSelectField({
 				defaultId: rowData.cat_id,
@@ -382,7 +382,7 @@ function loadEditData(params) {
 					.done(function (result, status) {
 
 						// Proceed with insert if no duplicate records found
-						if (result.response.type === 'FAILED') {												
+						if (result.response.type === 'FAILED') {
 							insertUpdateData({
 								dt: dt,
 								url: wsPost,
@@ -441,7 +441,7 @@ function loadEditData(params) {
 					title: o.title,
 					message: o.message,
 					formId: params.formId
-				});			
+				});
 			}
 		}
 	}
@@ -452,8 +452,8 @@ function loadEditData(params) {
 		if (userRoleId === '1' || userRoleId === '2') {
 			// Check Category if Tagged before deleting
 			if (params.pkey === 'cat_id') {
-				$.post(WS_CATEGORY_DEL_CHECK, { 
-					cat_id: dt.cell('.selected', 0).data() 
+				$.post(WS_CATEGORY_DEL_CHECK, {
+					cat_id: dt.cell('.selected', 0).data()
 				})
 				.done(function(results, status) {
 					var response = results.response;
@@ -477,7 +477,7 @@ function loadEditData(params) {
 			} else {
 				showDeleteConfirm();
 			}
-			
+
 			function showDeleteConfirm() {
 				// Confirm delete
 				BootstrapDialog.confirm({

@@ -22,7 +22,7 @@ $(function() {
 							$('select[data-field="baudrate"]').val()
 					);
 					$.each($('input[data-field]'), function(index, elem) {
-						var postString = '{"' + $(elem).attr('data-field') + '":"' + 
+						var postString = '{"' + $(elem).attr('data-field') + '":"' +
 							$(elem).val() + '"}';
 						$.extend(jsonObject, $.parseJSON(postString));
 					});

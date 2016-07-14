@@ -65,7 +65,7 @@ function loadDestProdData(params) {
 
 		// DT Buttons > Add
 		dtBtnNew = {
-			name: 'new',			
+			name: 'new',
 			className: 'btn-primary',
 			text: BTN_LABEL_ADD_ITEM,
 			titleAttr: 'Add ' + params.modTitle,
@@ -88,28 +88,28 @@ function loadDestProdData(params) {
 			enabled: false,
 			className: 'btn-danger',
 			text: BTN_LABEL_REMOVE_ITEM,
-			titleAttr: 'Remove ' + params.modTitle,			
+			titleAttr: 'Remove ' + params.modTitle,
 			action: dtBtnDeleteAction
 		},
-		
+
 		// DT Buttons > Refresh
 		dtBtnReload = {
 			name: 'reload',
 			className: 'btn-primary',
 			text: BTN_LABEL_REFRESH_RECORD,
-			titleAttr: 'Refresh ' + params.modTitle,			
+			titleAttr: 'Refresh ' + params.modTitle,
 			action: function (e, dt, node, config) {
 				dt.ajax.reload();
 			}
 		},
-		
+
 		// DT Buttons > Copy
 		dtBtnCopy = {
 			name: 'copy',
 			extend: 'copyHtml5',
 			className: 'btn-primary',
 			text: BTN_LABEL_COPY,
-			titleAttr: BTN_TITLE_COPY,		
+			titleAttr: BTN_TITLE_COPY,
 			exportOptions: {
 				columns: ':visible',
 				modifier: {
@@ -193,15 +193,15 @@ function loadDestProdData(params) {
 				}
 			},
 			buttons: [dtBtnNew, dtBtnDelete, dtBtnReload]
-		})	
+		})
 		.on('draw.dt', function (e, settings, data) {
 			var btns = [
-				'copy:name', 
-				'csv:name', 
-				'excel:name', 
-				'pdf:name', 
+				'copy:name',
+				'csv:name',
+				'excel:name',
+				'pdf:name',
 				'print:name'
-			];			
+			];
 			dt.data().length > 0 ?
 				dt.buttons(btns).enable() :
 				dt.buttons(btns).disable();
@@ -237,8 +237,8 @@ function loadDestProdData(params) {
 				dt.button('delete:name').enable();
 			}
 		}
-	});	
-		
+	});
+
 	// Trigger on New Modal OnShown
 	function modalNewOnShown(dialogRef) {
 		var modalBody = dialogRef.getModalBody(),
@@ -296,8 +296,8 @@ function loadDestProdData(params) {
 
 	// Delete Button Action
 	function dtBtnDeleteAction(e, dt, node, config) {
-		var userRoleId = STIC.User.ReadCookie('roleid');		
-		if (userRoleId === '1' || userRoleId === '2') {		
+		var userRoleId = STIC.User.ReadCookie('roleid');
+		if (userRoleId === '1' || userRoleId === '2') {
 			var custId = dtCustomer.row('.selected').data().cust_id,
 				pkey2Val = dt.row('.selected').data()[params.pkey2],
 				postData = $.parseJSON('{ "' + params.pkey2 + '": "' + pkey2Val + '" }');
@@ -318,23 +318,23 @@ function loadDestProdData(params) {
 					BootstrapDialog.closeAll();
 				}
 			});
-		}		
+		}
 	}
 
 	// Customize PDF Print Output
-	function dtPDFPrintCustom(doc) {		
+	function dtPDFPrintCustom(doc) {
 		// Set Default Styles
 		var pdfDoc = STIC.Report.SetPDFStyles({
 			doc: doc,
-			cd: params.cd1		
+			cd: params.cd1
 		});
-		
+
 		// Set add. messages
-		var rowData = dtCustomer.row('.selected').data(),			
-			codeLabel = { width: 80, bold: true, text: 'Customer Code :' },			
+		var rowData = dtCustomer.row('.selected').data(),
+			codeLabel = { width: 80, bold: true, text: 'Customer Code :' },
 			nameLabel = { width: 80, bold: true, text: 'Customer Name :' },
 			custCode = { width: 'auto', text: rowData.cust_code },
-			custName = { width: 'auto', text: rowData.cust_name };			
+			custName = { width: 'auto', text: rowData.cust_name };
 		pdfDoc.content.splice(1, 0, { columns: [codeLabel, custCode] });
 		pdfDoc.content.splice(2, 0, { columns: [nameLabel, custName] });
 	}
@@ -342,7 +342,7 @@ function loadDestProdData(params) {
 	// Customize Web Page Print Output
 	function dtWebPagePrintCustom(win) {
 		var rowData = dtCustomer.row('.selected').data();
-		
+
 		$(win.document.body)
 			.css('background', 'transparent')
 			.css('font-weight', 'normal')
@@ -356,7 +356,7 @@ function loadDestProdData(params) {
 			.css('font-size', '12pt')
 			.css('text-align', 'left')
 			.css('margin', '20px 0px 20px 0px')
-			.html('<strong>Customer Code :</strong> ' + rowData.cust_code + ' <br /><strong>Customer Name :</strong> ' + rowData.cust_name);		
+			.html('<strong>Customer Code :</strong> ' + rowData.cust_code + ' <br /><strong>Customer Name :</strong> ' + rowData.cust_name);
 		// Data Table
 		$(win.document.body).find('table')
 			.removeClass('display')
@@ -395,7 +395,7 @@ function loadDestProdData(params) {
 	*		{String} wsUpdate : Web Service for Updating records
 	*		{String} wsDelete : Web Service for Deleting records
 	*/
-function loadCustomerData(params) {	
+function loadCustomerData(params) {
 	// Modal Form Options
 	var modalFrmContent = $('<div></div>').load(params.formSrc),
 	modalNewTitle = '<i class="fa fa-plus"></i> New ' + params.modTitle,
@@ -465,7 +465,7 @@ function loadCustomerData(params) {
 		text: BTN_LABEL_DELETE_RECORD,
 		titleAttr: 'Delete ' + params.modTitle,
 	},
-	
+
 	// DT Buttons > Refresh
 	dtBtnReload = {
 		name: 'reload',
@@ -476,14 +476,14 @@ function loadCustomerData(params) {
 			dt.ajax.reload();
 		}
 	},
-	
+
 	// DT Buttons > Copy
 	dtBtnCopy = {
 		name: 'copy',
 		extend: 'copyHtml5',
 		className: 'btn-primary',
 		text: BTN_LABEL_COPY,
-		titleAttr: BTN_TITLE_COPY,		
+		titleAttr: BTN_TITLE_COPY,
 		exportOptions: {
 			columns: ':visible',
 			modifier: {
@@ -548,7 +548,7 @@ function loadCustomerData(params) {
 			columns: ':visible'
 		}
 	};
-	
+
 	// DT Initialization
 	var dt = $('#table-customer')
 		.DataTable({
@@ -569,12 +569,12 @@ function loadCustomerData(params) {
 		})
 		.on('draw.dt', function (e, settings, data) {
 			var btns = [
-				'copy:name', 
-				'csv:name', 
-				'excel:name', 
-				'pdf:name', 
+				'copy:name',
+				'csv:name',
+				'excel:name',
+				'pdf:name',
 				'print:name'
-			];			
+			];
 			dt.data().length > 0 ?
 				dt.buttons(btns).enable() :
 				dt.buttons(btns).disable();
@@ -595,7 +595,7 @@ function loadCustomerData(params) {
 	// Append to DT
 	dt.buttons(1, null).container()
 		.insertAfter('div.dt-buttons');
-		
+
 	// DT Default Sorting
 	dt.column('0:visible').order('asc').draw();
 
@@ -636,10 +636,10 @@ function loadCustomerData(params) {
 
 		// Proceed if form is valid
 		if (isValid) {
-			var wsPost = '', postString = '', 
+			var wsPost = '', postString = '',
 				infoTitle = '', infoMessage = '',
 				JSONString = '', JSONObject = {},
-				modalBody = dialogRef.getModalBody(),				
+				modalBody = dialogRef.getModalBody(),
 				pkey = $('input[data-field="' + params.pkey + '"]'),
 				elements = modalBody.find('input[data-field], select[data-field]');
 
@@ -653,20 +653,20 @@ function loadCustomerData(params) {
 				infoTitle = MSG_TITLE_ADD_REC;
 				infoMessage = MSG_INFO_ADD_REC;
 			}
-			
+
 			var input = $(params.formId).find('input[data-fv-unique="true"]'),
 				fieldValue = $(input).val(), fieldName = $(input).attr('data-field'),
-				postString = '{"' + fieldName + '": "' + fieldValue + '"}';		
-				
+				postString = '{"' + fieldName + '": "' + fieldValue + '"}';
+
 			// Check for duplicate entry if required
 			if (input.length > 0) {
 				if (pkey.val() != '')
-					$.extend(JSONObject, $.parseJSON('{"' + params.pkey + '": "' + pkey.val() + '"}'));				
-				
+					$.extend(JSONObject, $.parseJSON('{"' + params.pkey + '": "' + pkey.val() + '"}'));
+
 				$.extend(JSONObject, $.parseJSON(postString));
 				$.post(WS_UNIQUE_CHECK[fieldName], JSONObject)
 					.done(function (result, status) {
-						
+
 						// Proceed with insert if no duplicate records found
 						if (result.response.type === 'FAILED') {
 							insertUpdateData({
@@ -676,7 +676,7 @@ function loadCustomerData(params) {
 								message: infoMessage,
 								elements: elements
 							});
-							
+
 						// Show errors if there are duplicate records found
 						} else {
 							STIC.showDuplicateError({
@@ -685,12 +685,12 @@ function loadCustomerData(params) {
 							});
 						}
 					})
-					
+
 					// Show WS Error
 					.fail(function () {
 						STIC.showWSError({ formId: params.formId });
 					});
-			
+
 			// Proceed with insert if not required to check duplicate
 			} else {
 				insertUpdateData({
@@ -701,12 +701,12 @@ function loadCustomerData(params) {
 					elements: elements
 				});
 			}
-			
+
 			// Insert & Update
 			function insertUpdateData(o) {
-				var postString = '', JSONString = '', 
+				var postString = '', JSONString = '',
 					JSONObject = {};
-				
+
 				// Build post data
 				$.each(o.elements, function(idx, elem) {
 					var input = $(elem),
@@ -718,7 +718,7 @@ function loadCustomerData(params) {
 
 				// Build JSON string
 				JSONString = params.objectId + '=' + JSON.stringify(JSONObject);
-				
+
 				// Call WS
 				STIC.postData({
 					dt: o.dt,
@@ -734,7 +734,7 @@ function loadCustomerData(params) {
 
 	// Delete Button Action
 	function dtBtnDeleteAction(e, dt, node, config) {
-		var userRoleId = STIC.User.ReadCookie('roleid');		
+		var userRoleId = STIC.User.ReadCookie('roleid');
 		if (userRoleId === '1' || userRoleId === '2') {
 			// Confirm delete
 			BootstrapDialog.confirm({
@@ -769,18 +769,18 @@ function loadCustomerData(params) {
 					BootstrapDialog.closeAll();
 				}
 			});
-		}		
+		}
 	}
-	
+
 	// Customize PDF Print Output
-	function dtPDFPrintCustom(doc) {		
+	function dtPDFPrintCustom(doc) {
 		// Set Default Styles
 		var pdfDoc = STIC.Report.SetPDFStyles({
 			doc: doc,
-			cd: params.cd		
+			cd: params.cd
 		});
 	}
-	
+
 	// Customize Web Page Print Output
 	function dtWebPagePrintCustom(win) {
 		$(win.document.body)
@@ -812,7 +812,7 @@ function loadCustomerData(params) {
 			.css('padding-bottom', '10px')
 			.css('font-weight', 'normal');
 	}
-	
+
 	return dt;
 };
 
