@@ -118,15 +118,18 @@ var STIC = {
 			})
 			.done(function(results, status) {
 				if (results.response.type === 'SUCCESS') {
+					var modPage = DFLT_PAGE_DIR + 
+							params.modName + DFLT_PAGE_EXT;
 					if (STIC.CURRENT_PAGE === 'weight-scale' ||
-						STIC.CURRENT_PAGE === 'others-calibration') {
+							STIC.CURRENT_PAGE === 'others-calibration') {
 						clearInterval(STIC.INTERVAL_ID);
-					}
-					STIC.SHOW_PROGRESS = params.modName === 'weight-scale' ||
-						params.modName === 'others-calibration' ? false : true;
-					$(DFLT_WRPR_ID).load(DFLT_PAGE_DIR + params.modName + DFLT_PAGE_EXT, function() {
-
-					});
+						$.post(WS_SCALE_DISCONNECT, { compId: 1 },
+							function(results, status) {
+								$(DFLT_WRPR_ID).load(modPage);
+							});
+					} else {
+						$(DFLT_WRPR_ID).load(modPage);
+					}				
 					STIC.CURRENT_PAGE = params.modName;
 					STIC.CURRENT_PAGEID = params.modId;
 				} else {
@@ -161,17 +164,18 @@ var STIC = {
 
 	// Check License & User Session
 	checkSession: function(scope, callback) {
+		waitingDialog.show();
 		$.post(WS_LICENSE_NOTIFY, { id: 1 });
 		// Check License
 		$.post(WS_CHECK_LICENSE, { id: 1 })
 		.done(function(results, status) {
-			var response = results.response,
-				licenseValid = response.is_license,
-				hdSerialValid = response.is_hd_serial_number_valid;
+			waitingDialog.hide();
+			var response = results.response;
 			// License is valid
 			if (response.type === 'SUCCESS') {
 				// License & HD Serial is valid
-				if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {
+				if (response.is_license === 'YES' &&  
+						response.is_hd_serial_number_valid === 'YES') {
 					// Cookies are still active
 					if (STIC.checkUserCookies()) {
 						// Check User
@@ -240,28 +244,31 @@ var STIC = {
 			}
 		})
 		.fail(function () {
+			waitingDialog.hide();
 			STIC.showWSError();
 		});
 	},
 
 	// Connect to Scale Reader
-	openScaleReader() {
+	openScaleReader(callback) {
 		clearInterval(STIC.INTERVAL_ID)
 		$.post(WS_SCALE_DISCONNECT, { compId: 1 })
-		.done(function(results, status) {
-			$.post(WS_SCALE_INIT, { compId: 1 })
 			.done(function(results, status) {
-				var response = results.response;
-				if (response.type === 'SUCCESS') {
-					// do nothing
-				} else {
-					STIC.ISRError();
-				}
+				$.post(WS_SCALE_INIT, { compId: 1 })
+					.done(function(results, status) {
+						var response = results.response;
+						if (response.type === 'SUCCESS') {
+							callback({ type: 'SUCCESS' });
+						} else {
+							STIC.ISRError();
+							callback({ type: 'FAIL' });
+						}
+					})
+					.fail(function() {				
+						STIC.ISRError();
+						callback({ type: 'FAIL' });
+					});
 			})
-			.fail(function() {
-				STIC.ISRError();
-			});
-		})
 	},
 
 	// Enable Buttons
@@ -726,11 +733,10 @@ var STIC = {
 		CheckLicense: function (logout, callback) {
 			$.post(WS_CHECK_LICENSE, { id: 1 })
 				.done(function (results, status) {
-					var response = results.response,
-						licenseValid = response.is_license,
-						hdSerialValid = response.is_hd_serial_number_valid;
+					var response = results.response;
 					if (response.type === 'SUCCESS') {
-						if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {
+						if (response.is_license === 'YES' &&  
+							response.is_hd_serial_number_valid === 'YES') {
 							/*$.isFunction(callback)
 								? callback(response) : '';*/
 							STIC.User.Authenticate(logout, callback);
@@ -834,11 +840,10 @@ var STIC = {
 		LoginCheck: function () {
 			$.post(WS_CHECK_LICENSE, { id: 1 })
 				.done(function (results, status) {
-					var response = results.response,
-						licenseValid = response.is_license,
-						hdSerialValid = response.is_hd_serial_number_valid;
+					var response = results.response;
 					if (response.type === 'SUCCESS') {
-						if (licenseValid === 'YES' &&  hdSerialValid === 'YES') {
+						if (response.is_license === 'YES' &&  
+							response.is_hd_serial_number_valid === 'YES') {
 							STIC.User.Login();
 						} else if (hdSerialValid === 'NO') {
 							BootstrapDialog.alert({

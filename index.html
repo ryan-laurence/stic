@@ -43,18 +43,7 @@
 		<script type="text/javascript" src="js/stic-constants.js"></script>
 		<script type="text/javascript" src="js/stic-functions.js"></script>
 		<script type="text/javascript">
-			$(function () { 
-				// Progress Bar Start
-				$(document).ajaxStart(function () {
-					//if (STIC.SHOW_PROGRESS)
-						//waitingDialog.show();
-				});
-
-				// Progress Bar End
-				$(document).ajaxStop(function () {
-					//waitingDialog.hide();
-				});
-			
+			$(function () { 	
 				STIC.checkSession('idx');				
 			});
 		</script>
