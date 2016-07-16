@@ -258,15 +258,18 @@ var STIC = {
 					.done(function(results, status) {
 						var response = results.response;
 						if (response.type === 'SUCCESS') {
-							callback({ type: 'SUCCESS' });
+							$.isFunction(callback)
+								? callback({ type: 'SUCCESS' }) : '';
 						} else {
 							STIC.ISRError();
-							callback({ type: 'FAIL' });
+							$.isFunction(callback)
+								? callback({ type: 'FAIL' }) : '';
 						}
 					})
 					.fail(function() {				
 						STIC.ISRError();
-						callback({ type: 'FAIL' });
+						$.isFunction(callback)
+							? callback({ type: 'FAIL' }) : '';
 					});
 			})
 	},
