@@ -50,9 +50,9 @@
 			/**********************************************************************************************************************************************/
 			
 			// Read Scale Reader
-			STIC.openScaleReader(function(response) {
+			//STIC.openScaleReader(function(response) {
 				var buttons = ['#calibrate-zero', '#calibrate-span'];	
-				if (response.type === 'SUCCESS') {
+				//if (response.type === 'SUCCESS') {
 					var isCompleted = true;						
 					STIC.INTERVAL_ID = setInterval(function () {		
 						if(isCompleted) {
@@ -80,10 +80,10 @@
 								});			
 						}
 					}, SR_INTERVAL); 
-				} else {
-					$('.weight-lcd .weight-error').show();
-					STIC.disableButtons(buttons);
-				}			
+				//} else {
+				//	$('.weight-lcd .weight-error').show();
+				//	STIC.disableButtons(buttons);
+				//}			
 			});
 
 			/**********************************************************************************************************************************************/

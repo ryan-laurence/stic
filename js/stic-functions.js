@@ -123,10 +123,10 @@ var STIC = {
 					if (STIC.CURRENT_PAGE === 'weight-scale' ||
 							STIC.CURRENT_PAGE === 'others-calibration') {
 						clearInterval(STIC.INTERVAL_ID);
-						$.post(WS_SCALE_DISCONNECT, { compId: 1 },
-							function(results, status) {
+						//$.post(WS_SCALE_DISCONNECT, { compId: 1 },
+							//function(results, status) {
 								$(DFLT_WRPR_ID).load(modPage);
-							});
+							//});
 					} else {
 						$(DFLT_WRPR_ID).load(modPage);
 					}				
@@ -250,7 +250,7 @@ var STIC = {
 	},
 
 	// Connect to Scale Reader
-	openScaleReader(callback) {
+	openScaleReader: function(callback) {
 		clearInterval(STIC.INTERVAL_ID)
 		$.post(WS_SCALE_DISCONNECT, { compId: 1 })
 			.done(function(results, status) {
@@ -272,6 +272,43 @@ var STIC = {
 							? callback({ type: 'FAIL' }) : '';
 					});
 			})
+	},
+	
+	// Weight Scale Read
+	readScale: function() {
+		var isCompleted = true;	
+		STIC.INTERVAL_ID = setInterval(function () {		
+			if(isCompleted) {
+				isCompleted = false;				
+				$.get(WS_SCALE_READER)
+					.done(function (data, status) {
+						isCompleted = true;	
+						if (data.response.type === 'SUCCESS') {
+							$('.weight-lcd .weight-error').hide();
+							var response = data['response']['readData-list']['readdata'],
+								netWeight = response['read-weight'].replace(/\s/g, '');
+							$('#weight-reading').text(netWeight.toString());
+							$('#weight-unit').text(response['read-unitType']);
+							$('#weight-status').text(response['read-status1']);		
+							// 2nd Weighing
+							if ($('#wr_id').val() != '') {
+								$('#weight_out_reading').val(netWeight.replace(/[\s\+]/g, ''));
+								setNetWeight();
+								setTotalPrice();
+							// 1st Weighing
+							} else if ($('#truck_code').val() != '') {
+								$('#weight_in_reading').val(netWeight.replace(/[\s\+]/g, ''));
+							}						
+						} else {
+							$('.weight-lcd .weight-error').show();
+						}				
+					})
+					.fail(function () {
+						isCompleted = true;	
+						$('.weight-lcd .weight-error').show();
+					});			
+			} 			
+		}, SR_INTERVAL); 
 	},
 
 	// Enable Buttons

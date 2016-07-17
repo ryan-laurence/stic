@@ -291,6 +291,7 @@ function toggleWeightScaleFields(options) {
 
 		case 'CANCEL_WEIGHT_IN':
 			// LCD
+			$('.weight-lcd .weight-error').show();
 			$('#weight-reading').text('+0.00');
 			$('#weight-status').text('inactive');
 			$('.weight-stage .txt1').html('<img src="images/numeric-0-box-outline.png">');
