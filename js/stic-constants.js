@@ -1,6 +1,7 @@
 // Default Constants
 var DFLT_ROOT = '/stic/';
 var DFLT_CKIE_LIFE = 3;
+var DFLT_PICK_SIZE = 5;
 var DFLT_PAGE_SIZE = 10;
 var DFLT_PAGE_EXT = '.html';
 var DFLT_PAGE_DIR = 'pages/';
@@ -11,6 +12,7 @@ var DFLT_DS_RPTS = 'response.report-list.report';
 
 // Default DataTables Settings
 var DFLT_DT_CONF = {
+	scrollX: true,
 	processing: true,
 	lengthChange: false,
 	pagingType: 'full',
@@ -231,9 +233,11 @@ var WS_SUMMARY_CUSTOMER = '/stic/services/WeighingReadingSummInfoServices/getAll
 
 // Destination Summary
 var CD_SUMMARY_DESTINATION = [
-	{ data: 'dest_name', name: 'dest_name', width: '45%' },
-	{ data: 'cust_name', name: 'cust_name', width: '25%' },
-	{ data: 'net_weight', name: 'net_weight', width: '20%' },
+	{ data: 'dest_zipcode', name: 'dest_zipcode', width: '10%' },
+	{ data: 'dest_name', name: 'dest_name', width: '25%' },
+	{ data: 'dest_location', name: 'dest_location', width: '20%' },
+	{ data: 'cust_name', name: 'cust_name', width: '20%' },
+	{ data: 'net_weight', name: 'net_weight', width: '15%' },
 	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_DESTINATION = 'Destination Summary';
@@ -272,6 +276,8 @@ var WS_SUMMARY_TRUCK = '/stic/services/WeighingReadingSummInfoServices/getAllWei
 // Detailed  Truck Summary
 var CD_SUMMARY_DETAILED_TRUCK = [
 	{ data: 'truck_code', name: 'truck_code', _width: '10%' },
+	{ data: 'cat_name', name: 'cat_name', _width: '15%' },
+	{ data: 'prod_name', name: 'prod_name', _width: '15%' },
 	{ data: 'date_in', name: 'date_in', _width: '15%' },
 	{ data: 'time_in', name: 'time_in', _width: '15%' },
 	{ data: 'date_out', name: 'date_out', _width: '15%' },
@@ -290,8 +296,12 @@ var CD_SUMMARY_CUSTOM_DOCKET = [
 	{ data: 'prod_name', name: 'prod_name' },
 	{ data: 'cust_name', name: 'cust_name' },
 	{ data: 'truck_code', name: 'truck_code' },
-	{ data: 'user_name', name: 'user_name', width: '8%' },
+	{ data: 'user_name', name: 'user_name' },
+	{ data: 'date_in', name: 'date_in' },
+	{ data: 'time_in', name: 'time_in' },
 	{ data: 'weight_in_reading', name: 'weight_in_reading' },
+	{ data: 'date_out', name: 'date_out' },
+	{ data: 'time_out', name: 'time_out' },	
 	{ data: 'weight_out_reading', name: 'weight_out_reading' },
 	{ data: 'net_weight', name: 'net_weight' },
 	{ data: 'weight_unit', name: 'weight_unit', width: '5%' },

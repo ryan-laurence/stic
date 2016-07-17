@@ -252,7 +252,7 @@ function loadDestProdData(params) {
 
 		// Initialize DT
 		dtDDP = initDT_Picker({
-			pl: 5,
+			pl: DFLT_PICK_SIZE,
 			domId: params.domId2,
 			ds: params.ds2,
 			cd: params.cd2,

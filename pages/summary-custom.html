@@ -12,7 +12,7 @@
 		</div>
 		<div class="panel panel-default no-margin-bottom">
 			<div class="panel-body">
-				<table class="display compact" id="table-summary">
+				<table class="display compact nowrap" id="table-summary">
 					<thead>
 						<tr>
 							<th class="text-left">Docket No.</th>
@@ -21,7 +21,11 @@
 							<th class="text-left">Customer Name</th>
 							<th class="text-left">Truck Code</th>
 							<th class="text-left">User</th>
+							<th class="text-left">Date In</th>
+							<th class="text-left">Time In</th>
 							<th class="text-left">Weight In</th>
+							<th class="text-left">Date Out</th>
+							<th class="text-left">Time Out</th>							
 							<th class="text-left">Weight Out</th>
 							<th class="text-left">Net Weight</th>
 							<th class="text-left">Unit</th>
@@ -114,10 +118,10 @@
 			.DataTable({
 				pageLength: 10,
 				ordering: true,
-				searching: false,
+				searching: false,				
 				dom: '<"dt-toolbar">BRlfrtip',
 				columns: CD_SUMMARY_CUSTOM_DOCKET,
-				colReorder: { order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10] },
+				colReorder: { order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] },
 				ajax: {
 					url: WS_SUMMARY_CUSTOM_DOCKET,
 					dataSrc: function (json) {
@@ -173,12 +177,12 @@
 		);
 
 		var ordering = [];
-			ordering.push([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-			ordering.push([1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
-			ordering.push([2, 0, 1, 3, 4, 5, 6, 7, 8, 9, 10]);
-			ordering.push([3, 0, 1, 2, 4, 5, 6, 7, 8, 9, 10]);
-			ordering.push([4, 0, 1, 2, 3, 5, 6, 7, 8, 9, 10]);
-			ordering.push([5, 0, 1, 2, 3, 4, 6, 7, 8, 9, 10]);
+			ordering.push([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+			ordering.push([1, 0, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+			ordering.push([2, 0, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+			ordering.push([3, 0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+			ordering.push([4, 0, 1, 2, 3, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
+			ordering.push([5, 0, 1, 2, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14]);
 
 		$('#report-filter').selectpicker();
 

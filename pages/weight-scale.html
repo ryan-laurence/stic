@@ -323,7 +323,7 @@
 						</div>
 						<div class="panel panel-default no-margin-bottom">
 							<div class="panel-body">
-								<table class="display compact" id="table-truck-first" style="width: 100%">
+								<table class="display compact nowrap" id="table-truck-first" style="width: 100%">
 									<thead>
 										<tr>
 											<th class="text-left">Truck ID</th>
@@ -356,7 +356,7 @@
 						</div>
 						<div class="panel panel-default no-margin-bottom">
 							<div class="panel-body">
-								<table class="display compact" id="table-truck-second" style="width: 100%">
+								<table class="display compact nowrap" id="table-truck-second" style="width: 100%">
 									<thead>
 										<tr>
 											<th class="text-left">ID</th>
@@ -405,7 +405,7 @@
 				</div>
 				<div class="panel panel-default no-margin-bottom">
 					<div class="panel-body">
-						<table class="display compact" id="table-customer-data" style="width: 100%">
+						<table class="display compact nowrap" id="table-customer-data" style="width: 100%">
 							<thead>
 								<tr>
 									<th class="text-left">Customer ID</th>
@@ -443,15 +443,15 @@
 				</div>
 				<div class="panel panel-default no-margin-bottom">
 					<div class="panel-body">
-						<table class="display compact" id="table-destination-data" style="width: 100%">
+						<table class="display compact nowrap" id="table-destination-data" style="width: 100%">
 							<thead>
 								<tr>
 									<th class="text-left">CD ID</th>
 									<th class="text-left">Customer ID</th>
 									<th class="text-left">Destination ID</th>
 									<th class="text-left">Zip Code</th>
-									<th class="text-left">Name</th>
-									<th class="text-left">Location</th>
+									<th class="text-left">District Name</th>
+									<th class="text-left">Municipality Name</th>
 									<th class="text-left">Date Modified</th>
 								</tr>
 							</thead>
@@ -484,13 +484,13 @@
 				</div>
 				<div class="panel panel-default no-margin-bottom">
 					<div class="panel-body">
-						<table class="display compact" id="table-destination-data-all" style="width: 100%">
+						<table class="display compact nowrap" id="table-destination-data-all" style="width: 100%">
 							<thead>
 								<tr>
 									<th class="text-left">Destination ID</th>
 									<th class="text-left">Zip Code</th>
-									<th class="text-left">Name</th>
-									<th class="text-left">Location</th>
+									<th class="text-left">District Name</th>
+									<th class="text-left">Municipality Name</th>
 									<th class="text-left">Date Modified</th>
 								</tr>
 							</thead>
@@ -537,7 +537,7 @@
 						</div>
 						<div class="panel panel-default no-margin-bottom">
 							<div class="panel-body">
-								<table class="display compact" id="table-product-data-all" style="width: 100%">
+								<table class="display compact nowrap" id="table-product-data-all" style="width: 100%">
 									<thead>
 										<tr>
 											<th class="text-left">Product ID</th>							
@@ -573,7 +573,7 @@
 						</div>
 						<div class="panel panel-default no-margin-bottom">
 							<div class="panel-body">
-								<table class="display compact" id="table-product-data" style="width: 100%">
+								<table class="display compact nowrap" id="table-product-data" style="width: 100%">
 									<thead>
 										<tr>
 											<th class="text-left">CP ID</th>
@@ -622,7 +622,7 @@
 				</div>
 				<div class="panel panel-default no-margin-bottom">
 					<div class="panel-body">
-						<table class="display compact" id="table-supplier-data" style="width: 100%">
+						<table class="display compact nowrap" id="table-supplier-data" style="width: 100%">
 							<thead>
 								<tr>
 									<th class="text-left">Supplier ID</th>
@@ -680,14 +680,14 @@
 				dtSWT.destroy();
 			}
 			dtFWT = initDT_Picker({				
-				pl: 5,
+				pl: DFLT_PICK_SIZE,
 				ds: DS_TRUCK_LIST,
 				cd: CD_TRUCK_LIST,
 				ws: WS_TRUCK_LIST,
 				domId: 'table-truck-first'
 			});
 			dtSWT = initDT_Picker({
-				pl: 5,				
+				pl: DFLT_PICK_SIZE,				
 				ds: DFLT_DS,
 				cd: CD_TRUCK_IN_LIST,
 				ws: WS_CHECK_TRUCK_CODE_LIST,
@@ -796,7 +796,7 @@
 					dtCDP.destroy();
 				}
 				dtCDP = initDT_Picker({
-					pl: 5,
+					pl: DFLT_PICK_SIZE,
 					ds: DS_CUSTOMER_LIST,
 					cd: CD_CUSTOMER_LIST,
 					ws: WS_CUSTOMER_LIST,
@@ -845,7 +845,7 @@
 					dtDDP.destroy();
 				}
 				dtDDP = initDT_Picker({
-					pl: 5,
+					pl: DFLT_PICK_SIZE,
 					ds: DS_CUSTDEST_LIST,
 					cd: CD_CUSTDEST_LIST,
 					domId: 'table-destination-data',
@@ -892,7 +892,7 @@
 					dtADDP.destroy();
 				}
 				dtADDP = initDT_Picker({
-					pl: 5,
+					pl: DFLT_PICK_SIZE,
 					ds: DS_DESTINATION_LIST,
 					cd: CD_DESTINATION_LIST,
 					domId: 'table-destination-data-all',
@@ -983,14 +983,14 @@
 					dtAPDP.destroy();
 				}
 				dtPDP = initDT_Picker({
-					pl: 5,
+					pl: DFLT_PICK_SIZE,
 					ds: DS_CUSTPROD_LIST,
 					cd: CD_CUSTPROD_LIST,
 					domId: 'table-product-data',
 					ws: WS_CUSTPROD_LIST + 'cust_id=' +  $('#cust_id').val()
 				});
 				dtAPDP = initDT_Picker({
-					pl: 5,
+					pl: DFLT_PICK_SIZE,
 					ds: DS_PRODUCT_LIST,
 					cd: CD_PRODUCT_LIST,
 					domId: 'table-product-data-all',
@@ -1099,7 +1099,7 @@
 					dtSDP.destroy();
 				}
 				dtSDP = initDT_Picker({
-					pl: 5,
+					pl: DFLT_PICK_SIZE,
 					ds: DS_SUPPLIER_LIST,
 					cd: CD_SUPPLIER_LIST,
 					ws: WS_SUPPLIER_LIST,

@@ -1390,6 +1390,7 @@ function initDT_Picker(options) {
 		dtPl = (typeof options.pl != 'undefined' ? options.pl : DFLT_PAGE_SIZE);
 		dt = $('#' + dtDomId)
 			.DataTable({
+				scrollX: false,
 				pageLength: dtPl,
 				ordering: dtOd,
 				searching: true,

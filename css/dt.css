@@ -309,6 +309,7 @@ table.dataTable td {
  * Control feature layout
  */
 .dataTables_wrapper {
+	width: 100% !important;
   position: relative;
   clear: both;
   *zoom: 1;
@@ -501,6 +502,7 @@ table.dataTable td {
 }
 .dataTables_wrapper .dataTables_scroll {
   clear: both;
+	width: 100% !important;
 }
 .dataTables_wrapper .dataTables_scroll div.dataTables_scrollBody {
   *margin-top: -1px;
@@ -521,8 +523,14 @@ table.dataTable td {
 }
 .dataTables_wrapper.no-footer div.dataTables_scrollHead table,
 .dataTables_wrapper.no-footer div.dataTables_scrollBody table {
+	width: 100% !important;
   border-bottom: none;
 }
+.dataTables_scrollHeadInner,
+.dataTables_scrollHeadInner table {
+	width: 100% !important;
+}
+
 .dataTables_wrapper:after {
   visibility: hidden;
   display: block;

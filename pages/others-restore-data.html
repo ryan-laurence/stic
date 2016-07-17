@@ -7,7 +7,7 @@
 </div>
 <div class="panel panel-default no-margin-bottom">
 	<div class="panel-body">
-		<table class="display compact" id="table-history-restore">
+		<table class="display compact nowrap" id="table-history-restore">
 			<thead>
 				<tr>
 					<th class="text-left">Restore ID</th>					
@@ -39,7 +39,7 @@
 				</div>
 				<div class="panel panel-default no-margin-bottom">
 					<div class="panel-body">
-						<table class="display compact" id="table-history-backup" width="100%">
+						<table class="display compact nowrap" id="table-history-backup" width="100%">
 							<thead>
 								<tr>
 									<th class="text-left">Backup ID</th>					
@@ -99,7 +99,7 @@
 				} else {
 					// Backup Data Lookup DT	
 					dtBackup = initDT_Picker({
-						pl: 5,
+						pl: DFLT_PICK_SIZE,
 						ds: DS_DB_HISTORY,
 						cd: CD_DB_HISTORY,
 						ws: WS_BACKUP_DB_HISTORY
