@@ -715,6 +715,7 @@ var STIC = {
 
 		// Create Filter Field
 		makeFilter: function(params) {
+			STIC.Report.removeFilter({ filters: params.filters });
 			$.each(params.filters, function(idx, field) {
 				var x = REPORT_FILTER[field];
 				// Build select options
@@ -730,8 +731,7 @@ var STIC = {
 							});
 						}
 					});
-					// Create select DOM
-					STIC.Report.removeFilter({ filters: [field] });
+					// Create select DOM					
 					$('#' + field).append('<select class="form-control" ' +
 							'title="-" ' +
 							'data-field="' + field + '" ' +
