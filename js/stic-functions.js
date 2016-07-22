@@ -118,18 +118,12 @@ var STIC = {
 			})
 			.done(function(results, status) {
 				if (results.response.type === 'SUCCESS') {
-					var modPage = DFLT_PAGE_DIR + 
-							params.modName + DFLT_PAGE_EXT;
 					if (STIC.CURRENT_PAGE === 'weight-scale' ||
 							STIC.CURRENT_PAGE === 'others-calibration') {
 						clearInterval(STIC.INTERVAL_ID);
-						//$.post(WS_SCALE_DISCONNECT, { compId: 1 },
-							//function(results, status) {
-								$(DFLT_WRPR_ID).load(modPage);
-							//});
-					} else {
-						$(DFLT_WRPR_ID).load(modPage);
-					}				
+					}
+					$(DFLT_WRPR_ID).load(DFLT_PAGE_DIR +
+						params.modName + DFLT_PAGE_EXT);
 					STIC.CURRENT_PAGE = params.modName;
 					STIC.CURRENT_PAGEID = params.modId;
 				} else {
@@ -174,7 +168,7 @@ var STIC = {
 			// License is valid
 			if (response.type === 'SUCCESS') {
 				// License & HD Serial is valid
-				if (response.is_license === 'YES' &&  
+				if (response.is_license === 'YES' &&
 						response.is_hd_serial_number_valid === 'YES') {
 					// Cookies are still active
 					if (STIC.checkUserCookies()) {
@@ -220,7 +214,7 @@ var STIC = {
 						}
 					}
 				// HD Serial is invalid
-				} else if (hdSerialValid === 'NO') {
+				} else if (response.is_hd_serial_number_valid === 'NO') {
 					BootstrapDialog.alert({
 						type: 'type-danger',
 						title: MSG_TITLE_INFO,
@@ -266,30 +260,30 @@ var STIC = {
 								? callback({ type: 'FAIL' }) : '';
 						}
 					})
-					.fail(function() {				
+					.fail(function() {
 						STIC.ISRError();
 						$.isFunction(callback)
 							? callback({ type: 'FAIL' }) : '';
 					});
 			})
 	},
-	
+
 	// Weight Scale Read
 	readScale: function() {
-		var isCompleted = true;	
-		STIC.INTERVAL_ID = setInterval(function () {		
+		var isCompleted = true;
+		STIC.INTERVAL_ID = setInterval(function () {
 			if(isCompleted) {
-				isCompleted = false;				
+				isCompleted = false;
 				$.get(WS_SCALE_READER)
 					.done(function (data, status) {
-						isCompleted = true;	
+						isCompleted = true;
 						if (data.response.type === 'SUCCESS') {
 							$('.weight-lcd .weight-error').hide();
 							var response = data['response']['readData-list']['readdata'],
 								netWeight = response['read-weight'].replace(/\s/g, '');
 							$('#weight-reading').text(netWeight.toString());
 							$('#weight-unit').text(response['read-unitType']);
-							$('#weight-status').text(response['read-status1']);		
+							$('#weight-status').text(response['read-status1']);
 							// 2nd Weighing
 							if ($('#wr_id').val() != '') {
 								$('#weight_out_reading').val(netWeight.replace(/[\s\+]/g, ''));
@@ -298,17 +292,17 @@ var STIC = {
 							// 1st Weighing
 							} else if ($('#truck_code').val() != '') {
 								$('#weight_in_reading').val(netWeight.replace(/[\s\+]/g, ''));
-							}						
+							}
 						} else {
 							$('.weight-lcd .weight-error').show();
-						}				
+						}
 					})
 					.fail(function () {
-						isCompleted = true;	
+						isCompleted = true;
 						$('.weight-lcd .weight-error').show();
-					});			
-			} 			
-		}, SR_INTERVAL); 
+					});
+			}
+		}, SR_INTERVAL);
 	},
 
 	// Enable Buttons
@@ -636,18 +630,18 @@ var STIC = {
 	Report: {
 
 		// Format Number
-		FormatNumber: function (sum) {
+		FormatNumber: function(sum) {
 			return sum.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		},
 
 		// Set PDF Styles
-		SetPDFStyles: function (params) {
+		SetPDFStyles: function(params) {
 			var doc = params.doc,
 				footerData = params.footerData || [];
 
 			// Get Column Widths & Set Footer Columns
 			var widths = [], footerCols = [];
-			$.each(params.cd, function (idx, column) {
+			$.each(params.cd, function(idx, column) {
 				if (typeof column.visible === 'undefined') {
 
 					// Get Column Width
@@ -657,7 +651,7 @@ var STIC = {
 					// Set Table Footer
 					if (footerData.length > 0) {
 						var hasMatch = 0;
-						$.each(footerData, function (idy, footer) {
+						$.each(footerData, function(idy, footer) {
 							if (footer.data === column.data) {
 								hasMatch++;
 								footerCols.push({
@@ -698,18 +692,18 @@ var STIC = {
 
 			// Table Layout
 			doc.content[1]['layout'] = {
-				hLineWidth: function (i, node) {
+				hLineWidth: function(i, node) {
 					return (i === 1 || i === (node.table.body.length - 1)) ? 1 : 0;
 				},
-				hLineColor: function (i, node) {
+				hLineColor: function(i, node) {
 					return (i === 1 || i === (node.table.body.length - 1)) ? 'black' : '';
 				},
-				vLineWidth: function (i, node) { return 0; },
-				vLineColor: function (i, node) { return ''; },
-				paddingLeft: function (i, node) { return 2; },
-				paddingRight: function (i, node) { return 2; },
-				paddingTop: function (i, node) { return 6; },
-				paddingBottom: function (i, node) { return 6; }
+				vLineWidth: function(i, node) { return 0; },
+				vLineColor: function(i, node) { return ''; },
+				paddingLeft: function(i, node) { return 2; },
+				paddingRight: function(i, node) { return 2; },
+				paddingTop: function(i, node) { return 6; },
+				paddingBottom: function(i, node) { return 6; }
 			};
 
 			// Table Footer
@@ -717,6 +711,52 @@ var STIC = {
 			doc.content[1]['table']['body'].splice(rowCount, 0, footerCols);
 
 			return doc;
+		},
+
+		// Create Filter Field
+		makeFilter: function(params) {
+			$.each(params.filters, function(idx, field) {
+				var x = REPORT_FILTER[field];
+				// Build select options
+				$.getJSON(x.ws, function(data) {
+					var options = ['<option value="0">-- All --</option>'];
+					$.each(data.response, function(a, b) {
+						if (a == x.ds) {
+							$.each(b, function(c, d) {
+								$.each(d, function(e, f) {
+									options.push('<option value="' + f[field] + '">' +
+										f[field] + '</option>');
+								});
+							});
+						}
+					});
+					// Create select DOM
+					STIC.Report.removeFilter({ filters: [field] });
+					$('#' + field).append('<select class="form-control" ' +
+							'title="-" ' +
+							'data-field="' + field + '" ' +
+							'data-size="5" ' +
+							'data-live-search="true">' +
+							options.join('') +
+						'</select>');
+
+					var currentFilter = $('input[data-filter="' + field + '"]').val(),
+						defaultVal =  currentFilter !== '' ? currentFilter : 0;
+
+					$('select[data-field="' + field + '"]').val(defaultVal);
+					$('select[data-field="' + field + '"]').selectpicker('refresh');
+					$('select[data-field="' + field + '"]').selectpicker('val', defaultVal);
+				});
+			});
+		},
+
+		// Destroy Filter Field
+		removeFilter: function(params) {
+			$.each(params.filters, function(idx, field) {
+				$('select[data-field="' + field + '"]')
+					.selectpicker('destroy')
+					.html('');
+			});
 		}
 	},
 
@@ -775,10 +815,8 @@ var STIC = {
 				.done(function (results, status) {
 					var response = results.response;
 					if (response.type === 'SUCCESS') {
-						if (response.is_license === 'YES' &&  
+						if (response.is_license === 'YES' &&
 							response.is_hd_serial_number_valid === 'YES') {
-							/*$.isFunction(callback)
-								? callback(response) : '';*/
 							STIC.User.Authenticate(logout, callback);
 						} else if (hdSerialValid === 'NO') {
 							BootstrapDialog.alert({
@@ -882,7 +920,7 @@ var STIC = {
 				.done(function (results, status) {
 					var response = results.response;
 					if (response.type === 'SUCCESS') {
-						if (response.is_license === 'YES' &&  
+						if (response.is_license === 'YES' &&
 							response.is_hd_serial_number_valid === 'YES') {
 							STIC.User.Login();
 						} else if (hdSerialValid === 'NO') {
@@ -1162,6 +1200,9 @@ var STIC = {
 
 // Load Summary Reports
 function loadSummaryReport(params) {
+	// Reset filters if found
+	$('#dtFilters').find('input[data-filter]').val('');
+
 	// Set Default Date
 	var today = new Date(),
 		defEnd = moment(today).format(DFLT_DATE_FRMT),
@@ -1237,6 +1278,90 @@ function loadSummaryReport(params) {
 		}
 	};
 
+	var dtButtons = [];
+	if (typeof params.filters !== 'undefined') {
+		// Advanced Filter Content
+		var filterContent = '',
+			filterForm = '',
+			filterFields = '',
+			filterFormTpl = '' +
+				'<form class="form-horizontal well no-margin-bottom" id="dtFilters">' +
+					'<div class="alert alert-info all-middle" role="alert">' +
+						'<i class="fa fa-info-circle fa-2x"></i>Fill in the corresponding fields to filter the report.' +
+					'</div>' +
+					'${filterFields}' +
+				'</form>',
+			filterFieldsTpl = '' +
+				'<div class="form-group" id="${dataField}">' +
+					'<input type="hidden" data-filter="${dataField}">' +
+					'<label class="control-label" for="${dataField}">${inputLabel}</label>' +
+				'</div>';
+		$.each(params.filters, function(idx, field) {
+			var x = REPORT_FILTER[field];
+			filterFields += filterFieldsTpl
+				.replace(/\$\{dataField\}/g, x.df)
+				.replace(/\$\{inputLabel\}/g, x.inputLabel);
+		});
+		filterForm = filterFormTpl
+			.replace(/\$\{filterFields\}/g, filterFields);
+		filterContent = $('<div></div>').html(filterForm);
+
+		// DT Buttons > Filter
+		dtBtnFilter = {
+			name: 'filter',
+			className: 'btn-primary',
+			text: BTN_LABEL_FILTER_REPORT,
+			titleAttr: BTN_TITLE_FILTER_REPORT,
+			action: function(e, dt, node, config) {
+				BootstrapDialog.show({
+					closable: false,
+					title: '<i class="fa fa-filter"></i> Advanced Filter',
+					message: filterContent,
+					onshown: function(dialogRef) {
+						var modalBody = dialogRef.getModalBody();
+						STIC.Report.makeFilter({ filters: params.filters });
+						$('select[data-field]').selectpicker('refresh');
+					},
+					onhidden: function(dialogRef) {
+						var modalBody = dialogRef.getModalBody();
+						STIC.Report.removeFilter({ filters: params.filters });
+					},
+					buttons: [{
+						label: 'Cancel',
+						icon: 'fa fa-ban',
+						cssClass: 'btn-default',
+						action: function(dialogItself) {
+							BootstrapDialog.closeAll();
+						}
+					}, {
+						label: 'Filter Report',
+						icon: 'fa fa-filter',
+						cssClass: 'btn-primary',
+						action: function(dialogRef) {
+							var JSONObject = {},
+								modalBody = dialogRef.getModalBody(),
+								elements = modalBody.find('input[data-field], select[data-field]'),
+								reportParams = 'dateFrom=' + $('#start-date').val() +
+									'&dateTo=' + $('#end-date').val();
+							$.each(elements, function(idx, elem) {
+								if ($(elem).val() !== '' && $(elem).val() !== '0') {
+									var dataField = $(elem).attr('data-field');
+									reportParams += '&' + dataField + '=' + $(elem).val();
+									$('input[data-filter="' + dataField + '"]').val($(elem).val());
+								}
+							});
+							dialogRef.close();
+							dtSummary.ajax.url(params.ws + reportParams).load();
+						}
+					}]
+				});
+			}
+		};
+		dtButtons = [dtBtnFilter, dtBtnCopy, dtBtnCSV, dtBtnExcel, dtBtnPDF, dtBtnPrint];
+	} else {
+		dtButtons = [dtBtnCopy, dtBtnCSV, dtBtnExcel, dtBtnPDF, dtBtnPrint];
+	}
+
 	// DT Init
 	var dtSummary = $('#table-summary')
 		.DataTable({
@@ -1252,11 +1377,12 @@ function loadSummaryReport(params) {
 					return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
 				}
 			},
-			dom: '<"dt-toolbar">B<"dt-total">rtip',
-			buttons: [dtBtnCopy, dtBtnCSV, dtBtnExcel, dtBtnPDF, dtBtnPrint]
+			dom: '<"dt-toolbar">B<"dt-total"><"dt-filters">rtip',
+			buttons: dtButtons
 		})
 		.on('draw.dt', function (e, settings, data) {
 			var btns = [
+				'filter:name',
 				'copy:name',
 				'csv:name',
 				'excel:name',
@@ -1274,7 +1400,8 @@ function loadSummaryReport(params) {
 					.data().sum(),
 				formattedTotal = STIC.Report
 					.FormatNumber(totalNetWeight);
-				$('#total_net_weight').val(formattedTotal);			}
+				$('#total_net_weight').val(formattedTotal);
+			}
 		});
 
 	// DT Default Sorting
@@ -1315,6 +1442,18 @@ function loadSummaryReport(params) {
 	$('div.dt-toolbar').css('float', 'left');
 	$('div.dt-toolbar').css('margin-right', '5px');
 
+	// Report Filters
+	/*$('div.dt-filters').html(
+		'<div class="well no-margin-bottom">' +
+			'<div class="">' +
+				'Current Filter: Supplier Name: Supplier 000001, Category Name: Category 000001, Product Name: Product 000001' +
+				'<button type="button" class="btn btn-primary pull-right" id="filter-report" title="Filter Report"><i class="fa fa-filter"></i> Filter Report</button>' +
+			'</div>' +
+		'</div>'
+	);
+	$('div.dt-filters').css('clear', 'both');
+	$('div.dt-filters').css('margin-bottom', '10px');*/
+
 	var dp1 = $('#dp1'),
 		dp2 = $('#dp2'),
 		inEndDt = $('#end-date'),
@@ -1345,6 +1484,13 @@ function loadSummaryReport(params) {
 		var wsURL = params.ws +
 			'dateFrom=' + inStartDt.val() +
 			'&dateTo=' + inEndDt.val();
+		var filters = $('#dtFilters')
+			.find('input[data-filter]');
+		$.each(filters, function(idx, elem) {
+			if ($(elem).val() !== '' && $(elem).val() !== '0') {
+				wsURL += '&' + $(elem).attr('data-field') + '=' + $(elem).val();
+			}
+		});
 		dtSummary.ajax.url(wsURL).load();
 	});
 
@@ -1352,6 +1498,7 @@ function loadSummaryReport(params) {
 	$('#reset-report').on('click', function () {
 		inEndDt.val(defEnd);
 		inStartDt.val(defStart);
+		$('#dtFilters').find('input[data-filter]').val('');
 		dtSummary.ajax.url(defWsURL).load();
 	});
 

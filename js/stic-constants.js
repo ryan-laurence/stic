@@ -301,7 +301,7 @@ var CD_SUMMARY_CUSTOM_DOCKET = [
 	{ data: 'time_in', name: 'time_in' },
 	{ data: 'weight_in_reading', name: 'weight_in_reading' },
 	{ data: 'date_out', name: 'date_out' },
-	{ data: 'time_out', name: 'time_out' },	
+	{ data: 'time_out', name: 'time_out' },
 	{ data: 'weight_out_reading', name: 'weight_out_reading' },
 	{ data: 'net_weight', name: 'net_weight' },
 	{ data: 'weight_unit', name: 'weight_unit', width: '5%' },
@@ -398,6 +398,69 @@ WS_UNIQUE_CHECK['truck_code'] = '/stic/services/TrucksInfoServices/getTrucksByCo
 WS_UNIQUE_CHECK['role_name'] = '/stic/services/RolesInfoServices/getAllRolesByRoleNameList?response=application/json&';
 WS_UNIQUE_CHECK['user_name'] = '/stic/services/UserInfoServices/getUserByNameList?response=application/json&';
 
+// Report Filter
+var REPORT_FILTER = {
+	supp_name: {
+		df: 'supp_name',
+		inputLabel: 'Supplier Name',
+		ws: WS_SUPPLIER_LIST,
+		ds: 'suppliers-list'
+	},
+	cat_name: {
+		df: 'cat_name',
+		inputLabel: 'Category Name',
+		ws: WS_CATEGORY_LIST,
+		ds: 'categories-list'
+	},
+	prod_name: {
+		df: 'prod_name',
+		inputLabel: 'Product Name',
+		ws: WS_PRODUCT_LIST,
+		ds: 'products-list'
+	},
+	cust_name: {
+		df: 'cust_name',
+		inputLabel: 'Customer Name',
+		ws: WS_CUSTOMER_LIST,
+		ds: 'customers-list'
+	},
+	dest_zipcode: {
+		df: 'dest_zipcode',
+		inputLabel: 'Zip Code',
+		ws: WS_DESTINATION_LIST,
+		ds: 'destinations-list'
+	},
+	dest_name: {
+		df: 'dest_name',
+		inputLabel: 'District Name',
+		ws: WS_DESTINATION_LIST,
+		ds: 'destinations-list'
+	},
+	dest_location: {
+		df: 'dest_location',
+		inputLabel: 'Municipality Name',
+		ws: WS_DESTINATION_LIST,
+		ds: 'destinations-list'
+	},
+	docket_no: {
+		df: 'docket_no',
+		inputLabel: 'Docket No.',
+		inputText: 'Enter Docket No.'
+	},
+	truck_code: {
+		df: 'truck_code',
+		inputLabel: 'Truck Code',
+		ws: WS_TRUCK_LIST,
+		ds: 'trucks-list'
+	},
+	user_name: {
+		df: 'user_name',
+		inputLabel: 'User Name',
+		ws: WS_USER_LIST,
+		ds: 'users-list'
+	}
+};
+
 // Button Title Attribute
 var BTN_TITLE_NEW_RECORD = 'New Data';
 var BTN_TITLE_EDIT_RECORD = 'Edit Data';
@@ -411,6 +474,7 @@ var BTN_TITLE_PRINT_RECORD = 'Print Data';
 var BTN_TITLE_CHANGE_PASS = 'Change User Password';
 var BTN_TITLE_BACKUP_DB = 'Backup Database';
 var BTN_TITLE_RESTORE_DB = 'Restore Database';
+var BTN_TITLE_FILTER_REPORT = 'Filter Report';
 
 // Button Labels
 var BTN_LABEL_NEW_RECORD = '<i class="fa fa-plus"></i>';
@@ -437,6 +501,7 @@ var BTN_LABEL_CANCEL = '<i class="fa fa-ban"></i> Cancel';
 var BTN_LABEL_CHANGE_PASS = '<i class="fa fa-key"></i>';
 var BTN_LABEL_BACKUP_DB = '<i class="fa fa-floppy-o"></i>';
 var BTN_LABEL_RESTORE_DB = '<i class="fa fa-undo"></i>';
+var BTN_LABEL_FILTER_REPORT = '<i class="fa fa-filter"></i>';
 
 // Form Validation Messages
 var MSG_FV_NOTEMPTY = 'This field is required and should not be empty.';
