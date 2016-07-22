@@ -714,8 +714,7 @@ var STIC = {
 		},
 
 		// Create Filter Field
-		makeFilter: function(params) {
-			STIC.Report.removeFilter({ filters: params.filters });
+		makeFilter: function(params) {			
 			$.each(params.filters, function(idx, field) {
 				var x = REPORT_FILTER[field];
 				// Build select options
@@ -731,7 +730,8 @@ var STIC = {
 							});
 						}
 					});
-					// Create select DOM					
+					// Create select DOM	
+					STIC.Report.removeFilter({ filters: [field] });
 					$('#' + field).append('<select class="form-control" ' +
 							'title="-" ' +
 							'data-field="' + field + '" ' +
@@ -755,6 +755,8 @@ var STIC = {
 			$.each(params.filters, function(idx, field) {
 				$('select[data-field="' + field + '"]')
 					.selectpicker('destroy');
+				$('select[data-field="' + field + '"]')
+					.remove();
 			});
 		}
 	},
