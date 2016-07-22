@@ -30,12 +30,13 @@
 </div>
 <script type="text/javascript">
 	$(function () {
-		loadSummaryReport({		
+		loadSummaryReport({
 			showTotal: true,
 			ds: DFLT_DS_RPTS,
 			cd: CD_SUMMARY_PRODUCT,
 			ws: WS_SUMMARY_PRODUCT,
-			title: REPORT_TITLE_PRODUCT
+			title: REPORT_TITLE_PRODUCT,
+			filters: ['cat_name', 'prod_name']
 		});
 	});
 </script>

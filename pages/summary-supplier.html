@@ -4,7 +4,7 @@
 	</div>
 	<div class="panel-body">
 		<div class="alert alert-info" role="alert">
-			<i class="fa fa-info-circle fa-3x fa-pull-left"></i>	
+			<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 			<ul>
 				<li><i class="fa fa-check-square-o"></i> Choose the starting and ending date with time period that you needed for the summary report to be generated.</li>
 				<li><i class="fa fa-check-square-o"></i> Click the "Print" button to have a printed copy of the summary report.</li>
@@ -31,12 +31,13 @@
 </div>
 <script type="text/javascript">
 	$(function () {
-		loadSummaryReport({		
+		loadSummaryReport({
 			showTotal: true,
 			ds: DFLT_DS_RPTS,
 			cd: CD_SUMMARY_SUPPLIER,
 			ws: WS_SUMMARY_SUPPLIER,
-			title: REPORT_TITLE_SUPPLIER
+			title: REPORT_TITLE_SUPPLIER,
+			filters: ['supp_name', 'cat_name', 'prod_name']
 		});
 	});
 </script>
