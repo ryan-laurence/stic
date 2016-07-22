@@ -754,8 +754,7 @@ var STIC = {
 		removeFilter: function(params) {
 			$.each(params.filters, function(idx, field) {
 				$('select[data-field="' + field + '"]')
-					.selectpicker('destroy')
-					.html('');
+					.selectpicker('destroy');
 			});
 		}
 	},
