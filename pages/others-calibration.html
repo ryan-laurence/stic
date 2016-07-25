@@ -27,81 +27,56 @@
 					</button>
 				</div>
 			</div>
-		</div>	
+		</div>
 	</div>
 </div>
 <script>
-	$(function() {	
-		//  Scale Reader
-		$(document).ready(function () {
-			/**********************************************************************************************************************************************/
-			
-			/*// Sample Indicator
-			var random = function (max, min) {
-					return ((Math.random() * (max - min)) + min).toFixed(2);
-			};	
-			
-			STIC.INTERVAL_ID = setInterval(function () {
-				var rand = '+' + random(41000, 5000)
-					.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-				$('#weight-reading').text(rand.toString());
-			}, 1000);*/					
-			
-			/**********************************************************************************************************************************************/
-			
-			// Read Scale Reader
-			//STIC.openScaleReader(function(response) {
-				var buttons = ['#calibrate-zero', '#calibrate-span'];	
-				//if (response.type === 'SUCCESS') {
-					var isCompleted = true;						
-					STIC.INTERVAL_ID = setInterval(function () {		
-						if(isCompleted) {
-							isCompleted = false;
-							$.get(WS_SCALE_READER)
-								.done(function (data, status) {
-									isCompleted = true;	
-									if (data.response.type === 'SUCCESS') {
-										$('.weight-lcd .weight-error').hide();
-										STIC.enableButtons(buttons);
-										var response = data['response']['readData-list']['readdata'],
-											netWeight = response['read-weight'].replace(/\s/g, '');
-										$('#weight-reading').text(netWeight.toString());
-										$('#weight-unit').text(response['read-unitType']);
-										$('#weight-status').text(response['read-status1']);		
-									} else {								
-										$('.weight-lcd .weight-error').show();
-										STIC.disableButtons(buttons);
-									}
-								})
-								.fail(function () {
-									isCompleted = true;	
-									$('.weight-lcd .weight-error').show();
-									STIC.disableButtons(buttons);
-								});			
-						}
-					}, SR_INTERVAL); 
-				//} else {
-				//	$('.weight-lcd .weight-error').show();
-				//	STIC.disableButtons(buttons);
-				//}			
-			//});
-
-			/**********************************************************************************************************************************************/
+	$(function() {
+		$(document).ready(function() {
+			// Scale Reader
+			var isCompleted = true,
+				buttons = ['#calibrate-zero', '#calibrate-span'];
+			STIC.INTERVAL_ID = setInterval(function() {
+				if (isCompleted) {
+					isCompleted = false;
+					$.get(WS_SCALE_READER)
+						.done(function(data, status) {
+							isCompleted = true;
+							if (data.response.type === 'SUCCESS') {
+								$('.weight-lcd .weight-error').hide();
+								STIC.enableButtons(buttons);
+								var response = data['response']['readData-list']['readdata'],
+									netWeight = response['read-weight'].replace(/\s/g, '');
+								$('#weight-reading').text(netWeight.toString());
+								$('#weight-unit').text(response['read-unitType']);
+								$('#weight-status').text(response['read-status1']);
+							} else {
+								$('.weight-lcd .weight-error').show();
+								STIC.disableButtons(buttons);
+							}
+						})
+						.fail(function () {
+							isCompleted = true;
+							$('.weight-lcd .weight-error').show();
+							STIC.disableButtons(buttons);
+						});
+				}
+			}, SR_INTERVAL);
 		});
-	
+
 		// Zero
-		$('#calibrate-zero').on('click', function () {
+		$('#calibrate-zero').on('click', function() {
 			BootstrapDialog.confirm({
 				type: 'type-danger',
-				btnOKLabel: BTN_LABEL_CONFIRM_CAL_ZERO,
-				btnCancelLabel: BTN_LABEL_CANCEL,
 				title: MSG_TITLE_INFO,
 				message: MSG_CONFIRM_CAL_ZERO,
-				callback: function (result) {
+				btnCancelLabel: BTN_LABEL_CANCEL,
+				btnOKLabel: BTN_LABEL_CONFIRM_CAL_ZERO,
+				callback: function(result) {
 					if (result) {
 						waitingDialog.show();
 						$.post(WS_CALIBRATION_ZERO, { compId: 1 })
-							.done(function (results, status) {
+							.done(function(results, status) {
 								waitingDialog.hide();
 								var response = results.response;
 								if (response.type === 'SUCCESS') {
@@ -109,8 +84,8 @@
 										type: 'type-primary',
 										title: MSG_TITLE_INFO,
 										message: MSG_INFO_CALIBRATE_ZERO_OK,
-										callback: function () {
-											//
+										callback: function() {
+											BootstrapDialog.closeAll();
 										}
 									});
 								} else {
@@ -118,13 +93,13 @@
 										type: 'type-danger',
 										title: MSG_TITLE_INFO,
 										message: MSG_INFO_CALIBRATE_ZERO_ERROR,
-										callback: function () {
-											//
+										callback: function() {
+											BootstrapDialog.closeAll();
 										}
 									});
 								}
 							})
-							.fail(function () {
+							.fail(function() {
 								waitingDialog.hide();
 								STIC.showWSError();
 							})
@@ -132,17 +107,17 @@
 				}
 			});
 		});
-	
+
 		// Span
-		$('#calibrate-span').on('click', function () {
-			
+		$('#calibrate-span').on('click', function() {
+
 			// Form ID
 			var formId = '#formCalibrateSpan',
-			
+
 			// Modal Form Options
 			modalFrmContent = $('<div></div>').load(FORM_CALIBRATION_SPAN),
 			modalTitle = '<i class="fa fa-wrench"></i> Input Weight Value',
-			
+
 			// Modal Buttons > OK
 			modalBtnOk = {
 				label: 'OK',
@@ -159,8 +134,8 @@
 				action: function(dialogItself) {
 					BootstrapDialog.closeAll();
 				}
-			};	
-		
+			};
+
 			// Show Modal
 			BootstrapDialog.show({
 				closable: false,
@@ -170,32 +145,35 @@
 				onhidden: modalOnHidden,
 				buttons: [modalBtnOk, modalBtnCancel]
 			});
-			
+
 			// Trigger on Modal onshown event
 			function modalOnShown(dialogRef) {
 				var modalBody = dialogRef.getModalBody();
 				modalBody.find('input[data-field]').val('');
 			}
-			
+
 			// Trigger on Modal onhidden event
 			function modalOnHidden(dialogRef) {
 				var modalBody = dialogRef.getModalBody();
 				modalBody.find('input[data-field]').val('');
-				
+
 				// Clear form validation styles
 				STIC.clearHelpBlocks({ formId: formId });
 			}
-			
+
 			// OK Button Action
-			function btnOkAction () {
+			function btnOkAction() {
 				// Form Validation
 				var isValid = STIC.FormValidation({ formId: formId });
 
 				// Proceed if form is valid
 				if (isValid) {
 					waitingDialog.show();
-					$.post(WS_CALIBRATION_SPAN, { compId: 1, spanToNumber: $('input[data-field="weight_value"]').val() })
-						.done(function (results, status) {
+					$.post(WS_CALIBRATION_SPAN, {
+						compId: 1,
+						spanToNumber: $('input[data-field="weight_value"]').val()
+					})
+						.done(function(results, status) {
 							waitingDialog.hide();
 							var response = results.response;
 							if (response.type === 'SUCCESS') {
@@ -203,8 +181,8 @@
 									type: 'type-primary',
 									title: MSG_TITLE_INFO,
 									message: MSG_INFO_CALIBRATE_SPAN_OK,
-									callback: function () {
-										//
+									callback: function() {
+										BootstrapDialog.closeAll();
 									}
 								});
 							} else {
@@ -212,18 +190,18 @@
 									type: 'type-danger',
 									title: MSG_TITLE_INFO,
 									message: MSG_INFO_CALIBRATE_SPAN_ERROR,
-									callback: function () {
-										//
+									callback: function() {
+										BootstrapDialog.closeAll();
 									}
 								});
 							}
 						})
-						.fail(function () {
+						.fail(function() {
 							waitingDialog.hide();
 							STIC.showWSError();
 						})
 				}
 			}
-		});	
+		});
 	});
 </script>
