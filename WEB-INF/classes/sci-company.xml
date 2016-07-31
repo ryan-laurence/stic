@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<update id="addCompanySql" parameterClass="java.util.Map">
+		INSERT INTO `company` (company_name, company_address, port_baudrate, contact_person, bridge_code, current_docket_number, minimum_truck_weight, delay_time_second, weight_unit, zero_range, hd_serial_number, pc_number)
+			VALUES (#company_name#, #company_address#, #port_baudrate#, #contact_person#, #bridge_code#, #current_docket_number#, #minimum_truck_weight#, #delay_time_second#, #weight_unit#, #zero_range#, #hd_serial_number#, #pc_number#)
+	</update>
+	
+	<insert id="addCompanyInfoSql" parameterClass="java.util.Map">
+		INSERT INTO `company` (company_name, company_address, port_baudrate, contact_person, bridge_code, hd_serial_number, pc_number)
+			VALUES (#company_name#, #company_address#, #port_baudrate#, #contact_person#, #bridge_code#, #hd_serial_number#, #pc_number#)
+	</insert>
+
+	<update id="updateCompanySql" parameterClass="java.util.Map">
+		UPDATE `company` SET
+			 company_name = #company_name#, 
+			 company_address = #company_address#, 
+			 port_baudrate = #port_baudrate#,
+			 contact_person = #contact_person#, 
+			 bridge_code = #bridge_code#, 
+			 current_docket_number = #current_docket_number#, 
+			 minimum_truck_weight = #minimum_truck_weight#, 
+			 delay_time_second = #delay_time_second#, 
+			 weight_unit = #weight_unit#, 
+			 zero_range = #zero_range#
+		  WHERE id = #id#
+	</update>
+	
+	<select id="getAllCompanySql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `company`
+			<dynamic>
+			  	<isNotEmpty property="id" prepend="WHERE">
+			  		id = #id#
+			  	</isNotEmpty>
+			</dynamic>
+	</select>
+	
+	<select id="getAllCompanyByPrinterSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `company` a
+			JOIN `printer_configuration` b USING (`id`)
+			<dynamic>
+			  	<isNotEmpty property="id" prepend="WHERE">
+			  		id = #id#
+			  	</isNotEmpty>
+			</dynamic>
+	</select>
+	
+	<update id="updateCompanyLicenseKeySql" parameterClass="java.util.Map">
+		UPDATE `company` SET 
+			`license_key` = #license_key#,
+			`is_license` = #is_license#,
+			`exp_date` = #exp_date#,
+			`current_date` = #current_date#
+		  WHERE id = #id#
+	</update>
+	
+	<update id="updateCompanyLicenseKeyStatusSql" parameterClass="java.util.Map">
+		UPDATE `company` SET 
+			`is_license` = #is_license#
+		  WHERE id = #id#
+	</update>
+	
+	<select id="checkIsLicenseSql" parameterClass="java.util.Map" resultClass="java.lang.Integer" remapResults="false">
+		SELECT is_license FROM `company` WHERE id = #id#
+	</select>
+
+	<update id="updateCompanyCurrentDateSql" parameterClass="java.util.Map">
+		UPDATE `company` SET
+			`current_date` = NOW()
+		  WHERE id = #id#
+		    AND CURDATE() > `current_date`
+	</update>
+	
+</sqlMap>

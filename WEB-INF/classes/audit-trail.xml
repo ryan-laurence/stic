@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans classpath:spring-beans-2.5.xsd
+	http://www.springframework.org/schema/util classpath:spring-util-2.5.xsd">
+
+	<!-- Settings for Audit Trail -->
+
+	<bean id="signalsBean" class="com.scaletech.util.Signals" scope="singleton">
+		<property name="auditJdbcDao" ref="auditTrailDao" />
+		<property name="listWebservices" ref="listWebservicesAuditTrail" />
+	</bean>
+	
+	<util:map id="listWebservicesAuditTrail" map-class="java.util.HashMap">
+    	
+    	<!-- Configuration for Categories Management Module  -->
+    	<entry key="categoriesinfoservice/addcategories" value="Created Category"/>
+    	<entry key="categoriesinfoservice/updatecategories" value="Updated Category"/>
+    	<entry key="categoriesinfoservice/updatecategoriesbyisdeleted" value="Deleted Category"/>
+    	<entry key="categoriesinfoservice/getallcategorieslist" value="View All Categories"/>
+    	<entry key="categoriesinfoservice/getcategoriesbycodelist" value="View All Category By Code"/>
+    	<entry key="categoriesinfoservice/getcategoriesbynamelist" value="View All Category By Name"/>
+    	
+    	<!-- Customer Destinations Management Module -->
+    	<entry key="custdestinfoservices/addcustdest" value="Add New Customer Destination"/>
+    	<entry key="custdestinfoservices/updatecustdest" value="Updated Customer Destination"/>
+    	<entry key="custdestinfoservices/updatecustdestbyisdeleted" value="Deleted Customer Destination"/>
+    	<entry key="custdestinfoservices/getallcustdestlist" value="View all Customer Destination"/>
+    	
+    	<!-- Customers Management Module  -->
+    	<entry key="customerinfoservices/addcustomers" value="Created Customer"/>
+    	<entry key="customerinfoservices/updatecustomers" value="Update Customer"/>
+    	<entry key="customerinfoservices/updatecustomersbyisdeleted" value="Deleted Customers"/>
+    	<entry key="customerinfoservices/getallcustomerslist" value="View All Customers"/>
+    	<entry key="customerinfoservices/getcustomersbycodelist" value="View Customers By Code"/>
+    	<entry key="customerinfoservices/getcustomersbynamelist" value="View Customers By Name"/>
+    	<entry key="customerinfoservices/getcustomersbyweightlist" value="View Customers By Weight Reading"/>
+    	
+    	<!-- Customer Products Management Module  -->
+    	<entry key="custproductsinfoservices/addcustprod" value="Add New Customer Products"/>
+    	<entry key="custproductsinfoservices/updatecustprod" value="Update Customer Products"/>
+    	<entry key="custproductsinfoservices/updatecustprodbyisdeleted" value="Deleted Customer Products"/>
+    	<entry key="custproductsinfoservices/getallcustprodlist" value="View All Customer Products"/>
+    	
+    	<!-- Destinations Management Module  -->   
+    	<entry key="destinationsinfoservices/getalldestinationsbylocationlist" value="View All Destination By Location"/>
+    	<entry key="destinationsinfoservices/getalldestinationsbynamelist" value="View All Destination By Name"/>
+    	<entry key="destinationsinfoservices/getalldestinationsbyzipcodelist" value="View All Destination By Zip Code"/>
+    	<entry key="destinationsinfoservices/getalldestinationslist" value="View All Destinations"/>
+    	<entry key="destinationsinfoservices/updatedestinationsisdeleted" value="Deleted Destination"/>
+    	<entry key="destinationsinfoservices/getalldestinationsnotincustdestlist" value="View All Destination Not In Customer Destination List"/>
+    	<entry key="destinationsinfoservices/getalldestinationsbyweightlist" value="View All Destination By Weight Reading"/>
+    	
+    	<!-- Product Categories Management Module  -->
+    	<entry key="productcategoriesinfoservices/addprodcategories" value="Add New Product Category"/>
+    	<entry key="productcategoriesinfoservices/updateprodcategories" value="Updated Product Category"/>
+    	<entry key="productcategoriesinfoservices/updateprodcategoriesbyisdeleted" value="Deleted Product Category"/>
+    	<entry key="productcategoriesinfoservices/getallprodcategorieslist" value="View All Product Category"/>
+
+		<!-- Products Management Module-->
+    	<entry key="productsinfoservices/addproducts" value="Created Product"/>
+    	<entry key="productsinfoservices/addproductsandcustomerproducts" value="Add New Product and Customer Product"/>
+    	<entry key="productsinfoservices/updateproducts" value="Updated Product"/>
+    	<entry key="productsinfoservices/updateproductsbyisdeleted" value="Deleted Product"/>
+    	<entry key="productsinfoservices/getallproductslist" value="View All Product"/>
+    	<entry key="productsinfoservices/getallproductsnotincustomerlist" value="View All Product Not In Customers List"/>
+    	<entry key="productsinfoservices/getproductsbycodelist" value="View All Product By Code"/>
+    	<entry key="productsinfoservices/getproductsbynamelist" value="View All Product By Name"/>
+    	<entry key="productsinfoservices/getproductsbyweightlist" value="View All Product By Weight Reading"/>
+		
+		<!-- Suppliers Management Module -->
+		<entry key="suppliersinfoservices/addsuppliers" value="Created Suppliers"/>
+    	<entry key="suppliersinfoservices/updatesuppliers" value="Updated Supplier"/>
+    	<entry key="suppliersinfoservices/updatesuppliersbyisdeleted" value="Deleted Supplier"/>
+    	<entry key="suppliersinfoservices/getallsupplierslist" value="View All Suppliers"/>
+    	<entry key="suppliersinfoservices/getsuppliersbycodelist" value="View All Suppliers By Code"/>
+    	<entry key="suppliersinfoservices/getsuppliersbynamelist" value="View All Suppliers By Name"/>
+    	<entry key="suppliersinfoservices/getsupplierssummarybyprodidlist" value="View All Suppliers Summary By Product ID"/>
+		
+		<!-- Trucks Management Module -->
+		<entry key="trucksinfoservices/addtrucks" value="Created Trucks"/>
+    	<entry key="trucksinfoservices/updatetrucks" value="Updated Trucks"/>
+    	<entry key="trucksinfoservices/updatetrucksbyisdeleted" value="Deleted Trucks"/>
+    	<entry key="trucksinfoservices/getalltruckslist" value="View All Trucks"/>
+    	<entry key="trucksinfoservices/gettrucksbycodelist" value="View All Trucks By Code"/>
+    	<entry key="trucksinfoservices/gettruckscodebyweightlist" value="View All Trucks By Weight"/>
+		
+		<!-- User Access Management Module -->
+		<entry key="useraccessinfoservices/adduseraccess" value="Created User Access"/>
+    	<entry key="useraccessinfoservices/updateuseraccess" value="Updated User Access"/>
+    	<entry key="useraccessinfoservices/updateuseraccessisdeleted" value="Deleted User Access"/>
+		
+		<!-- Users Management Module -->
+		<entry key="userinfoservices/adduser" value="Created User"/>
+    	<entry key="userinfoservices/updateuser" value="Updated User"/>
+    	<entry key="userinfoservices/updateuserbyisdeleted" value="Deleted User"/>
+    	<entry key="userinfoservices/updateuserpassword" value="User Change Password"/>
+    	<entry key="userinfoservices/getalluserlist" value="View All Users"/>
+    	<entry key="userinfoservices/getuserbynamepasslist" value="View All Users By Name and Password"/>
+    	<entry key="userinfoservices/getuserbynamelist" value="View All Users By Name"/>
+    	<entry key="userinfoservices/removeuser" value="Remove Users By Name"/>
+    	<entry key="userinfoservices/checkifuserisauthentication" value="Authenticate User"/>
+		
+		<!-- Weight Reading Management Module -->
+		<entry key="weightreadinginfoservices/addweightreadings" value="First Weighing"/>
+    	<entry key="weightreadinginfoservices/updateweightreadings" value="Second Weighing"/>
+    	<entry key="weightreadinginfoservices/getallweightreadingslist" value="View All Weight Reading"/>
+    	<entry key="weightreadinginfoservices/getallweightreadingsbydaterangelist" value="View All Weight Reading By Date Range"/>
+    	<entry key="weightreadinginfoservices/checktruckcodelist" value="Check Truck By Code"/>
+    	<entry key="weightreadinginfoservices/deleteweighreadingbyid" value="Delete Weight Reading By Id"/>
+
+		<!-- Weighing Reading Summary Report Management Module -->
+		<entry key="weighingreadingsumminfoservices/getallweightreadingssummreportbycustomerlist" value="View Customer Summary"/>
+		<entry key="weighingreadingsumminfoservices/getallweightreadingssummreportbydestinationlist" value="View Destination Summary"/>
+		<entry key="weighingreadingsumminfoservices/getallweightreadingssummreportbydetailedtrucklist" value="View Detailed Truck Summary"/>
+		<entry key="weighingreadingsumminfoservices/getallweightreadingssummreportbyproductlist" value="View Product Summary"/>
+		<entry key="weighingreadingsumminfoservices/getallweightreadingssummreportbysupplierlist" value="View Supplier Summary"/>
+		<entry key="weighingreadingsumminfoservices/getallweightreadingssummreportbytrucklist" value="View Truck Summary"/>
+		<entry key="weighingreadingsumminfoservices/getallweightreadingbyfilterlist" value="View All Filters Weight Reading"/>
+		
+		<!-- Company Management Module -->
+		<entry key="companyinfoservices/addcompany" value="Created Company"/>
+		<entry key="companyinfoservices/updatecompany" value="Update New Company"/>
+		<entry key="companyinfoservices/getallcompanylist" value="View All New Company"/>
+		<entry key="companyinfoservices/getallcompanybyprinterlist" value="View All New Company By Printers"/>
+		<entry key="companyinfoservices/checkislicense" value="Check Application License"/>
+		<entry key="companyinfoservices/updatecompanylicensekey" value="Update License Key"/>
+		
+		<!-- Company Management Module (Backup Restore) -->
+		<entry key="companyinfoservices/backupdatabase" value="Back-Up Databases"/>
+		<entry key="companyinfoservices/restoredatabase" value="Restore Databases"/>
+		<entry key="companyinfoservices/getalldatabasehistorybydatelist" value="Fetch Databases History By Date Range"/>
+		<entry key="companyinfoservices/getalldatabasehistorybytypedatelist" value="Fetch Databases History By Type and Date Range"/>
+		
+		<!-- Docket Template Management Module -->
+		<entry key="dockettemplateinfoservice/adddockettemplate" value="Created Docket Template"/>
+		<entry key="dockettemplateinfoservice/updatedockettemplate" value="Update Docket Template"/>
+		<entry key="dockettemplateinfoservice/deletedockettemplate" value="Delete Docket Template By Id"/>
+		<entry key="dockettemplateinfoservice/getalldockettemplatebytypelist" value="View All Docket Templates By Types"/>
+		<entry key="dockettemplateinfoservice/getdockettemplatelist" value="View All Docket Templates By Id"/>
+		
+		<!-- Docket Fields Management Module -->
+		<entry key="docketfieldsinfoservices/adddocketfields" value="Created Docket Field"/>
+		<entry key="docketfieldsinfoservices/updatedocketfields" value="Update Docket Field"/>
+		<entry key="docketfieldsinfoservices/getalldocketfieldslist" value="View All Docket Fields"/>
+		<entry key="docketfieldsinfoservices/getalldocketfieldsbyavailablelist" value="View All Docket Fields By Available"/>
+		
+		<!-- Docket Print Log Management Module -->
+		<entry key="docketprintloginfoservices/adddocketprintlog" value="Add New Docket Print Log"/>
+		<entry key="docketprintloginfoservices/updatedocketprintlog" value="Update Docket Print Log"/>
+		<entry key="docketprintloginfoservices/getalldocketprintloglist" value="View Reprint Count Summary"/>
+		
+		<!-- Printer Configuration Management Module -->
+		<entry key="docketprintloginfoservices/addprinter" value="Add New Printer"/>
+		<entry key="docketprintloginfoservices/updateprinter" value="Update New Printer"/>
+		<entry key="docketprintloginfoservices/getallprintersbynamelist" value="View All Printers By Name"/>
+		<entry key="docketprintloginfoservices/getallprinterslist" value="View All Printers"/>
+		
+		<!-- Scale Reader Management Module -->
+		<entry key="scalereaderinfoservices/calibratespantozero" value="Calibrate Span to ZERO"/>
+		<entry key="scalereaderinfoservices/calibratespantonumber" value="Calibrate Span to NUMBER"/>
+		
+    </util:map>
+
+</beans>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<insert id="addUserSql" parameterClass="java.util.Map">
+		INSERT INTO `users` (user_name, user_password)
+			VALUES (#user_name#, #user_password#)
+	</insert>
+
+	<update id="updateUserSql" parameterClass="java.util.Map">
+		UPDATE `users` SET 
+			<dynamic>
+				<isNotEmpty property="user_name">
+					user_name = #user_name#
+				</isNotEmpty>
+				
+				<isNotEmpty property="user_password" prepend=",">
+						user_password = #user_password#
+				</isNotEmpty>
+			</dynamic>
+		WHERE
+			user_id = #user_id#
+	</update>
+	
+	<update id="updateUserByIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `users` SET 
+			 `status` = #status#
+		WHERE user_id = #user_id#
+	</update>
+	
+	<update id="updateUserPasswordSql" parameterClass="java.util.Map">
+		UPDATE `users` SET 
+			user_password = #user_password#
+		WHERE user_id = #user_id#
+	</update>
+	
+	<select id="getAllUsersSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+			u.`user_id`,
+			u.`user_name`,
+			u.`user_password`,	
+			r.`role_id`,
+			r.`role_name`,
+			DATE_FORMAT(u.`date_modified`, '%m/%d/%Y %h:%i:%s %p') AS date_modified,
+			ur.ur_id
+		FROM `users` u
+		LEFT JOIN `user_roles` ur ON ur.user_id = u.user_id
+		LEFT JOIN `roles` r ON r.role_id = ur.role_id
+		WHERE u.`status` = 1 AND
+			r.`status` = 1
+		<dynamic>
+				<isNotEmpty property="user_name" prepend="AND">
+					u.user_name = #user_name#
+				</isNotEmpty>
+				
+				<isNotEmpty property="user_password" prepend="AND">
+						u.user_password = #user_password#
+				</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getUserByNameSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+			SELECT 
+				u.`user_id`,
+				u.`user_name`,
+				u.`user_password`,	
+				r.`role_id`,
+				r.`role_name`,
+				u.`date_modified`,
+				ur.ur_id
+			FROM `users` u
+			LEFT JOIN `user_roles` ur ON ur.user_id = u.user_id
+			LEFT JOIN `roles` r ON r.role_id = ur.role_id
+			WHERE u.`status` = 1 AND
+				r.`status` = 1
+				AND u.user_name = #user_name#
+		<dynamic>
+		  	<isNotEmpty property="user_password" prepend="AND">
+		  		u.user_password = #user_password#
+		  	</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getUserByNameNotIDSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `users` WHERE `user_name` = #user_name# AND `user_id` != #user_id#
+	</select>
+
+	<select id="getUserByNamePassSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+			SELECT 
+				u.`user_id`,
+				u.`user_name`,
+				u.`user_password`,
+				r.`role_id`,
+				r.`role_name`,
+				u.`date_modified`,
+				ur.ur_id
+			FROM `users` u
+			LEFT JOIN `user_roles` ur ON ur.user_id = u.user_id
+			LEFT JOIN `roles` r ON r.role_id = ur.role_id
+			WHERE u.`status` = 1 AND r.`status` = 1 AND 
+			   u.user_name = #user_name# AND u.user_password = #user_password#
+	</select>
+
+</sqlMap>
+	

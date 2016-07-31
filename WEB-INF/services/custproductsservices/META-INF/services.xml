@@ -1,0 +1,22 @@
+<service name="CustProductsInfoServices">
+    <description>Customers Products Info Service</description>
+    <parameter name="ServiceObjectSupplier">org.apache.axis2.extensions.spring.receivers.SpringServletContextObjectSupplier</parameter>
+    <parameter name="SpringBeanName">custProductsInfoServices</parameter>
+	
+	<operation name="addCustProd">
+        <messageReceiver class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
+    </operation>
+
+	<operation name="updateCustProd">
+        <messageReceiver class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
+    </operation>
+
+	<operation name="updateCustProdByIsDeleted">
+        <messageReceiver class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
+    </operation>
+
+	<operation name="getAllCustProdList">
+        <messageReceiver class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
+    </operation>
+
+</service>

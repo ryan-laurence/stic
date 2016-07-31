@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<update id="addTrucksSql" parameterClass="java.util.Map">
+		INSERT INTO `trucks` (truck_code)
+			VALUES (#truck_code#)
+	</update>
+
+	<update id="updateTrucksSql" parameterClass="java.util.Map">
+		UPDATE `trucks` SET
+			 truck_code = #truck_code#
+		  WHERE truck_id = #truck_id#
+	</update>
+
+	<update id="updateTrucksByIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `trucks` SET
+			 status = #status#
+		  WHERE truck_id = #truck_id#
+		    AND truck_code NOT IN (SELECT truck_code FROM `weight_readings` WHERE `weight_status` = 'PENDING')
+	</update>
+	
+	<select id="getAllTrucksSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+			truck_id,
+			truck_code,
+			DATE_FORMAT(date_modified, '%m/%d/%Y %r') AS date_modified
+		FROM `trucks`
+		WHERE `status` = 1
+		  AND truck_code NOT IN (SELECT truck_code FROM `weight_readings` WHERE `weight_status` = 'PENDING')
+		ORDER BY truck_code
+	</select>
+
+	<select id="getTrucksByCodeSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * 
+		FROM `trucks`
+		WHERE truck_code = #truck_code#
+			AND `status` = 1
+		<dynamic>
+		  	<isNotEmpty property="truck_id" prepend="AND">
+				`truck_id` != #truck_id#
+		  	</isNotEmpty>
+		</dynamic>
+			
+	</select>
+
+	<select id="getTrucksCodeByWeightSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT *
+		FROM `weight_readings` a
+		JOIN `trucks` b USING (`truck_code`)
+		WHERE b.`status` = 1
+		<dynamic>
+		  	<isNotEmpty property="startDate" prepend="AND">
+		  		DATE_FORMAT(a.`weight_in_date`, '%m/%d/%Y') 
+		  		BETWEEN #startDate# AND #endDate#
+		  	</isNotEmpty>
+		</dynamic>
+
+	</select>
+
+</sqlMap>
+	

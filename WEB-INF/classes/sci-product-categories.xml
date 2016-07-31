@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<update id="addProdCategoriesSql" parameterClass="java.util.Map">
+		INSERT INTO `product_categories` (cat_id, prod_id)
+			VALUES (#cat_id#, #prod_id#)
+	</update>
+
+	<update id="updateProdCategoriesSql" parameterClass="java.util.Map">
+		UPDATE `product_categories` SET
+			 cat_id = #cat_id#
+			,prod_id = #prod_id#
+		  WHERE pc_id = #pc_id#
+	</update>
+
+	<update id="updateProdCategoriesByIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `product_categories` SET
+			 status = #status#
+		  WHERE pc_id = #pc_id#
+	</update>
+	
+	<select id="getAllProdCategoriesSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `product_categories`
+	</select>
+
+</sqlMap>
+	

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<update id="addCustProdSql" parameterClass="java.util.Map">
+		INSERT INTO `customer_products` (cust_id, prod_id)
+			VALUES (#cust_id#, #prod_id#)
+	</update>
+
+	<update id="updateCustProdSql" parameterClass="java.util.Map">
+		UPDATE `customer_products` SET
+			 cust_id = #cust_id#
+			,prod_id = #prod_id#
+		  WHERE cp_id = #cp_id#
+	</update>
+
+	<update id="updateCustProdByIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `customer_products` SET
+			 status = #status#
+		  WHERE cp_id = #cp_id#
+	</update>
+	
+	<select id="getAllCustProdSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+			a.cp_id, 
+			a.cust_id, 
+			a.prod_id, 
+			c.prod_code, 
+			c.prod_name, 
+			c.unit_price, 
+			d.cat_name,
+			b.cust_code, 
+			b.cust_name,
+			DATE_FORMAT(a.date_modified, '%m/%d/%Y %r') AS date_modified
+		FROM `customer_products` a
+		JOIN `customers` b USING (`cust_id`)
+		JOIN `products` c USING (`prod_id`)
+		JOIN `categories` d USING (`cat_id`)
+		WHERE a.`status` = 1
+		<dynamic>
+			<isNotEmpty property="cust_id" prepend="AND">
+				a.cust_id = #cust_id#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+</sqlMap>
+	

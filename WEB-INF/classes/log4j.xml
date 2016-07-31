@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+
+<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+	<param name="Target" value="System.out" /> 
+	<layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern" value="%d %p ->%t[%c{1}:%L] %x- %m%n"/>
+	</layout>     
+ </appender> 
+  
+<appender name="file-info" class="org.apache.log4j.DailyRollingFileAppender">
+	<param name="File" value="${catalina.home}/logs/scaletech-info.log"/>
+	<param name="Append" value="true" />
+	<param name="Encoding" value="utf8" />
+	<param name="Threshold" value="INFO" />
+	<layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern" value="%p[%d]%c{1}%L %x-%m%n"/>
+	</layout>
+     
+	<filter class="org.apache.log4j.varia.LevelRangeFilter">
+		<param name="LevelMax" value="WARN"/>
+		<param name="LevelMin" value="INFO"/>
+		<param name="AcceptOnMatch" value="true"/>
+	</filter>
+</appender>
+  
+<appender name="rolling-error" class="org.apache.log4j.DailyRollingFileAppender">
+	<param name="file" value="${catalina.home}/logs/scaletech-error.log"/>
+	<param name="Append" value="true" />
+	<param name="Encoding" value="utf8" />
+	<param name="Threshold" value="ERROR" />
+	<layout class="org.apache.log4j.PatternLayout">
+		<param name="ConversionPattern" value="%p[%d]%c{1}:%L %x- %m%n"/>   
+	</layout>	 
+	<filter class="org.apache.log4j.varia.LevelRangeFilter">
+		<param name="LevelMax" value="fatal"/>
+		<param name="LevelMin" value="error"/>
+		<param name="AcceptOnMatch" value="true"/>
+	</filter> 		
+</appender> 
+
+<logger name="org.springframework">
+	<level value="WARN" />
+</logger>
+
+<logger name="org.apache">
+	<level value="WARN" />
+</logger>
+
+<root> 
+	<level value="INFO"/> 
+	<appender-ref ref="stdout"/>
+	<appender-ref ref="file-info" /> 
+	<appender-ref ref="rolling-error" />
+</root>
+
+<!-- remarks: debug 
+<category name="com.ibatis">
+        <priority value="debug" />
+</category>
+ 
+<category name="java.sql">
+        <priority value="debug" />
+</category>
+-->
+
+ 
+</log4j:configuration>

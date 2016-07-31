@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<update id="addModulesSql" parameterClass="java.util.Map">
+		INSERT INTO `modules` (mod_id, mod_name, mod_label, mod_parent, mod_index, status)
+			VALUES (#mod_id#, #mod_name#, #mod_label#, #mod_parent#, #mod_index#, #status#)
+	</update>
+
+	<update id="updateModulesSql" parameterClass="java.util.Map">
+		UPDATE `modules` SET
+			 mod_id = #mod_id#, 
+			 mod_name = #mod_name#, 
+			 mod_label = #mod_label#, 
+			 mod_parent = #mod_parent#, 
+			 mod_index = #mod_index#, 
+			 status = #status#
+		  WHERE mod_id = #mod_id#
+	</update>
+
+	<update id="updateMpdulesByIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `modules` SET
+			 status = #status#
+		  WHERE mod_id = #mod_id#
+	</update>
+	
+	<select id="getAllModulesSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+			b.mod_id,
+			IFNULL(b.mod_parent, '') AS mod_parent,
+			IF(a.mod_label IS NULL, 
+				b.mod_label, 
+				CONCAT(a.mod_label, ' > ', b.mod_label)
+			) AS mod_label,
+			IFNULL(a.mod_icon, b.mod_icon) AS mod_icon,
+			IFNULL(c.status, 0) AS mod_allow
+		FROM `modules` a
+		RIGHT JOIN `modules` b ON b.mod_parent = a.mod_id
+		LEFT JOIN (
+			SELECT *
+			FROM `role_modules`
+			WHERE `status` = 1
+			<dynamic>
+			  	<isNotEmpty property="mod_id" prepend="AND">
+			  		role_id = #mod_id#
+			  	</isNotEmpty>
+			</dynamic>
+		) c ON c.mod_id = b.mod_id
+		WHERE b.`status` = 1
+			AND b.mod_type != 'group'
+		ORDER by b.mod_index ASC
+	</select>
+
+</sqlMap>
+	

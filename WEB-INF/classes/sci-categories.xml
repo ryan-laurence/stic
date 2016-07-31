@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<update id="addCategoriesSql" parameterClass="java.util.Map">
+		INSERT INTO `categories` (cat_code, cat_name)
+			VALUES (#cat_code#, #cat_name#)
+	</update>
+
+	<update id="updateCategoriesSql" parameterClass="java.util.Map">
+		UPDATE `categories` SET
+			 cat_code = #cat_code#
+			,cat_name = #cat_name#
+		  WHERE cat_id = #cat_id#
+	</update>
+
+	<update id="updateCategoriesByIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `categories` SET
+			 status = #status#
+		  WHERE cat_id = #cat_id#
+	</update>
+	
+	<select id="getAllCategoriesSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+			cat_id,
+			cat_code,
+			cat_name,
+			DATE_FORMAT(date_modified, '%m/%d/%Y %r') AS date_modified
+		FROM `categories` 
+		WHERE `status` = 1
+		ORDER BY cat_name	
+	</select>
+
+	<select id="getCategoriesByCodeSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * 
+		FROM `categories`
+		WHERE cat_code = #cat_code#
+			AND `status` = 1
+		<dynamic>
+		  	<isNotEmpty property="cat_id" prepend="AND">
+		  		`cat_id` != #cat_id#
+		  	</isNotEmpty>
+		</dynamic>
+	</select>
+
+	<select id="getCategoriesByNameSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `categories`
+			WHERE cat_name = #cat_name#
+	</select>
+
+</sqlMap>
+	

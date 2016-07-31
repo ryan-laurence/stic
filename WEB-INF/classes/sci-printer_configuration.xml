@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<insert id="addPrinterSql" parameterClass="java.util.Map">
+		INSERT INTO `printer_configuration` (printer_id, printer_name, id, first_docket_type, second_docket_type, is_print_first_docket, is_print_second_docket)
+			VALUES (#printer_id#, #printer_name#, #id#, #first_docket_type#, #second_docket_type#, #is_print_first_docket#, #is_print_second_docket#)
+	</insert>
+
+	<update id="updatePrinterSql" parameterClass="java.util.Map">
+		UPDATE `printer_configuration` SET
+			printer_id = #printer_id#, 
+			printer_name = #printer_name#,
+			id = #id#, 
+			first_docket_type = #first_docket_type#, 
+			second_docket_type = #second_docket_type#, 
+			is_print_first_docket = #is_print_first_docket#, 
+			is_print_second_docket = #is_print_second_docket# 
+		WHERE
+			printer_id = #printer_id#
+	</update>
+	
+	<select id="getAllPrintersSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `printer_configuration`
+		<dynamic>
+				<isNotEmpty property="printer_id" prepend="WHERE">
+					printer_id = #printer_id#
+				</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getAllPrintersByNameSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `printer_configuration`
+		<dynamic>
+				<isNotEmpty property="printer_name" prepend="WHERE">
+					printer_name = #printer_name#
+				</isNotEmpty>
+		</dynamic>
+	</select>
+
+</sqlMap>
+	

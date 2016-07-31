@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<insert id="addDocketFieldsSql" parameterClass="java.util.Map">
+		INSERT INTO `docket_fields` (df_alias, df_src_field, df_src_table, df_length, df_format, df_type, df_available)
+			VALUES (#df_alias#, #df_src_field#, #df_src_table#, #df_length#, #df_format#, #df_type#, #df_available#)
+	</insert>
+
+	<update id="updateDocketFieldsSql" parameterClass="java.util.Map">
+		UPDATE `docket_fields` SET 
+			df_alias = #df_alias#, 
+			df_src_field = #df_src_field#, 
+			df_src_table = #df_src_table#, 
+			df_length = #df_length#, 
+			df_format = #df_format#, 
+			df_type = #df_type#, 
+			df_available = #df_available#
+		WHERE
+			df_id = #df_id#
+	</update>
+	
+	<select id="getAllDocketFieldsSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `docket_fields`
+		<dynamic>
+			<isNotEmpty property="df_id" prepend="WHERE">
+				df_id = #df_id#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="getAllDocketFieldsByAvailableSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `docket_fields`
+		<dynamic>
+			<isNotEmpty property="df_available" prepend="WHERE">
+				df_available = #df_available#
+			</isNotEmpty>
+		</dynamic>
+	</select>
+
+</sqlMap>
+	

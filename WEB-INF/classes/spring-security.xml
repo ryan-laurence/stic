@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:sec="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/beans classpath:spring-beans-2.0.xsd
+		http://www.springframework.org/schema/util classpath:spring-util-2.0.xsd
+		http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-2.0.xsd">
+	
+	<!-- original setup -->
+    <bean id="filterChainProxy" class="org.springframework.security.util.FilterChainProxy">
+        <property name="filterInvocationDefinitionSource">
+            <value><![CDATA[
+                CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+                PATTERN_TYPE_APACHE_ANT
+                /services/**=httpSessionContextIntegrationFilter,exceptionTranslationFilter, ntlmFilter, filterInvocationInterceptor
+                /html/**=httpSessionContextIntegrationFilter,exceptionTranslationFilter, ntlmFilter, filterInvocationInterceptor
+                /js/**=httpSessionContextIntegrationFilter,exceptionTranslationFilter, ntlmFilter, filterInvocationInterceptor
+                /jsp/**=httpSessionContextIntegrationFilter,exceptionTranslationFilter, ntlmFilter, filterInvocationInterceptor
+                /images/**=httpSessionContextIntegrationFilter,exceptionTranslationFilter, ntlmFilter, filterInvocationInterceptor
+                /data/**=httpSessionContextIntegrationFilter,exceptionTranslationFilter, ntlmFilter, filterInvocationInterceptor
+                /pages/**=httpSessionContextIntegrationFilter,exceptionTranslationFilter, ntlmFilter, filterInvocationInterceptor
+                /css/**=httpSessionContextIntegrationFilter,exceptionTranslationFilter, ntlmFilter, filterInvocationInterceptor
+                /login.html=httpSessionContextIntegrationFilter,exceptionTranslationFilter, ntlmFilter, filterInvocationInterceptor
+                /index.html=httpSessionContextIntegrationFilter,exceptionTranslationFilter, ntlmFilter, filterInvocationInterceptor
+		    ]]></value>
+        </property>
+    </bean>
+    <!--  
+                /services/**=httpSessionContextIntegrationFilter,exceptionTranslationFilter, isaBasicFilter, ntlmFilter, filterInvocationInterceptor
+                /index.html=httpSessionContextIntegrationFilter,exceptionTranslationFilter, isaBasicFilter, ntlmFilter, filterInvocationInterceptor
+                or
+                /**=httpSessionContextIntegrationFilter,anonymousProcessingFilter,logoutFilter
+    -->
+    
+    <!-- new setup -->
+    <!-- 
+    <bean id="filterChainProxy" class="org.springframework.security.util.FilterChainProxy">
+    	<sec:filter-chain-map path-type="ant">
+    		<sec:filter-chain pattern="/services/**" filters="httpSessionContextIntegrationFilter, exceptionTranslationFilter, isaBasicFilter, ntlmFilter, filterInvocationInterceptor" />
+    		<sec:filter-chain pattern="/xxindex.html" filters="httpSessionContextIntegrationFilter, exceptionTranslationFilter, isaBasicFilter, ntlmFilter, filterInvocationInterceptor" />
+    	</sec:filter-chain-map>
+    </bean>
+    -->
+    
+    <!-- Start Here - UAT shinsei Active Directory -->
+    <!-- 
+    <bean id="ntlmFilter" class="org.springframework.security.ui.ntlm.NtlmProcessingFilter">
+    	<property name="netbiosWINS" value="192.168.23.11"/>
+    	<property name="defaultDomain" value="asti"/>
+    	<property name="smbClientUsername" value="rmp"/>
+    	<property name="smbClientPassword" value="password"/>
+    	<property name="loadBalance" value="true"/>
+        <property name="authenticationManager" ref="authenticationManager"/>        
+    </bean>
+    -->
+    
+    <!-- Use for Live Testing -->
+    <!-- old process
+    <bean id="ntlmFilter" class="org.springframework.security.ui.ntlm.NtlmProcessingFilter">
+    	<property name="netbiosWINS" value="${jcifs.netbios.wins}"/>
+    	<property name="defaultDomain" value="${jcifs.smb.client.domain}"/>
+    	<property name="loadBalance" value="${jcifs.http.loadBalance}"/>
+    	<property name="smbClientUsername" value="${jcifs.smb.client.username}"/>
+    	<property name="smbClientPassword" value="${jcifs.smb.client.password}"/>
+        <property name="authenticationManager" ref="authenticationManager"/>        
+    </bean>
+    -->
+
+    <bean id="ntlmFilter" class="org.springframework.security.ui.ntlm.NtlmProcessingFilter">
+    	<property name="netbiosWINS" value="${jcifs.netbios.wins}"/>
+    	<property name="authenticationManager" ref="authenticationManager"/>        
+    	<property name="defaultDomain" value="${jcifs.smb.client.domain}"/>
+    	<property name="loadBalance" value="${jcifs.http.loadBalance}"/>
+    	
+	  	<property name="smbClientUsername">
+	  		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="encryptDecrypt"/>
+			   	<property name="targetMethod" value="getDecrypted"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>${jcifs.smb.client.username}</value>
+	    			</util:list>
+				</property>
+			</bean>	
+	  	</property>
+	
+	  	<property name="smbClientPassword">
+	  		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="encryptDecrypt"/>
+			   	<property name="targetMethod" value="getDecrypted"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>${jcifs.smb.client.password}</value>
+	    			</util:list>
+				</property>
+			</bean>	
+	  	</property>
+	  	
+    </bean>
+     <!-- End Here - UAT shinsei Active Directory -->
+    
+    <bean id="httpSessionContextIntegrationFilter" class="org.springframework.security.context.HttpSessionContextIntegrationFilter"/>
+	
+	<bean id="httpSessionContextIntegrationFilterASCfalse" class="org.springframework.security.context.HttpSessionContextIntegrationFilter">
+        <property name="allowSessionCreation">
+          <value>false</value>
+        </property>
+    </bean>
+	
+    <bean id="logoutFilter" class="org.springframework.security.ui.logout.LogoutFilter">
+        <constructor-arg value="/scaletech/login.html"/> <!-- URL redirected to after logout -->
+        <constructor-arg>
+            <list>
+                <bean class="org.springframework.security.ui.logout.SecurityContextLogoutHandler"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
+    <bean id="securityContextHolderAwareRequestFilter" class="org.springframework.security.wrapper.SecurityContextHolderAwareRequestFilter"/>
+
+    <bean id="anonymousProcessingFilter" class="org.springframework.security.providers.anonymous.AnonymousProcessingFilter">
+        <property name="key" value="changeThis"/>
+        <property name="userAttribute" value="ANONYMOUS_USER,ROLE_ANONYMOUS"/>
+    </bean>
+
+    <bean id="exceptionTranslationFilter" class="org.springframework.security.ui.ExceptionTranslationFilter">
+        <property name="authenticationEntryPoint" ref="ntlmEntryPoint"/>
+    </bean>
+    
+    <bean id="ntlmEntryPoint" class="org.springframework.security.ui.ntlm.NtlmProcessingFilterEntryPoint">
+        <property name="authenticationFailureUrl" value="/access-denied.html"/>
+    </bean>
+
+    <bean id="filterInvocationInterceptor" class="org.springframework.security.intercept.web.FilterSecurityInterceptor">
+        <property name="authenticationManager" ref="authenticationManager"/>
+        <property name="accessDecisionManager">
+            <bean class="org.springframework.security.vote.AffirmativeBased">
+                <property name="allowIfAllAbstainDecisions" value="false"/>
+                <property name="decisionVoters">
+                    <list>
+                        <bean class="org.springframework.security.vote.RoleVoter"/>
+                        <bean class="org.springframework.security.vote.AuthenticatedVoter"/>
+                    </list>
+                </property>
+            </bean>
+        </property>
+        <property name="objectDefinitionSource">
+            <value><![CDATA[
+                CONVERT_URL_TO_LOWERCASE_BEFORE_COMPARISON
+                PATTERN_TYPE_APACHE_ANT
+                /**=ROLE_USER,ROLE_ADMIN,ROLE_LOCAL_ADMIN
+            ]]></value>
+        </property>
+    </bean>
+
+    <bean id="authenticationManager" class="org.springframework.security.providers.ProviderManager">
+        <property name="providers">
+            <list>
+                <ref local="daoAuthenticationProvider"/>
+                <bean class="org.springframework.security.providers.anonymous.AnonymousAuthenticationProvider">
+                    <property name="key" value="/access-denied.html"/>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="daoAuthenticationProvider" class="org.springframework.security.providers.dao.DaoAuthenticationProvider">
+        <property name="userDetailsService" ref="userDetailsService"/>
+    </bean>
+    
+    <!-- ISA Process filter (start here) -->
+    <bean id="isaBasicFilter" class="com.scaletech.security.ISABasicProcessingFilter">
+    	<property name="authenticationManager" ref="authenticationManager" />
+    	<property name="realmName" value="Scale Tech, Inc."/>
+    	<property name="isaIPAddress">
+    		<util:list>
+				<value>172.22.135.133</value>
+                <value>172.22.135.132</value>
+    			<value>0:0:0:0:0:0:0:1</value>
+    		</util:list>
+    	</property>
+    </bean>
+    <!-- ISA Process filter (end here) -->
+
+	<!-- NOTE: Please change only this part -->
+    <!-- UserDetailsService is the most commonly frequently Acegi Security interface implemented by end users -->
+
+	<!-- Authentication using your own Dao -->
+    <bean id="userDetailsService" class="com.scaletech.security.JdbcUserSecurity">
+    	<property name="userJdbcDao" ref="userIbatisDao" />
+	</bean>
+	 
+    <!-- Authentication using InMemoryDaoImpl -->
+    <!-- 
+    <bean id="userDetailsService" class="org.springframework.security.userdetails.memory.InMemoryDaoImpl">
+        <property name="userProperties">
+            <bean class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+                <property name="location" value="/WEB-INF/users.properties"/>
+            </bean>
+        </property>
+    </bean>
+    -->
+    
+</beans>

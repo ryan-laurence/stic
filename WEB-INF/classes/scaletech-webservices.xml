@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:spring-beans-2.0.xsd
+						http://www.springframework.org/schema/util classpath:spring-util-2.0.xsd">
+
+	<!-- Utility -->
+	<bean id="categoriesInfoService" class="com.scaletech.webservice.CategoriesInfoService">
+		<property name="catDao" ref="categoriesIbatisDao" />
+	</bean>
+	
+	<bean id="custDestInfoServices" class="com.scaletech.webservice.CustDestInfoServices">
+		<property name="custDestDao" ref="custDestIbatisDao" />
+	</bean>
+	
+	<bean id="customerInfoServices" class="com.scaletech.webservice.CustomerInfoServices">
+		<property name="customersDao" ref="customersIbatisDao" />
+	</bean>
+
+	<bean id="custProductsInfoServices" class="com.scaletech.webservice.CustProductsInfoServices">
+		<property name="custProductsDao" ref="custProductsIbatisDao" />
+	</bean>
+
+	<bean id="destinationsInfoServices" class="com.scaletech.webservice.DestinationsInfoServices">
+		<property name="destinationsDao" ref="destinationsIbatisDao" />
+	</bean>
+
+	<bean id="productCategoriesInfoServices" class="com.scaletech.webservice.ProductCategoriesInfoServices">
+		<property name="productCategoriesDao" ref="productCategoriesIbatisDao" />
+	</bean>
+
+	<bean id="productsInfoServices" class="com.scaletech.webservice.ProductsInfoServices">
+		<property name="productsDao" ref="productsIbatisDao" />
+	</bean>
+
+	<bean id="suppliersInfoServices" class="com.scaletech.webservice.SuppliersInfoServices">
+		<property name="suppliersDao" ref="suppliersIbatisDao" />
+	</bean>
+
+	<bean id="trucksInfoServices" class="com.scaletech.webservice.TrucksInfoServices">
+		<property name="trucksDao" ref="trucksIbatisDao" />
+	</bean>
+
+	<bean id="userAccessInfoServices" class="com.scaletech.webservice.UserAccessInfoServices">
+		<property name="userAccessDao" ref="userAccessIbatisDao" />
+	</bean>
+
+	<bean id="modulesInfoServices" class="com.scaletech.webservice.ModulesInfoServices">
+		<property name="moduleDao" ref="modulesIbatisDao" />
+	</bean>
+
+	<bean id="roleModulesInfoService" class="com.scaletech.webservice.RoleModulesInfoService">
+		<property name="roleModuleDao" ref="roleModulesIbatisDao" />
+	</bean>
+
+	<bean id="rolesInfoServices" class="com.scaletech.webservice.RolesInfoServices">
+		<property name="rolesDao" ref="rolesIbatisDao" />
+	</bean>
+
+	<bean id="userInfoServices" class="com.scaletech.webservice.UserInfoServices">
+		<property name="userDao" ref="userIbatisDao" />
+	</bean>
+
+	<bean id="weightReadingInfoServices" class="com.scaletech.webservice.WeightReadingInfoServices">
+		<property name="weightReadingDao" ref="weightReadingsIbatisDao" />
+	</bean>
+
+	<bean id="auditInfoService" class="com.scaletech.webservice.AuditInfoService">
+		<property name="auditDao" ref="auditTrailDao" />
+	</bean>
+
+	<bean id="companyInfoServices" class="com.scaletech.webservice.CompanyInfoServices">
+		<property name="compDao" ref="companyDaoIbatisDao" />
+		<property name="backUpDB" ref="backupDB" />
+		<property name="utils" ref="beanUtils" />
+		
+		<property name="checkLicenseWarningDays" value="${check.license.warning.days}" />
+		<property name="checkLicenseCriticalDays" value="${check.license.critical.days}" />
+	</bean>
+
+	<bean id="printerConfigurationInfoServices" class="com.scaletech.webservice.PrinterConfigurationInfoServices">
+		<property name="printDao" ref="printersIbatisDao" />
+	</bean>
+	
+	<!-- Weighing Reading Summary Report -->
+	<bean id="weighingReadingSummInfoServices" class="com.scaletech.webservice.WeighingReadingSummInfoServices">
+		<property name="wgReadSummDao" ref="weighingReadingSummaryDao" />
+	</bean>
+
+	<!-- ScaleReader -->
+	<bean id="scaleReaderInfoServices" class="com.scaletech.webservice.ScaleReaderInfoServices">
+		<property name="scaleReaderDao" ref="scaleReaderDao" />
+		<property name="compDao" ref="companyDaoIbatisDao" />
+	</bean>
+
+	<!-- Docket Template -->
+	<bean id="docketTemplateInfoService" class="com.scaletech.webservice.DocketTemplateInfoService">
+		<property name="docketDao" ref="docketTemplateIbatisDao" />
+	</bean>
+
+	<!-- Docket Print Log -->
+	<bean id="docketPrintLogInfoServices" class="com.scaletech.webservice.DocketPrintLogInfoServices">
+		<property name="printDao" ref="docketPrintLogIbatisDao" />
+	</bean>
+
+	<bean id="docketFieldsInfoServices" class="com.scaletech.webservice.DocketFieldsInfoServices">
+		<property name="docketFldDao" ref="docketFieldsIbatisDao" />
+	</bean>
+
+</beans>

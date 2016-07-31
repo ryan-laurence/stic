@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<insert id="addUserRoleSql" parameterClass="java.util.Map">
+		INSERT INTO `user_roles` (user_id, role_id)
+			VALUES (#user_id#, #role_id#)
+	</insert>
+
+	<update id="updateUserRoleSql" parameterClass="java.util.Map">
+		UPDATE `user_roles` SET 
+			user_id = #user_id#,
+			role_id	= #role_id#
+		WHERE
+			ur_id = #ur_id#
+	</update>
+	
+	<update id="updateUserRoleIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `user_roles` SET 
+			 status = #status#
+		WHERE ur_id = #ur_id#
+	</update>
+
+	<update id="updateUserRoleByUserIdIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `user_roles` SET 
+			 status = #status#
+		WHERE user_id = #user_id#
+	</update>
+	
+	<select id="getAllUserRolesByRoleIdSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT ur_id, user_id, role_id, status
+		  FROM `user_roles`
+		WHERE role_id = #role_id#
+	</select>
+	
+</sqlMap>
+	

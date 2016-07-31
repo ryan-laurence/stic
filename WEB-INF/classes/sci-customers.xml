@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<update id="addCustomersSql" parameterClass="java.util.Map">
+		INSERT INTO `customers` (cust_code, cust_name)
+			VALUES (#cust_code#, #cust_name#)
+	</update>
+
+	<update id="updateCustomersSql" parameterClass="java.util.Map">
+		UPDATE `customers` SET
+			 cust_code = #cust_code#
+			,cust_name = #cust_name#
+		  WHERE cust_id = #cust_id#
+	</update>
+
+	<update id="updateCustomersByIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `customers` SET
+			 status = #status#
+		  WHERE cust_id = #cust_id#
+		     AND cust_id NOT IN (SELECT cust_id FROM `customer_destinations`)
+	</update>
+	
+	<select id="getAllCustomersSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+			cust_id,
+			cust_code,
+			cust_name,
+			DATE_FORMAT(date_modified, '%m/%d/%Y %r') AS date_modified
+		FROM `customers`
+		WHERE `status` = 1
+		ORDER BY cust_name
+	</select>
+
+	<select id="getCustomersByNameSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `customers`
+			WHERE `status` = 1
+			WHERE cust_name = #cust_name#
+	</select>
+	
+	<select id="getCustomersByCodeIDSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `customers`
+			WHERE `status` = 1 
+			AND cust_code = #cust_code# 
+			AND cust_id != #cust_id#
+	</select>
+
+	<select id="getCustomersByWeightSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT *
+			FROM `weight_readings` a
+			JOIN `customers` b USING (`cust_id`)
+			JOIN `products` c USING (`prod_id`)
+			WHERE b.`status` = 1
+		<dynamic>
+		  	<isNotEmpty property="startDate" prepend="AND">
+		  		DATE_FORMAT(a.`weight_in_date`, '%Y-%m-%d') 
+		  		BETWEEN #startDate# AND #endDate#
+		  	</isNotEmpty>
+		</dynamic>
+	</select>
+
+</sqlMap>
+	

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<update id="updateDestinationsIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `destinations` SET 
+			 status = #status#
+		WHERE dest_id = #dest_id#
+	</update>
+	
+	<select id="getAllDestinationsSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+		  dest_id, 
+		  dest_zipcode, 
+		  dest_name, 
+		  dest_location,
+			DATE_FORMAT(date_modified, '%m/%d/%Y %r') AS date_modified
+		FROM `destinations`
+		ORDER BY dest_location, dest_name
+	</select>
+
+	<select id="getAllDestinationsByLocationSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+		  dest_id, 
+		  dest_zipcode, 
+		  dest_name, 
+		  dest_location,
+			DATE_FORMAT(date_modified, '%m/%d/%Y %r') AS date_modified
+		FROM `destinations`
+		WHERE dest_location = #dest_location#
+		<dynamic>
+			<isNotEmpty property="dest_name" prepend="AND">
+				dest_name = #dest_name#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY dest_location, dest_name
+	</select>
+
+	<select id="getAllDestinationsByNameSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+		  dest_id, 
+		  dest_zipcode, 
+		  dest_name, 
+		  dest_location,
+			DATE_FORMAT(date_modified, '%m/%d/%Y %r') AS date_modified
+		FROM `destinations`
+		WHERE dest_name = #dest_name#
+	</select>
+
+	<select id="getAllDestinationsByZipCodeSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+		  dest_id, 
+		  dest_zipcode, 
+		  dest_name, 
+		  dest_location,
+			DATE_FORMAT(date_modified, '%m/%d/%Y %r') AS date_modified
+		FROM `destinations`
+		WHERE dest_zipcode = #dest_zipcode#
+	</select>
+	
+	<select id="getAllDestinationsNotInCustDestSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+		  dest_id, 
+		  dest_zipcode, 
+		  dest_name, 
+		  dest_location,
+			DATE_FORMAT(date_modified, '%m/%d/%Y %r') AS date_modified
+		FROM `destinations`
+		WHERE dest_id NOT IN (
+		  SELECT dest_id 
+		  FROM `customer_destinations`
+		  WHERE cust_id = #cust_id#
+		  	AND `status` = 1
+		)
+		ORDER BY dest_location, dest_name
+   	</select>
+	
+	<select id="getAllDestinationsByWeightSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+		  CONCAT(c.dest_name, ', ', c.dest_location) AS dest_name,
+		  b.cust_name,
+		  a.net_weight,
+		  a.weight_unit
+		FROM `weight_readings` a
+		JOIN `customers` b USING (`cust_id`)
+		JOIN `destinations` c USING (`dest_id`)
+		WHERE b.`status` = 1
+		<dynamic>
+		  	<isNotEmpty property="startDate" prepend="AND">
+		  		DATE_FORMAT(a.`weight_in_date`, '%Y-%m-%d') 
+		  		BETWEEN #startDate# AND #endDate#
+		  	</isNotEmpty>
+		</dynamic>
+		ORDER BY c.dest_location
+	</select>
+	
+</sqlMap>
+	

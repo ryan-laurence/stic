@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMapConfig
+PUBLIC "-//iBATIS.com//DTD SQL Map Config 2.0//EN" "http://www.ibatis.com/dtd/sql-map-config-2.dtd">
+
+<sqlMapConfig>
+	<sqlMap resource="scaletech-user.xml" />
+	<sqlMap resource="sci-user-access.xml" />
+	<sqlMap resource="sci-destination.xml" />
+	<sqlMap resource="sci-categories.xml" />
+	<sqlMap resource="sci-product-categories.xml" />
+	<sqlMap resource="sci-products.xml" />
+	<sqlMap resource="sci-suppliers.xml" />
+	<sqlMap resource="sci-trucks.xml" />
+	<sqlMap resource="sci-customers.xml" />
+	<sqlMap resource="sci-customer-products.xml" />
+	<sqlMap resource="sci-customer-destinations.xml" />
+	<sqlMap resource="sci-weight-readings.xml" />
+	<sqlMap resource="sci-company.xml" />
+	<sqlMap resource="sci-docket-template.xml" />
+	<sqlMap resource="sci-printer_configuration.xml" />
+	<sqlMap resource="sci-docket_fields.xml" />
+	<sqlMap resource="sci-docket_print_log.xml" />
+	<sqlMap resource="sci-user_roles.xml" />
+	<sqlMap resource="sci-modules.xml" />
+	<sqlMap resource="sci-role_modules.xml" />
+	<sqlMap resource="sci-roles.xml" />
+	<sqlMap resource="sci-database_history.xml" />
+</sqlMapConfig>

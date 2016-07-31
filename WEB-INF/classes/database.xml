@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans classpath:spring-beans-2.5.xsd
+	http://www.springframework.org/schema/util classpath:spring-util-2.5.xsd">
+
+	<!-- Comment the placeholderConfig bean 
+		 if the environment is LIVE and 
+		 uncomment for junit test 
+	--> 
+	
+	<!-- 
+	<bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="location" value="classpath:database.properties"/>
+	</bean>
+	-->
+	<bean id="placeholderConfig" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="locations">
+	    	<list>
+	        	<value>classpath:database.properties</value>
+	        	<value>classpath:scaletech.properties</value>
+	        	<value>classpath:email.properties</value>
+	        	<value>classpath:security.properties</value>
+	    	</list>
+		</property>
+	</bean>
+	
+	
+	<bean id="extendedBasicDataSource" class="com.scaletech.datasource.ExtendedBasicDataSource" destroy-method="close">  	  		
+		<property name="driverClassName">	
+	      	<value>${database.driverclassname}</value>
+	   	</property>
+	   
+	   	<property name="url">
+	      	<value>${database.url}</value>
+	  	</property>
+
+<!-- 
+	   	<property name="username">
+	      	<value>${database.user}</value>
+	  	</property>
+	
+	   	<property name="password">
+	      	<value>${database.password}</value>
+	  	</property>
+ -->
+   	
+	  	<property name="username">
+	  		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="encryptDecrypt"/>
+			   	<property name="targetMethod" value="getDecrypted"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>${database.user}</value>
+	    			</util:list>
+				</property>
+			</bean>	
+	  	</property>
+	
+	  	<property name="password">
+	  		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="encryptDecrypt"/>
+			   	<property name="targetMethod" value="getDecrypted"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>${database.password}</value>
+	    			</util:list>
+				</property>
+			</bean>	
+	  	</property>
+	  
+	   	<property name="defaultAutoCommit">
+			<value>${database.autocommit}</value>
+	  	</property>
+		
+	  	<property name="maxActive">
+			<value>${database.maxactive}</value>
+	  	</property>
+	  
+	  	<property name="maxIdle">
+			<value>${database.maxidle}</value>
+	  	</property>
+	  
+	  	<property name="minIdle">
+			<value>${database.minidle}</value>
+	  	</property>
+	  
+	  	<property name="maxWait">
+			<value>${database.maxwait}</value>
+	  	</property>
+	  
+	  	<property name="validationQuery">
+			<value>${database.validattionquery}</value>
+	  	</property>
+	  
+	  	<property name="removeAbandoned">
+			<value>${database.removeabandoned}</value>
+	  	</property>
+	  
+	  	<property name="removeAbandonedTimeout">
+			<value>${database.removeabandonedtimeout}</value>
+	  	</property>
+	  
+	  	<property name="poolPreparedStatements">
+			<value>${database.poolpreparedstatements}</value>
+	  	</property>
+	  
+	  	<property name="maxOpenPreparedStatements">
+			<value>${database.maxopenpreparedstatements}</value>
+	  	</property>
+	  	
+	  	<property name="connectionProperties">
+	  		<props>
+				<prop key="useUnicode">${database.useUnicode}</prop>
+				<prop key="characterEncoding">${database.characterEncoding}</prop>	
+				<prop key="characterSetResults">${database.characterSetResults}</prop>
+	  		</props>
+		</property>
+	</bean>
+	
+	<bean id="encryptDecrypt" class="com.scaletech.encryption.DesedeEncryptDecrypt"/>
+	
+	<!-- 	
+	<bean id="decryptor" class="com.paz.encryption.Decrypt" />
+	
+	<bean id="encryptor" class="com.paz.encryption.Encrypt" />
+	-->
+	
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+	    <property name="dataSource" ref="extendedBasicDataSource"/>
+	</bean>
+</beans>

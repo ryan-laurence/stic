@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:spring-beans-2.0.xsd
+http://www.springframework.org/schema/util classpath:spring-util-2.0.xsd">
+
+	<!--  templates configuration -->
+	<bean id="configuration" class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+	 	<property name="targetObject">
+			<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+	   			<property name="templateLoaderPath">
+	   				<value>classpath:templates/</value>
+				</property>
+			</bean>
+		</property> 		
+	   	<property name="targetMethod" value="getConfiguration"/>
+	</bean>
+	
+	<!--  customer contracts mapper -->
+	<bean id="monthlySalesReportMapper" class="com.scaletech.mapper.FtlGeneric" scope="singleton">
+		<property name="template">
+			<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="configuration"/>
+			   	<property name="targetMethod" value="getTemplate"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>monthly-sales-report.ftl</value>
+	    			</util:list>
+				</property>
+			</bean>		
+		</property>
+	</bean>
+
+	<!-- Email Mapper -->
+	<!--  customer contracts mapper -->
+	<bean id="emailMapSuccess" class="com.scaletech.mapper.FtlGeneric" scope="singleton">
+		<property name="template">
+			<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="configuration"/>
+			   	<property name="targetMethod" value="getTemplate"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>email-notify-sucess.ftl</value>
+	    			</util:list>
+				</property>
+			</bean>		
+		</property>
+	</bean>
+	
+	<bean id="emailMapError" class="com.scaletech.mapper.FtlGeneric" scope="singleton">
+		<property name="template">
+			<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="configuration"/>
+			   	<property name="targetMethod" value="getTemplate"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>email-notify-error.ftl</value>
+	    			</util:list>
+				</property>
+			</bean>		
+		</property>
+	</bean>
+
+	<bean id="emailMapperSpammer" class="com.scaletech.mapper.FtlGeneric" scope="singleton">
+		<property name="template">
+			<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="configuration"/>
+			   	<property name="targetMethod" value="getTemplate"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>email-notify-spam.ftl</value>
+	    			</util:list>
+				</property>
+			</bean>		
+		</property>
+	</bean>	
+	
+</beans>

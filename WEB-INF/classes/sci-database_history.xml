@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<update id="addDatabaseHistorySql" parameterClass="java.util.Map">
+		INSERT INTO `database_history` (`database_path`, `database_file`, `type`, `user`, `status`)
+			VALUES (#database_path#, #database_file#, #type#, #user#, #status#)
+	</update>
+
+	<update id="updateDatabaseHistorySql" parameterClass="java.util.Map">
+		UPDATE `database_history` SET
+			 `database_path` = #database_path#,
+			 `database_file` = #database_file#,
+			 `type` = #type#,
+			 `status` = #status#
+		  WHERE `id` = #id#
+	</update>
+
+	<update id="updateDatabaseHistoryByIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `database_history` SET
+			 `database_path` = #database_path#,
+			 `database_file` = #database_file#
+		  WHERE `id` = #id#
+	</update>
+	
+	<select id="getAllDatabaseHistorySql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT `id`, `user`, `database_path`, `database_file`, `type`, `status`, DATE_FORMAT(date_process, '%Y-%m-%d %r') AS date_process
+		FROM `database_history`
+		WHERE `type` = 'BACKUP'
+		<dynamic>
+		  	<isNotEmpty property="id" prepend="AND">
+		  		`id` = #id#
+		  	</isNotEmpty>
+		</dynamic>
+		ORDER BY id
+	</select>
+
+</sqlMap>
+	

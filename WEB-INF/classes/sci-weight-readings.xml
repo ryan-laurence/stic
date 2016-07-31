@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<insert id="addWeightReadingsSql" parameterClass="java.util.Map" >
+		INSERT INTO `weight_readings` (
+			docket_no,
+			truck_code, 
+			weight_in_reading, 
+			weight_unit, 
+			weight_in_date, 
+			weight_count, 
+			weight_status,
+			user_id
+		) VALUES (
+			#docket_no#,
+			#truck_code#, 
+			#weight_in_reading#, 
+			#weight_unit#, 
+			#weight_in_date#, 
+			#weight_count#, 
+			#weight_status#, 
+			#user_id#
+		)
+	</insert>
+	
+	<update id="updateWeightReadingsSql" parameterClass="java.util.Map">
+		UPDATE `weight_readings` SET
+			 cust_id = #cust_id#
+			,dest_id = #dest_id#
+			,prod_id = #prod_id#
+			,supp_id = #supp_id#
+			,user_id = #user_id#
+			,unit_price = #unit_price#
+			,total_price = #total_price#
+			,remarks = #remarks#
+			,weight_out_reading = #weight_out_reading#
+			,compensation = #compensation#
+			,net_weight = #net_weight#
+			,weight_unit = #weight_unit#
+			,weight_out_date = #weight_out_date#
+			,weight_count = #weight_count#
+			,weight_status = #weight_status#
+		  WHERE wr_id = #wr_id#
+	</update>
+
+	<select id="getAllWeightReadingsSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `weight_readings`
+			<dynamic>
+			  	<isNotEmpty property="wr_id" prepend="WHERE">
+			  		wr_id = #wr_id#
+			  	</isNotEmpty>
+			</dynamic>
+	</select>
+	
+	<select id="checkTruckCodeSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+			w.wr_id
+			,w.truck_code
+			,DATE_FORMAT(w.weight_in_date, '%Y-%m-%d') AS date_in
+			,DATE_FORMAT(w.weight_in_date, '%r') AS time_in
+			,w.weight_in_reading
+			,w.weight_unit
+			,IFNULL(u.user_name, '-') AS user_name
+			,IFNULL(w.docket_no, '-') AS docket_no
+		FROM `weight_readings` w
+		LEFT JOIN `users` u ON u.user_id = w.user_id 
+		WHERE weight_count = 1 AND weight_status = 'PENDING'
+		<dynamic>
+			<isNotEmpty property="truck_code" prepend="AND">
+				truck_code = #truck_code#
+			</isNotEmpty>
+		</dynamic>
+		ORDER BY w.weight_in_date DESC
+	</select>
+
+	<delete id="deleteWeighReadingByIdSql" parameterClass="java.util.Map">
+		DELETE FROM `weight_readings` 
+			WHERE weight_status = 'PENDING' AND weight_count = 1 AND wr_id = #wr_id#
+	</delete>
+	
+	<select id="getWeightReadingGapDocketNumberSql" parameterClass="java.util.Map" resultClass="java.lang.String" remapResults="false">
+		SELECT (t1.docket_no + 1) AS gap_number
+			FROM weight_readings t1
+		WHERE NOT EXISTS (SELECT t2.docket_no FROM weight_readings t2 WHERE t2.docket_no = t1.docket_no + 1)
+			HAVING gap_number IS NOT NULL
+			ORDER BY gap_number
+			LIMIT 1
+	</select>
+	
+	<!-- Company Table here -->
+	<select id="getCompanyIdSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT *
+			FROM `company`
+			LIMIT 1
+	</select>
+	
+	<update id="updateCompanyByCurrentDocketNumberSql" parameterClass="java.util.Map">
+		UPDATE `company` SET
+			 current_docket_number = #current_docket_number#
+		  WHERE id = #id#
+	</update>
+	
+	<procedure id="callProcDocketTemplate" parameterClass="java.util.Map">
+		CALL  proc_docket_template(#wr_id#)
+	</procedure>
+	
+</sqlMap>

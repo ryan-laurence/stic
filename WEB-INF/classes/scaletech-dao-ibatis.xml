@@ -1,0 +1,640 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans classpath:spring-beans-2.5.xsd
+						http://www.springframework.org/schema/util classpath:spring-util-2.5.xsd">
+
+	<import resource="classpath:database.xml" />
+	
+	<bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+		<property name="configLocation" value="classpath:sql-map-config.xml" />
+		<property name="dataSource" ref="extendedBasicDataSource"/>
+	</bean>
+	
+	<bean id="sqlMapClientOperations" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+		<property name="sqlMapClient" ref="sqlMapClient"/>
+	</bean>
+
+	<!-- API -->
+	<bean id="apiXml" class="com.scaletech.api.XmlReader" />
+	<bean id="scaleReaderDao" class="com.scaletech.reader.ScaleReader" />
+	<!-- 
+	<bean id="modelJTableApi" class="com.scaletech.printing.ModelJTable" />
+	-->
+	
+	<!-- Security -->
+	<bean id="beanSecurity" class="com.scaletech.security.SecurityImpl" />
+	
+	<!-- email -->
+	<bean id="beanEmail" class="com.scaletech.email.Email">
+		<property name="emailMapperSuccess" ref="emailMapSuccess" />
+		<property name="emailMapperError" ref="emailMapError" />
+		<property name="emailMapperSpammer" ref="emailMapperSpammer" />
+		<property name="emailTo" value="${mail.smtp.To}"/>
+		<property name="emailCc" value="${mail.smtp.Cc}"/>
+		
+		<property name="mailProtocol" value="${mail.transport.protocol}"/>
+		<property name="mailHost" value="${mail.smtp.host}"/>
+		<property name="mailPort" value="${mail.smtp.port}"/>
+		<property name="mailAuthenticate" value="${mail.smtp.auth}"/>
+		<property name="mailSender" value="${mail.smtp.sender}"/>
+		<property name="mailAllow" value="${mail.smtp.allow}"/>
+		<property name="mailRemarks" value="${remarks}"/>
+		<property name="mailSignature" value="${mail.sender}"/>
+		<property name="mailSSL" value="${mail.smtp.ssl.enable}"/>
+		
+		<property name="mailUserName" value="${mail.smtp.username}" />
+		<property name="mailPassword" value="${mail.smtp.password}" />
+		
+		<!-- 
+		<property name="mailUserName">
+			<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="encryptDecrypt"/>
+			   	<property name="targetMethod" value="getDecrypted"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>${mail.smtp.username}</value>
+	    			</util:list>
+				</property>
+		 	</bean>
+		</property>
+		<property name="mailPassword">
+			<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="encryptDecrypt"/>
+			   	<property name="targetMethod" value="getDecrypted"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>${mail.smtp.password}</value>
+	    			</util:list>
+				</property>
+			</bean>
+		</property>
+		-->
+		
+	</bean>
+	
+	<bean id="sendEmail" class="com.scaletech.email.SendMail">
+		<property name="mailHost" value="${mail.smtp.host}" />
+		<property name="mailPort" value="${mail.smtp.port}" />
+		<property name="mailMessage" value="${mail.message}" />
+		<property name="mailSubject" value="${mail.subject}" />
+		<property name="mailFrom" value="${mail.smtp.username}" />
+		<property name="mailFromPass" value="${mail.smtp.password}" />
+		<property name="mailTo" value="${mail.smtp.To}" />
+		<property name="mailCc" value="${mail.smtp.Cc}" />
+	</bean>
+
+	<!-- utilities -->
+	<bean id="beanUtils" class="com.scaletech.util.PazUtil">
+		<property name="folderPath" value="${file.upload.folder}"/>
+		<property name="folderTempPath" value="${file.temp.folder}" />
+		<property name="emailApi" ref="beanEmail" />
+		<property name="secret" ref="encryptDecrypt" />
+		
+		<property name="timeFormat" value="${web.defaultTimeFormat}" />
+		<property name="dateTimeFormat" value="${web.defaultDateTimeFormat}" />
+		<property name="companyTin" value="${company.tin}" />
+		<property name="driveApplication" value="${drive.application}" />
+	</bean>
+
+	<!-- Back DB -->
+	<bean id="backupDB" class="com.scaletech.util.BackupDB">
+		<property name="util" ref="beanUtils" />
+		<property name="dbHistory" ref="databaseHistoryIbatisDao" />
+		<property name="databasePath" value="${database.folder.location}" />
+		<property name="databaseRestore" value="${database.restore.batchfile}" />
+		
+		<property name="dbName" value="stic"/>
+		
+	  	<property name="dbUser">
+	  		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="encryptDecrypt"/>
+			   	<property name="targetMethod" value="getDecrypted"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>${database.user}</value>
+	    			</util:list>
+				</property>
+			</bean>	
+	  	</property>
+		
+		<property name="dbPass">
+	  		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="encryptDecrypt"/>
+			   	<property name="targetMethod" value="getDecrypted"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>${database.password}</value>
+	    			</util:list>
+				</property>
+			</bean>	
+	  	</property>
+	  	
+	  	<property name="applicationMySql" value="${mysql.path}"/>
+
+	</bean>
+	
+	<!-- 	
+	<bean id="emailDao" class="com.asti.cpaid.ibatis.EmailIbatisDao">
+		<property name="sqlMapClientOperations" ref="sqlMapClientOperations" />
+	</bean>
+	-->
+
+	<bean id="databaseHistoryIbatisDao" class="com.scaletech.ibatis.DatabaseHistoryIbatisDao">
+		<property name="sqlMapClientOperations" ref="sqlMapClientOperations" />
+		<property name="urlDb" value="${database.urlDb}" />
+		
+		<property name="mySqlUser">
+	  		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="encryptDecrypt"/>
+			   	<property name="targetMethod" value="getDecrypted"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>${database.user}</value>
+	    			</util:list>
+				</property>
+			</bean>	
+	  	</property>
+		
+		<property name="mySqlPc">
+	  		<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+			 	<property name="targetObject" ref="encryptDecrypt"/>
+			   	<property name="targetMethod" value="getDecrypted"/>
+			   	<property name="arguments">
+	    			<util:list>
+	    				<value>${database.password}</value>
+	    			</util:list>
+				</property>
+			</bean>	
+	  	</property>
+		
+		<property name="addDatabaseHistorySql">
+	    	<value><![CDATA[
+	    		INSERT INTO `database_history` (`database_path`, `database_file`, `type`, `user`, `status`) VALUES ( ?, ?, ?, ?, ?) 
+	    	]]></value>
+		</property>
+		
+		<property name="updateDatabaseHistorySql">
+			<value><![CDATA[
+				UPDATE `database_history` SET 
+					`database_path` = ?,
+					`database_file` = ?, 
+					`type` = ?, 
+					`status` = ? 
+				WHERE `id` = ? 
+			]]></value>
+		</property>
+		
+		<property name="getAllDatabaseHistoryByDateSql">
+			<value><![CDATA[
+				SELECT `id`, `user`, `database_path`, `database_file`, `type`, `status`, DATE_FORMAT(date_process, '%Y-%m-%d %r') AS date_process
+					FROM `database_history`
+					WHERE DATE_FORMAT(`date_process`, '%Y-%m-%d') BETWEEN 'DATE_FROM' AND 'DATE_TO'
+					ORDER BY id
+			]]></value>
+		</property>
+		
+		<property name="getAllDatabaseHistoryByIdSql">
+			<value><![CDATA[
+				SELECT `id`, `user`, `database_path`, `database_file`, `type`, `status`, DATE_FORMAT(date_process, '%Y-%m-%d %r') AS date_process
+					FROM `database_history`
+					WHERE id = DB_ID
+					ORDER BY id
+			]]></value>
+		</property>
+		
+		<property name="getAllDatabaseHistoryByTypeDateSql">
+			<value><![CDATA[
+				SELECT `id`, `user`, `database_path`, `database_file`, `type`, `status`, DATE_FORMAT(date_process, '%Y-%m-%d %r') AS date_process
+						FROM `database_history`
+						WHERE `type` = 'TYPE' 
+			]]></value>
+		</property>
+
+	</bean>
+	
+	<!-- Maintenance -->
+	<bean id="userIbatisDao" class="com.scaletech.ibatis.UserIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+	    <property name="util" ref="beanUtils"/>
+	    
+	    <property name="getLastRecordForUserIdSql">
+	    	<!--  value = "SELECT last_insert_id()" -->
+	    	<value><![CDATA[ 
+				SELECT user_id FROM `users`
+				ORDER BY user_id DESC LIMIT 1
+	    	]]></value>
+	    </property>
+	</bean>
+
+	<bean id="userAccessIbatisDao" class="com.scaletech.ibatis.UserAccessIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="userRolesIbatisDao" class="com.scaletech.ibatis.UserRolesIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="destinationsIbatisDao" class="com.scaletech.ibatis.DestinationsIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="categoriesIbatisDao" class="com.scaletech.ibatis.CategoriesIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="productCategoriesIbatisDao" class="com.scaletech.ibatis.ProductCategoriesIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+	
+	<bean id="productsIbatisDao" class="com.scaletech.ibatis.ProductsIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+	    
+	    <property name="getLastRecordForProductIdSql">
+	    	<value><![CDATA[ 
+	    	SELECT prod_id FROM `products`
+			ORDER BY prod_id DESC LIMIT 1
+	    	]]></value>
+	    	
+	    </property>
+	    <!-- value = "SELECT last_insert_id()"/-->
+
+	    <property name="getAllProductsNotInCustomerSql">
+	    	<value><![CDATA[ 
+	    		SELECT * FROM `products` a
+					JOIN `customer_products` b USING (`prod_id`)
+				WHERE a.`status` = 1 AND b.date_modified != '0000-00-00 00:00:00'
+					AND b.cust_id NOT IN (SELECT cust_id FROM customers WHERE cust_id = ?)
+				ORDER BY a.prod_name
+	    	]]></value>
+	    </property>
+	    
+	</bean>
+
+	<bean id="suppliersIbatisDao" class="com.scaletech.ibatis.SuppliersIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+	    
+	    <property name="getLastRecordForSupplierIdSql">
+	    	<!-- value = "SELECT last_insert_id()" -->
+	    	<value><![CDATA[
+				SELECT supp_id FROM `suppliers`
+				ORDER BY supp_id DESC LIMIT 1
+			]]></value>
+	    </property>
+	    
+	</bean>
+
+	<bean id="trucksIbatisDao" class="com.scaletech.ibatis.TrucksIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="customersIbatisDao" class="com.scaletech.ibatis.CustomersIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+	    
+	    <property name="getLastRecordForCustomerIdSql">
+	    	<!-- value = "SELECT last_insert_id()" -->
+	    	<value><![CDATA[
+				SELECT cust_id FROM `customers`
+				ORDER BY cust_id DESC LIMIT 1
+			    ]]></value>
+	    </property>
+	    
+	    <property name="getCustomersByCodeSql">
+	    	<value><![CDATA[
+						SELECT * FROM `customers`
+							WHERE `status` = 1 AND cust_code LIKE '%VALUE%'
+			    ]]></value>
+	    </property>	
+	    
+	</bean>
+
+	<bean id="custProductsIbatisDao" class="com.scaletech.ibatis.CustProductsIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="custDestIbatisDao" class="com.scaletech.ibatis.CustDestIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="printersIbatisDao" class="com.scaletech.ibatis.PrintersIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="modulesIbatisDao" class="com.scaletech.ibatis.ModulesIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="rolesIbatisDao" class="com.scaletech.ibatis.RolesIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="roleModulesIbatisDao" class="com.scaletech.ibatis.RoleModulesIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<!-- Transactions -->
+	<bean id="weightReadingsIbatisDao" class="com.scaletech.ibatis.WeightReadingsIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+	    
+	    <property name="getAllWeightReadingsByDateRangeSql">
+	    	<value><![CDATA[
+		    	SELECT * FROM `weight_readings`
+					WHERE DATE_FORMAT(weight_in_date, '%Y-%m-%d %H:%m') >= CONCAT(?, ' ', ?)
+	     				AND DATE_FORMAT(weight_out_date, '%Y-%m-%d %H:%m') <= CONCAT(?, ' ', ?)
+	     			LIMIT ?, ?
+		    ]]></value>
+	    </property>
+	    
+		<property name="getWeightReadingLastInsertIdSql">
+			<!-- value = "SELECT last_insert_id()"/> -->
+			<value><![CDATA[ 
+				SELECT wr_id FROM `weight_readings`
+				ORDER BY wr_id DESC LIMIT 1
+	    	]]></value>
+	    </property>
+	</bean>
+
+	<!-- Audit Trail -->
+	<bean id="auditTrailDao" class="com.scaletech.jdbc.JdbcAuditTrailDao">
+			<property name="jdbcTemplate" ref="jdbcTemplate"/>
+			
+			<property name="getAuditTrailRecordsSql" 
+				value="SELECT rec_timestamp, id, user_id, user_name, activity 
+						FROM `audit_trail` WHERE id = ? " />	
+			
+			<property name="getLastRecordSql"
+				value = "SELECT last_insert_id()"/>
+			
+			<property name="insertAuditTrailSql"
+				value="INSERT INTO `audit_trail` (user_id, user_name, activity) 
+						VALUES(?,?,?) "/>	
+							
+			<property name="deleteRecordSql"
+				value = "DELETE FROM `audit_trail` where id = ?"/>
+				
+			<property name="getAuditTrailListSql" 
+				value="SELECT DATE_FORMAT(a.rec_timestamp, '%m/%d/%Y %h:%i:%s %p') AS DATE, 
+							CAST(a.id AS CHAR) AS ID, a.activity AS ACTIVITY, a.user_name
+						FROM `audit_trail` a
+							WHERE DATE_FORMAT(a.rec_timestamp, '%m/%d/%Y') BETWEEN ? AND ?
+							ORDER BY SORT_BY SORT_ORDER 
+							LIMIT ?,?
+						"/>				
+			
+			<property name="getLastInsertIdSql" 
+				value="SELECT last_insert_id()
+						"/>	
+			
+			<property name="getTotalAuditTrailCountSql" 
+				value="SELECT COUNT(a.id) AS ID_COUNT
+						FROM `audit_trail` a
+							WHERE DATE_FORMAT(a.rec_timestamp, '%m-%d-%Y') 
+						"/>					
+			<property name="getAllAuditTrailSql"
+				value="SELECT DATE_FORMAT(a.rec_timestamp, '%m/%d/%Y %h:%i:%s %p') AS rec_timestamp, 
+							CAST(a.id AS CHAR) AS id, a.activity AS activity, a.user_name, a.user_id
+						 FROM `audit_trail` a
+						 WHERE DATE_FORMAT(a.rec_timestamp, '%m/%d/%Y') BETWEEN ? AND ?
+						 ORDER BY a.id "
+					 />
+			
+	</bean>
+	
+	<!-- Company -->
+	<bean id="companyDaoIbatisDao" class="com.scaletech.ibatis.CompanyDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+	    
+	    <property name="utils" ref="beanUtils"/>
+	    
+		<property name="checkExpirationDateSql">
+	    	<value><![CDATA[
+	    	UPDATE `company` SET 
+	    		is_license = 0,
+				database_datetime = NOW()
+				WHERE 
+					DATE_FORMAT(`exp_date`, '%Y-%m-%d') <= DATE_FORMAT(`current_date`, '%Y-%m-%d') 
+					AND is_license = 1
+					AND id = ?
+	    	]]></value>
+	    </property>
+	</bean>
+	
+	<!-- Docket Template -->
+	<bean id="docketTemplateIbatisDao" class="com.scaletech.ibatis.DocketTemplateIbatisDao">
+	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+	</bean>
+	
+	<!-- Docket Fields -->
+	<bean id="docketFieldsIbatisDao" class="com.scaletech.ibatis.DocketFieldsIbatisDao">
+		<property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+	
+	<!-- Docket Print Log -->
+	<bean id="docketPrintLogIbatisDao" class="com.scaletech.ibatis.DocketPrintLogIbatisDao">
+		<property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
+
+	<bean id="printRowColumn" class="com.scaletech.printing.PrintRowColumn" />
+
+	<!-- Docket Print -->
+	<bean id="docketPrint" class="com.scaletech.printing.DocketPrint">
+		<property name="docketPathFile" value="${print.docket.path.file}" />
+	</bean>
+	
+	<!--
+	================================================================================  
+	-->
+	<!-- F2 Truck In Report AND F4 Summary -->
+	<bean id="weighingReadingSummaryDao" class="com.scaletech.jdbc.WeighingReadingSummaryDao">
+	    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+	    
+	    <property name="getAllWeightReadingsSummReportBySupplierSql">
+	    	<value><![CDATA[
+					SELECT 
+						s.supp_name,
+						c.cat_name,
+						p.prod_name,
+						FORMAT(SUM(wr.net_weight), 2) AS net_weight,
+						wr.weight_unit
+					FROM weight_readings wr
+					LEFT JOIN suppliers s ON s.supp_id = wr.supp_id
+					LEFT JOIN products p ON p.prod_id = wr.prod_id
+					LEFT JOIN categories c ON c.cat_id = p.cat_id
+					WHERE wr.weight_count = 2
+						AND wr.weight_status = 'DONE'
+						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+					GROUP BY
+						wr.supp_id,
+						wr.prod_id
+		    ]]></value>
+		    <!-- LIMIT ?, ? -->
+	    </property>
+	    
+	    <property name="getAllWeightReadingsSummReportByCustomerSql">
+	    	<value><![CDATA[
+					SELECT 
+						c.cust_code,
+						c.cust_name,
+						FORMAT(SUM(wr.net_weight), 2) AS net_weight,
+						wr.weight_unit
+					FROM weight_readings wr
+					LEFT JOIN customers c ON c.cust_id = wr.cust_id
+					WHERE wr.weight_count = 2
+						AND wr.weight_status = 'DONE'
+						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+					GROUP BY
+						wr.cust_id
+					
+	    	]]>
+	    	<!-- LIMIT ?, ? -->
+	    	</value>
+	    </property>
+	    
+	    <property name="getAllWeightReadingsSummReportByDestinationSql">
+	    	<value><![CDATA[
+					SELECT 
+						c.cust_name,
+						d.dest_zipcode,
+						d.dest_name,
+						d.dest_location,
+						FORMAT(SUM(wr.net_weight), 2) AS net_weight,
+						wr.weight_unit
+					FROM weight_readings wr
+					LEFT JOIN destinations d ON d.dest_id = wr.dest_id
+					LEFT JOIN customers c ON c.cust_id = wr.cust_id
+					WHERE wr.weight_count = 2
+						AND wr.weight_status = 'DONE'
+						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+					GROUP BY
+						wr.dest_id, wr.cust_id
+	    	]]></value>
+	    	<!-- LIMIT ?, ? -->
+	    </property>
+	    
+	    <property name="getAllWeightReadingsSummReportByProductSql">
+	    	<value><![CDATA[
+					SELECT 
+						c.cat_name,
+						p.prod_name,
+						FORMAT(SUM(wr.net_weight), 2) AS net_weight,
+						wr.weight_unit
+					FROM weight_readings wr
+					LEFT JOIN products p ON p.prod_id = wr.prod_id
+					LEFT JOIN categories c ON c.cat_id = p.cat_id
+					WHERE wr.weight_count = 2
+						AND wr.weight_status = 'DONE'
+						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+					GROUP BY
+						wr.prod_id
+	    	]]></value>
+	    	<!-- LIMIT ?, ? -->
+	    </property>
+	    
+	    <property name="getAllWeightReadingsSummReportByTruckSql">
+	    	<value><![CDATA[
+					SELECT 
+						wr.truck_code,
+						FORMAT(COUNT(wr.truck_code), 0) AS no_of_count,
+						FORMAT(SUM(wr.net_weight), 2) AS net_weight,
+						wr.weight_unit
+					FROM weight_readings wr
+					WHERE wr.weight_count = 2
+						AND wr.weight_status = 'DONE'
+						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+					GROUP BY
+						wr.truck_code
+	    	]]></value>
+	    	<!-- LIMIT ?, ? -->
+	    </property>
+	    
+	    <property name="getAllWeightReadingsSummReportByDetailedTruckSql">
+	    	<value><![CDATA[
+					SELECT 
+						wr.truck_code,
+						c.cat_name,
+						p.prod_name,
+						DATE_FORMAT(wr.weight_in_date, '%m/%d/%Y') AS date_in,
+						DATE_FORMAT(wr.weight_in_date, '%r') AS time_in,
+						DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') AS date_out,
+						DATE_FORMAT(wr.weight_out_date, '%r') AS time_out,
+						FORMAT(SUM(wr.net_weight), 2) AS net_weight,
+						wr.weight_unit,
+						u.user_name
+					FROM weight_readings wr
+					LEFT JOIN users u ON u.user_id = wr.user_id
+					LEFT JOIN products p ON p.prod_id = wr.prod_id
+					LEFT JOIN categories c ON c.cat_id = p.cat_id
+					WHERE wr.weight_count = 2
+						AND wr.weight_status = 'DONE'
+						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+					GROUP BY
+						wr.truck_code,
+						wr.prod_id,
+						wr.weight_out_date
+	    	]]></value>
+	    	<!-- LIMIT ?, ? -->
+	    </property>
+	    
+	    <property name="getAllWeightReadingByFilterNoParamSql">
+	    	<value><![CDATA[
+				SELECT 
+					IFNULL(a.docket_no, '') AS docket_no,
+					IFNULL(c.cat_name, '') AS cat_name,
+					IFNULL(e.prod_name, '') AS prod_name,
+					IFNULL(b.cust_name, '') AS cust_name,
+					IFNULL(a.truck_code, '') AS truck_code,
+					IFNULL(g.user_name, '') AS user_name,
+					DATE_FORMAT(a.weight_in_date, '%m/%d/%Y') AS date_in,
+					DATE_FORMAT(a.weight_in_date, '%r') AS time_in,
+					DATE_FORMAT(a.weight_out_date, '%m/%d/%Y') AS date_out,
+					DATE_FORMAT(a.weight_out_date, '%r') AS time_out,
+					IFNULL(FORMAT(a.weight_in_reading, 2), 0) AS weight_in_reading,
+					IFNULL(FORMAT(a.weight_out_reading, 2), 0) AS weight_out_reading,
+					IFNULL(FORMAT(a.net_weight, 2), 0) AS net_weight,
+					IFNULL(a.weight_unit, '') AS weight_unit,
+					IFNULL(a.compensation, 0) AS compensation
+				FROM `weight_readings` a
+					JOIN `customers` b USING (`cust_id`)
+					JOIN `products` e USING(`prod_id`)
+					JOIN `categories` c USING(`cat_id`)
+					JOIN `users` g USING(`user_id`)
+	    	]]></value>
+	    </property>
+	    <property name="getAllWeightReadingByFilterParamSql">
+	    	<value><![CDATA[
+				SELECT 
+					IFNULL(a.docket_no, '') AS docket_no,
+					IFNULL(c.cat_name, '') AS cat_name,
+					IFNULL(e.prod_name, '') AS prod_name,
+					IFNULL(b.cust_name, '') AS cust_name,
+					IFNULL(a.truck_code, '') AS truck_code,
+					IFNULL(g.user_name, '') AS user_name,
+					DATE_FORMAT(a.weight_in_date, '%m/%d/%Y') AS date_in,
+					DATE_FORMAT(a.weight_in_date, '%r') AS time_in,
+					DATE_FORMAT(a.weight_out_date, '%m/%d/%Y') AS date_out,
+					DATE_FORMAT(a.weight_out_date, '%r') AS time_out,
+					IFNULL(FORMAT(a.weight_in_reading, 2), 0) AS weight_in_reading,
+					IFNULL(FORMAT(a.weight_out_reading, 2), 0) AS weight_out_reading,
+					IFNULL(FORMAT(a.net_weight, 2), 0) AS net_weight,
+					IFNULL(a.weight_unit, '') AS weight_unit,
+					IFNULL(a.compensation, 0) AS compensation
+				FROM `weight_readings` a
+					JOIN `customers` b USING (`cust_id`)
+					JOIN `products` e USING(`prod_id`)
+					JOIN `categories` c USING(`cat_id`)
+					JOIN `users` g USING(`user_id`)
+				WHERE
+					FIELD_FILTER
+	    	]]></value>
+	    </property>
+	    
+	</bean>
+	
+</beans>

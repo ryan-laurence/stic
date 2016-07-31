@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<insert id="addDocketTemplateSql" parameterClass="java.util.Map">
+		INSERT INTO `docket_template` (dt_type, dt_field, dt_row, dt_column, dt_font_uppercase, dt_font_underline, dt_font_size, dt_message, dt_source)
+			VALUES (#dt_type#, #dt_field#, #dt_row#, #dt_column#, #dt_font_uppercase#, #dt_font_underline#, #dt_font_size#, #dt_message#, #dt_source#)
+	</insert>
+	
+	<update id="updateDocketTemplateSql" parameterClass="java.util.Map">
+		UPDATE `docket_template` SET 
+			  dt_type = #dt_type#, 
+			  dt_field = #dt_field#, 
+			  dt_row = #dt_row#, 
+			  dt_column = #dt_column#, 
+			  dt_font_uppercase = #dt_font_uppercase#, 
+			  dt_font_underline = #dt_font_underline#, 
+			  dt_font_size = #dt_font_size#,
+			  dt_message = #dt_message#,
+			  dt_source = #dt_source#
+			WHERE dt_id = #dt_id#
+	</update>
+	
+	<delete id="deleteDocketTemplateSql" parameterClass="java.util.Map">
+		DELETE FROM `docket_template` WHERE dt_id = #dt_id#
+	</delete>
+	
+	<!-- select id="getAllDocketTemplateByTypeSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT dt_id, dt_type, IF(dt_field=NULL, dt_field, '') AS dt_field, IF(dt_message=NULL, dt_message, '') AS dt_msg, dt_row, dt_column, dt_font_uppercase, IF(dt_font_underline, 'YES', 'NO') AS dt_font_underline, dt_font_size, date_modified 
+			FROM `docket_template`
+			<dynamic>
+				<isNotEmpty property="dt_type" prepend="WHERE">
+				dt_type = #dt_type#
+				</isNotEmpty>
+			</dynamic>
+	</select -->
+
+	<select id="getAllDocketTemplateByTypeSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT dt_id, dt_type, IFNULL(dt_field, '') AS dt_field, IFNULL(dt_message, '') AS dt_message, dt_row, dt_column, IF(dt_font_uppercase, 'Yes', 'No') AS dt_font_uppercase, IF(dt_font_underline, 'Yes', 'No') AS dt_font_underline, dt_font_size, dt_source 
+			FROM `docket_template`
+			<dynamic>
+				<isNotEmpty property="dt_type" prepend="WHERE">
+				dt_type = #dt_type#
+				</isNotEmpty>
+			</dynamic>
+			ORDER BY dt_row, dt_column
+	</select>
+	
+	<procedure id="callProcDocketTemplateSql" parameterClass="java.util.Map">
+		{ CALL proc_docket_template(#wr_id#) }
+	</procedure>
+
+	<select id="getDocketTemplateSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT
+			dt_id, dt_type, dt_message, dt_row, dt_column, dt_font_uppercase, IF(dt_font_underline, 'YES', 'NO') AS dt_font_underline, dt_font_size  
+		  FROM `docket_template_print`
+		  WHERE wr_id = #wr_id# AND dt_type = #dt_type#
+	</select>
+	
+</sqlMap>

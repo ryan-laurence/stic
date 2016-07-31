@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<update id="addProductsSql" parameterClass="java.util.Map">
+		INSERT INTO `products` (prod_code, prod_name, cat_id)
+			VALUES (#prod_code#, #prod_name#, #cat_id#)
+	</update>
+
+	<update id="updateProductsSql" parameterClass="java.util.Map">
+		UPDATE `products` SET
+			 prod_code = #prod_code#
+			,prod_name = #prod_name#
+			,cat_id = #cat_id#
+		  WHERE prod_id = #prod_id#
+	</update>
+
+	<update id="updateProductsByIsDeletedSql" parameterClass="java.util.Map">
+		UPDATE `products` SET
+			 status = #status#
+		  WHERE prod_id = #prod_id#
+		     AND prod_id NOT IN (SELECT prod_id FROM `customer_products`)
+	</update>
+	
+	<select id="getAllProductsSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT 
+			p.prod_id,
+			p.prod_code,
+			p.prod_name,
+			p.unit_price,
+			IFNULL(c.cat_id, p.cat_id) AS cat_id,
+			IFNULL(c.cat_name, '-') AS cat_name,	
+			DATE_FORMAT(p.date_modified, '%m/%d/%Y %r') AS date_modified
+		FROM `products` p
+		LEFT JOIN `categories` c ON c.cat_id = p.cat_id
+		WHERE p.`status` = 1 AND p.date_modified != '0000-00-00 00:00:00'
+		<dynamic>
+				<isNotEmpty property="cust_id" prepend="AND">
+				p.`prod_id` NOT IN (
+				SELECT prod_id
+					FROM `customer_products`
+					WHERE cust_id = #cust_id#
+						AND `status` = 1)
+				</isNotEmpty>
+		</dynamic>
+		ORDER BY prod_name
+	</select>
+
+	<select id="getProductsByCodeSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * 
+		FROM `products`
+		WHERE `status` = 1
+			AND prod_code = #prod_code#
+			<dynamic>
+			  	<isNotEmpty property="prod_id" prepend="AND">
+			  		prod_id != #prod_id#
+			  	</isNotEmpty>
+			</dynamic>
+	</select>
+
+	<select id="getProductsByNameSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `products`
+			WHERE prod_name = #prod_name#
+	</select>
+	
+	<select id="getProductsByWeightSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT *
+		FROM `weight_readings` a
+		JOIN `products` b USING (`prod_id`)
+		WHERE b.`status` = 1
+		<dynamic>
+		  	<isNotEmpty property="startDate" prepend="AND">
+		  		DATE_FORMAT(a.`weight_in_date`, '%Y-%m-%d') 
+		  		BETWEEN #startDate# AND #endDate#
+		  	</isNotEmpty>
+		</dynamic>
+	</select>
+	
+	<select id="checkTagCatIdSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT COUNT(`cat_id`) as `count`
+		  FROM `products`
+		  WHERE `cat_id` = #cat_id# AND `status` = 1
+	</select>
+
+</sqlMap>
+	

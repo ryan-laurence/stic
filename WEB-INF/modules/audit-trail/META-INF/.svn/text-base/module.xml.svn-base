@@ -1,0 +1,10 @@
+<module name="audit" class="com.asti.clpr.webservice.module.AuditTrailModule">
+   <Description>This is the Audit Trail web service module</Description>
+   
+   <InFlow>
+        <handler name="InFlowAuditHandler" class="com.asti.clpr.webservice.module.AuditTrailHandler">
+        <order phase="auditPhase" />
+        </handler>
+   </InFlow>
+
+</module>
