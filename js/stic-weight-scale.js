@@ -167,10 +167,6 @@ function showNewModalForm(params) {
 							else if (params.objectId === 'prodInfo')
 								$('#prod_id').val(result.response.newId);
 
-							// New Id for Supplier
-							else if (params.objectId === 'suppInfo')
-								$('#supp_id').val(result.response.newId);
-
 							BootstrapDialog.closeAll();
 
 							if (params.status === 'FIRST_WEIGHT_IN')
@@ -222,20 +218,17 @@ function toggleWeightScaleFields(options) {
 			$('label[for]').css('color', '#333333');
 			$('#new-customer-data').prop('disabled', true);
 			$('#search-customer-data').prop('disabled', true);
-			$('#new-destination-data').prop('disabled', true);
-			$('#search-destination-data').prop('disabled', true);
+			$('#address').prop('disabled', true);
+			$('#new-category-data').prop('disabled', true);
+			$('#search-category-data').prop('disabled', true);
 			$('#new-product-data').prop('disabled', true);
 			$('#search-product-data').prop('disabled', true);
-			$('#new-supplier-data').prop('disabled', true);
-			$('#search-supplier-data').prop('disabled', true);
 			$('#new-customer-data').popover('destroy');
 			$('#search-customer-data').popover('destroy');
-			$('#new-destination-data').popover('destroy');
-			$('#search-destination-data').popover('destroy');
+			$('#new-category-data').popover('destroy');
+			$('#search-category-data').popover('destroy');
 			$('#new-product-data').popover('destroy');
 			$('#search-product-data').popover('destroy');
-			$('#new-supplier-data').popover('destroy');
-			$('#search-supplier-data').popover('destroy');
 
 			// Input Fields
 			$('input[data-stage="second"][type="hidden"]').val('');
@@ -262,23 +255,19 @@ function toggleWeightScaleFields(options) {
 
 			// Field Buttons
 			$('label[for]').css('color', '#333333');
-			$('#new-customer-data').popover();
 			$('#new-customer-data').prop('disabled', false);
 			$('#search-customer-data').prop('disabled', false);
-			$('#new-destination-data').prop('disabled', false);
-			$('#search-destination-data').prop('disabled', false);
+			$('#address').prop('disabled', false);
+			$('#new-category-data').prop('disabled', false);
+			$('#search-category-data').prop('disabled', false);
 			$('#new-product-data').prop('disabled', false);
 			$('#search-product-data').prop('disabled', false);
-			$('#new-supplier-data').prop('disabled', false);
-			$('#search-supplier-data').prop('disabled', false);
 			$('#new-customer-data').popover();
 			$('#search-customer-data').popover();
-			$('#new-destination-data').popover();
-			$('#search-destination-data').popover();
+			$('#new-category-data').popover();
+			$('#search-category-data').popover();
 			$('#new-product-data').popover();
 			$('#search-product-data').popover();
-			$('#new-supplier-data').popover();
-			$('#search-supplier-data').popover();
 
 			// Input Fields
 			$('input[data-stage="second"][type="hidden"]').val('');
@@ -305,20 +294,17 @@ function toggleWeightScaleFields(options) {
 			$('#new-customer-data').popover('destroy');
 			$('#new-customer-data').prop('disabled', true);
 			$('#search-customer-data').prop('disabled', true);
-			$('#new-destination-data').prop('disabled', true);
-			$('#search-destination-data').prop('disabled', true);
+			$('#address').prop('disabled', true);
+			$('#new-category-data').prop('disabled', true);
+			$('#search-category-data').prop('disabled', true);
 			$('#new-product-data').prop('disabled', true);
 			$('#search-product-data').prop('disabled', true);
-			$('#new-supplier-data').prop('disabled', true);
-			$('#search-supplier-data').prop('disabled', true);
 			$('#new-customer-data').popover('destroy');
 			$('#search-customer-data').popover('destroy');
-			$('#new-destination-data').popover('destroy');
-			$('#search-destination-data').popover('destroy');
+			$('#new-category-data').popover('destroy');
+			$('#search-category-data').popover('destroy');
 			$('#new-product-data').popover('destroy');
 			$('#search-product-data').popover('destroy');
-			$('#new-supplier-data').popover('destroy');
-			$('#search-supplier-data').popover('destroy');
 
 			// Input Fields
 			$('input[data-stage="first"][data-type="varchar"]').val('');

@@ -113,10 +113,9 @@ var WS_DESTINATION_LIST = '/stic/services/DestinationsInfoServices/getAllDestina
 // Product Data
 var CD_PRODUCT_LIST = [
 	{ data: 'prod_id', name: 'prod_id', visible: false, searchable: false },
-	{ data: 'prod_code', name: 'prod_code', width: '20%' },
-	{ data: 'prod_name', name: 'prod_name', width: '20%' },
-	{ data: 'unit_price', name: 'unit_price', width: '15%' },
-	{ data: 'cat_name', name: 'cat_name', width: '20%' },
+	{ data: 'prod_code', name: 'prod_code', width: '25%' },
+	{ data: 'prod_name', name: 'prod_name', width: '25%' },
+	{ data: 'cat_name', name: 'cat_name', width: '25%' },
 	{ data: 'date_modified', name: 'date_modified', width: '25%' }
 ];
 var DS_PRODUCT_LIST = 'response.products-list.product';
@@ -134,8 +133,8 @@ var CD_CUSTDEST_LIST = [
 	{ data: 'dest_id', name: 'dest_id', visible: false, searchable: false },
 	{ data: 'dest_zipcode', name: 'dest_zipcode', width: '15%' },
 	{ data: 'dest_name', name: 'dest_name', width: '35%' },
-	{ data: 'dest_location', name: 'dest_location', width: '25%' },
-	{ data: 'date_modified', name: 'date_modified', width: '25%' }
+	{ data: 'dest_location', name: 'dest_location', width: '70%' },
+	{ data: 'date_modified', name: 'date_modified', width: '30%' }
 ];
 var PICKER_CUSTDEST_DATA = 'pages/data-customer-destination-picker.html';
 var DS_CUSTDEST_LIST = 'response.custDest-list.customerDestination';
@@ -148,10 +147,9 @@ var CD_CUSTPROD_LIST = [
 	{ data: 'cp_id', name: 'cp_id', visible: false, searchable: false },
 	{ data: 'cust_id', name: 'cust_id', visible: false, searchable: false },
 	{ data: 'prod_id', name: 'prod_id', visible: false, searchable: false },
-	{ data: 'prod_code', name: 'prod_code', width: '20%' },
-	{ data: 'prod_name', name: 'prod_name', width: '20%' },
-	{ data: 'unit_price', name: 'unit_price', width: '15%' },
-	{ data: 'cat_name', name: 'cat_name', width: '20%' },
+	{ data: 'prod_code', name: 'prod_code', width: '25%' },
+	{ data: 'prod_name', name: 'prod_name', width: '25%' },
+	{ data: 'cat_name', name: 'cat_name', width: '25%' },
 	{ data: 'date_modified', name: 'date_modified', width: '25%' }
 ];
 var PICKER_CUSTPROD_DATA = 'pages/data-customer-product-picker.html';

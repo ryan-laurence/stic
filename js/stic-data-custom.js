@@ -1,5 +1,5 @@
 /**
- * @summary				EditData for Customer, Destination & Product Details
+ * @summary				EditData for Customer Details, Addresses & Product Details
  * @file					stic-data-custom.js
  * @required			JQuery & Bootstrap Core, JQuery DataTables & STIC Functions
  */
@@ -815,4 +815,3 @@ function loadCustomerData(params) {
 
 	return dt;
 };
-

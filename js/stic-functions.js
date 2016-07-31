@@ -12,7 +12,13 @@ var STIC = {
 
 	// Flag for Ajax Loader
 	SHOW_PROGRESS: true,
-
+	
+	dtDataSrc: function(params) {
+		var ds = params.ds.split('.'),
+			rec = params.response[ds[0]][ds[1]][ds[2]]; 
+		return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+	},
+	
 	// Load index page
 	loadIndex: function(pageType) {
 		if (pageType == 'activate') {
@@ -118,7 +124,8 @@ var STIC = {
 			})
 			.done(function(results, status) {
 				if (results.response.type === 'SUCCESS') {
-					if (STIC.CURRENT_PAGE === 'weight-scale' ||
+					if (STIC.CURRENT_PAGE === 'weighing-truck-scale' ||
+							STIC.CURRENT_PAGE === 'weighing-floor-scale' ||
 							STIC.CURRENT_PAGE === 'others-calibration') {
 						clearInterval(STIC.INTERVAL_ID);
 					}
