@@ -240,6 +240,7 @@
 </div>
 <input type="hidden" data-stage="second" id="wr_id">
 <input type="hidden" data-stage="second" id="cust_id">
+<input type="hidden" data-stage="second" id="cat_id">
 <input type="hidden" data-stage="second" id="prod_id">
 <input type="hidden" data-stage="second" id="docket_no">
 <div class="modal fade bootstrap-dialog type-primary" id="truck-data-modal" tabindex="-1" role="dialog">
@@ -370,6 +371,44 @@
 				</div>
 			</div>
 			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
+				<button type="button" class="btn btn-primary" id="select-item" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade bootstrap-dialog type-primary" id="category-data-modal" tabindex="-1" role="dialog">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			<div class="modal-header" style="color: #FFFFFF">
+				<i class="fa fa-users"></i> Category Data Lookup
+			</div>
+			<div class="modal-body">
+				<div class="alert alert-info" role="alert">
+					<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
+					<ul>
+						<li><i class="fa fa-check-square-o"></i> Records listed here are Supplier Data that are already available in the system.</li>
+						<li><i class="fa fa-check-square-o"></i> To create new Supplier Data, use the Weighing Scale form.</li>
+					</ul>
+				</div>
+				<div class="panel panel-default no-margin-bottom">
+					<div class="panel-body">
+						<table class="display compact nowrap" id="table-category-data" style="width: 100%">
+							<thead>
+								<tr>
+									<th class="text-left">Category ID</th>
+									<th class="text-left">Category Code</th>
+									<th class="text-left">Category Name</th>
+									<th class="text-left">Date Modified</th>
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">				
 				<button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
 				<button type="button" class="btn btn-primary" id="select-item" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
 			</div>
@@ -909,62 +948,62 @@
 
 		/**********************************************************************************************************************************************/
 
-		// Supplier > New Supplier Data
-		$('#new-supplier-data').on('click', function () {
+		// Category > New Category Data
+		$('#new-category-data').on('click', function() {
 			showNewModalForm({
-				objectId: 'suppInfo',
-				dataType: 'Supplier Data',
+				objectId: 'cateInfo',
+				dataType: 'Category Data',
 				status: 'SECOND_WEIGHT_IN',
-				formId: '#dataSupplierForm',
-				formSrc: FORM_SUPPLIER_DATA,
-				wsInsert: WS_SUPPLIER_INSERT
+				formId: '#dataCategoryForm',
+				formSrc: FORM_CATEGORY_DATA,
+				wsInsert: WS_CATEGORY_INSERT
 			});
 		});
 
-		// Supplier > Data Lookup
-		$('#search-supplier-data').on('click', function () {
+		// Category > Data Lookup
+		$('#search-category-data').on('click', function () {
 			if ($('#truck_code').val() != '') {
-				if ($.fn.DataTable.isDataTable('#table-supplier-data')) {
+				if ($.fn.DataTable.isDataTable('#table-category-data')) {
 					dtSDP.destroy();
 				}
 				dtSDP = initDT_Picker({
 					pl: DFLT_PICK_SIZE,
-					ds: DS_SUPPLIER_LIST,
-					cd: CD_SUPPLIER_LIST,
-					ws: WS_SUPPLIER_LIST,
-					domId: 'table-supplier-data'
+					ds: DS_CATEGORY_LIST,
+					cd: CD_CATEGORY_LIST,
+					ws: WS_CATEGORY_LIST,
+					domId: 'table-category-data'
 				});
-				$('#supplier-data-modal').modal('show');
+				$('#category-data-modal').modal('show');
 			} else {
 				BootstrapDialog.alert({
 					type: 'type-danger',
 					title: MSG_TITLE_INFO,
 					message: MSG_TRUCK_DATA_EMPTY,
-					callback: function () {
+					callback: function() {
 						BootstrapDialog.closeAll();
 					}
 				});
 			}
 		});
 
-		// Supplier > Data Lookup > DT Row Click Event
-		$('#table-supplier-data tbody').on( 'click', 'tr', function () {
+		// Category > Data Lookup > DT Row Click Event
+		$('#table-category-data tbody').on( 'click', 'tr', function () {
 			STIC.dtToggleRowSelect({
 				row: this,
 				table: dtSDP,
-				pid: 'supp_id',
-				buttons: ['#supplier-data-modal #select-item']
+				pid: 'cat_id',
+				buttons: ['#category-data-modal #select-item']
 			});
 		});
 
-		// Supplier > Data Lookup > Select Item
-		$('#supplier-data-modal #select-item').on('click', function () {
-			clearErrorStyles(['supp_code', 'supp_name']);
+		// Category > Data Lookup > Select Item
+		$('#category-data-modal #select-item').on('click', function () {
+			clearErrorStyles(['cat_code', 'cat_name']);
 			var selected_row = dtSDP.row('.selected');
-			$('#supp_id').val(selected_row.data().supp_id);
-			$('#supp_code').val(selected_row.data().supp_code);
-			$('#supp_name').val(selected_row.data().supp_name);
-			$('#supplier-data-modal').modal('hide');
+			$('#cat_id').val(selected_row.data().cat_id);
+			$('#cat_code').val(selected_row.data().cat_code);
+			$('#cat_name').val(selected_row.data().cat_name);
+			$('#category-data-modal').modal('hide');
 		});
 
 		/**********************************************************************************************************************************************/
