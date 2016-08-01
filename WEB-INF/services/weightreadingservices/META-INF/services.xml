@@ -27,4 +27,21 @@
         <messageReceiver class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
     </operation>
 
+	<!-- Detail -->
+	<operation name="addWeightReadingsDetail">
+        <messageReceiver class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
+    </operation>
+
+	<operation name="updateWeightReadingsDetail">
+        <messageReceiver class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
+    </operation>
+
+	<operation name="updateWeightReadingsDetailByStatus">
+        <messageReceiver class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
+    </operation>
+
+	<operation name="getAllWeightReadingsDetailByIdList">
+        <messageReceiver class="org.apache.axis2.receivers.RawXMLINOutMessageReceiver"/>
+    </operation>
+
 </service>

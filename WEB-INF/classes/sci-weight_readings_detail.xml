@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap>
+	
+	<insert id="addWeightReadingsDetailSql" parameterClass="java.util.Map" >
+		INSERT INTO `weight_readings_detail` (
+			wr_id,
+			weight_in_date, 
+			weight_out_date, 
+			weight_in_reading, 
+			weight_out_reading, 
+			weight_unit,
+			user_id
+		) VALUES (
+			#wr_id#,
+			#weight_in_date#, 
+			#weight_out_date#, 
+			#weight_in_reading#, 
+			#weight_out_reading#, 
+			#weight_unit#,
+			#user_id#
+		)
+	</insert>
+	
+	<update id="updateWeightReadingsDetailSql" parameterClass="java.util.Map">
+		UPDATE `weight_readings_detail` SET
+			wr_id = #wr_id#,
+			weight_in_date = #weight_in_date#, 
+			weight_out_date = #weight_out_date#, 
+			weight_in_reading = #weight_in_reading#, 
+			weight_out_reading = #weight_out_reading#, 
+			weight_unit = #weight_unit#,
+			user_id = #user_id#
+		  WHERE wr_dtlid = #wr_dtlid#
+	</update>
+
+	<update id="updateWeightReadingsDetailByStatusSql" parameterClass="java.util.Map">
+		UPDATE `weight_readings_detail` SET
+			weight_status = #weight_status#
+		  WHERE wr_dtlid = #wr_dtlid#
+	</update>
+
+	<select id="getAllWeightReadingsDetailByIdSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
+		SELECT * FROM `weight_readings_detail`
+			WHERE 1=1
+			<dynamic>
+			  	<isNotEmpty property="wr_id" prepend="AND">
+			  		wr_id = #wr_id#
+			  	</isNotEmpty>
+			</dynamic>
+	</select>
+	
+</sqlMap>

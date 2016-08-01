@@ -64,6 +64,7 @@
 
 	<bean id="weightReadingInfoServices" class="com.scaletech.webservice.WeightReadingInfoServices">
 		<property name="weightReadingDao" ref="weightReadingsIbatisDao" />
+		<property name="weightReadingDetailDao" ref="weightReadingsDetailIbatisDao" />
 	</bean>
 
 	<bean id="auditInfoService" class="com.scaletech.webservice.AuditInfoService">

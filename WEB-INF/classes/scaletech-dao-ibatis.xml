@@ -242,6 +242,13 @@
 
 	<bean id="categoriesIbatisDao" class="com.scaletech.ibatis.CategoriesIbatisDao">
 	    <property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	    <property name="jdbcTemplate" ref="jdbcTemplate"/>
+	    <property name="getLastRecordForCatIdSql">
+	    	<value><![CDATA[ 
+				SELECT cat_id FROM `categories`
+				ORDER BY cat_id DESC LIMIT 1
+	    	]]></value>
+	    </property>
 	</bean>
 
 	<bean id="productCategoriesIbatisDao" class="com.scaletech.ibatis.ProductCategoriesIbatisDao">
@@ -358,6 +365,10 @@
 	    	]]></value>
 	    </property>
 	</bean>
+	
+	<bean id="weightReadingsDetailIbatisDao" class="com.scaletech.ibatis.WeightReadingsDetailIbatisDao">
+		<property name="sqlMapClientOperations" ref="sqlMapClientOperations"/>
+	</bean>
 
 	<!-- Audit Trail -->
 	<bean id="auditTrailDao" class="com.scaletech.jdbc.JdbcAuditTrailDao">
@@ -470,6 +481,7 @@
 					WHERE wr.weight_count = 2
 						AND wr.weight_status = 'DONE'
 						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+						FILTER_LIKE
 					GROUP BY
 						wr.supp_id,
 						wr.prod_id
@@ -489,6 +501,7 @@
 					WHERE wr.weight_count = 2
 						AND wr.weight_status = 'DONE'
 						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+						FILTER_LIKE
 					GROUP BY
 						wr.cust_id
 					
@@ -531,6 +544,7 @@
 					WHERE wr.weight_count = 2
 						AND wr.weight_status = 'DONE'
 						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+						FILTER_LIKE
 					GROUP BY
 						wr.prod_id
 	    	]]></value>
@@ -548,6 +562,7 @@
 					WHERE wr.weight_count = 2
 						AND wr.weight_status = 'DONE'
 						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+						FILTER_LIKE
 					GROUP BY
 						wr.truck_code
 	    	]]></value>
@@ -574,6 +589,7 @@
 					WHERE wr.weight_count = 2
 						AND wr.weight_status = 'DONE'
 						AND DATE_FORMAT(wr.weight_out_date, '%m/%d/%Y') BETWEEN ? AND ?
+						FILTER_LIKE
 					GROUP BY
 						wr.truck_code,
 						wr.prod_id,

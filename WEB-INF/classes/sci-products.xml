@@ -43,6 +43,9 @@
 					WHERE cust_id = #cust_id#
 						AND `status` = 1)
 				</isNotEmpty>
+				<isNotEmpty property="cat_id" prepend="AND">
+					c.`cat_id` = #cat_id#
+				</isNotEmpty>
 		</dynamic>
 		ORDER BY prod_name
 	</select>
@@ -76,7 +79,7 @@
 		  	</isNotEmpty>
 		</dynamic>
 	</select>
-	
+
 	<select id="checkTagCatIdSql" parameterClass="java.util.Map" resultClass="java.util.HashMap" remapResults="false">
 		SELECT COUNT(`cat_id`) as `count`
 		  FROM `products`
@@ -84,4 +87,3 @@
 	</select>
 
 </sqlMap>
-	

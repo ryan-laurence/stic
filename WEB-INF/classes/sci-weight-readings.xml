@@ -27,13 +27,10 @@
 	
 	<update id="updateWeightReadingsSql" parameterClass="java.util.Map">
 		UPDATE `weight_readings` SET
-			 cust_id = #cust_id#
-			,dest_id = #dest_id#
+			 address = #address#
+			,cust_id = #cust_id#
 			,prod_id = #prod_id#
-			,supp_id = #supp_id#
 			,user_id = #user_id#
-			,unit_price = #unit_price#
-			,total_price = #total_price#
 			,remarks = #remarks#
 			,weight_out_reading = #weight_out_reading#
 			,compensation = #compensation#

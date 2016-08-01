@@ -22,10 +22,14 @@
 			FORMAT(COUNT(`docket_no`), 0) AS reprint_count, 
 			DATE_FORMAT(`date_modified`, '%m/%d/%Y') AS reprint_date
 		FROM `docket_print_log`
+		WHERE 1 = 1
 		<dynamic>
-			<isNotEmpty property="startDate" prepend="WHERE">
+			<isNotEmpty property="startDate" prepend="AND">
 				DATE_FORMAT(`date_modified`, '%m/%d/%Y') 
 				BETWEEN #startDate# AND #endDate#
+			</isNotEmpty>
+			<isNotEmpty property="docket_no" prepend="AND">
+				`docket_no` = #docket_no#
 			</isNotEmpty>
 		</dynamic>
 		GROUP BY DATE_FORMAT(`date_modified`, '%m/%d/%Y'), `docket_no`, `user_name`

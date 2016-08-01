@@ -42,6 +42,9 @@
 			<isNotEmpty property="cust_id" prepend="AND">
 				a.cust_id = #cust_id#
 			</isNotEmpty>
+			<isNotEmpty property="cat_id" prepend="AND">
+				d.cat_id = #cat_id#
+			</isNotEmpty>
 		</dynamic>
 	</select>
 
