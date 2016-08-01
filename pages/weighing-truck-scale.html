@@ -19,115 +19,126 @@
 		<hr>
 		<div class="container well no-margin-bottom no-margin-right" style="width: auto; padding: 10px">
 			<div class="form-horizontal no-margin-bottom" style="width: 750px; float: left;" id="weight-scale-form">
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="truck_code" class="col-sm-2 control-label" style="width: 130px">Truck</label>
+				<div class="row row-cust">
+					<div class="col-cust-1">
+						<label for="truck_code" class="control-label">Truck</label>
 					</div>
-					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-primary" id="new-truck-data"
-							data-toggle="popover"
-							data-trigger="hover"
-							data-placement="bottom"
-							data-container="body"
-							data-html="true"
-							title='<i class="fa fa-plus"></i> <strong>New Truck Data</strong>'
-							data-content="Click to create new truck data for First Weighing."><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-primary" id="search-truck-data"
-							data-toggle="popover"
-							data-trigger="hover"
-							data-placement="bottom"
-							data-container="body"
-							data-html="true"
-							title='<i class="fa fa-truck"></i> <strong>Truck Data Lookup</strong>'
-							data-content="Click to search for truck data that are already available for First and Second Weighing."><i class="fa fa-truck"></i></button>
+					<div class="col-cust-2">
+						<div class="btn-group" role="group">
+							<button type="button" class="btn btn-primary" id="new-truck-data"
+								data-toggle="popover"
+								data-trigger="hover"
+								data-placement="bottom"
+								data-container="body"
+								data-html="true"
+								title='<i class="fa fa-plus"></i> <strong>New Truck Data</strong>'
+								data-content="Click to create new truck data for First Weighing."><i class="fa fa-plus"></i></button>
+							<button type="button" class="btn btn-primary" id="search-truck-data"
+								data-toggle="popover"
+								data-trigger="hover"
+								data-placement="bottom"
+								data-container="body"
+								data-html="true"
+								title='<i class="fa fa-list"></i> <strong>Truck Data Lookup</strong>'
+								data-content="Click to list all truck data that are available for First and Second Weighing."><i class="fa fa-list"></i></button>
+						</div>
 					</div>
-					<div class="btn-group" role="group" style="width: 150px">
+					<div class="col-cust-3">
 						<input type="text" class="form-control bg-white" id="truck_code" data-type="varchar" data-stage="first" placeholder="Truck Code" readonly>
 					</div>
 				</div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="cust_code" class="col-sm-2 control-label" style="width: 130px">Customer</label>
+				<div class="row row-cust">
+					<div class="col-cust-1">
+						<label for="customer" class="control-label">Customer</label>
 					</div>
-					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-primary" id="new-customer-data" disabled
-							data-toggle="popover"
-							data-trigger="hover"
-							data-placement="bottom"
-							data-container="body"
-							data-html="true"
-							title='<i class="fa fa-plus"></i> <strong>New Customer Data</strong>'
-							data-content="Click to create new customer data for Second Weighing."><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-primary" id="search-customer-data" disabled
-							data-toggle="popover"
-							data-trigger="hover"
-							data-placement="bottom"
-							data-container="body"
-							data-html="true"
-							title='<i class="fa fa-users"></i> <strong>Customer Data Lookup</strong>'
-							data-content="Click to search for customer data that are already available for Second Weighing."><i class="fa fa-users"></i></button>
+					<div class="col-cust-2">
+						<div class="btn-group" role="group">
+							<button type="button" class="btn btn-primary" id="new-customer-data" disabled
+								data-toggle="popover"
+								data-trigger="hover"
+								data-placement="bottom"
+								data-container="body"
+								data-html="true"
+								title='<i class="fa fa-plus"></i> <strong>New Customer Data</strong>'
+								data-content="Click to create new customer data for Second Weighing."><i class="fa fa-plus"></i></button>
+							<button type="button" class="btn btn-primary" id="search-customer-data" disabled
+								data-toggle="popover"
+								data-trigger="hover"
+								data-placement="bottom"
+								data-container="body"
+								data-html="true"
+								title='<i class="fa fa-list"></i> <strong>Customer Data Lookup</strong>'
+								data-content="Click to list all customer data that are available for Second Weighing."><i class="fa fa-list"></i></button>
+						</div>
 					</div>
-					<div class="btn-group" role="group" style="width: 515px">
+					<div class="col-cust-3">
 						<input type="text" class="form-control" id="cust_name" data-type="varchar" data-stage="second" placeholder="Customer Name" readonly>
 					</div>
 				</div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="address" class="col-sm-2 control-label" style="width: 130px">Address</label>
+				<div class="row row-cust">
+					<div class="col-cust-1">
+						<label for="address" class="control-label">Address</label>
 					</div>
-					<div class="btn-group" role="group" style="width: 600px">
+					<div class="col-cust-2">
+						&nbsp;
+					</div>
+					<div class="col-cust-3">
 						<input type="text" class="form-control" id="address" data-type="varchar" data-stage="second" placeholder="Address" data-action="enable" readonly>
 					</div>
 				</div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="category" class="col-sm-2 control-label" style="width: 130px">Category</label>
+				<div class="row row-cust">
+					<div class="col-cust-1">
+						<label for="category" class="control-label">Category</label>
 					</div>
-					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-primary" id="new-category-data" disabled
-							data-toggle="popover"
-							data-trigger="hover"
-							data-placement="bottom"
-							data-container="body"
-							data-html="true"
-							title='<i class="fa fa-plus"></i> <strong>New Category Data</strong>'
-							data-content="Click to create new category data for Second Weighing."><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-primary" id="search-category-data" disabled
-							data-toggle="popover"
-							data-trigger="hover"
-							data-placement="bottom"
-							data-container="body"
-							data-html="true"
-							title='<i class="fa fa-users"></i> <strong>Category Data Lookup</strong>'
-							data-content="Click to search for category data that are already available for Second Weighing."><i class="fa fa-users"></i></button>
+					<div class="col-cust-2">
+						<div class="btn-group" role="group">
+							<button type="button" class="btn btn-primary" id="new-category-data" disabled
+								data-toggle="popover"
+								data-trigger="hover"
+								data-placement="bottom"
+								data-container="body"
+								data-html="true"
+								title='<i class="fa fa-plus"></i> <strong>New Category Data</strong>'
+								data-content="Click to create new category data for Second Weighing."><i class="fa fa-plus"></i></button>
+							<button type="button" class="btn btn-primary" id="search-category-data" disabled
+								data-toggle="popover"
+								data-trigger="hover"
+								data-placement="bottom"
+								data-container="body"
+								data-html="true"
+								title='<i class="fa fa-list"></i> <strong>Category Data Lookup</strong>'
+								data-content="Click to list all category data that are available for Second Weighing."><i class="fa fa-list"></i></button>
+						</div>
 					</div>
-					<div class="btn-group" role="group" style="width: 515px">
+					<div class="col-cust-3">
 						<input type="text" class="form-control" id="cat_name" data-type="varchar" data-stage="second" placeholder="Category Name" readonly>
-					</div>					
+					</div>
 				</div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="prod_code" class="col-sm-2 control-label" style="width: 130px">Product</label>
+				<div class="row row-cust">
+					<div class="col-cust-1">
+						<label for="product" class="control-label">Product</label>
 					</div>
-					<div class="btn-group" role="group">
-						<button type="button" class="btn btn-primary" id="new-product-data" disabled
-							data-toggle="popover"
-							data-trigger="hover"
-							data-placement="bottom"
-							data-container="body"
-							data-html="true"
-							title='<i class="fa fa-plus"></i> <strong>New Product Data</strong>'
-							data-content="Click to create new product data for Second Weighing. This will be tagged automatically to the selected customer data."><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-primary" id="search-product-data" disabled
-							data-toggle="popover"
-							data-trigger="hover"
-							data-placement="bottom"
-							data-container="body"
-							data-html="true"
-							title='<i class="fa fa-product-hunt"></i> <strong>Product Data Lookup</strong>'
-							data-content="Click to search for product data that are already available in the system or tagged to the selected customer data."><i class="fa fa-product-hunt"></i></button>
+					<div class="col-cust-2">
+						<div class="btn-group" role="group">
+							<button type="button" class="btn btn-primary" id="new-product-data" disabled
+								data-toggle="popover"
+								data-trigger="hover"
+								data-placement="bottom"
+								data-container="body"
+								data-html="true"
+								title='<i class="fa fa-plus"></i> <strong>New Product Data</strong>'
+								data-content="Click to create new product data for Second Weighing. This will be tagged automatically to the selected customer data."><i class="fa fa-plus"></i></button>
+							<button type="button" class="btn btn-primary" id="search-product-data" disabled
+								data-toggle="popover"
+								data-trigger="hover"
+								data-placement="bottom"
+								data-container="body"
+								data-html="true"
+								title='<i class="fa fa-list"></i> <strong>Product Data Lookup</strong>'
+								data-content="Click to list all product data that are available or tagged to the selected customer data."><i class="fa fa-list"></i></button>
+						</div>
 					</div>
-					<div class="btn-group" role="group" style="width: 515px">
+					<div class="col-cust-3">
 						<input type="text" class="form-control" id="prod_name" data-type="varchar" data-stage="second" placeholder="Product Name" readonly>
 					</div>
 				</div>
@@ -247,7 +258,7 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-truck"></i> Truck Data Lookup
+				<i class="fa fa-list"></i> Truck Data Lookup
 			</div>
 			<div class="modal-body">
 				<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 15px;" id="tabSelectTruck">
@@ -267,8 +278,8 @@
 						<div class="alert alert-info" role="alert">
 							<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 							<ul>
-								<li><i class="fa fa-check-square-o"></i> Records listed here are Truck Codes available for First Weighing only.</li>
-								<li><i class="fa fa-check-square-o"></i> To create new Truck Code for First Weighing, use the Weighing Scale form.</li>
+								<li><i class="fa fa-check-square-o"></i> Records listed here are Truck Data available for First Weighing only.</li>
+								<li><i class="fa fa-check-square-o"></i> To create new Truck Data for First Weighing, use the Truck Scale form.</li>
 							</ul>
 						</div>
 						<div class="panel panel-default no-margin-bottom">
@@ -300,8 +311,8 @@
 						<div class="alert alert-info" role="alert">
 							<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 							<ul>
-								<li><i class="fa fa-check-square-o"></i> Records listed here are Truck Codes available for Second Weighing only.</li>
-								<li><i class="fa fa-check-square-o"></i> To remove Truck Code from Second Weighing, go to the Truck In report page.</li>
+								<li><i class="fa fa-check-square-o"></i> Records listed here are Truck Data available for Second Weighing only.</li>
+								<li><i class="fa fa-check-square-o"></i> To remove Truck Data from Second Weighing, go to the Pending Items page.</li>
 							</ul>
 						</div>
 						<div class="panel panel-default no-margin-bottom">
@@ -343,14 +354,14 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-users"></i> Customer Data Lookup
+				<i class="fa fa-list"></i> Customer Data Lookup
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
 					<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 					<ul>
-						<li><i class="fa fa-check-square-o"></i> Records listed here are Customer Data that are already available in the system.</li>
-						<li><i class="fa fa-check-square-o"></i> To create new Customer Data, use the Weighing Scale form.</li>
+						<li><i class="fa fa-check-square-o"></i> Records listed here are Customer Data that are available in the system.</li>
+						<li><i class="fa fa-check-square-o"></i> To create new Customer Data, use the Truck Scale form.</li>
 					</ul>
 				</div>
 				<div class="panel panel-default no-margin-bottom">
@@ -381,14 +392,14 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-users"></i> Category Data Lookup
+				<i class="fa fa-list"></i> Category Data Lookup
 			</div>
 			<div class="modal-body">
 				<div class="alert alert-info" role="alert">
 					<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 					<ul>
-						<li><i class="fa fa-check-square-o"></i> Records listed here are Supplier Data that are already available in the system.</li>
-						<li><i class="fa fa-check-square-o"></i> To create new Supplier Data, use the Weighing Scale form.</li>
+						<li><i class="fa fa-check-square-o"></i> Records listed here are Category Data that are available in the system.</li>
+						<li><i class="fa fa-check-square-o"></i> To create new Category Data, use the Truck Scale form.</li>
 					</ul>
 				</div>
 				<div class="panel panel-default no-margin-bottom">
@@ -408,7 +419,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="modal-footer">				
+			<div class="modal-footer">
 				<button type="button" class="btn btn-default" data-dismiss="modal" style="margin-left: 0px;"><i class="fa fa-ban"></i> Cancel</button>
 				<button type="button" class="btn btn-primary" id="select-item" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
 			</div>
@@ -419,7 +430,7 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-product-hunt"></i> Product Data Lookup
+				<i class="fa fa-list"></i> Product Data Lookup
 			</div>
 			<div class="modal-body">
 				<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 15px;" id="tabSelectProduct">
@@ -440,7 +451,7 @@
 							<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 							<ul>
 								<li><i class="fa fa-check-square-o"></i> Records listed here are Product Data that are not yet tagged to the selected Customer Data.</li>
-								<li><i class="fa fa-check-square-o"></i> To create new Product Data, use the Weighing Scale form.</li>
+								<li><i class="fa fa-check-square-o"></i> To create new Product Data, use the Truck Scale form.</li>
 							</ul>
 						</div>
 						<div class="panel panel-default no-margin-bottom">
@@ -474,8 +485,8 @@
 						<div class="alert alert-info" role="alert">
 							<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
 							<ul>
-								<li><i class="fa fa-check-square-o"></i> Records listed here are Product Data that are already tagged to the selected Customer Data.</li>
-								<li><i class="fa fa-check-square-o"></i> To tag other Product Data to the selected Customer Data, go to the Products tab.</li>
+								<li><i class="fa fa-check-square-o"></i> Records listed here are Product Data that are tagged to the selected Customer Data.</li>
+								<li><i class="fa fa-check-square-o"></i> To tag other Product Data to the selected Customer Data, go to the Products Data page.</li>
 							</ul>
 						</div>
 						<div class="panel panel-default no-margin-bottom">
@@ -516,7 +527,7 @@
 <script>
 	$(function() {
 		// Initialize DT variables
-		var dtFWT, dtSWT, dtCDP, dtDDP, dtADDP, dtPDP, dtAPDP, dtSDP;
+		var dtFWT, dtSWT, dtCDP, dtPDP, dtAPDP;
 
 		// Load user based on cookie
 		$('#user_name').val(STIC.User.ReadCookie('username'));
@@ -528,7 +539,7 @@
 		/**********************************************************************************************************************************************/
 
 		// Truck > New Truck Data
-		$('#new-truck-data').on('click', function () {
+		$('#new-truck-data').on('click', function() {
 			showNewModalForm({
 				objectId: 'truckInfo',
 				dataType: 'Truck Data',
@@ -540,7 +551,7 @@
 		});
 
 		// Truck > Data Lookup
-		$('#search-truck-data').on('click', function () {
+		$('#search-truck-data').on('click', function() {
 			if ($.fn.DataTable.isDataTable('#table-truck-first')) {
 				dtFWT.destroy();
 			}
@@ -565,25 +576,25 @@
 		});
 
 		// Truck > Data Lookup > onShow Event
-		$('#truck-data-modal').on('shown.bs.modal', function () {
+		$('#truck-data-modal').on('shown.bs.modal', function() {
 			$('#btnFWTrucksOK, #btnSWTrucksOK').prop('disabled', true);
 			$('#tabSelectTruck a[href="#firstWeighing"]').tab('show');
 		})
 
 		// Truck > Data Lookup > First Weighing Tab Click Event
-		$('#tabSelectTruck a[href="#firstWeighing"]').on('click', function () {
+		$('#tabSelectTruck a[href="#firstWeighing"]').on('click', function() {
 			dtFWT.ajax.reload();
 			$('#btnFWTrucksOK').prop('disabled', true);
 		});
 
 		// Truck > Data Lookup > Second Weighing Tab Click Event
-		$('#tabSelectTruck a[href="#secondWeighing"]').on('click', function () {
+		$('#tabSelectTruck a[href="#secondWeighing"]').on('click', function() {
 			dtSWT.ajax.reload();
 			$('#btnSWTrucksOK').prop('disabled', true);
 		});
 
 		// Truck > Data Lookup > First Weighing Trucks > DT Row Click Event
-		$('#table-truck-first tbody').on( 'click', 'tr', function () {
+		$('#table-truck-first tbody').on( 'click', 'tr', function() {
 			STIC.dtToggleRowSelect({
 				row: this,
 				table: dtFWT,
@@ -593,7 +604,7 @@
 		});
 
 		// Truck > Data Lookup > Second Weighing Trucks > DT Row Click Event
-		$('#table-truck-second tbody').on( 'click', 'tr', function () {
+		$('#table-truck-second tbody').on( 'click', 'tr', function() {
 			STIC.dtToggleRowSelect({
 				row: this,
 				table: dtSWT,
@@ -603,7 +614,7 @@
 		});
 
 		// Truck > Data Lookup > First Weighing Trucks > Select Item
-		$('#truck-data-modal #btnFWTrucksOK').on('click', function () {
+		$('#truck-data-modal #btnFWTrucksOK').on('click', function() {
 			toggleWeightScaleFields({ status: 'FIRST_WEIGHT_IN' });
 			$('#truck_code').val(dtFWT.row('.selected').data().truck_code);
 			$('#truck-data-modal').modal('hide');
@@ -611,7 +622,7 @@
 		});
 
 		// Truck > Data Lookup > Second Weighing Trucks > Select Item
-		$('#truck-data-modal #btnSWTrucksOK').on('click', function () {
+		$('#truck-data-modal #btnSWTrucksOK').on('click', function() {
 			var selected_row = dtSWT.row('.selected');
 			toggleWeightScaleFields({ status: 'SECOND_WEIGHT_IN' });
 			$('#wr_id').val(selected_row.data().wr_id);
@@ -626,7 +637,7 @@
 		});
 
 		// Truck > Data Lookup > Cancel
-		$('.btnFWTrucksCancel, .btnSWTrucksCancel').on('click', function () {
+		$('.btnFWTrucksCancel, .btnSWTrucksCancel').on('click', function() {
 			$('#truck-data-modal').modal('hide');
 			$('#btnFWTrucksOK, #btnSWTrucksOK').prop('disabled', true);
 		});
@@ -634,7 +645,7 @@
 		/**********************************************************************************************************************************************/
 
 		// Customer > New Customer Data
-		$('#new-customer-data').on('click', function () {
+		$('#new-customer-data').on('click', function() {
 			if ($('#truck_code').val() != '') {
 				showNewModalForm({
 					objectId: 'custInfo',
@@ -650,7 +661,7 @@
 					type: 'type-danger',
 					title: MSG_TITLE_INFO,
 					message: MSG_TRUCK_DATA_EMPTY,
-					callback: function () {
+					callback: function() {
 						BootstrapDialog.closeAll();
 					}
 				});
@@ -658,7 +669,7 @@
 		});
 
 		// Customer > Data Lookup
-		$('#search-customer-data').on('click', function () {
+		$('#search-customer-data').on('click', function() {
 			if ($('#truck_code').val() != '') {
 				if ($.fn.DataTable.isDataTable('#table-customer-data')) {
 					dtCDP.destroy();
@@ -677,7 +688,7 @@
 					type: 'type-danger',
 					title: MSG_TITLE_INFO,
 					message: MSG_TRUCK_DATA_EMPTY,
-					callback: function () {
+					callback: function() {
 						BootstrapDialog.closeAll();
 					}
 				});
@@ -685,7 +696,7 @@
 		});
 
 		// Customer > Data Lookup > DT Row Click Event
-		$('#table-customer-data tbody').on( 'click', 'tr', function () {
+		$('#table-customer-data tbody').on( 'click', 'tr', function() {
 			STIC.dtToggleRowSelect({
 				row: this,
 				table: dtCDP,
@@ -695,33 +706,28 @@
 		});
 
 		// Customer > Data Lookup > Select Item
-		$('#customer-data-modal #select-item').on('click', function () {
+		$('#customer-data-modal #select-item').on('click', function() {
 			clearErrorStyles(['cust_code', 'cust_name']);
 			var selected_row = dtCDP.row('.selected');
 			$('#cust_id').val(selected_row.data().cust_id);
-			$('#cust_code').val(selected_row.data().cust_code);
 			$('#cust_name').val(selected_row.data().cust_name);
 			$('#customer-data-modal').modal('hide');
 		});
 
 		/**********************************************************************************************************************************************/
 
-		// Destination > Data Lookup
-		$('#search-destination-data').on('click', function () {
-			if ($('#cust_code').val() != '') {
-				if ($.fn.DataTable.isDataTable('#table-destination-data')) {
-					dtDDP.destroy();
-				}
-				dtDDP = initDT_Picker({
-					pl: DFLT_PICK_SIZE,
-					ds: DS_CUSTDEST_LIST,
-					cd: CD_CUSTDEST_LIST,
-					domId: 'table-destination-data',
-					ws: WS_CUSTDEST_LIST + 'cust_id=' +  $('#cust_id').val()
+		// Category > New Category Data
+		$('#new-category-data').on('click', function() {
+			if ($('#cust_id').val() != '') {
+				showNewModalForm({
+					objectId: 'cateInfo',
+					dataType: 'Category Data',
+					status: 'SECOND_WEIGHT_IN',
+					formId: '#dataCategoryForm',
+					formSrc: FORM_CATEGORY_DATA,
+					wsInsert: WS_CATEGORY_INSERT
 				});
-				$('#destination-data-modal').modal('show');
 			} else {
-				showErrorStyles(['cust_code', 'cust_name']);
 				BootstrapDialog.alert({
 					type: 'type-danger',
 					title: MSG_TITLE_INFO,
@@ -733,240 +739,13 @@
 			}
 		});
 
-		// Destination > Data Lookup > DT Row Click Event
-		$('#table-destination-data tbody').on( 'click', 'tr', function () {
-			STIC.dtToggleRowSelect({
-				row: this,
-				table: dtDDP,
-				pid: 'dest_id',
-				buttons: ['#destination-data-modal #select-item']
-			});
-		});
-
-		// Destination > Data Lookup > Select Item
-		$('#destination-data-modal #select-item').on('click', function () {
-			clearErrorStyles(['dest_zipcode', 'dest_location']);
-			var selected_row = dtDDP.row('.selected');
-			$('#dest_id').val(selected_row.data().dest_id);
-			$('#dest_zipcode').val(selected_row.data().dest_zipcode);
-			$('#dest_location').val(selected_row.data().dest_name + ', ' + selected_row.data().dest_location);
-			$('#destination-data-modal').modal('hide');
-		});
-
-		// Destinations > New Item > Data Lookup
-		$('#new-destination-data').on('click', function () {
-			if ($('#cust_code').val() != '') {
-				if ($.fn.DataTable.isDataTable('#table-destination-data-all')) {
-					dtADDP.destroy();
-				}
-				dtADDP = initDT_Picker({
-					pl: DFLT_PICK_SIZE,
-					ds: DS_DESTINATION_LIST,
-					cd: CD_DESTINATION_LIST,
-					domId: 'table-destination-data-all',
-					ws: WS_DESTINATION_LIST + 'cust_id=' + $('#cust_id').val()
-				});
-				$('#destination-data-all-modal').modal('show');
-			} else {
-				showErrorStyles(['cust_code', 'cust_name']);
-				BootstrapDialog.alert({
-					type: 'type-danger',
-					title: MSG_TITLE_INFO,
-					message: MSG_CUSTOMER_DATA_EMPTY,
-					callback: function () {
-						BootstrapDialog.closeAll();
-					}
-				});
-			}
-		});
-
-		// Destination > New Item > Data Lookup > DT Row Click Event
-		$('#table-destination-data-all tbody').on( 'click', 'tr', function () {
-			STIC.dtToggleRowSelect({
-				row: this,
-				table: dtADDP,
-				pid: 'dest_id',
-				buttons: ['#destination-data-all-modal #select-item']
-			});
-		});
-
-		// Destination > New Item > Data Lookup > Select Item
-		$('#destination-data-all-modal #select-item').on('click', function () {
-			clearErrorStyles(['dest_zipcode', 'dest_location']);
-			var cust_id = $('#cust_id').val(),
-				selected_row = dtADDP.row('.selected'),
-				dest_id = selected_row.data().dest_id,
-				post_data = 'custDestInfo={ "cust_id": ' + cust_id + ', "dest_id": ' + dest_id + '}';
-			$('#dest_id').val(dest_id);
-			$('#dest_zipcode').val(selected_row.data().dest_zipcode);
-			$('#dest_location').val(selected_row.data().dest_name + ', ' + selected_row.data().dest_location);
-			$('#destination-data-all-modal').modal('hide');
-			$.post(WS_CUSTDEST_INSERT, post_data)
-				.done(function (data, status) {
-					if (data.response.type === 'SUCCESS') {
-						BootstrapDialog.closeAll();
-					} else {
-						STIC.showWSError();
-					}
-				})
-				.fail(function () {
-					STIC.showWSError();
-				});
-		});
-
-		/**********************************************************************************************************************************************/
-
-		// Product > New Product Data
-		$('#new-product-data').on('click', function () {
-			if ($('#cust_code').val() != '') {
-				showNewModalForm({
-					objectId: 'prodInfo',
-					dataType: 'Product Data',
-					status: 'SECOND_WEIGHT_IN',
-					formId: '#dataProductForm',
-					formSrc: FORM_CUST_PRODUCT_DATA,
-					wsInsert: WS_CUST_PRODUCT_INSERT,
-					data: { cust_id: $('#cust_id').val() }
-				});
-			} else {
-				showErrorStyles(['cust_code', 'cust_name']);
-				BootstrapDialog.alert({
-					type: 'type-danger',
-					title: MSG_TITLE_INFO,
-					message: MSG_CUSTOMER_DATA_EMPTY,
-					callback: function () {
-						BootstrapDialog.closeAll();
-					}
-				});
-			}
-		});
-
-		// Product > Data Lookup
-		$('#search-product-data').on('click', function () {
-			if ($('#cust_code').val() != '') {
-				if ($.fn.DataTable.isDataTable('#table-product-data')) {
-					dtPDP.destroy();
-				}
-				if ($.fn.DataTable.isDataTable('#table-product-data-all')) {
-					dtAPDP.destroy();
-				}
-				dtPDP = initDT_Picker({
-					pl: DFLT_PICK_SIZE,
-					ds: DS_CUSTPROD_LIST,
-					cd: CD_CUSTPROD_LIST,
-					domId: 'table-product-data',
-					ws: WS_CUSTPROD_LIST + 'cust_id=' +  $('#cust_id').val()
-				});
-				dtAPDP = initDT_Picker({
-					pl: DFLT_PICK_SIZE,
-					ds: DS_PRODUCT_LIST,
-					cd: CD_PRODUCT_LIST,
-					domId: 'table-product-data-all',
-					ws: WS_PRODUCT_LIST + 'cust_id=' +  $('#cust_id').val()
-				});
-				$('#product-data-modal').modal('show');
-			} else {
-				showErrorStyles(['cust_code', 'cust_name']);
-				BootstrapDialog.alert({
-					type: 'type-danger',
-					title: MSG_TITLE_INFO,
-					message: MSG_CUSTOMER_DATA_EMPTY,
-					callback: function () {
-						BootstrapDialog.closeAll();
-					}
-				});
-			}
-		});
-
-		// Product > Data Lookup > onShow Event
-		$('#product-data-modal').on('shown.bs.modal', function () {
-			$('#btnAllProdOK, #btnCustProdOK').prop('disabled', true);
-			$('#tabSelectProduct a[href="#products"]').tab('show');
-		})
-
-		// Product > Data Lookup > All Products Click Event
-		$('#tabSelectProduct a[href="#products"]').on('click', function () {
-			dtAPDP.ajax.reload();
-			$('#btnAllProdOK').prop('disabled', true);
-		});
-
-		// Product > Data Lookup > Customer Products Click Event
-		$('#tabSelectProduct a[href="#customerProducts"]').on('click', function () {
-			dtPDP.ajax.reload();
-			$('#btnCustProdOK').prop('disabled', true);
-		});
-
-		// All Product > Data Lookup > DT Row Click Event
-		$('#table-product-data-all tbody').on( 'click', 'tr', function () {
-			STIC.dtToggleRowSelect({
-				row: this,
-				table: dtAPDP,
-				pid: 'prod_id',
-				buttons: ['#btnAllProdOK']
-			});
-		});
-
-		// Customer Product > Data Lookup > DT Row Click Event
-		$('#table-product-data tbody').on( 'click', 'tr', function () {
-			STIC.dtToggleRowSelect({
-				row: this,
-				table: dtPDP,
-				pid: 'prod_id',
-				buttons: ['#btnCustProdOK']
-			});
-		});
-
-		// All Product > Data Lookup > Select Item
-		$('#product-data-modal #btnAllProdOK').on('click', function () {
-			clearErrorStyles(['prod_code', 'prod_name']);
-			var selected_row = dtAPDP.row('.selected');
-			$('#prod_id').val(selected_row.data().prod_id);
-			$('#prod_code').val(selected_row.data().prod_code);
-			$('#prod_name').val(selected_row.data().prod_name);
-			$('#unit_price').val(selected_row.data().unit_price);
-			$('#product-data-modal').modal('hide');
-			setTotalPrice();
-		});
-
-		// Customer Products > Data Lookup > Select Item
-		$('#product-data-modal #btnCustProdOK').on('click', function () {
-			clearErrorStyles(['prod_code', 'prod_name']);
-			var selected_row = dtPDP.row('.selected');
-			$('#prod_id').val(selected_row.data().prod_id);
-			$('#prod_code').val(selected_row.data().prod_code);
-			$('#prod_name').val(selected_row.data().prod_name);
-			$('#unit_price').val(selected_row.data().unit_price);
-			$('#product-data-modal').modal('hide');
-			setTotalPrice();
-		});
-
-		// Cancel Data Lookup
-		$('.btnAllProdCancel, .btnCustProdCancel').on('click', function () {
-			$('#product-data-modal').modal('hide');
-			$('#btnAllProdOK, #btnCustProdOK').prop('disabled', true);
-		});
-
-		/**********************************************************************************************************************************************/
-
-		// Category > New Category Data
-		$('#new-category-data').on('click', function() {
-			showNewModalForm({
-				objectId: 'cateInfo',
-				dataType: 'Category Data',
-				status: 'SECOND_WEIGHT_IN',
-				formId: '#dataCategoryForm',
-				formSrc: FORM_CATEGORY_DATA,
-				wsInsert: WS_CATEGORY_INSERT
-			});
-		});
-
 		// Category > Data Lookup
-		$('#search-category-data').on('click', function () {
-			if ($('#truck_code').val() != '') {
+		$('#search-category-data').on('click', function() {
+			if ($('#cust_id').val() != '') {
 				if ($.fn.DataTable.isDataTable('#table-category-data')) {
-					dtSDP.destroy();
+					dtCDP.destroy();
 				}
-				dtSDP = initDT_Picker({
+				dtCDP = initDT_Picker({
 					pl: DFLT_PICK_SIZE,
 					ds: DS_CATEGORY_LIST,
 					cd: CD_CATEGORY_LIST,
@@ -978,7 +757,7 @@
 				BootstrapDialog.alert({
 					type: 'type-danger',
 					title: MSG_TITLE_INFO,
-					message: MSG_TRUCK_DATA_EMPTY,
+					message: MSG_CUSTOMER_DATA_EMPTY,
 					callback: function() {
 						BootstrapDialog.closeAll();
 					}
@@ -987,75 +766,199 @@
 		});
 
 		// Category > Data Lookup > DT Row Click Event
-		$('#table-category-data tbody').on( 'click', 'tr', function () {
+		$('#table-category-data tbody').on('click', 'tr', function() {
 			STIC.dtToggleRowSelect({
 				row: this,
-				table: dtSDP,
+				table: dtCDP,
 				pid: 'cat_id',
 				buttons: ['#category-data-modal #select-item']
 			});
 		});
 
 		// Category > Data Lookup > Select Item
-		$('#category-data-modal #select-item').on('click', function () {
+		$('#category-data-modal #select-item').on('click', function() {
+			$('#prod_id').val('');
+			$('#prod_name').val('');
 			clearErrorStyles(['cat_code', 'cat_name']);
-			var selected_row = dtSDP.row('.selected');
+			var selected_row = dtCDP.row('.selected');
 			$('#cat_id').val(selected_row.data().cat_id);
-			$('#cat_code').val(selected_row.data().cat_code);
 			$('#cat_name').val(selected_row.data().cat_name);
 			$('#category-data-modal').modal('hide');
 		});
 
 		/**********************************************************************************************************************************************/
 
-		// First Weighing Button > Show Confirm Modal
-		$('#first-weighing').on('click', function () {
+		// Product > New Product Data
+		$('#new-product-data').on('click', function() {
+			if ($('#cat_id').val() != '') {
+				showNewModalForm({
+					objectId: 'prodInfo',
+					dataType: 'Product Data',
+					status: 'SECOND_WEIGHT_IN',
+					formId: '#dataProductForm',
+					formSrc: FORM_CUST_PRODUCT_DATA,
+					wsInsert: WS_CUST_PRODUCT_INSERT,
+					data: { cust_id: $('#cust_id').val(), cat_id: $('#cat_id').val() }
+				});
+			} else {
+				showErrorStyles(['cust_code', 'cust_name']);
+				BootstrapDialog.alert({
+					type: 'type-danger',
+					title: MSG_TITLE_INFO,
+					message: MSG_CATEGORY_DATA_EMPTY,
+					callback: function() {
+						BootstrapDialog.closeAll();
+					}
+				});
+			}
+		});
+
+		// Product > Data Lookup
+		$('#search-product-data').on('click', function() {
+			if ($('#cat_id').val() != '') {
+				if ($.fn.DataTable.isDataTable('#table-product-data')) {
+					dtPDP.destroy();
+				}
+				if ($.fn.DataTable.isDataTable('#table-product-data-all')) {
+					dtAPDP.destroy();
+				}
+				dtPDP = initDT_Picker({
+					pl: DFLT_PICK_SIZE,
+					ds: DS_CUSTPROD_LIST,
+					cd: CD_CUSTPROD_LIST,
+					domId: 'table-product-data',
+					ws: WS_CUSTPROD_LIST + 'cust_id=' +  $('#cust_id').val() + '&cat_id=' +  $('#cat_id').val()
+				});
+				dtAPDP = initDT_Picker({
+					pl: DFLT_PICK_SIZE,
+					ds: DS_PRODUCT_LIST,
+					cd: CD_PRODUCT_LIST,
+					domId: 'table-product-data-all',
+					ws: WS_PRODUCT_LIST + 'cust_id=' +  $('#cust_id').val() + '&cat_id=' +  $('#cat_id').val()
+				});
+				$('#product-data-modal').modal('show');
+			} else {
+				showErrorStyles(['cust_code', 'cust_name']);
+				BootstrapDialog.alert({
+					type: 'type-danger',
+					title: MSG_TITLE_INFO,
+					message: MSG_CATEGORY_DATA_EMPTY,
+					callback: function() {
+						BootstrapDialog.closeAll();
+					}
+				});
+			}
+		});
+
+		// Product > Data Lookup > onShow Event
+		$('#product-data-modal').on('shown.bs.modal', function() {
+			$('#btnAllProdOK, #btnCustProdOK').prop('disabled', true);
+			$('#tabSelectProduct a[href="#products"]').tab('show');
+		})
+
+		// Product > Data Lookup > All Products Click Event
+		$('#tabSelectProduct a[href="#products"]').on('click', function() {
+			dtAPDP.ajax.reload();
+			$('#btnAllProdOK').prop('disabled', true);
+		});
+
+		// Product > Data Lookup > Customer Products Click Event
+		$('#tabSelectProduct a[href="#customerProducts"]').on('click', function() {
+			dtPDP.ajax.reload();
+			$('#btnCustProdOK').prop('disabled', true);
+		});
+
+		// All Product > Data Lookup > DT Row Click Event
+		$('#table-product-data-all tbody').on( 'click', 'tr', function() {
+			STIC.dtToggleRowSelect({
+				row: this,
+				table: dtAPDP,
+				pid: 'prod_id',
+				buttons: ['#btnAllProdOK']
+			});
+		});
+
+		// Customer Product > Data Lookup > DT Row Click Event
+		$('#table-product-data tbody').on( 'click', 'tr', function() {
+			STIC.dtToggleRowSelect({
+				row: this,
+				table: dtPDP,
+				pid: 'prod_id',
+				buttons: ['#btnCustProdOK']
+			});
+		});
+
+		// All Product > Data Lookup > Select Item
+		$('#product-data-modal #btnAllProdOK').on('click', function() {
+			clearErrorStyles(['prod_code', 'prod_name']);
+			var selected_row = dtAPDP.row('.selected');
+			$('#prod_id').val(selected_row.data().prod_id);
+			$('#prod_name').val(selected_row.data().prod_name);
+			$('#product-data-modal').modal('hide');
+		});
+
+		// Customer Products > Data Lookup > Select Item
+		$('#product-data-modal #btnCustProdOK').on('click', function () {
+			clearErrorStyles(['prod_code', 'prod_name']);
+			var selected_row = dtPDP.row('.selected');
+			$('#prod_id').val(selected_row.data().prod_id);
+			$('#prod_name').val(selected_row.data().prod_name);
+			$('#product-data-modal').modal('hide');
+		});
+
+		// Cancel Data Lookup
+		$('.btnAllProdCancel, .btnCustProdCancel').on('click', function() {
+			$('#product-data-modal').modal('hide');
+			$('#btnAllProdOK, #btnCustProdOK').prop('disabled', true);
+		});
+
+		/**********************************************************************************************************************************************/
+
+		// First Weighing Button
+		$('#first-weighing').on('click', function() {
 			BootstrapDialog.confirm({
 				type: 'type-primary',
 				title: MSG_TITLE_INFO,
-				message: MSG_CONFIRM_FIRST_WEIGHING,
 				btnOKLabel: BTN_LABEL_CONFIRM_FW,
 				btnCancelLabel: BTN_LABEL_CANCEL,
-				callback: function (result) {
+				message: MSG_CONFIRM_FIRST_WEIGHING,
+				callback: function(result) {
 					if (result) {
 						clearInterval(STIC.INTERVAL_ID);
-						var JSONObject = {
-							weight_count: 1,
-							weight_status: 'PENDING',
-							truck_code: $('#truck_code').val(),
-							weight_unit: $('#weight-unit').text(),
-							user_id: STIC.User.ReadCookie('userid'),
-							date_modified: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
-							weight_in_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
-							weight_in_reading: $('#weight_in_reading').val().replace(/,/g, '')
-						},
-						JSONString = 'weightReadingInfo=' + JSON.stringify(JSONObject);
-						var result = $.post(WS_FIRST_WEIGHING_INSERT, JSONString);
-						result.done(function (result) {
-							if (result.response.type === 'SUCCESS') {
-
-								STIC.readScale();
-								BootstrapDialog.alert({
-									type: 'type-primary',
-									title: MSG_TITLE_INFO,
-									message: MSG_FIRST_WEIGHING_SUCCESS,
-									callback: function() {
-										BootstrapDialog.closeAll();
-										// Docket Print
-										window.open('http://localhost:8080' + WS_DOCKET_PRINT
-											+ 'wrId=' + result.response.wr_id
-											+ '&type=A1', 'DocketPrint').focus();
-										toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
-
-									}
-								});
-							} else {
+						$.post(WS_FIRST_WEIGHING_INSERT, 'weightReadingInfo=' +
+							JSON.stringify({
+								weight_count: 1,
+								weight_status: 'PENDING',
+								truck_code: $('#truck_code').val(),
+								weight_unit: $('#weight-unit').text(),
+								user_id: STIC.User.ReadCookie('userid'),
+								date_modified: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
+								weight_in_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
+								weight_in_reading: $('#weight_in_reading').val().replace(/,/g, '')
+							}))
+							.done(function(result) {
+								if (result.response.type === 'SUCCESS') {
+									STIC.readScale();
+									BootstrapDialog.alert({
+										type: 'type-primary',
+										title: MSG_TITLE_INFO,
+										message: MSG_FIRST_WEIGHING_SUCCESS,
+										callback: function() {
+											BootstrapDialog.closeAll();
+											// Docket Print
+											window.open('http://localhost:8080' + WS_DOCKET_PRINT
+												+ 'wrId=' + result.response.wr_id
+												+ '&type=A1', 'DocketPrint').focus();
+											toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+										}
+									});
+								} else {
+									STIC.showWSError();
+								}
+							})
+							.fail(function() {
 								STIC.showWSError();
-							}
-						});
-						result.fail(function() {
-							STIC.showWSError();
-						});
+							});
 					}
 				}
 			});
@@ -1063,19 +966,17 @@
 
 		/**********************************************************************************************************************************************/
 
-		// Second Weighing Button > Show Confirm Modal
+		// Second Weighing Button
 		$('#second-weighing').on('click', function () {
 			var totalErrors = 0,
 				inputFields = [
 					{ code: 'truck_code' },
 					{ code: 'cust_code', name: 'cust_name' },
-					{ code: 'dest_zipcode', name: 'dest_location' },
-					{ code: 'prod_code', name: 'prod_name' },
-					{ code: 'supp_code', name: 'supp_name' }
+					{ code: 'prod_code', name: 'prod_name' }
 				];
 
 			// Check required fields
-			$.each(inputFields, function(index, input) {
+			/*$.each(inputFields, function(index, input) {
 				var errors = 0,
 					fieldCode = $('#' + input.code),
 					fieldCodeBox = fieldCode.parent('div.btn-group'),
@@ -1109,7 +1010,7 @@
 					totalErrors += errors;
 					labelWrapper.addClass('has-error');
 				}
-			});
+			});*/
 
 			// Show alert message if there are errors
 			if (totalErrors > 0) {
@@ -1117,7 +1018,7 @@
 					type: 'type-danger',
 					title: MSG_TITLE_INFO,
 					message: MSG_WEIGHING_FORM_ERROR,
-					callback: function () {
+					callback: function() {
 						BootstrapDialog.closeAll();
 					}
 				});
@@ -1126,11 +1027,11 @@
 			} else {
 				BootstrapDialog.confirm({
 					type: 'type-primary',
-					title: MSG_TITLE_INFO,
-					message: MSG_CONFIRM_SECOND_WEIGHING,
+					title: MSG_TITLE_INFO,					
 					btnOKLabel: BTN_LABEL_CONFIRM_SW,
 					btnCancelLabel: BTN_LABEL_CANCEL,
-					callback: function (result) {
+					message: MSG_CONFIRM_SECOND_WEIGHING,
+					callback: function(result) {
 						if (result) {
 							clearInterval(STIC.INTERVAL_ID);
 							var JSONObject = {
@@ -1138,15 +1039,12 @@
 								weight_status: 'DONE',
 								wr_id: $('#wr_id').val(),
 								cust_id: $('#cust_id').val(),
-								dest_id: $('#dest_id').val(),
+								address: $('#address').val(),
 								prod_id: $('#prod_id').val(),
-								supp_id: $('#supp_id').val(),
 								remarks: $('#remarks').val(),
 								weight_unit: $('#weight-unit').text(),
 								user_id: STIC.User.ReadCookie('userid'),
 								net_weight: $('#net_weight').val().replace(/,/g, ''),
-								unit_price: $('#unit_price').val().replace(/,/g, ''),
-								total_price: $('#total_price').val().replace(/,/g, ''),
 								compensation: $('#compensation').val().replace(/,/g, ''),
 								weight_out_reading: $('#weight_out_reading').val().replace(/,/g, ''),
 								weight_out_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date())
@@ -1207,38 +1105,16 @@
 			.replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
 	}
 
-	// Set Total Price
-	function setTotalPrice() {
-		var unitPrice = parseFloat($('#unit_price').val().replace(',', '')),
-			netWeight = parseFloat($('#net_weight').val().replace(',', '')),
-			totalPrice = parseFloat(unitPrice * netWeight);
-		$('#total_price').val(totalPrice.toFixed(2)
-			.replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-	}
-
 	//  Scale Reader
-	$(document).ready(function () {
-
-		// Unit Price onKeyDown
-		$('#unit_price').on('keydown', function (e) {
-			var self = this;
-			setTimeout(function () {
-				var oldVal = $(self).val().replace(/[^\d\.]/g, ''),
-					newVal = oldVal != '' ? parseFloat(oldVal).toFixed(2) : '0.00';
-				$(self).val(newVal);
-				setTotalPrice();
-			}, 0);
-		});
-
+	$(document).ready(function() {
 		// Compensation onKeyDown
-		$('#compensation').on('keydown', function (e) {
+		$('#compensation').on('keydown', function(e) {
 			var self = this;
-			setTimeout(function () {
+			setTimeout(function() {
 				var oldVal = $(self).val().replace(/[^\d\.]/g, ''),
 					oldVal = oldVal != '' ? parseFloat(oldVal).toFixed(2) : '0.00',
 					newVal = (oldVal) > 100 ? '100.00' : oldVal;
 				$(self).val(newVal);
-				setTotalPrice();
 				setNetWeight();
 			}, 0);
 		});
@@ -1274,7 +1150,7 @@
 		// Read Scale Reader
 		//STIC.openScaleReader(function(response) {
 			//if (response.type === 'SUCCESS') {
-				STIC.readScale();
+				//STIC.readScale();
 			//} else {
 				//$('.weight-lcd .weight-error').show();
 			//}

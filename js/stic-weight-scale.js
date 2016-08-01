@@ -65,6 +65,25 @@ function showNewModalForm(params) {
 		});
 	};
 
+	// Destroy PC Input
+	var destroyPCInputField = function(params) {
+		var container = params.container;
+		container.find('input[data-field="cat_id"]').remove();
+		container.find('input[data-field="cat_name"]').remove();
+	};
+
+	// Create PC Input
+	var newPCInputField = function(params) {
+		var container = params.container,
+			defaultId = params.defaultId,
+			defaultVal = params.defaultVal;
+		destroyPCInputField({ container: params.container });
+		container.append('<input type="text" class="form-control" value="' +
+			defaultVal + '" data-field="cat_name" disabled>');
+		container.append('<input type="hidden" value="' +
+			defaultId + '" data-field="cat_id">');
+	};
+
 	// Trigger on New Modal onShown event
 	function btnNewOnShown(dialogRef) {
 		var modalBody = dialogRef.getModalBody(),
@@ -75,11 +94,9 @@ function showNewModalForm(params) {
 
 		// For Product Data only
 		if (params.objectId == 'prodInfo') {
-			destroyPCField();
-			newPCSelectField({
-				defaultId: '',
-				JSONUrl: WS_CATEGORY_LIST,
-				JSONData: 'categories-list',
+			newPCInputField({
+				defaultId: $('#cat_id').val(),
+				defaultVal: $('#cat_name').val(),
 				container: $('#cat-box')
 			});
 		}
@@ -166,6 +183,13 @@ function showNewModalForm(params) {
 							// New Id for Product
 							else if (params.objectId === 'prodInfo')
 								$('#prod_id').val(result.response.newId);
+
+							// New Id for Category
+							else if (params.objectId === 'cateInfo') {
+								$('#prod_id').val('');
+								$('#prod_name').val('');
+								$('#cat_id').val(result.response.newId);
+							}
 
 							BootstrapDialog.closeAll();
 

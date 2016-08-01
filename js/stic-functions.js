@@ -12,13 +12,13 @@ var STIC = {
 
 	// Flag for Ajax Loader
 	SHOW_PROGRESS: true,
-	
+
 	dtDataSrc: function(params) {
 		var ds = params.ds.split('.'),
-			rec = params.response[ds[0]][ds[1]][ds[2]]; 
+			rec = params.response[ds[0]][ds[1]][ds[2]];
 		return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
 	},
-	
+
 	// Load index page
 	loadIndex: function(pageType) {
 		if (pageType == 'activate') {
@@ -295,7 +295,6 @@ var STIC = {
 							if ($('#wr_id').val() != '') {
 								$('#weight_out_reading').val(netWeight.replace(/[\s\+]/g, ''));
 								setNetWeight();
-								setTotalPrice();
 							// 1st Weighing
 							} else if ($('#truck_code').val() != '') {
 								$('#weight_in_reading').val(netWeight.replace(/[\s\+]/g, ''));
@@ -721,7 +720,7 @@ var STIC = {
 		},
 
 		// Create Filter Field
-		makeFilter: function(params) {			
+		makeFilter: function(params) {
 			$.each(params.filters, function(idx, field) {
 				var x = REPORT_FILTER[field];
 				// Build select options
@@ -737,7 +736,7 @@ var STIC = {
 							});
 						}
 					});
-					// Create select DOM	
+					// Create select DOM
 					STIC.Report.removeFilter({ filters: [field] });
 					$('#' + field).append('<select class="form-control" ' +
 							'title="-" ' +

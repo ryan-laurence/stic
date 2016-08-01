@@ -122,3 +122,28 @@
 	margin: 12px;
 	margin-top: 70px;
 }
+
+.row-cust {
+	margin: 0px 0px 10px 0px;
+	width: 100%;
+}
+
+.col-cust-1 {
+	float: left;
+	width: 17%;
+	text-align: right;
+	padding-right: 10px;
+}
+
+.col-cust-2 {
+	margin-left: 6px;
+	float: left;
+	width: 11%;
+}
+
+.col-cust-3 {
+	float: left;
+	width: 68%;
+}
+
+
