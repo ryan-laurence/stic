@@ -12,22 +12,22 @@
 .weight-lcd {
 	color: #FFFFFF;
 	padding: 20px;
-	margin-left: 15px;
-	margin-right: 15px;
 	display: table;
 	border-radius: 4px;
 	background: linear-gradient(#000, #000);
-  width: 97%;
+  width: 100%;
 	height: 100%;
   -moz-box-shadow: inset 0 0 10px #323333;
 	-webkit-box-shadow: inset 0 0 10px #323333;
 	box-shadow: inset 0 0 10px #323333;
 	position: relative;
+	margin-bottom: 15px;
 }
 
 .weight-input {
 	color: #FFFFFF;
 	background: linear-gradient(#343538, #111113);
+	border: 1px solid #343538;
 }
 
 .weight-lcd .weight-reading {

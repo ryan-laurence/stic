@@ -1,9 +1,9 @@
-<div class="panel panel-primary" style="width: 990px !important; margin-left: auto; margin-right: auto">
+<div class="panel panel-primary" style="width: 970px !important; margin-left: auto; margin-right: auto">
 	<div class="panel-heading" style="text-align: left">
 		<i class="fa fa-balance-scale"></i> Truck Scale
 	</div>
 	<div class="panel-body">
-		<div class="row">
+		<div class="row zero-margin">
 			<div class="weight-lcd">
 				<div id="weight-reading" class="weight-reading">+0.00</div>
 				<div class="weight-info">
@@ -16,151 +16,221 @@
 				<div class="weight-error"></div>
 			</div>
 		</div>
-		<hr>
 		<div class="container well no-margin-bottom no-margin-right" style="width: auto; padding: 10px">
-			<div class="form-horizontal no-margin-bottom" style="width: 750px; float: left;" id="weight-scale-form">
-				<div class="row row-cust">
-					<div class="col-cust-1">
+			<div class="form-horizontal no-margin-bottom" id="weight-scale-form" style="width: 80%; float: left">
+				<div class="row row-1">
+					<div class="col-1">
 						<label for="truck_code" class="control-label">Truck</label>
 					</div>
-					<div class="col-cust-2">
-						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-primary" id="new-truck-data"
-								data-toggle="popover"
-								data-trigger="hover"
-								data-placement="bottom"
-								data-container="body"
-								data-html="true"
-								title='<i class="fa fa-plus"></i> <strong>New Truck Data</strong>'
-								data-content="Click to create new truck data for First Weighing."><i class="fa fa-plus"></i></button>
-							<button type="button" class="btn btn-primary" id="search-truck-data"
-								data-toggle="popover"
-								data-trigger="hover"
-								data-placement="bottom"
-								data-container="body"
-								data-html="true"
-								title='<i class="fa fa-list"></i> <strong>Truck Data Lookup</strong>'
-								data-content="Click to list all truck data that are available for First and Second Weighing."><i class="fa fa-list"></i></button>
+					<div class="col-2">
+						<div class="row row-2">
+							<div class="col-21">
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-primary" id="new-truck-data"
+										data-toggle="popover"
+										data-trigger="hover"
+										data-placement="bottom"
+										data-container="body"
+										data-html="true"
+										title='<i class="fa fa-plus"></i> <strong>New Truck Data</strong>'
+										data-content="Click to create new truck data for First Weighing."><i class="fa fa-plus"></i></button>
+									<button type="button" class="btn btn-primary" id="search-truck-data"
+										data-toggle="popover"
+										data-trigger="hover"
+										data-placement="bottom"
+										data-container="body"
+										data-html="true"
+										title='<i class="fa fa-list"></i> <strong>Truck Data Lookup</strong>'
+										data-content="Click to list all truck data that are available for First and Second Weighing."><i class="fa fa-list"></i></button>
+								</div>
+							</div>
+							<div class="col-22">
+								<input type="text" class="form-control bg-white" id="truck_code" data-type="varchar" data-stage="first" placeholder="Truck Code" readonly>
+							</div>
 						</div>
 					</div>
-					<div class="col-cust-3">
-						<input type="text" class="form-control bg-white" id="truck_code" data-type="varchar" data-stage="first" placeholder="Truck Code" readonly>
-					</div>
 				</div>
-				<div class="row row-cust">
-					<div class="col-cust-1">
+				<hr/>
+				<div class="row row-1">
+					<div class="col-1">
 						<label for="customer" class="control-label">Customer</label>
 					</div>
-					<div class="col-cust-2">
-						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-primary" id="new-customer-data" disabled
-								data-toggle="popover"
-								data-trigger="hover"
-								data-placement="bottom"
-								data-container="body"
-								data-html="true"
-								title='<i class="fa fa-plus"></i> <strong>New Customer Data</strong>'
-								data-content="Click to create new customer data for Second Weighing."><i class="fa fa-plus"></i></button>
-							<button type="button" class="btn btn-primary" id="search-customer-data" disabled
-								data-toggle="popover"
-								data-trigger="hover"
-								data-placement="bottom"
-								data-container="body"
-								data-html="true"
-								title='<i class="fa fa-list"></i> <strong>Customer Data Lookup</strong>'
-								data-content="Click to list all customer data that are available for Second Weighing."><i class="fa fa-list"></i></button>
+					<div class="col-2">
+						<div class="row row-2">
+							<div class="col-21">
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-primary" id="new-customer-data" disabled
+										data-toggle="popover"
+										data-trigger="hover"
+										data-placement="bottom"
+										data-container="body"
+										data-html="true"
+										title='<i class="fa fa-plus"></i> <strong>New Customer Data</strong>'
+										data-content="Click to create new customer data for Second Weighing."><i class="fa fa-plus"></i></button>
+									<button type="button" class="btn btn-primary" id="search-customer-data" disabled
+										data-toggle="popover"
+										data-trigger="hover"
+										data-placement="bottom"
+										data-container="body"
+										data-html="true"
+										title='<i class="fa fa-list"></i> <strong>Customer Data Lookup</strong>'
+										data-content="Click to list all customer data that are available for Second Weighing."><i class="fa fa-list"></i></button>
+								</div>
+							</div>
+							<div class="col-22">
+								<input type="text" class="form-control" id="cust_name" data-type="varchar" data-stage="second" placeholder="Customer Name" readonly>
+							</div>
 						</div>
 					</div>
-					<div class="col-cust-3">
-						<input type="text" class="form-control" id="cust_name" data-type="varchar" data-stage="second" placeholder="Customer Name" readonly>
-					</div>
 				</div>
-				<div class="row row-cust">
-					<div class="col-cust-1">
+				<div class="row row-1">
+					<div class="col-1">
 						<label for="address" class="control-label">Address</label>
 					</div>
-					<div class="col-cust-2">
-						&nbsp;
-					</div>
-					<div class="col-cust-3">
-						<input type="text" class="form-control" id="address" data-type="varchar" data-stage="second" placeholder="Address" data-action="enable" readonly>
+					<div class="col-2">
+						<div class="row row-2">
+							<div class="col-21">
+								&nbsp;
+							</div>
+							<div class="col-22">
+								<input type="text" class="form-control" id="address" data-type="varchar" data-stage="second" placeholder="Address" data-action="enable" readonly>
+							</div>
+						</div>
 					</div>
 				</div>
-				<div class="row row-cust">
-					<div class="col-cust-1">
+				<div class="row row-1">
+					<div class="col-1">
 						<label for="category" class="control-label">Category</label>
 					</div>
-					<div class="col-cust-2">
-						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-primary" id="new-category-data" disabled
-								data-toggle="popover"
-								data-trigger="hover"
-								data-placement="bottom"
-								data-container="body"
-								data-html="true"
-								title='<i class="fa fa-plus"></i> <strong>New Category Data</strong>'
-								data-content="Click to create new category data for Second Weighing."><i class="fa fa-plus"></i></button>
-							<button type="button" class="btn btn-primary" id="search-category-data" disabled
-								data-toggle="popover"
-								data-trigger="hover"
-								data-placement="bottom"
-								data-container="body"
-								data-html="true"
-								title='<i class="fa fa-list"></i> <strong>Category Data Lookup</strong>'
-								data-content="Click to list all category data that are available for Second Weighing."><i class="fa fa-list"></i></button>
+					<div class="col-2">
+						<div class="row row-2">
+							<div class="col-21">
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-primary" id="new-category-data" disabled
+										data-toggle="popover"
+										data-trigger="hover"
+										data-placement="bottom"
+										data-container="body"
+										data-html="true"
+										title='<i class="fa fa-plus"></i> <strong>New Category Data</strong>'
+										data-content="Click to create new category data for Second Weighing."><i class="fa fa-plus"></i></button>
+									<button type="button" class="btn btn-primary" id="search-category-data" disabled
+										data-toggle="popover"
+										data-trigger="hover"
+										data-placement="bottom"
+										data-container="body"
+										data-html="true"
+										title='<i class="fa fa-list"></i> <strong>Category Data Lookup</strong>'
+										data-content="Click to list all category data that are available for Second Weighing."><i class="fa fa-list"></i></button>
+								</div>
+							</div>
+							<div class="col-22">
+								<input type="text" class="form-control" id="cat_name" data-type="varchar" data-stage="second" placeholder="Category Name" readonly>
+							</div>
 						</div>
 					</div>
-					<div class="col-cust-3">
-						<input type="text" class="form-control" id="cat_name" data-type="varchar" data-stage="second" placeholder="Category Name" readonly>
-					</div>
 				</div>
-				<div class="row row-cust">
-					<div class="col-cust-1">
+				<div class="row row-1">
+					<div class="col-1">
 						<label for="product" class="control-label">Product</label>
 					</div>
-					<div class="col-cust-2">
-						<div class="btn-group" role="group">
-							<button type="button" class="btn btn-primary" id="new-product-data" disabled
-								data-toggle="popover"
-								data-trigger="hover"
-								data-placement="bottom"
-								data-container="body"
-								data-html="true"
-								title='<i class="fa fa-plus"></i> <strong>New Product Data</strong>'
-								data-content="Click to create new product data for Second Weighing. This will be tagged automatically to the selected customer data."><i class="fa fa-plus"></i></button>
-							<button type="button" class="btn btn-primary" id="search-product-data" disabled
-								data-toggle="popover"
-								data-trigger="hover"
-								data-placement="bottom"
-								data-container="body"
-								data-html="true"
-								title='<i class="fa fa-list"></i> <strong>Product Data Lookup</strong>'
-								data-content="Click to list all product data that are available or tagged to the selected customer data."><i class="fa fa-list"></i></button>
+					<div class="col-2">
+						<div class="row row-2">
+							<div class="col-21">
+								<div class="btn-group" role="group">
+									<button type="button" class="btn btn-primary" id="new-product-data" disabled
+										data-toggle="popover"
+										data-trigger="hover"
+										data-placement="bottom"
+										data-container="body"
+										data-html="true"
+										title='<i class="fa fa-plus"></i> <strong>New Product Data</strong>'
+										data-content="Click to create new product data for Second Weighing. This will be tagged automatically to the selected customer data."><i class="fa fa-plus"></i></button>
+									<button type="button" class="btn btn-primary" id="search-product-data" disabled
+										data-toggle="popover"
+										data-trigger="hover"
+										data-placement="bottom"
+										data-container="body"
+										data-html="true"
+										title='<i class="fa fa-list"></i> <strong>Product Data Lookup</strong>'
+										data-content="Click to list all product data that are available or tagged to the selected customer data."><i class="fa fa-list"></i></button>
+								</div>
+							</div>
+							<div class="col-22">
+								<input type="text" class="form-control" id="prod_name" data-type="varchar" data-stage="second" placeholder="Product Name" readonly>
+							</div>
 						</div>
 					</div>
-					<div class="col-cust-3">
-						<input type="text" class="form-control" id="prod_name" data-type="varchar" data-stage="second" placeholder="Product Name" readonly>
+				</div>
+				<hr/>
+				<div class="row row-1">
+					<div class="col-1">
+						<label for="user_name" class="control-label">User</label>
+					</div>
+					<div class="col-6">
+						<input type="text" class="form-control" id="user_name" readonly>
 					</div>
 				</div>
-				<div style="margin: 10px 15px 15px 0px; border-top: 1px solid #CCC"></div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="user_name" class="col-sm-2 control-label" style="width: 130px">User</label>
+				<div class="row row-1">
+					<div class="col-1">
+						<label for="remarks" class="control-label">Remarks</label>
 					</div>
-					<div class="btn-group" role="group">
-						<input type="text" class="form-control" id="user_name" style="width: 120px" readonly>
-					</div>
-				</div>
-				<div class="btn-toolbar" role="toolbar">
-					<div class="btn-group" role="group">
-						<label for="remarks" class="col-sm-2 control-label" style="width: 130px">Remarks</label>
-					</div>
-					<div class="btn-group" role="group" style="width: 600px">
+					<div class="col-7">
 						<input type="text" class="form-control" id="remarks" placeholder="Enter Remarks" data-type="varchar" data-stage="second" data-action="enable" readonly>
 					</div>
 				</div>
-				<div style="margin: 10px 15px 8px 0px; border-top: 1px solid #CCC"></div>
-				<div class="form-group no-margin-bottom">
+				<hr/>
+				<div class="row row-1">
+					<div class="col-8">
+						<label for="weight_in_reading" class="control-label">Weight In</label>
+					</div>
+					<div class="col-3">
+						<input type="text" class="form-control weight-input" id="weight_in_reading" value="0.00" data-type="float" data-stage="first" readonly
+							data-toggle="popover"
+							data-trigger="hover"
+							data-placement="top"
+							data-container="body"
+							data-html="true"
+							title='<div class="all-middle"><img src="images/numeric-1-box-outline-16.png"> <strong>Weight In</strong></div>'
+							data-content="Weight reading for First Weighing.">
+					</div>
+					<div class="col-4">
+						<label for="compensation" class="control-label">Compensation(%)</label>
+					</div>
+					<div class="col-5">
+						<input type="text" class="form-control" id="compensation" value="0.00" data-type="float" data-stage="second" data-action="enable" readonly>
+					</div>
+				</div>
+				<div class="row row-3">
+					<div class="col-8">
+						<label for="weight_out_reading" class="control-label">Weight Out</label>
+					</div>
+					<div class="col-3">
+						<input type="text" class="form-control weight-input" id="weight_out_reading" value="0.00" data-type="float" data-stage="second" readonly
+							data-toggle="popover"
+							data-trigger="hover"
+							data-placement="top"
+							data-container="body"
+							data-html="true"
+							title='<div class="all-middle"><img src="images/numeric-2-box-outline-16.png"> <strong>Weight Out</strong></div>'
+							data-content="Weight reading for Second Weighing.">
+					</div>
+					<div class="col-4">
+						<label for="net_weight" class="control-label">Net Weight</label>
+					</div>
+					<div class="col-5">
+						<input type="text" class="form-control weight-input" id="net_weight" value="0.00" data-type="float" data-stage="second" readonly
+							data-toggle="popover"
+							data-trigger="hover"
+							data-placement="top"
+							data-container="body"
+							data-html="true"
+							title='<i class="fa fa-calculator"></i> <strong>Net Weight</strong>'
+							data-content="Net Weight = Gross Weight - Tare Weight<br>Final Net Weight = Net Weight - (Net Weight x (Compensation / 100))">
+					</div>
+				</div>
+
+				<!--div class="form-group no-margin-bottom">
 					<div class="col-sm-2 no-padding-left" style="margin-left: 20px; width: 175px">
 						<label for="weight_in_reading" class="control-label">Truck In Weight</label>
 						<input type="text" class="form-control weight-input" id="weight_in_reading" value="0.00" data-type="float" data-stage="first" readonly
@@ -198,10 +268,10 @@
 							title='<i class="fa fa-calculator"></i> <strong>Net Weight</strong>'
 							data-content="Net Weight = Gross Weight - Tare Weight<br>Final Net Weight = Net Weight - (Net Weight x (Compensation / 100))">
 					</div>
-				</div>
+				</div-->
 			</div>
-			<div class="form-horizontal no-margin-bottom" style="width: 180px; float: right;">
-				<button id="first-weighing" class="btn btn-success btn-lg" data-type="button" disabled
+			<div class="form-horizontal no-margin-bottom" style="width: 19%; float: right">
+				<button id="first-weighing" class="btn btn-success btn-lg btn-block" data-type="button" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -212,7 +282,7 @@
 					<img src="images/numeric-1-box-outline.png">
 					<p>First Weighing</p>
 				</button>
-				<button id="second-weighing" class="btn btn-warning btn-lg" data-type="button" disabled
+				<button id="second-weighing" class="btn btn-warning btn-lg btn-block" data-type="button" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -223,7 +293,7 @@
 					<img src="images/numeric-2-box-outline.png">
 					<p>Second Weighing</p>
 				</button>
-				<button id="cancel-weighing" class="btn btn-danger btn-lg" data-type="button" disabled
+				<button id="cancel-weighing" class="btn btn-danger btn-lg btn-block" data-type="button" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -234,7 +304,7 @@
 					<i class="fa fa-ban fa-3x" style="margin-top: 5px"></i>
 					<p>Cancel</p>
 				</button>
-				<button id="reprint-docket" class="btn btn-info btn-lg no-margin-bottom" data-type="button" disabled
+				<button id="reprint-docket" class="btn btn-info btn-lg btn-block" data-type="button" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -927,6 +997,7 @@
 						clearInterval(STIC.INTERVAL_ID);
 						$.post(WS_FIRST_WEIGHING_INSERT, 'weightReadingInfo=' +
 							JSON.stringify({
+								type: 'TRUCK',
 								weight_count: 1,
 								weight_status: 'PENDING',
 								truck_code: $('#truck_code').val(),
@@ -1027,7 +1098,7 @@
 			} else {
 				BootstrapDialog.confirm({
 					type: 'type-primary',
-					title: MSG_TITLE_INFO,					
+					title: MSG_TITLE_INFO,
 					btnOKLabel: BTN_LABEL_CONFIRM_SW,
 					btnCancelLabel: BTN_LABEL_CANCEL,
 					message: MSG_CONFIRM_SECOND_WEIGHING,
