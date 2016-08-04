@@ -1,0 +1,39 @@
+{
+  "response": {
+  "statuscode": "0",
+	"type": "SUCCESS",
+	"message": "Successfully fetched record.",
+	"weightInDetails-list": {
+	  "weightInDetails": [{
+			"wr_dtlid": "1",
+			"user_id", "admin",
+			"weight_unit": "kg",
+			"weight_in_reading": "100.00",
+			"weight_in_date": "08/04/2016 02:55 PM"
+		}, {
+			"wr_dtlid": "2",
+			"user_id", "admin",
+			"weight_unit": "kg",
+			"weight_in_reading": "85.00",
+			"weight_in_date": "08/04/2016 03:00 PM"
+		}, {
+			"wr_dtlid": "3",
+			"user_id", "admin",
+			"weight_unit": "kg",
+			"weight_in_reading": "60.00",
+			"weight_in_date": "08/04/2016 03:10 PM"
+		}, {
+			"wr_dtlid": "4",
+			"user_id", "admin",
+			"weight_unit": "kg",
+			"weight_in_reading": "80.00",
+			"weight_in_date": "08/04/2016 03:15 PM"
+		}, {
+			"wr_dtlid": "5",
+			"user_id", "admin",
+			"weight_unit": "kg",
+			"weight_in_reading": "95.00",
+			"weight_in_date": "08/04/2016 03:20 PM"
+		}]
+  }
+}
