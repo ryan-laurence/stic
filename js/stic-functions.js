@@ -1201,7 +1201,26 @@ var STIC = {
 						});
 				}
 			}
-		}
+		},
+		
+		// Check if User can delete data
+		allowDelete: function(action) {	
+			var userRoleId = STIC.User.ReadCookie('roleid');
+			if (userRoleId === '1' || userRoleId === '2') {
+				output = true;
+			} else {
+				output = false;
+				BootstrapDialog.alert({
+					type: 'type-danger',
+					title: MSG_TITLE_INFO,
+					message: MSG_INFO_ROLE_INVALID,
+					callback: function(result) {
+						BootstrapDialog.closeAll();
+					}
+				});
+			}		
+			return output;
+		} 
 	}
 };
 

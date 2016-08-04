@@ -56,6 +56,9 @@ var WS_SCALE_DISCONNECT = '/stic/services/ScaleReaderInfoServices/disconnect?res
 var WS_SCALE_READER = '/stic/services/ScaleReaderInfoServices/readScaleReading?response=application/json';
 var WS_DOCKET_PRINT = '/stic/DocketPrintReportService?';
 
+var FRM_ADD_WEIGHT_IN = 'pages/weighing-add-weight-in.html';
+var WS_DELETE_WEIGHT_DETAIL = '';
+
 // Supplier Data
 var CD_SUPPLIER_LIST = [
 	{ data: 'supp_id', visible: false, searchable: false },

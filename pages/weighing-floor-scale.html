@@ -593,9 +593,23 @@
 				scrollCollapse: false,
 				dom: 'rt'
 			});
+			
+		////////////////////////////////////////
+			columns: dtCd,
+			ajax: {
+					url: dtWs,
+					dataSrc: function(json) {
+						var ds = dtDs.split('.'),
+							rec = json[ds[0]][ds[1]][ds[2]];
+						return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+					}
+				}	
+		////////////////////////////////////
+				
 		
+					
 		// Weight In Details > DT Row Click Event
-		$('#dtWeightIn tbody').on( 'click', 'tr', function() {
+		$('#dtWeightIn tbody').on('click', 'tr', function() {
 			STIC.dtToggleRowSelect({
 				row: this,
 				table: dtWID,
@@ -603,13 +617,16 @@
 				buttons: ['#del-weight-in']
 			});
 		});
+		
+		// Form Content
+		var frmAddWeightIn = $('<div></div>').load(FRM_ADD_WEIGHT_IN);
 			
 		// Add Weight In
 		$('#add-weight-in').on('click', function() {
 			BootstrapDialog.show({
 				closable: false,
-				title: '<i class="fa fa-sign-in"></i> Get Weight Reading',
-				message: '',
+				title: '<i class="fa fa-sign-in"></i> Add Weight In',
+				message: frmAddWeightIn,
 				onshown: function(dialogRef) {
 					var modalBody = dialogRef.getModalBody();
 					modalBody.find('input[data-field]').val('');
@@ -622,19 +639,64 @@
 						BootstrapDialog.closeAll();
 					}
 				}, {
-					label: 'Get Weight Reading',
-					icon: 'fa fa-sign-in',
+					label: 'Save Scale Reading',
+					icon: 'fa fa-floppy-o',
 					cssClass: 'btn-primary',
 					action: function(dialogRef) {
-					
+						var modalBody = dialogRef.getModalBody(),							
+							weightUnit = modalBody
+								.find('.weight-unit')
+								.text()
+								.replace(/\+/g, '')
+								.replace(/\,/g, ''),							
+							weightReading = modalBody
+								.find('.weight-reading')
+								.text()
+								.replace(/\+/g, '')
+								.replace(/\,/g, ''),							
+							currDateTime = $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
+							JSONObject = {								
+								weight_unit: weightUnit,											
+								date_modified: currDateTime,
+								weight_in_date: currDateTime,
+								weight_in_reading: weightReading,			
+								user_id: STIC.User.ReadCookie('userid')
+							};							
+						console.log(JSONObject);
+						// Call WS to insert weight in details
+						// Reload Weight In Details DT
 					}
 				}]
 			});
 		});
 		
 		// Delete Weight In
-		$('#del-weight-in').on('click', function() {
-		
+		$('#del-weight-in').on('click', function() {		
+			if (STIC.User.allowDelete()) {
+				BootstrapDialog.confirm({
+					type: 'type-danger',					
+					title: MSG_TITLE_INFO,
+					btnCancelLabel: BTN_LABEL_CANCEL,
+					message: MSG_CONFIRM_DELETE_RECORD,
+					btnOKLabel: BTN_LABEL_CONFIRM_DELETE,
+					callback: function(result) {
+						if (result) {
+							// Call WS
+							STIC.postData({
+								dt: dtWID,
+								title: MSG_TITLE_INFO,
+								message: MSG_INFO_DEL_REC,
+								url: WS_DELETE_WEIGHT_DETAIL,
+								data: {
+									wr_dtlid: dtWID
+										.row('.selected')
+										.data()['wr_dtlid']
+								}								
+							});
+						}
+					}
+				});
+			}
 		});
 
 		/**********************************************************************************************************************************************/
@@ -1222,18 +1284,20 @@
 
 		/**********************************************************************************************************************************************/
 
-		// Sample Indicator
-		/*
-		var random = function (max, min) {
+		// Sample Indicator		
+		var random = function(max, min) {
 				return ((Math.random() * (max - min)) + min).toFixed(2);
 		};
 
-		STIC.INTERVAL_ID = setInterval(function () {
-			var rand = '+' + random(41000, 5000)
+		STIC.INTERVAL_ID = setInterval(function() {
+			var rand = '+' + random(50, 950)
 				.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-
+				
+			$('.weight-lcd .weight-error').hide();
+			$('div.weight-reading').text(rand.toString());
+			
 			// 2nd Weighing
-			if ($('#wr_id').val() != '') {
+			/*if ($('#wr_id').val() != '') {
 				$('#weight-reading').text(rand.toString());
 				$('#weight_out_reading').val(rand.replace('+', ''));
 				setNetWeight();
@@ -1243,15 +1307,15 @@
 			} else if ($('#truck_code').val() != '') {
 				$('#weight-reading').text(rand.toString());
 				$('#weight_in_reading').val(rand.replace('+', ''));
-			}
-		}, 5000);*/
+			}*/
+		}, 5000);
 
 		/**********************************************************************************************************************************************/
 
 		// Read Scale Reader
 		//STIC.openScaleReader(function(response) {
 			//if (response.type === 'SUCCESS') {
-				STIC.readScale();
+				//STIC.readScale();
 			//} else {
 				//$('.weight-lcd .weight-error').show();
 			//}
