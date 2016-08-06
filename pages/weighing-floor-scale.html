@@ -4,11 +4,11 @@
 	</div>
 	<div class="panel-body">
 		<div class="row zero-margin">
-			<div class="weight-lcd">
-				<div id="weight-reading" class="weight-reading">+0.00</div>
+			<div class="weight-lcd" id="main-lcd">
+				<div class="weight-reading" id="weight-reading">+0.00</div>
 				<div class="weight-info">
-					<div id="weight-unit" class="weight-unit">kg</div>
-					<div id="weight-status"class="weight-status">inactive</div>
+					<div class="weight-unit" id="weight-unit">kg</div>
+					<div class="weight-status" id="weight-status">inactive</div>
 				</div>
 				<div class="weight-stage">
 					<div class="txt1"><img src="images/numeric-0-box-outline.png"></div>
@@ -26,22 +26,22 @@
 						<div class="row row-2">
 							<div class="col-21">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-primary" id="new-truck-data"
+									<button type="button" class="btn btn-primary" id="new-trans-code"
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
 										data-container="body"
 										data-html="true"
 										title='<i class="fa fa-plus"></i> <strong>New Transaction</strong>'
-										data-content="Click to create a new transaction code for First Weighing."><i class="fa fa-plus"></i></button>
-									<button type="button" class="btn btn-primary" id="search-truck-data"
+										data-content="Click to create a new transaction code for weighing."><i class="fa fa-plus"></i></button>
+									<button type="button" class="btn btn-primary" id="search-trans-code"
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
 										data-container="body"
 										data-html="true"
 										title='<i class="fa fa-list"></i> <strong>Transaction Lookup</strong>'
-										data-content="Click to list all transaction codes that are available for Second Weighing."><i class="fa fa-list"></i></button>
+										data-content="Click to list all pending transaction codes for weighing."><i class="fa fa-list"></i></button>
 								</div>
 							</div>
 							<div class="col-22">
@@ -59,7 +59,7 @@
 						<div class="row row-2">
 							<div class="col-21">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-primary" id="new-customer-data" disabled
+									<button type="button" class="btn btn-primary" id="new-customer-data" data-stage="first" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -67,7 +67,7 @@
 										data-html="true"
 										title='<i class="fa fa-plus"></i> <strong>New Customer Data</strong>'
 										data-content="Click to create new customer data for Second Weighing."><i class="fa fa-plus"></i></button>
-									<button type="button" class="btn btn-primary" id="search-customer-data" disabled
+									<button type="button" class="btn btn-primary" id="search-customer-data" data-stage="first" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -78,7 +78,7 @@
 								</div>
 							</div>
 							<div class="col-22">
-								<input type="text" class="form-control" id="cust_name" data-type="varchar" data-stage="second" placeholder="Customer Name" readonly>
+								<input type="text" class="form-control" id="cust_name" data-type="varchar" data-stage="first" placeholder="Customer Name" readonly>
 							</div>
 						</div>
 					</div>
@@ -93,7 +93,7 @@
 								&nbsp;
 							</div>
 							<div class="col-22">
-								<input type="text" class="form-control" id="address" data-type="varchar" data-stage="second" placeholder="Address" data-action="enable" readonly>
+								<input type="text" class="form-control" id="address" data-type="varchar" data-stage="first" placeholder="Address" data-action="enable" readonly>
 							</div>
 						</div>
 					</div>
@@ -106,7 +106,7 @@
 						<div class="row row-2">
 							<div class="col-21">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-primary" id="new-category-data" disabled
+									<button type="button" class="btn btn-primary" id="new-category-data" data-stage="first" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -114,7 +114,7 @@
 										data-html="true"
 										title='<i class="fa fa-plus"></i> <strong>New Category Data</strong>'
 										data-content="Click to create new category data for Second Weighing."><i class="fa fa-plus"></i></button>
-									<button type="button" class="btn btn-primary" id="search-category-data" disabled
+									<button type="button" class="btn btn-primary" id="search-category-data" data-stage="first" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -125,7 +125,7 @@
 								</div>
 							</div>
 							<div class="col-22">
-								<input type="text" class="form-control" id="cat_name" data-type="varchar" data-stage="second" placeholder="Category Name" readonly>
+								<input type="text" class="form-control" id="cat_name" data-type="varchar" data-stage="first" placeholder="Category Name" readonly>
 							</div>
 						</div>
 					</div>
@@ -138,7 +138,7 @@
 						<div class="row row-2">
 							<div class="col-21">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-primary" id="new-product-data" disabled
+									<button type="button" class="btn btn-primary" id="new-product-data" data-stage="first" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -146,7 +146,7 @@
 										data-html="true"
 										title='<i class="fa fa-plus"></i> <strong>New Product Data</strong>'
 										data-content="Click to create new product data for Second Weighing. This will be tagged automatically to the selected customer data."><i class="fa fa-plus"></i></button>
-									<button type="button" class="btn btn-primary" id="search-product-data" disabled
+									<button type="button" class="btn btn-primary" id="search-product-data" data-stage="first" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -157,7 +157,7 @@
 								</div>
 							</div>
 							<div class="col-22">
-								<input type="text" class="form-control" id="prod_name" data-type="varchar" data-stage="second" placeholder="Product Name" readonly>
+								<input type="text" class="form-control" id="prod_name" data-type="varchar" data-stage="first" placeholder="Product Name" readonly>
 							</div>
 						</div>
 					</div>
@@ -171,11 +171,25 @@
 						<div class="row row-3">
 							<div class="col-21">
 								<div class="btn-group" role="group">
-									<button class="btn btn-primary" type="button" id="add-weight-in">
-										<span class="fa fa-plus-circle"></span>
+									<button class="btn btn-primary" type="button" id="add-weight-in" data-stage="first" 
+										data-toggle="popover"
+										data-trigger="hover"
+										data-placement="bottom"
+										data-container="body"
+										data-html="true"
+										title='<i class="fa fa-plus-circle"></i> <strong>Add Weight In</strong>'
+										data-content="Click to add weight in reading." disabled>
+										<i class="fa fa-plus-circle"></i>
 									</button>
-									<button class="btn btn-danger" type="button" id="del-weight-in" disabled>
-										<span class="fa fa-minus-circle"></span>
+									<button class="btn btn-danger" type="button" id="del-weight-in" 
+										data-toggle="popover"
+										data-trigger="hover"
+										data-placement="bottom"
+										data-container="body"
+										data-html="true"
+										title='<i class="fa fa-minus-circle"></i> <strong>Remove Weight In</strong>'
+										data-content="Click to remove selected weight in reading." disabled>
+										<i class="fa fa-minus-circle"></i>
 									</button>
 								</div>
 							</div>
@@ -183,36 +197,24 @@
 								<table class="display compact nowrap" id="dtWeightIn" style="width: 100%">
 									<thead>
 										<tr>
-											<th class="text-left" width="45%">Time</th>
-											<th class="text-left" width="35%"><div style="margin-left: -9px;">Reading</div></th>
-											<th class="text-left" width="20%"><div style="margin-left: -18px;">Unit</div></th>
+											<th class="text-left">ID</th>
+											<th class="text-left">User</th>
+											<th class="text-left">Time</th>
+											<th class="text-left">Reading</th>
+											<th class="text-left">Unit</th>
 										</tr>
 									</thead>
 									<tbody>
-										<tr>
-											<td class="text-left">08/03/2016 10:00 AM</td>
-											<td class="text-left">1,000</td>
-											<td class="text-left">kg</td>
-										</tr>
-										<tr>
-											<td class="text-left">08/03/2016 10:00 AM</td>
-											<td class="text-left">1,000</td>
-											<td class="text-left">kg</td>
-										</tr>
-										<tr>
-											<td class="text-left">08/03/2016 10:00 AM</td>
-											<td class="text-left">1,000</td>
-											<td class="text-left">kg</td>
-										</tr>
-										<tr>
-											<td class="text-left">08/03/2016 10:00 AM</td>
-											<td class="text-left">1,000</td>
-											<td class="text-left">kg</td>
-										</tr>
 									</tbody>
 								</table>
 								<div class="weight-in-total">
-									<strong>Total Weight In:</strong> 10,000 kg
+									<div class="right">										
+										<div class="total">
+										</div>		
+										<div class="label_">
+											<strong>Total Weight In:</strong>
+										</div>
+									</div>									
 								</div>
 							</div>
 						</div>
@@ -224,7 +226,7 @@
 						<label for="weight_out_reading" class="control-label">Weight Out</label>
 					</div>
 					<div class="col-3">
-						<input type="text" class="form-control weight-input" id="weight_out_reading" value="0.00" data-type="float" data-stage="second" readonly
+						<input type="text" class="form-control weight-input" id="weight_out_reading" value="0.00" data-type="float" data-stage="first" readonly
 							data-toggle="popover"
 							data-trigger="hover"
 							data-placement="top"
@@ -237,7 +239,7 @@
 						<label for="net_weight" class="control-label">Net Weight</label>
 					</div>
 					<div class="col-5">
-						<input type="text" class="form-control weight-input" id="net_weight" value="0.00" data-type="float" data-stage="second" readonly
+						<input type="text" class="form-control weight-input" id="net_weight" value="0.00" data-type="float" data-stage="first" readonly
 							data-toggle="popover"
 							data-trigger="hover"
 							data-placement="top"
@@ -255,10 +257,10 @@
 					data-placement="left"
 					data-container="body"
 					data-html="true"
-					title='<div class="all-middle"><img src="images/numeric-1-box-outline-16.png"> <strong>Save Details</strong></div>'
-					data-content="Click to save First Weighing details into the system.">
-					<img src="images/numeric-1-box-outline.png">
-					<p>Save Data</p>
+					title='<div class="all-middle"><i class="fa fa-floppy-o"></i> <strong>Save Transaction</strong></div>'
+					data-content="Click to save weighing data into the system.">
+					<p><i class="fa fa-floppy-o fa-3x"></i></p>
+					<p>Save Transaction</p> 
 				</button>
 				<button id="second-weighing" class="btn btn-warning btn-lg btn-block" data-type="button" disabled
 					data-toggle="popover"
@@ -266,9 +268,9 @@
 					data-placement="left"
 					data-container="body"
 					data-html="true"
-					title='<div class="all-middle"><img src="images/numeric-2-box-outline-16.png"> <strong>Complete Transaction</strong></div>'
-					data-content="Click to save Second Weighing details into the system.">
-					<img src="images/numeric-2-box-outline.png">
+					title='<div class="all-middle"><i class="fa fa-check-square-o"></i> <strong>Complete Transaction</strong></div>'
+					data-content="Click to save weighing data and tag this transaction as completed.">
+					<p><i class="fa fa-check-square-o fa-3x"></i></p>
 					<p>Complete Transaction</p>
 				</button>
 				<button id="cancel-weighing" class="btn btn-danger btn-lg btn-block" data-type="button" disabled
@@ -278,8 +280,8 @@
 					data-container="body"
 					data-html="true"
 					title='<i class="fa fa-ban"></i> <strong>Cancel</strong>'
-					data-content="Click to clear and reset the Weighing Scale form.">
-					<i class="fa fa-ban fa-3x" style="margin-top: 5px"></i>
+					data-content="Click to clear and reset the Floor Scale form.">
+					<p><i class="fa fa-ban fa-3x"></i></p>
 					<p>Cancel</p>
 				</button>
 				<button id="reprint-docket" class="btn btn-info btn-lg btn-block" data-type="button" disabled
@@ -290,7 +292,7 @@
 					data-html="true"
 					title='<i class="glyphicon glyphicon-print"></i> <strong>Reprint Docket</strong>'
 					data-content="Click to reprint docket details for First Weighing.">
-					<i class="glyphicon glyphicon-print fa-3x" style="margin-top: 3px"></i>
+					<p><i class="glyphicon glyphicon-print fa-3x"></i></p>
 					<p>Reprint Docket</p>
 				</button>
 			</div>
@@ -302,96 +304,56 @@
 <input type="hidden" data-stage="second" id="cat_id">
 <input type="hidden" data-stage="second" id="prod_id">
 <input type="hidden" data-stage="second" id="docket_no">
-<div class="modal fade bootstrap-dialog type-primary" id="truck-data-modal" tabindex="-1" role="dialog">
+<div class="modal fade bootstrap-dialog type-primary" id="trans-code-modal" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
 			<div class="modal-header" style="color: #FFFFFF">
-				<i class="fa fa-list"></i> Truck Data Lookup
+				<i class="fa fa-list"></i> Transaction Lookup
 			</div>
 			<div class="modal-body">
-				<ul class="nav nav-tabs" role="tablist" style="margin-bottom: 15px;" id="tabSelectTruck">
-					<li role="presentation" class="active">
-						<a href="#firstWeighing" aria-controls="firstWeighing" role="tab" data-toggle="tab">
-							<div class="all-middle"><img src="images/numeric-1-box-outline-18.png"> First Weighing</div>
-						</a>
-					</li>
-					<li role="presentation">
-						<a href="#secondWeighing" aria-controls="secondWeighing" role="tab" data-toggle="tab">
-							<div class="all-middle"><img src="images/numeric-2-box-outline-18.png"> Second Weighing</div>
-						</a>
-					</li>
-				</ul>
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane active" id="firstWeighing">
-						<div class="alert alert-info" role="alert">
-							<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
-							<ul>
-								<li><i class="fa fa-check-square-o"></i> Records listed here are Truck Data available for First Weighing only.</li>
-								<li><i class="fa fa-check-square-o"></i> To create new Truck Data for First Weighing, use the Truck Scale form.</li>
-							</ul>
-						</div>
-						<div class="panel panel-default no-margin-bottom">
-							<div class="panel-body">
-								<table class="display compact nowrap" id="table-truck-first" style="width: 100%">
-									<thead>
-										<tr>
-											<th class="text-left">Truck ID</th>
-											<th class="text-left">Truck Code</th>
-											<th class="text-left">Date Modified</th>
-										</tr>
-									</thead>
-									<tbody>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
-						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary" id="btnFWTrucksOK" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
-							</div>
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-default btnFWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
-							</div>
-						</div>
+				<div class="alert alert-info" role="alert">
+					<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
+					<ul>
+						<li><i class="fa fa-check-square-o"></i> Records listed here are pending transactions only.</li>
+						<li><i class="fa fa-check-square-o"></i> To create new transaction code, use the Floor Scale form.</li>
+					</ul>
+				</div>
+				<div class="panel panel-default no-margin-bottom">
+					<div class="panel-body">
+						<table class="display compact nowrap" id="trans-code-data" style="width: 100%">
+							<thead>
+								<tr>
+									<th class="text-left">ID</th>
+									<th class="text-left">Trans Code</th>
+									<th class="text-left">Date In</th>
+									<th class="text-left">Time In</th>
+									<th class="text-left">Weight In</th>
+									<th class="text-left">Unit</th>
+									<th class="text-left">User</th>
+									<th class="text-left">Docket No.</th>									
+									<th class="text-left">cust_id</th>
+									<th class="text-left">cust_name</th>
+									<th class="text-left">address</th>
+									<th class="text-left">cat_id</th>
+									<th class="text-left">cat_name</th>
+									<th class="text-left">prod_id</th>
+									<th class="text-left">prod_name</th>
+									<th class="text-left">weight_out_reading</th>
+									<th class="text-left">net_weight</th>									
+								</tr>
+							</thead>
+							<tbody>
+							</tbody>
+						</table>
 					</div>
-					<div role="tabpanel" class="tab-pane" id="secondWeighing">
-						<div class="alert alert-info" role="alert">
-							<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
-							<ul>
-								<li><i class="fa fa-check-square-o"></i> Records listed here are Truck Data available for Second Weighing only.</li>
-								<li><i class="fa fa-check-square-o"></i> To remove Truck Data from Second Weighing, go to the Pending Items page.</li>
-							</ul>
-						</div>
-						<div class="panel panel-default no-margin-bottom">
-							<div class="panel-body">
-								<table class="display compact nowrap" id="table-truck-second" style="width: 100%">
-									<thead>
-										<tr>
-											<th class="text-left">ID</th>
-											<th class="text-left">Truck Code</th>
-											<th class="text-left">Date In</th>
-											<th class="text-left">Time In</th>
-											<th class="text-left">Weight In</th>
-											<th class="text-left">Unit</th>
-											<th class="text-left">User</th>
-											<th class="text-left">Docket No.</th>
-										</tr>
-									</thead>
-									<tbody>
-									</tbody>
-								</table>
-							</div>
-						</div>
-						<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
-						<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-primary" id="btnSWTrucksOK" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
-							</div>
-							<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-								<button type="button" class="btn btn-default btnSWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
-							</div>
-						</div>
+				</div>
+				<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
+				<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
+					<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+						<button type="button" class="btn btn-primary" id="btnFWTrucksOK" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
+					</div>
+					<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
+						<button type="button" class="btn btn-default btnFWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
 					</div>
 				</div>
 			</div>
@@ -584,51 +546,52 @@
 		$('[data-toggle="popover"]').popover();
 		toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
 
+		/**********************************************************************************************************************************************/
+
 		// DT Weight In Details
-		var dtWID = $('#dtWeightIn')
-			.DataTable({
-				paging: false,
-				ordering: false,
-				scrollY: '90px',
-				scrollCollapse: false,
-				dom: 'rt'
+		if ($('#wr_id').val() !== '') {
+			var dtWID = STIC.DT.wghtDtls({
+				pId: 'wr_dtlid',
+				dId: '#dtWeightIn',
+				btns: ['#del-weight-in'],
+				wrId: $('#wr_id').val()
 			});
-			
-		////////////////////////////////////////
-			columns: dtCd,
-			ajax: {
-					url: dtWs,
-					dataSrc: function(json) {
-						var ds = dtDs.split('.'),
-							rec = json[ds[0]][ds[1]][ds[2]];
-						return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
-					}
-				}	
-		////////////////////////////////////
-				
-		
-					
-		// Weight In Details > DT Row Click Event
-		$('#dtWeightIn tbody').on('click', 'tr', function() {
-			STIC.dtToggleRowSelect({
-				row: this,
-				table: dtWID,
-				pid: 'prod_id',
-				buttons: ['#del-weight-in']
+		}	else {
+			var dtWID = STIC.DT.wghtDtls({
+				pId: 'wr_dtlid',
+				dId: '#dtWeightIn',
+				btns: ['#del-weight-in'],
+				wrId: 0
 			});
-		});
-		
-		// Form Content
-		var frmAddWeightIn = $('<div></div>').load(FRM_ADD_WEIGHT_IN);
-			
+		}
+
+		// Pre load Form Content
+		var frmAddWeightIn = $('<div></div>')
+			.load(FRM_ADD_WGHT_IN);
+
 		// Add Weight In
 		$('#add-weight-in').on('click', function() {
 			BootstrapDialog.show({
 				closable: false,
-				title: '<i class="fa fa-sign-in"></i> Add Weight In',
+				title: '<i class="fa fa-plus-circle"></i> Add Weight In',
 				message: frmAddWeightIn,
 				onshown: function(dialogRef) {
-					var modalBody = dialogRef.getModalBody();
+					var modalBody = dialogRef.getModalBody();					
+					modalBody.find('input[data-field="user_id"]')
+						.val(STIC.User.ReadCookie('userid'));
+					modalBody.find('input[data-field="user_name"]')
+						.val(STIC.User.ReadCookie('username'));
+					modalBody.find('input[data-field="weight_in_unit"]')
+						.val($('#main-lcd .weight-unit').text());
+					modalBody.find('input[data-field="weight_in_reading"]')
+						.val($('#main-lcd .weight-reading').text()
+							.replace(/\+/g, '')
+							.replace(/\,/g, ''));
+					modalBody.find('input[data-field="weight_in_date"]')
+						.val($.formatDateTime('yy-mm-dd hh:ii:ss', new Date()));						
+				},
+				onhidden: function(dialogRef) {
+					var modalBody = dialogRef.getModalBody();					
 					modalBody.find('input[data-field]').val('');
 				},
 				buttons: [{
@@ -643,38 +606,46 @@
 					icon: 'fa fa-floppy-o',
 					cssClass: 'btn-primary',
 					action: function(dialogRef) {
-						var modalBody = dialogRef.getModalBody(),							
-							weightUnit = modalBody
-								.find('.weight-unit')
-								.text()
-								.replace(/\+/g, '')
-								.replace(/\,/g, ''),							
-							weightReading = modalBody
-								.find('.weight-reading')
-								.text()
-								.replace(/\+/g, '')
-								.replace(/\,/g, ''),							
-							currDateTime = $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
-							JSONObject = {								
-								weight_unit: weightUnit,											
-								date_modified: currDateTime,
-								weight_in_date: currDateTime,
-								weight_in_reading: weightReading,			
+						var modalBody = dialogRef.getModalBody(),
+							JSONObject = {
+								wr_id: $('#wr_id').val(),
+								weight_unit: modalBody.find('input[data-field="weight_in_unit"]').val(),
+								weight_in_date: modalBody.find('input[data-field="weight_in_date"]').val(),
+								weight_in_reading: modalBody.find('input[data-field="weight_in_reading"]').val(),
 								user_id: STIC.User.ReadCookie('userid')
-							};							
-						console.log(JSONObject);
-						// Call WS to insert weight in details
-						// Reload Weight In Details DT
+							};
+				
+						$.post(WS_WGHT_DTL_ADD, 'weightReadingDetailInfo=' + JSON.stringify(JSONObject))
+							.done(function(results, status) {
+								var response = results.response;
+								if (response.type === 'SUCCESS') {		
+									BootstrapDialog.closeAll();
+									BootstrapDialog.alert({
+										type: 'type-primary',
+										title: MSG_TITLE_INFO,
+										message: MSG_INFO_ADD_REC,
+										callback: function(result) {
+											BootstrapDialog.closeAll();
+											dtWID.ajax.reload();
+										}
+									});
+								} else {
+									STIC.showWSError();
+								}
+							})
+							.fail(function() {
+								STIC.showWSError();
+							});					
 					}
 				}]
 			});
 		});
-		
+
 		// Delete Weight In
-		$('#del-weight-in').on('click', function() {		
+		$('#del-weight-in').on('click', function() {
 			if (STIC.User.allowDelete()) {
 				BootstrapDialog.confirm({
-					type: 'type-danger',					
+					type: 'type-danger',
 					title: MSG_TITLE_INFO,
 					btnCancelLabel: BTN_LABEL_CANCEL,
 					message: MSG_CONFIRM_DELETE_RECORD,
@@ -686,13 +657,15 @@
 								dt: dtWID,
 								title: MSG_TITLE_INFO,
 								message: MSG_INFO_DEL_REC,
-								url: WS_DELETE_WEIGHT_DETAIL,
+								url: WS_WGHT_DTL_REM,
 								data: {
 									wr_dtlid: dtWID
 										.row('.selected')
 										.data()['wr_dtlid']
-								}								
+								}
 							});
+							
+							STIC.disableButtons(['#del-weight-in']);
 						}
 					}
 				});
@@ -701,47 +674,52 @@
 
 		/**********************************************************************************************************************************************/
 
-		// Truck > New Truck Data
-		$('#new-truck-data').on('click', function() {
-			showNewModalForm({
-				objectId: 'truckInfo',
-				dataType: 'Truck Data',
-				status: 'FIRST_WEIGHT_IN',
-				formId: '#dataTruckForm',
-				formSrc: FORM_TRUCK_DATA,
-				wsInsert: WS_TRUCK_INSERT
-			});
+		// New Trans Code
+		$('#new-trans-code').on('click', function() {
+			$.getJSON(WS_NEW_TRANS_CODE)
+				.done(function(results, status) {
+					var response = results.response;
+					if (response.type === 'SUCCESS') {						
+						BootstrapDialog.alert({
+							type: 'type-primary',
+							title: MSG_TITLE_INFO,
+							message: MSG_INFO_ADD_REC,
+							callback: function(result) {
+								BootstrapDialog.closeAll();
+								toggleFloorScaleFields({ status: 'FIRST_STAGE' });
+								$('#wr_id').val(response.newWrId);
+								$('#trans_code').val(response.newTransCode);
+								dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=' + response.newWrId).load();
+								
+							}
+						});
+					} else {
+						STIC.showWSError();
+					}
+				})
+				.fail(function() {
+					STIC.showWSError();
+				});
 		});
 
-		// Truck > Data Lookup
-		$('#search-truck-data').on('click', function() {
-			if ($.fn.DataTable.isDataTable('#table-truck-first')) {
+		// Trans Code > Data Lookup
+		$('#search-trans-code').on('click', function() {
+			if ($.fn.DataTable.isDataTable('#trans-code-data')) {
 				dtFWT.destroy();
-			}
-			if ($.fn.DataTable.isDataTable('#table-truck-second')) {
-				dtSWT.destroy();
 			}
 			dtFWT = initDT_Picker({
 				pl: DFLT_PICK_SIZE,
-				ds: DS_TRUCK_LIST,
-				cd: CD_TRUCK_LIST,
-				ws: WS_TRUCK_LIST,
-				domId: 'table-truck-first'
-			});
-			dtSWT = initDT_Picker({
-				pl: DFLT_PICK_SIZE,
 				ds: DFLT_DS,
-				cd: CD_TRUCK_IN_LIST,
-				ws: WS_CHECK_TRUCK_CODE_LIST,
-				domId: 'table-truck-second'
+				cd: CD_TRANS_CODE_LST,
+				ws: WS_TRANS_CODE_LST + 'type=FLOOR',
+				domId: 'trans-code-data'
 			});
-			$('#truck-data-modal').modal('show');
+			$('#trans-code-modal').modal('show');
 		});
 
 		// Truck > Data Lookup > onShow Event
-		$('#truck-data-modal').on('shown.bs.modal', function() {
+		$('#trans-code-modal').on('shown.bs.modal', function() {
 			$('#btnFWTrucksOK, #btnSWTrucksOK').prop('disabled', true);
-			$('#tabSelectTruck a[href="#firstWeighing"]').tab('show');
 		})
 
 		// Truck > Data Lookup > First Weighing Tab Click Event
@@ -750,58 +728,34 @@
 			$('#btnFWTrucksOK').prop('disabled', true);
 		});
 
-		// Truck > Data Lookup > Second Weighing Tab Click Event
-		$('#tabSelectTruck a[href="#secondWeighing"]').on('click', function() {
-			dtSWT.ajax.reload();
-			$('#btnSWTrucksOK').prop('disabled', true);
-		});
-
 		// Truck > Data Lookup > First Weighing Trucks > DT Row Click Event
-		$('#table-truck-first tbody').on( 'click', 'tr', function() {
+		$('#trans-code-data tbody').on( 'click', 'tr', function() {
 			STIC.dtToggleRowSelect({
 				row: this,
 				table: dtFWT,
-				pid: 'truck_id',
+				pid: 'wr_id',
 				buttons: ['#btnFWTrucksOK']
 			});
 		});
 
-		// Truck > Data Lookup > Second Weighing Trucks > DT Row Click Event
-		$('#table-truck-second tbody').on( 'click', 'tr', function() {
-			STIC.dtToggleRowSelect({
-				row: this,
-				table: dtSWT,
-				pid: 'truck_id',
-				buttons: ['#btnSWTrucksOK']
+
+		// Transaction Lookup > Select Item
+		$('#trans-code-modal #btnFWTrucksOK').on('click', function() {
+			toggleFloorScaleFields({ status: 'FIRST_STAGE' });
+			
+			var rowData = dtFWT.row('.selected').data();
+			$.each(rowData, function(key, value) {
+				$('#' + key).val(value);
 			});
-		});
-
-		// Truck > Data Lookup > First Weighing Trucks > Select Item
-		$('#truck-data-modal #btnFWTrucksOK').on('click', function() {
-			toggleWeightScaleFields({ status: 'FIRST_WEIGHT_IN' });
-			$('#truck_code').val(dtFWT.row('.selected').data().truck_code);
-			$('#truck-data-modal').modal('hide');
-			setNetWeight();
-		});
-
-		// Truck > Data Lookup > Second Weighing Trucks > Select Item
-		$('#truck-data-modal #btnSWTrucksOK').on('click', function() {
-			var selected_row = dtSWT.row('.selected');
-			toggleWeightScaleFields({ status: 'SECOND_WEIGHT_IN' });
-			$('#wr_id').val(selected_row.data().wr_id);
-			$('#docket_no').val(selected_row.data().docket_no);
-			$('#truck_code').val(selected_row.data().truck_code);
-			//$('#weight_unit').text(selected_row.data().weight_unit);
-			//$('#weight_in_reading').val(selected_row.data().weight_in_reading
-			//	.replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
-			$('#weight_in_reading').val(selected_row.data().weight_in_reading);
-			$('#truck-data-modal').modal('hide');
-			setNetWeight();
+			
+			dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=' + $('#wr_id').val()).load();
+			$('#trans-code-modal').modal('hide');		
+			//setNetWeight();
 		});
 
 		// Truck > Data Lookup > Cancel
 		$('.btnFWTrucksCancel, .btnSWTrucksCancel').on('click', function() {
-			$('#truck-data-modal').modal('hide');
+			$('#trans-code-modal').modal('hide');
 			$('#btnFWTrucksOK, #btnSWTrucksOK').prop('disabled', true);
 		});
 
@@ -1088,20 +1042,24 @@
 				callback: function(result) {
 					if (result) {
 						clearInterval(STIC.INTERVAL_ID);
-						$.post(WS_FIRST_WEIGHING_INSERT, 'weightReadingInfo=' +
+						$.post(WS_SECOND_WEIGHING_UPDATE, 'weightReadingInfo=' +
 							JSON.stringify({
+								type: 'FLOOR',
 								weight_count: 1,
 								weight_status: 'PENDING',
-								truck_code: $('#truck_code').val(),
+								wr_id: $('#wr_id').val(),
+								trans_code: $('#trans_code').val(),
+								cust_id: $('#cust_id').val(),
+								address: $('#address').val(),
+								prod_id: $('#prod_id').val(),	
 								weight_unit: $('#weight-unit').text(),
 								user_id: STIC.User.ReadCookie('userid'),
-								date_modified: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
 								weight_in_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
-								weight_in_reading: $('#weight_in_reading').val().replace(/,/g, '')
+								weight_in_reading: dtWID.column('weight_in_reading:name').data().sum()			
 							}))
 							.done(function(result) {
 								if (result.response.type === 'SUCCESS') {
-									STIC.readScale();
+									//STIC.readScale();
 									BootstrapDialog.alert({
 										type: 'type-primary',
 										title: MSG_TITLE_INFO,
@@ -1109,10 +1067,11 @@
 										callback: function() {
 											BootstrapDialog.closeAll();
 											// Docket Print
-											window.open('http://localhost:8080' + WS_DOCKET_PRINT
+											/*window.open('http://localhost:8080' + WS_DOCKET_PRINT
 												+ 'wrId=' + result.response.wr_id
-												+ '&type=A1', 'DocketPrint').focus();
-											toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+												+ '&type=A1', 'DocketPrint').focus();*/
+											toggleFloorScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+											dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=0').load();
 										}
 									});
 								} else {
@@ -1198,17 +1157,16 @@
 						if (result) {
 							clearInterval(STIC.INTERVAL_ID);
 							var JSONObject = {
+								type: 'FLOOR',
 								weight_count:	2,
 								weight_status: 'DONE',
 								wr_id: $('#wr_id').val(),
 								cust_id: $('#cust_id').val(),
 								address: $('#address').val(),
 								prod_id: $('#prod_id').val(),
-								remarks: $('#remarks').val(),
 								weight_unit: $('#weight-unit').text(),
 								user_id: STIC.User.ReadCookie('userid'),
 								net_weight: $('#net_weight').val().replace(/,/g, ''),
-								compensation: $('#compensation').val().replace(/,/g, ''),
 								weight_out_reading: $('#weight_out_reading').val().replace(/,/g, ''),
 								weight_out_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date())
 							},
@@ -1229,6 +1187,7 @@
 												+ 'wrId=' + $('#wr_id').val()
 												+ '&type=A2', 'DocketPrint').focus();
 											toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+											dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=0').load();
 										}
 									});
 								} else {
@@ -1284,7 +1243,7 @@
 
 		/**********************************************************************************************************************************************/
 
-		// Sample Indicator		
+		// Sample Indicator
 		var random = function(max, min) {
 				return ((Math.random() * (max - min)) + min).toFixed(2);
 		};
@@ -1292,10 +1251,10 @@
 		STIC.INTERVAL_ID = setInterval(function() {
 			var rand = '+' + random(50, 950)
 				.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-				
+
 			$('.weight-lcd .weight-error').hide();
 			$('div.weight-reading').text(rand.toString());
-			
+
 			// 2nd Weighing
 			/*if ($('#wr_id').val() != '') {
 				$('#weight-reading').text(rand.toString());

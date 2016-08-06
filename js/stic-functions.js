@@ -13,10 +13,59 @@ var STIC = {
 	// Flag for Ajax Loader
 	SHOW_PROGRESS: true,
 
-	dtDataSrc: function(params) {
-		var ds = params.ds.split('.'),
-			rec = params.response[ds[0]][ds[1]][ds[2]];
-		return ($.isArray(rec) === true ? rec : (rec !== '' ? [rec] : []));
+	// DataTables
+	DT: {
+
+		// Default Ajax Option
+		ajaxOpts: function(params) {
+			return {
+				url: params.url,
+				dataSrc: function(json) {
+					var ds = params.ds.split('.'),
+						rec = json[ds[0]][ds[1]][ds[2]];
+					return ($.isArray(rec) === true ?
+						rec : (rec !== '' ? [rec] : []));
+				}
+			};
+		},
+
+		// Weight Details Table
+		wghtDtls: function(params) {
+			var dt = $(params.dId)
+				.DataTable({
+					dom: 'rt',
+					paging: false,
+					ordering: false,
+					scrollY: '90px',
+					scrollCollapse: false,
+					columns: CD_WGHT_DTL,
+					ajax: STIC.DT.ajaxOpts({
+						ds: DS_WGHT_DTL,
+						url: WS_WGHT_DTL_LST + 'wr_id=' + params.wrId 
+					})
+				})				
+				.on('draw.dt', function (e, settings, data) {
+					var totalWeightIn = dt
+						.column('weight_in_reading:name')
+						.data().sum(),
+					formattedTotal = STIC.Report
+						.FormatNumber(totalWeightIn);
+					$('.weight-in-total .right .total').text(formattedTotal
+						+ ' ' + $('#weight-unit').text());
+				});
+				
+			$(params.dId + ' tbody').on('click', 'tr',
+				function() {
+					STIC.dtToggleRowSelect({
+						row: this,
+						table: dt,
+						pid: params.pId,
+						buttons: params.btns
+					});
+				});
+			return dt;
+		}
+
 	},
 
 	// Load index page
@@ -1202,9 +1251,9 @@ var STIC = {
 				}
 			}
 		},
-		
+
 		// Check if User can delete data
-		allowDelete: function(action) {	
+		allowDelete: function(action) {
 			var userRoleId = STIC.User.ReadCookie('roleid');
 			if (userRoleId === '1' || userRoleId === '2') {
 				output = true;
@@ -1218,9 +1267,9 @@ var STIC = {
 						BootstrapDialog.closeAll();
 					}
 				});
-			}		
+			}
 			return output;
-		} 
+		}
 	}
 };
 

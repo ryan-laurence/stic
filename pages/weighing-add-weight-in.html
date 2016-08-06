@@ -1,15 +1,38 @@
 <form class="form-horizontal well no-margin-bottom" id="formAddWeightIn">
+	<input type="hidden" data-field="user_id">
 	<div class="alert alert-info" role="alert">
-		<i class="fa fa-info-circle fa-3x fa-pull-left"></i> Please make sure the platform scale is stable before saving the current scale reading.
+		<i class="fa fa-info-circle fa-3x fa-pull-left"></i> Please make sure the platform scale is stable and the weight in values are correctly defined before saving the current scale reading.
 	</div>
-	<div class="row zero-margin">
-		<div class="weight-lcd no-margin-bottom">
-			<div id="weight-reading" class="weight-reading">+0.00</div>
-			<div class="weight-info">
-				<div id="weight-unit" class="weight-unit">kg</div>
-				<div id="weight-status"class="weight-status">inactive</div>
+	<div class="form-group">
+		<div class="row">
+			<div class="col-md-6">
+				<label class="control-label" for="weight_in_date">Weight In Date</label>
+				<input type="text" class="form-control" placeholder="Weight In Date"
+					data-field="weight_in_date"
+					data-fv-notempty="true" readonly>
 			</div>
-			<div class="weight-error"></div>
+			<div class="col-md-6">
+				<label class="control-label" for="weight_in_reading">Weight In Reading</label>
+				<input type="text" class="form-control" placeholder="Weight In Reading"
+					data-field="weight_in_reading"
+					data-fv-notempty="true" readonly>
+			</div>
+		</div>
+	</div>
+	<div class="form-group">
+		<div class="row">
+			<div class="col-md-6">
+				<label class="control-label" for="weight_in_unit">Weight In Unit</label>
+				<input type="text" class="form-control" placeholder="Weight In Unit"
+					data-field="weight_in_unit"
+					data-fv-notempty="true" readonly>
+			</div>
+			<div class="col-md-6">
+				<label class="control-label" for="user_name">User</label>
+				<input type="text" class="form-control" placeholder="User"
+					data-field="user_name"
+					data-fv-notempty="true" readonly>
+			</div>
 		</div>
 	</div>
 </form>

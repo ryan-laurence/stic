@@ -261,7 +261,7 @@
 					data-html="true"
 					title='<i class="fa fa-ban"></i> <strong>Cancel</strong>'
 					data-content="Click to clear and reset the Weighing Scale form.">
-					<i class="fa fa-ban fa-3x" style="margin-top: 5px"></i>
+					<p><i class="fa fa-ban fa-3x"></i></p>
 					<p>Cancel</p>
 				</button>
 				<button id="reprint-docket" class="btn btn-info btn-lg btn-block" data-type="button" disabled
@@ -272,7 +272,7 @@
 					data-html="true"
 					title='<i class="glyphicon glyphicon-print"></i> <strong>Reprint Docket</strong>'
 					data-content="Click to reprint docket details for First Weighing.">
-					<i class="glyphicon glyphicon-print fa-3x" style="margin-top: 3px"></i>
+					<p><i class="glyphicon glyphicon-print fa-3x"></i></p>
 					<p>Reprint Docket</p>
 				</button>
 			</div>
@@ -963,7 +963,6 @@
 								truck_code: $('#truck_code').val(),
 								weight_unit: $('#weight-unit').text(),
 								user_id: STIC.User.ReadCookie('userid'),
-								date_modified: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
 								weight_in_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
 								weight_in_reading: $('#weight_in_reading').val().replace(/,/g, '')
 							}))
