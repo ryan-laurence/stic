@@ -1065,6 +1065,7 @@
 						if (result) {
 							clearInterval(STIC.INTERVAL_ID);
 							var JSONObject = {
+								type: 'TRUCK',
 								weight_count:	2,
 								weight_status: 'DONE',
 								wr_id: $('#wr_id').val(),
@@ -1083,7 +1084,6 @@
 							var result = $.post(WS_SECOND_WEIGHING_UPDATE, JSONString);
 							result.done(function (results) {
 								if (results.response.type === 'SUCCESS') {
-
 									STIC.readScale();
 									BootstrapDialog.alert({
 										type: 'type-primary',

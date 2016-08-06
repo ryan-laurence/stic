@@ -41,9 +41,9 @@ var STIC = {
 					columns: CD_WGHT_DTL,
 					ajax: STIC.DT.ajaxOpts({
 						ds: DS_WGHT_DTL,
-						url: WS_WGHT_DTL_LST + 'wr_id=' + params.wrId 
+						url: WS_WGHT_DTL_LST + 'wr_id=' + params.wrId
 					})
-				})				
+				})
 				.on('draw.dt', function (e, settings, data) {
 					var totalWeightIn = dt
 						.column('weight_in_reading:name')
@@ -53,7 +53,7 @@ var STIC = {
 					$('.weight-in-total .right .total').text(formattedTotal
 						+ ' ' + $('#weight-unit').text());
 				});
-				
+
 			$(params.dId + ' tbody').on('click', 'tr',
 				function() {
 					STIC.dtToggleRowSelect({

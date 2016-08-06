@@ -171,7 +171,7 @@
 						<div class="row row-3">
 							<div class="col-21">
 								<div class="btn-group" role="group">
-									<button class="btn btn-primary" type="button" id="add-weight-in" data-stage="first" 
+									<button class="btn btn-primary" type="button" id="add-weight-in" data-stage="first"
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -181,7 +181,7 @@
 										data-content="Click to add weight in reading." disabled>
 										<i class="fa fa-plus-circle"></i>
 									</button>
-									<button class="btn btn-danger" type="button" id="del-weight-in" 
+									<button class="btn btn-danger" type="button" id="del-weight-in"
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -208,13 +208,13 @@
 									</tbody>
 								</table>
 								<div class="weight-in-total">
-									<div class="right">										
+									<div class="right">
 										<div class="total">
-										</div>		
+										</div>
 										<div class="label_">
 											<strong>Total Weight In:</strong>
 										</div>
-									</div>									
+									</div>
 								</div>
 							</div>
 						</div>
@@ -260,7 +260,7 @@
 					title='<div class="all-middle"><i class="fa fa-floppy-o"></i> <strong>Save Transaction</strong></div>'
 					data-content="Click to save weighing data into the system.">
 					<p><i class="fa fa-floppy-o fa-3x"></i></p>
-					<p>Save Transaction</p> 
+					<p>Save Transaction</p>
 				</button>
 				<button id="second-weighing" class="btn btn-warning btn-lg btn-block" data-type="button" disabled
 					data-toggle="popover"
@@ -330,7 +330,7 @@
 									<th class="text-left">Weight In</th>
 									<th class="text-left">Unit</th>
 									<th class="text-left">User</th>
-									<th class="text-left">Docket No.</th>									
+									<th class="text-left">Docket No.</th>
 									<th class="text-left">cust_id</th>
 									<th class="text-left">cust_name</th>
 									<th class="text-left">address</th>
@@ -339,7 +339,7 @@
 									<th class="text-left">prod_id</th>
 									<th class="text-left">prod_name</th>
 									<th class="text-left">weight_out_reading</th>
-									<th class="text-left">net_weight</th>									
+									<th class="text-left">net_weight</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -576,7 +576,7 @@
 				title: '<i class="fa fa-plus-circle"></i> Add Weight In',
 				message: frmAddWeightIn,
 				onshown: function(dialogRef) {
-					var modalBody = dialogRef.getModalBody();					
+					var modalBody = dialogRef.getModalBody();
 					modalBody.find('input[data-field="user_id"]')
 						.val(STIC.User.ReadCookie('userid'));
 					modalBody.find('input[data-field="user_name"]')
@@ -588,10 +588,10 @@
 							.replace(/\+/g, '')
 							.replace(/\,/g, ''));
 					modalBody.find('input[data-field="weight_in_date"]')
-						.val($.formatDateTime('yy-mm-dd hh:ii:ss', new Date()));						
+						.val($.formatDateTime('yy-mm-dd hh:ii:ss', new Date()));
 				},
 				onhidden: function(dialogRef) {
-					var modalBody = dialogRef.getModalBody();					
+					var modalBody = dialogRef.getModalBody();
 					modalBody.find('input[data-field]').val('');
 				},
 				buttons: [{
@@ -614,11 +614,11 @@
 								weight_in_reading: modalBody.find('input[data-field="weight_in_reading"]').val(),
 								user_id: STIC.User.ReadCookie('userid')
 							};
-				
+
 						$.post(WS_WGHT_DTL_ADD, 'weightReadingDetailInfo=' + JSON.stringify(JSONObject))
 							.done(function(results, status) {
 								var response = results.response;
-								if (response.type === 'SUCCESS') {		
+								if (response.type === 'SUCCESS') {
 									BootstrapDialog.closeAll();
 									BootstrapDialog.alert({
 										type: 'type-primary',
@@ -635,7 +635,7 @@
 							})
 							.fail(function() {
 								STIC.showWSError();
-							});					
+							});
 					}
 				}]
 			});
@@ -664,7 +664,7 @@
 										.data()['wr_dtlid']
 								}
 							});
-							
+
 							STIC.disableButtons(['#del-weight-in']);
 						}
 					}
@@ -679,7 +679,7 @@
 			$.getJSON(WS_NEW_TRANS_CODE)
 				.done(function(results, status) {
 					var response = results.response;
-					if (response.type === 'SUCCESS') {						
+					if (response.type === 'SUCCESS') {
 						BootstrapDialog.alert({
 							type: 'type-primary',
 							title: MSG_TITLE_INFO,
@@ -690,7 +690,7 @@
 								$('#wr_id').val(response.newWrId);
 								$('#trans_code').val(response.newTransCode);
 								dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=' + response.newWrId).load();
-								
+
 							}
 						});
 					} else {
@@ -742,14 +742,14 @@
 		// Transaction Lookup > Select Item
 		$('#trans-code-modal #btnFWTrucksOK').on('click', function() {
 			toggleFloorScaleFields({ status: 'FIRST_STAGE' });
-			
+
 			var rowData = dtFWT.row('.selected').data();
 			$.each(rowData, function(key, value) {
 				$('#' + key).val(value);
 			});
-			
+
 			dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=' + $('#wr_id').val()).load();
-			$('#trans-code-modal').modal('hide');		
+			$('#trans-code-modal').modal('hide');
 			//setNetWeight();
 		});
 
@@ -1051,15 +1051,15 @@
 								trans_code: $('#trans_code').val(),
 								cust_id: $('#cust_id').val(),
 								address: $('#address').val(),
-								prod_id: $('#prod_id').val(),	
+								prod_id: $('#prod_id').val(),
 								weight_unit: $('#weight-unit').text(),
 								user_id: STIC.User.ReadCookie('userid'),
 								weight_in_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
-								weight_in_reading: dtWID.column('weight_in_reading:name').data().sum()			
+								weight_in_reading: dtWID.column('weight_in_reading:name').data().sum()
 							}))
 							.done(function(result) {
 								if (result.response.type === 'SUCCESS') {
-									//STIC.readScale();
+									STIC.readScale();
 									BootstrapDialog.alert({
 										type: 'type-primary',
 										title: MSG_TITLE_INFO,
@@ -1067,9 +1067,9 @@
 										callback: function() {
 											BootstrapDialog.closeAll();
 											// Docket Print
-											/*window.open('http://localhost:8080' + WS_DOCKET_PRINT
+											window.open('http://localhost:8080' + WS_DOCKET_PRINT
 												+ 'wrId=' + result.response.wr_id
-												+ '&type=A1', 'DocketPrint').focus();*/
+												+ '&type=A1', 'DocketPrint').focus();
 											toggleFloorScaleFields({ status: 'CANCEL_WEIGHT_IN' });
 											dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=0').load();
 										}
@@ -1174,7 +1174,6 @@
 							var result = $.post(WS_SECOND_WEIGHING_UPDATE, JSONString);
 							result.done(function (results) {
 								if (results.response.type === 'SUCCESS') {
-
 									STIC.readScale();
 									BootstrapDialog.alert({
 										type: 'type-primary',

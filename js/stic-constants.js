@@ -56,23 +56,20 @@ var WS_SCALE_DISCONNECT = '/stic/services/ScaleReaderInfoServices/disconnect?res
 var WS_SCALE_READER = '/stic/services/ScaleReaderInfoServices/readScaleReading?response=application/json';
 var WS_DOCKET_PRINT = '/stic/DocketPrintReportService?';
 
-// Floor Scale 
+// Floor Scale
 var CD_WGHT_DTL = [
 	{ data: 'wr_dtlid', visible: false, searchable: false, orderable: false },
-	{ data: 'user_id', visible: false, searchable: false, orderable: false },		
+	{ data: 'user_id', visible: false, searchable: false, orderable: false },
 	{ data: 'weight_in_date', width: '45%' },
 	{ data: 'weight_in_reading', name: 'weight_in_reading', width: '35%' },
 	{ data: 'weight_unit', width: '20%' }
 ];
-var WS_WGHT_DTL_LST = '/stic/services/WeightReadingInfoServices/getAllWeightReadingsDetailByIdList?response=application/json&';
-// /stic/services/WeightReadingInfoServices/getAllWeightReadingsDetailByIdList
-// /stic/data/data-weightin-details.json
-var WS_WGHT_DTL_ADD = '/stic/services/WeightReadingInfoServices/addWeightReadingsDetail?response=application/json&';
-var WS_WGHT_DTL_REM = '/stic/services/WeightReadingInfoServices/deleteDetailId?response=application/json&';
 var FRM_ADD_WGHT_IN = 'pages/weighing-add-weight-in.html';
 var DS_WGHT_DTL = 'response.weightReadingDetail-list.weightReadingDetail';
+var WS_WGHT_DTL_REM = '/stic/services/WeightReadingInfoServices/deleteDetailId?response=application/json&';
 var WS_NEW_TRANS_CODE = '/stic/services/WeightReadingInfoServices/createTransactionCode?response=application/json';
-
+var WS_WGHT_DTL_ADD = '/stic/services/WeightReadingInfoServices/addWeightReadingsDetail?response=application/json&';
+var WS_WGHT_DTL_LST = '/stic/services/WeightReadingInfoServices/getAllWeightReadingsDetailByIdList?response=application/json&';
 
 var CD_TRANS_CODE_LST = [
 	{ data: 'wr_id', visible: false, searchable: false, orderable: false },
@@ -91,16 +88,10 @@ var CD_TRANS_CODE_LST = [
 	{ data: 'prod_id', visible: false, searchable: false, orderable: false },
 	{ data: 'prod_name', visible: false, searchable: false, orderable: false },
 	{ data: 'weight_out_reading', visible: false, searchable: false, orderable: false },
-	{ data: 'net_weight', visible: false, searchable: false, orderable: false }	
+	{ data: 'net_weight', visible: false, searchable: false, orderable: false }
 ];
 var DS_TRANS_CODE_LST = 'response.weightReadingDetail-list.weightReadingDetail';
 var WS_TRANS_CODE_LST = '/stic/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&';
-
-
-
-
-
-
 
 // Supplier Data
 var CD_SUPPLIER_LIST = [
