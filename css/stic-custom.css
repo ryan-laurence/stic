@@ -256,14 +256,14 @@
 .col-3 {
 	float: left;
 	width: 25%;
-	margin-left: 12px;
+	margin-left: 10px;
 }
 
 .col-4 {
 	float: left;
 	width: 17%;
 	text-align: right;
-	margin-left: 30px;
+	margin-left: 10px;
 }
 
 .col-5 {
@@ -288,6 +288,12 @@
 	float: left;
 	width: 18%;
 	text-align: right;
+}
+
+.col-9 {
+	float: left;
+	width: auto;
+	margin-left: 12px;
 }
 
 .col-21 {

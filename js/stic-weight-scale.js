@@ -349,53 +349,21 @@ function toggleWeightScaleFields(options) {
 	}
 }
 
+// Toggle Floor Scale Fields
 function toggleFloorScaleFields(options) {
 	switch(options.status) {
-		case 'CANCEL_WEIGHT_IN':
-			$('#first-weighing, #second-weighing, #cancel-weighing, #reprint-docket')
-				.popover('destroy')
-				.prop('disabled', true);
+		case 'CANCEL_WEIGHING':
 			$('label[for]').css('color', '#333333');
-			
-			$('[data-stage="first"]')
-				.popover('destroy')
-				.prop('disabled', true);
-			
-			
-			$('input[data-stage="first"][type="hidden"]').val('');
-			$('input[data-stage="first"][data-type="varchar"]').val('');
-			$('input[data-stage="first"][data-type="float"]').val('0.00');
-			$('input[data-action="enable"]').prop('readonly', true);
-			
+			$('input[data-stage="1"]').val('');
+			$('input[data-type="float"]').val('0.00');
+			$('[data-stage="1"]').popover('destroy').prop('disabled', true);
 			break;
-		
-		case 'FIRST_STAGE':
-			// Main Buttons
-			$('#first-weighing, #second-weighing, #cancel-weighing')
-				.popover()
-				.prop('disabled', false);
-			$('#reprint-docket')
-				.popover('destroy')
-				.prop('disabled', true);
-
-			// Field Buttons
+		case 'START_WEIGHING':
 			$('label[for]').css('color', '#333333');
-			
-			$('[data-stage="first"]')
-				.popover()
-				.prop('disabled', false);
-			
-		
-
-			// Input Fields
-			$('input[data-stage="first"][type="hidden"]').val('');
-			$('input[data-stage="first"][data-type="varchar"]').val('');
-			$('input[data-stage="first"][data-type="float"]').val('0.00');
-			$('input[data-action="enable"]').prop('readonly', false);
-
-			//$('input[data-stage="second"][data-type="varchar"]').removeClass('bg-white');
-			break;
-		case 'COMPLETE':
+			$('input[data-stage="1"]').val('');
+			$('input[data-type="float"]').val('0.00');
+			$('[data-stage="1"]').popover().prop('disabled', false);
+			$('#reprint-docket').popover('destroy').prop('disabled', true);
 			break;
 		default:
 			console.log('Error: Unknown Response Type!');

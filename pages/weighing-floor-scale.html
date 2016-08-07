@@ -16,7 +16,7 @@
 				<div class="weight-error"></div>
 			</div>
 		</div>
-		<div class="container well no-margin-bottom no-margin-right" style="width: auto; padding: 10px">
+		<div class="container well no-margin-bottom no-margin-right" style="width: 100%; padding: 10px">
 			<div class="form-horizontal no-margin-bottom" id="weight-scale-form" style="width: 80%; float: left">
 				<div class="row row-1">
 					<div class="col-1">
@@ -45,7 +45,7 @@
 								</div>
 							</div>
 							<div class="col-22">
-								<input type="text" class="form-control bg-white" id="trans_code" data-type="varchar" data-stage="first" placeholder="Transaction Code" readonly>
+								<input type="text" class="form-control" id="trans_code" data-type="varchar" data-stage="1" placeholder="Transaction Code" readonly>
 							</div>
 						</div>
 					</div>
@@ -59,7 +59,7 @@
 						<div class="row row-2">
 							<div class="col-21">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-primary" id="new-customer-data" data-stage="first" disabled
+									<button type="button" class="btn btn-primary" id="new-customer-data" data-stage="1" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -67,7 +67,7 @@
 										data-html="true"
 										title='<i class="fa fa-plus"></i> <strong>New Customer Data</strong>'
 										data-content="Click to create new customer data for Second Weighing."><i class="fa fa-plus"></i></button>
-									<button type="button" class="btn btn-primary" id="search-customer-data" data-stage="first" disabled
+									<button type="button" class="btn btn-primary" id="search-customer-data" data-stage="1" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -78,7 +78,7 @@
 								</div>
 							</div>
 							<div class="col-22">
-								<input type="text" class="form-control" id="cust_name" data-type="varchar" data-stage="first" placeholder="Customer Name" readonly>
+								<input type="text" class="form-control" id="cust_name" data-type="varchar" data-stage="1" placeholder="Customer Name" readonly>
 							</div>
 						</div>
 					</div>
@@ -93,7 +93,7 @@
 								&nbsp;
 							</div>
 							<div class="col-22">
-								<input type="text" class="form-control" id="address" data-type="varchar" data-stage="first" placeholder="Address" data-action="enable" readonly>
+								<input type="text" class="form-control" id="address" data-type="varchar" data-stage="1" placeholder="Address">
 							</div>
 						</div>
 					</div>
@@ -106,7 +106,7 @@
 						<div class="row row-2">
 							<div class="col-21">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-primary" id="new-category-data" data-stage="first" disabled
+									<button type="button" class="btn btn-primary" id="new-category-data" data-stage="1" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -114,7 +114,7 @@
 										data-html="true"
 										title='<i class="fa fa-plus"></i> <strong>New Category Data</strong>'
 										data-content="Click to create new category data for Second Weighing."><i class="fa fa-plus"></i></button>
-									<button type="button" class="btn btn-primary" id="search-category-data" data-stage="first" disabled
+									<button type="button" class="btn btn-primary" id="search-category-data" data-stage="1" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -125,7 +125,7 @@
 								</div>
 							</div>
 							<div class="col-22">
-								<input type="text" class="form-control" id="cat_name" data-type="varchar" data-stage="first" placeholder="Category Name" readonly>
+								<input type="text" class="form-control" id="cat_name" data-type="varchar" data-stage="1" placeholder="Category Name" readonly>
 							</div>
 						</div>
 					</div>
@@ -138,7 +138,7 @@
 						<div class="row row-2">
 							<div class="col-21">
 								<div class="btn-group" role="group">
-									<button type="button" class="btn btn-primary" id="new-product-data" data-stage="first" disabled
+									<button type="button" class="btn btn-primary" id="new-product-data" data-stage="1" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -146,7 +146,7 @@
 										data-html="true"
 										title='<i class="fa fa-plus"></i> <strong>New Product Data</strong>'
 										data-content="Click to create new product data for Second Weighing. This will be tagged automatically to the selected customer data."><i class="fa fa-plus"></i></button>
-									<button type="button" class="btn btn-primary" id="search-product-data" data-stage="first" disabled
+									<button type="button" class="btn btn-primary" id="search-product-data" data-stage="1" disabled
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -157,7 +157,7 @@
 								</div>
 							</div>
 							<div class="col-22">
-								<input type="text" class="form-control" id="prod_name" data-type="varchar" data-stage="first" placeholder="Product Name" readonly>
+								<input type="text" class="form-control" id="prod_name" data-type="varchar" data-stage="1" placeholder="Product Name" readonly>
 							</div>
 						</div>
 					</div>
@@ -171,7 +171,7 @@
 						<div class="row row-3">
 							<div class="col-21">
 								<div class="btn-group" role="group">
-									<button class="btn btn-primary" type="button" id="add-weight-in" data-stage="first"
+									<button class="btn btn-primary" type="button" id="add-weight-in" data-stage="1"
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -181,7 +181,7 @@
 										data-content="Click to add weight in reading." disabled>
 										<i class="fa fa-plus-circle"></i>
 									</button>
-									<button class="btn btn-danger" type="button" id="del-weight-in"
+									<button class="btn btn-danger" type="button" id="del-weight-in" data-stage="1"
 										data-toggle="popover"
 										data-trigger="hover"
 										data-placement="bottom"
@@ -225,8 +225,20 @@
 					<div class="col-1">
 						<label for="weight_out_reading" class="control-label">Weight Out</label>
 					</div>
+					<div class="col-9">
+						<button class="btn btn-primary" type="button" id="get-weight-out" data-stage="1"
+							data-toggle="popover"
+							data-trigger="hover"
+							data-placement="bottom"
+							data-container="body"
+							data-html="true"
+							title='<i class="fa fa-sign-in"></i> <strong>Get Weight Out</strong>'
+							data-content="Click to get current scale reading." disabled>
+							<i class="fa fa-sign-in"></i>
+						</button>
+					</div>
 					<div class="col-3">
-						<input type="text" class="form-control weight-input" id="weight_out_reading" value="0.00" data-type="float" data-stage="first" readonly
+						<input type="text" class="form-control weight-input" id="weight_out_reading" value="0.00" data-type="float" data-stage="1" readonly
 							data-toggle="popover"
 							data-trigger="hover"
 							data-placement="top"
@@ -239,7 +251,7 @@
 						<label for="net_weight" class="control-label">Net Weight</label>
 					</div>
 					<div class="col-5">
-						<input type="text" class="form-control weight-input" id="net_weight" value="0.00" data-type="float" data-stage="first" readonly
+						<input type="text" class="form-control weight-input" id="net_weight" value="0.00" data-type="float" data-stage="1" readonly
 							data-toggle="popover"
 							data-trigger="hover"
 							data-placement="top"
@@ -251,7 +263,7 @@
 				</div>
 			</div>
 			<div class="form-horizontal no-margin-bottom" style="width: 19%; float: right">
-				<button id="first-weighing" class="btn btn-success btn-lg btn-block" data-type="button" disabled
+				<button id="first-weighing" class="btn btn-success btn-lg btn-block" data-type="button" data-stage="1" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -262,7 +274,7 @@
 					<p><i class="fa fa-floppy-o fa-3x"></i></p>
 					<p>Save Transaction</p>
 				</button>
-				<button id="second-weighing" class="btn btn-warning btn-lg btn-block" data-type="button" disabled
+				<button id="second-weighing" class="btn btn-warning btn-lg btn-block" data-type="button" data-stage="1" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -273,7 +285,7 @@
 					<p><i class="fa fa-check-square-o fa-3x"></i></p>
 					<p>Complete Transaction</p>
 				</button>
-				<button id="cancel-weighing" class="btn btn-danger btn-lg btn-block" data-type="button" disabled
+				<button id="cancel-weighing" class="btn btn-danger btn-lg btn-block" data-type="button" data-stage="1" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -284,7 +296,7 @@
 					<p><i class="fa fa-ban fa-3x"></i></p>
 					<p>Cancel</p>
 				</button>
-				<button id="reprint-docket" class="btn btn-info btn-lg btn-block" data-type="button" disabled
+				<button id="reprint-docket" class="btn btn-info btn-lg btn-block" data-type="button" data-stage="1" disabled
 					data-toggle="popover"
 					data-trigger="hover"
 					data-placement="left"
@@ -299,11 +311,11 @@
 		</div>
 	</div>
 </div>
-<input type="hidden" data-stage="second" id="wr_id">
-<input type="hidden" data-stage="second" id="cust_id">
-<input type="hidden" data-stage="second" id="cat_id">
-<input type="hidden" data-stage="second" id="prod_id">
-<input type="hidden" data-stage="second" id="docket_no">
+<input type="hidden" data-stage="1" id="wr_id">
+<input type="hidden" data-stage="1" id="cust_id">
+<input type="hidden" data-stage="1" id="cat_id">
+<input type="hidden" data-stage="1" id="prod_id">
+<input type="hidden" data-stage="1" id="docket_no">
 <div class="modal fade bootstrap-dialog type-primary" id="trans-code-modal" tabindex="-1" role="dialog">
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
@@ -350,10 +362,10 @@
 				<hr style="margin-top: 20px; margin-bottom: 15px; border-color: #DDDDDD;">
 				<div class="btn-toolbar" role="toolbar" aria-label="button groups" style="margin-bottom: 5px;">
 					<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-						<button type="button" class="btn btn-primary" id="btnFWTrucksOK" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
+						<button type="button" class="btn btn-primary" id="btnTransCodeOK" disabled><i class="fa fa-check-square-o"></i> Select Item</button>
 					</div>
 					<div class="btn-group pull-right" role="group" style="margin-bottom: 0px;">
-						<button type="button" class="btn btn-default btnFWTrucksCancel"><i class="fa fa-ban"></i> Cancel</button>
+						<button type="button" class="btn btn-default btnTransCodeCancel"><i class="fa fa-ban"></i> Cancel</button>
 					</div>
 				</div>
 			</div>
@@ -539,12 +551,9 @@
 		// Initialize DT variables
 		var dtFWT, dtSWT, dtCDP, dtPDP, dtAPDP;
 
-		// Load user based on cookie
-		$('#user_name').val(STIC.User.ReadCookie('username'));
-
 		// Initialize Popovers
 		$('[data-toggle="popover"]').popover();
-		toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+		toggleFloorScaleFields({ status: 'CANCEL_WEIGHING' });
 
 		/**********************************************************************************************************************************************/
 
@@ -614,7 +623,6 @@
 								weight_in_reading: modalBody.find('input[data-field="weight_in_reading"]').val(),
 								user_id: STIC.User.ReadCookie('userid')
 							};
-
 						$.post(WS_WGHT_DTL_ADD, 'weightReadingDetailInfo=' + JSON.stringify(JSONObject))
 							.done(function(results, status) {
 								var response = results.response;
@@ -664,12 +672,20 @@
 										.data()['wr_dtlid']
 								}
 							});
-
-							STIC.disableButtons(['#del-weight-in']);
 						}
 					}
 				});
 			}
+		});
+
+		// Get Weight Out
+		$('#get-weight-out').on('click', function() {
+			$('#weight_out_reading').val(
+				$('#main-lcd .weight-reading').text()
+					.replace(/\+/g, '')
+					.replace(/\,/g, '')
+			);
+			setNetWeight(dtWID);
 		});
 
 		/**********************************************************************************************************************************************/
@@ -686,11 +702,10 @@
 							message: MSG_INFO_ADD_REC,
 							callback: function(result) {
 								BootstrapDialog.closeAll();
-								toggleFloorScaleFields({ status: 'FIRST_STAGE' });
+								toggleFloorScaleFields({ status: 'START_WEIGHING' });
 								$('#wr_id').val(response.newWrId);
 								$('#trans_code').val(response.newTransCode);
 								dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=' + response.newWrId).load();
-
 							}
 						});
 					} else {
@@ -705,58 +720,47 @@
 		// Trans Code > Data Lookup
 		$('#search-trans-code').on('click', function() {
 			if ($.fn.DataTable.isDataTable('#trans-code-data')) {
-				dtFWT.destroy();
+				dtFWT.ajax.reload();
+			} else {
+				dtFWT = initDT_Picker({
+					pl: DFLT_PICK_SIZE,
+					ds: DFLT_DS,
+					cd: CD_TRANS_CODE_LST,
+					ws: WS_TRANS_CODE_LST,
+					domId: 'trans-code-data'
+				});
 			}
-			dtFWT = initDT_Picker({
-				pl: DFLT_PICK_SIZE,
-				ds: DFLT_DS,
-				cd: CD_TRANS_CODE_LST,
-				ws: WS_TRANS_CODE_LST + 'type=FLOOR',
-				domId: 'trans-code-data'
-			});
 			$('#trans-code-modal').modal('show');
 		});
 
-		// Truck > Data Lookup > onShow Event
+		// Trans Code Lookup > onShow Event
 		$('#trans-code-modal').on('shown.bs.modal', function() {
-			$('#btnFWTrucksOK, #btnSWTrucksOK').prop('disabled', true);
+			$('#btnTransCodeOK').prop('disabled', true);
 		})
 
-		// Truck > Data Lookup > First Weighing Tab Click Event
-		$('#tabSelectTruck a[href="#firstWeighing"]').on('click', function() {
-			dtFWT.ajax.reload();
-			$('#btnFWTrucksOK').prop('disabled', true);
-		});
-
-		// Truck > Data Lookup > First Weighing Trucks > DT Row Click Event
-		$('#trans-code-data tbody').on( 'click', 'tr', function() {
+		// Trans Code Lookup > DT Row Click Event
+		$('#trans-code-data tbody').on('click', 'tr', function() {
 			STIC.dtToggleRowSelect({
 				row: this,
 				table: dtFWT,
 				pid: 'wr_id',
-				buttons: ['#btnFWTrucksOK']
+				buttons: ['#btnTransCodeOK']
 			});
 		});
 
-
-		// Transaction Lookup > Select Item
-		$('#trans-code-modal #btnFWTrucksOK').on('click', function() {
-			toggleFloorScaleFields({ status: 'FIRST_STAGE' });
-
+		// Trans Code Lookup > Select Item
+		$('#trans-code-modal #btnTransCodeOK').on('click', function() {
+			toggleFloorScaleFields({ status: 'START_WEIGHING' });
 			var rowData = dtFWT.row('.selected').data();
-			$.each(rowData, function(key, value) {
-				$('#' + key).val(value);
-			});
-
+			$.each(rowData, function(key, value) { $('#' + key).val(value); });
 			dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=' + $('#wr_id').val()).load();
 			$('#trans-code-modal').modal('hide');
-			//setNetWeight();
 		});
 
-		// Truck > Data Lookup > Cancel
-		$('.btnFWTrucksCancel, .btnSWTrucksCancel').on('click', function() {
+		// Trans Code Lookup > Cancel
+		$('.btnTransCodeCancel').on('click', function() {
 			$('#trans-code-modal').modal('hide');
-			$('#btnFWTrucksOK, #btnSWTrucksOK').prop('disabled', true);
+			$('#btnTransCodeOK').prop('disabled', true);
 		});
 
 		/**********************************************************************************************************************************************/
@@ -1070,7 +1074,7 @@
 											window.open('http://localhost:8080' + WS_DOCKET_PRINT
 												+ 'wrId=' + result.response.wr_id
 												+ '&type=A1', 'DocketPrint').focus();
-											toggleFloorScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+											toggleFloorScaleFields({ status: 'CANCEL_WEIGHING' });
 											dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=0').load();
 										}
 									});
@@ -1185,7 +1189,7 @@
 											window.open('http://localhost:8080' + WS_DOCKET_PRINT
 												+ 'wrId=' + $('#wr_id').val()
 												+ '&type=A2', 'DocketPrint').focus();
-											toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
+											toggleFloorScaleFields({ status: 'CANCEL_WEIGHING' });
 											dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=0').load();
 										}
 									});
@@ -1211,80 +1215,40 @@
 				+ 'wrId=' + $('#wr_id').val()
 				+ '&type=A1', 'DocketPrint').focus();
 		});
+
+		// Cancel Weighing Button Click Event
+		$('#cancel-weighing').on('click', function() {
+			dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=0').load();
+			toggleFloorScaleFields({ status: 'CANCEL_WEIGHING' });
+		});
+
 	});
 
 	// Set Net Weight
-	function setNetWeight() {
-		var weightIn = parseFloat($('#weight_in_reading').val().replace(',', '')),
-			weightOut = parseFloat($('#weight_out_reading').val().replace(',', '')),
-			compensation = parseFloat($('#compensation').val()) / 100,
-			netWeight = (weightIn > weightOut ?
-				(weightIn - weightOut) :
-				(weightOut - weightIn)),
-			finalNetWeight = netWeight - (netWeight * compensation);
-		$('#net_weight').val(finalNetWeight.toFixed(2)
-			.replace(/(\d)(?=(\d{3})+\.)/g, '$1,'));
+	function setNetWeight(dtWID) {
+		var weightIn = dtWID.column('weight_in_reading:name').data().sum(),
+			weightOut = $('#weight_out_reading').val().replace(/\,/g, ''),
+			netWeight = parseFloat(weightIn) - parseFloat(weightOut);
+		$('#net_weight').val(STIC.Report.FormatNumber(netWeight));
 	}
 
 	//  Scale Reader
 	$(document).ready(function() {
-		// Compensation onKeyDown
-		$('#compensation').on('keydown', function(e) {
-			var self = this;
-			setTimeout(function() {
-				var oldVal = $(self).val().replace(/[^\d\.]/g, ''),
-					oldVal = oldVal != '' ? parseFloat(oldVal).toFixed(2) : '0.00',
-					newVal = (oldVal) > 100 ? '100.00' : oldVal;
-				$(self).val(newVal);
-				setNetWeight();
-			}, 0);
-		});
-
-		/**********************************************************************************************************************************************/
 
 		// Sample Indicator
-		var random = function(max, min) {
+		/*var random = function(max, min) {
 				return ((Math.random() * (max - min)) + min).toFixed(2);
 		};
 
 		STIC.INTERVAL_ID = setInterval(function() {
 			var rand = '+' + random(50, 950)
 				.replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
-
 			$('.weight-lcd .weight-error').hide();
 			$('div.weight-reading').text(rand.toString());
-
-			// 2nd Weighing
-			/*if ($('#wr_id').val() != '') {
-				$('#weight-reading').text(rand.toString());
-				$('#weight_out_reading').val(rand.replace('+', ''));
-				setNetWeight();
-				setTotalPrice();
-
-			// 1st Weighing
-			} else if ($('#truck_code').val() != '') {
-				$('#weight-reading').text(rand.toString());
-				$('#weight_in_reading').val(rand.replace('+', ''));
-			}*/
-		}, 5000);
+		}, 5000);*/
 
 		/**********************************************************************************************************************************************/
 
-		// Read Scale Reader
-		//STIC.openScaleReader(function(response) {
-			//if (response.type === 'SUCCESS') {
-				//STIC.readScale();
-			//} else {
-				//$('.weight-lcd .weight-error').show();
-			//}
-		//});
-
-		/**********************************************************************************************************************************************/
-
-		// Cancel Weighing Button Click Event
-		$('#cancel-weighing').on('click', function() {
-			toggleWeightScaleFields({ status: 'CANCEL_WEIGHT_IN' });
-		});
-
+		STIC.readScale();
 	});
 </script>

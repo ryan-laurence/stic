@@ -45,7 +45,7 @@ var CD_TRUCK_IN_LIST = [
 	{ data: 'docket_no', visible: false, searchable: false, orderable: false }
 ];
 var FORM_CUST_PRODUCT_DATA = 'pages/data-customer-product-form.html'
-var WS_CHECK_TRUCK_CODE_LIST = '/stic/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&';
+var WS_CHECK_TRUCK_CODE_LIST = '/stic/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&type=TRUCK&';
 var WS_FIRST_WEIGHING_INSERT = '/stic/services/WeightReadingInfoServices/addWeightReadings?response=application/json&';
 var WS_FIRST_WEIGHING_DELETE = '/stic/services/WeightReadingInfoServices/deleteWeighReadingById?response=application/json&';
 var WS_SECOND_WEIGHING_UPDATE = '/stic/services/WeightReadingInfoServices/updateWeightReadings?response=application/json&';
@@ -91,7 +91,7 @@ var CD_TRANS_CODE_LST = [
 	{ data: 'net_weight', visible: false, searchable: false, orderable: false }
 ];
 var DS_TRANS_CODE_LST = 'response.weightReadingDetail-list.weightReadingDetail';
-var WS_TRANS_CODE_LST = '/stic/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&';
+var WS_TRANS_CODE_LST = '/stic/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&type=FLOOR';
 
 // Supplier Data
 var CD_SUPPLIER_LIST = [
@@ -264,7 +264,7 @@ var CD_SUMMARY_CUSTOMER = [
 	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_CUSTOMER = 'Customer Summary';
-var WS_SUMMARY_CUSTOMER = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByCustomerList?response=application/json&';
+var WS_SUMMARY_CUSTOMER = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByCustomerList?response=application/json&type=TRUCK&';
 
 // Destination Summary
 var CD_SUMMARY_DESTINATION = [
@@ -286,7 +286,7 @@ var CD_SUMMARY_PRODUCT = [
 	{ data: 'weight_unit', name: 'weight_unit', width: '20%' }
 ];
 var REPORT_TITLE_PRODUCT = 'Product Summary';
-var WS_SUMMARY_PRODUCT = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByProductList?response=application/json&';
+var WS_SUMMARY_PRODUCT = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByProductList?response=application/json&type=TRUCK&';
 
 // Reprint Count Summary
 var CD_SUMMARY_REPRINT_COUNT = [
@@ -296,7 +296,7 @@ var CD_SUMMARY_REPRINT_COUNT = [
 	{ data: 'user_name', name: 'user_name', width: '25%' }
 ];
 var REPORT_TITLE_REPRINT_COUNT = 'Reprint Count Summary';
-var WS_SUMMARY_REPRINT_COUNT = '/stic/services/DocketPrintLogInfoServices/getAllDocketPrintLogList?response=application/json&';
+var WS_SUMMARY_REPRINT_COUNT = '/stic/services/DocketPrintLogInfoServices/getAllDocketPrintLogList?response=application/json&type=TRUCK&';
 
 // Truck Summary
 var CD_SUMMARY_TRUCK = [
@@ -306,7 +306,7 @@ var CD_SUMMARY_TRUCK = [
 	{ data: 'weight_unit', name: 'weight_unit', width: '10%' }
 ];
 var REPORT_TITLE_TRUCK = 'Truck Summary';
-var WS_SUMMARY_TRUCK = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByTruckList?response=application/json&';
+var WS_SUMMARY_TRUCK = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByTruckList?response=application/json&type=TRUCK&';
 
 // Detailed  Truck Summary
 var CD_SUMMARY_DETAILED_TRUCK = [
@@ -322,7 +322,7 @@ var CD_SUMMARY_DETAILED_TRUCK = [
 	{ data: 'user_name', name: 'user_name', width: '10%' }
 ];
 var REPORT_TITLE_DETAILED_TRUCK = 'Detailed Truck Summary';
-var WS_SUMMARY_DETAILED_TRUCK = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByDetailedTruckList?response=application/json&';
+var WS_SUMMARY_DETAILED_TRUCK = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingsSummReportByDetailedTruckList?response=application/json&type=TRUCK&';
 
 // Summary Custom
 var CD_SUMMARY_CUSTOM_DOCKET = [
@@ -342,7 +342,7 @@ var CD_SUMMARY_CUSTOM_DOCKET = [
 	{ data: 'weight_unit', name: 'weight_unit', width: '5%' },
 	{ data: 'compensation', name: 'compensation' }
 ];
-var WS_SUMMARY_CUSTOM_DOCKET = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingByFilterList?response=application/json&';
+var WS_SUMMARY_CUSTOM_DOCKET = '/stic/services/WeighingReadingSummInfoServices/getAllWeightReadingByFilterList?response=application/json&type=TRUCK&';
 
 // Event Log
 var CD_EVENT_LOG_LIST = [

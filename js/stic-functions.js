@@ -45,13 +45,12 @@ var STIC = {
 					})
 				})
 				.on('draw.dt', function (e, settings, data) {
-					var totalWeightIn = dt
-						.column('weight_in_reading:name')
-						.data().sum(),
-					formattedTotal = STIC.Report
-						.FormatNumber(totalWeightIn);
-					$('.weight-in-total .right .total').text(formattedTotal
-						+ ' ' + $('#weight-unit').text());
+					STIC.disableButtons(['#del-weight-in']);
+					var totalWeightIn = dt.column('weight_in_reading:name').data().sum(),
+						formattedTotal = STIC.Report.FormatNumber(totalWeightIn);
+					$('.weight-in-total .right .total').text(formattedTotal + ' ' +
+						$('#weight-unit').text());
+					setNetWeight(dt);
 				});
 
 			$(params.dId + ' tbody').on('click', 'tr',
@@ -63,6 +62,7 @@ var STIC = {
 						buttons: params.btns
 					});
 				});
+
 			return dt;
 		}
 
