@@ -681,9 +681,8 @@
 		// Get Weight Out
 		$('#get-weight-out').on('click', function() {
 			$('#weight_out_reading').val(
-				$('#main-lcd .weight-reading').text()
-					.replace(/\+/g, '')
-					.replace(/\,/g, '')
+				STIC.Report.FormatNumber($('#main-lcd .weight-reading')
+					.text().replace(/\+/g, ''))
 			);
 			setNetWeight(dtWID);
 		});
@@ -1057,13 +1056,15 @@
 								address: $('#address').val(),
 								prod_id: $('#prod_id').val(),
 								weight_unit: $('#weight-unit').text(),
-								user_id: STIC.User.ReadCookie('userid'),
+								user_id: STIC.User.ReadCookie('userid'),								
+								net_weight: $('#net_weight').val().replace(/,/g, ''),
 								weight_in_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
+								weight_out_reading: $('#weight_out_reading').val().replace(/,/g, ''),
 								weight_in_reading: dtWID.column('weight_in_reading:name').data().sum()
 							}))
 							.done(function(result) {
 								if (result.response.type === 'SUCCESS') {
-									STIC.readScale();
+									STIC.readScale2();
 									BootstrapDialog.alert({
 										type: 'type-primary',
 										title: MSG_TITLE_INFO,
@@ -1072,7 +1073,7 @@
 											BootstrapDialog.closeAll();
 											// Docket Print
 											window.open('http://localhost:8080' + WS_DOCKET_PRINT
-												+ 'wrId=' + result.response.wr_id
+												+ 'wrId=' + $('#wr_id').val()
 												+ '&type=A1', 'DocketPrint').focus();
 											toggleFloorScaleFields({ status: 'CANCEL_WEIGHING' });
 											dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=0').load();
@@ -1178,7 +1179,7 @@
 							var result = $.post(WS_SECOND_WEIGHING_UPDATE, JSONString);
 							result.done(function (results) {
 								if (results.response.type === 'SUCCESS') {
-									STIC.readScale();
+									STIC.readScale2();
 									BootstrapDialog.alert({
 										type: 'type-primary',
 										title: MSG_TITLE_INFO,
@@ -1226,9 +1227,11 @@
 
 	// Set Net Weight
 	function setNetWeight(dtWID) {
-		var weightIn = dtWID.column('weight_in_reading:name').data().sum(),
-			weightOut = $('#weight_out_reading').val().replace(/\,/g, ''),
-			netWeight = parseFloat(weightIn) - parseFloat(weightOut);
+		var weightIn = parseFloat(dtWID.column('weight_in_reading:name').data().sum()),
+			weightOut = parseFloat($('#weight_out_reading').val().replace(/\,/g, '')),
+			netWeight = (weightIn > weightOut ?
+					(weightIn - weightOut) :
+					(weightOut - weightIn))
 		$('#net_weight').val(STIC.Report.FormatNumber(netWeight));
 	}
 
@@ -1249,6 +1252,6 @@
 
 		/**********************************************************************************************************************************************/
 
-		STIC.readScale();
+		STIC.readScale2();
 	});
 </script>

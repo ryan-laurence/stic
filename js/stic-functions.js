@@ -339,15 +339,43 @@ var STIC = {
 								netWeight = response['read-weight'].replace(/\s/g, '');
 							$('#weight-reading').text(netWeight.toString());
 							$('#weight-unit').text(response['read-unitType']);
-							$('#weight-status').text(response['read-status1']);
+							$('#weight-status').text(response['read-status1']);							
 							// 2nd Weighing
 							if ($('#wr_id').val() != '') {
-								$('#weight_out_reading').val(netWeight.replace(/[\s\+]/g, ''));
+								$('#weight_out_reading').val(STIC.Report.FormatNumber(netWeight.replace(/[\s\+]/g, '')));
 								setNetWeight();
 							// 1st Weighing
 							} else if ($('#truck_code').val() != '') {
-								$('#weight_in_reading').val(netWeight.replace(/[\s\+]/g, ''));
+								$('#weight_in_reading').val(STIC.Report.FormatNumber(netWeight.replace(/[\s\+]/g, '')));
 							}
+						} else {
+							$('.weight-lcd .weight-error').show();
+						}
+					})
+					.fail(function () {
+						isCompleted = true;
+						$('.weight-lcd .weight-error').show();
+					});
+			}
+		}, SR_INTERVAL);
+	},
+	
+	// Floor Scale Read
+	readScale2: function() {
+		var isCompleted = true;
+		STIC.INTERVAL_ID = setInterval(function () {
+			if(isCompleted) {
+				isCompleted = false;
+				$.get(WS_SCALE_READER)
+					.done(function (data, status) {
+						isCompleted = true;
+						if (data.response.type === 'SUCCESS') {
+							$('.weight-lcd .weight-error').hide();
+							var response = data['response']['readData-list']['readdata'],
+								netWeight = response['read-weight'].replace(/\s/g, '');
+							$('#weight-reading').text(netWeight.toString());
+							$('#weight-unit').text(response['read-unitType']);
+							$('#weight-status').text(response['read-status1']);
 						} else {
 							$('.weight-lcd .weight-error').show();
 						}
