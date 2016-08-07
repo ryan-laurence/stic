@@ -714,7 +714,7 @@ var STIC = {
 
 		// Format Number
 		FormatNumber: function(sum) {
-			return sum.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
+			return parseFloat(sum).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,');
 		},
 
 		// Set PDF Styles

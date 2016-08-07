@@ -593,9 +593,7 @@
 					modalBody.find('input[data-field="weight_in_unit"]')
 						.val($('#main-lcd .weight-unit').text());
 					modalBody.find('input[data-field="weight_in_reading"]')
-						.val($('#main-lcd .weight-reading').text()
-							.replace(/\+/g, '')
-							.replace(/\,/g, ''));
+						.val(STIC.Report.FormatNumber($('#main-lcd .weight-reading').text().replace(/\+/g, '')));							
 					modalBody.find('input[data-field="weight_in_date"]')
 						.val($.formatDateTime('yy-mm-dd hh:ii:ss', new Date()));
 				},
@@ -620,7 +618,7 @@
 								wr_id: $('#wr_id').val(),
 								weight_unit: modalBody.find('input[data-field="weight_in_unit"]').val(),
 								weight_in_date: modalBody.find('input[data-field="weight_in_date"]').val(),
-								weight_in_reading: modalBody.find('input[data-field="weight_in_reading"]').val(),
+								weight_in_reading: modalBody.find('input[data-field="weight_in_reading"]').val().replace(/\,/g, ''),
 								user_id: STIC.User.ReadCookie('userid')
 							};
 						$.post(WS_WGHT_DTL_ADD, 'weightReadingDetailInfo=' + JSON.stringify(JSONObject))
@@ -751,7 +749,13 @@
 		$('#trans-code-modal #btnTransCodeOK').on('click', function() {
 			toggleFloorScaleFields({ status: 'START_WEIGHING' });
 			var rowData = dtFWT.row('.selected').data();
-			$.each(rowData, function(key, value) { $('#' + key).val(value); });
+			$.each(rowData, function(key, value) { 
+				var val = value;
+				if (key === 'weight_out_reading') {					
+					val = STIC.Report.FormatNumber(value); 
+				} 
+				$('#' + key).val(val);					
+			});
 			dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=' + $('#wr_id').val()).load();
 			$('#trans-code-modal').modal('hide');
 		});
@@ -1074,7 +1078,7 @@
 											// Docket Print
 											window.open('http://localhost:8080' + WS_DOCKET_PRINT
 												+ 'wrId=' + $('#wr_id').val()
-												+ '&type=A1', 'DocketPrint').focus();
+												+ '&type=A2', 'DocketPrint').focus();
 											toggleFloorScaleFields({ status: 'CANCEL_WEIGHING' });
 											dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=0').load();
 										}
