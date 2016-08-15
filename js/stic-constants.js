@@ -91,7 +91,8 @@ var CD_TRANS_CODE_LST = [
 	{ data: 'net_weight', visible: false, searchable: false, orderable: false }
 ];
 var DS_TRANS_CODE_LST = 'response.weightReadingDetail-list.weightReadingDetail';
-var WS_TRANS_CODE_LST = '/stic/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&type=FLOOR';
+var WS_TRANS_CODE_LST = '/stic/services/WeightReadingInfoServices/checkTruckCodeList?response=application/json&type=FLOOR&';
+var WS_TRANS_CODE_DEL = '/stic/services/WeightReadingInfoServices/deleteWeighReadingById?response=application/json&';
 
 // Supplier Data
 var CD_SUPPLIER_LIST = [
@@ -591,8 +592,8 @@ var MSG_INFO_CALIBRATE_SPAN_OK = '<div class="alert alert-info no-margin-bottom"
 var MSG_INFO_CALIBRATE_SPAN_ERROR = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> An error occurred while calibrating the platform scale to the weight value of the current makeweight. Please try again.</div>';
 
 // License Activation
-var MSG_INFO_SYSTEM_INACTIVE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The system has been deactivated because your current license is expired. Please enter a new license key in the activation page to be able to use the system.</div>';
-var MSG_INFO_INVALID_HD = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The system has been deactivated because the current hard disk specifications are invalid. Please contact ScaleTech for more information on this error.</div>';
+var MSG_INFO_SYSTEM_INACTIVE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The system has encountered a serious error and is unable to proceed. Please contact ScaleTech Administrator for more information.</div>';
+var MSG_INFO_INVALID_HD = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The system has been deactivated because the current hard disk specifications are invalid. Please contact ScaleTech Administrator for more information on this error.</div>';
 var MSG_INFO_INVALID_FILE_FORMAT = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> Please select a valid license file in this format (e.g. "companyname-yyyymmddhhmmss.lcns") and try again.</div>';
 var MSG_INFO_INVALID_LICENSE_FILE = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license file you have uploaded is invalid. Please select a valid license file to start the system activation process.</div>';
 var MSG_INFO_INVALID_LICENSE_KEY = '<div class="alert alert-danger no-margin-bottom" role="alert"><i class="fa fa-exclamation-circle fa-3x fa-pull-left"></i> The license key you have provided is invalid, expired or might be already in use. Please contact ScaleTech for more information on this error.</div>';

@@ -1,0 +1,46 @@
+<div class="alert alert-info" role="alert">
+	<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
+	<ul>
+		<li><i class="fa fa-check-square-o"></i> Records listed here are Truck Codes available for Second Weighing only.</li>
+		<li><i class="fa fa-check-square-o"></i> To add a Truck Code for Second Weighing, use the Truck Scale form.</li>
+	</ul>
+</div>
+<div class="panel panel-default no-margin-bottom">
+	<div class="panel-body">
+		<table class="display compact nowrap" id="table-data">
+			<thead>
+				<tr>
+					<th class="text-left">ID</th>
+					<th class="text-left">Truck Code</th>
+					<th class="text-left">Date In</th>
+					<th class="text-left">Time In</th>
+					<th class="text-left">Weight In</th>
+					<th class="text-left">Unit</th>
+					<th class="text-left">User</th>
+					<th class="text-left">Docket No.</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript" src="js/stic-data.js"></script>
+<script>
+	$(function() {
+		loadEditData({
+			formId: '',
+			formSrc: '',
+			wsInsert: '',
+			wsUpdate: '',
+			objectId: '',
+			ds: DFLT_DS,
+			pkey: 'wr_id',
+			showAllBtns: false,
+			cd: CD_TRUCK_IN_LIST,			
+			wsList: WS_CHECK_TRUCK_CODE_LIST,
+			wsDelete: WS_FIRST_WEIGHING_DELETE,
+			modTitle: 'Pending Items (Truck Scale)'
+		});
+	});
+</script>

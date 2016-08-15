@@ -1,0 +1,55 @@
+<div class="alert alert-info" role="alert">
+	<i class="fa fa-info-circle fa-3x fa-pull-left"></i>
+	<ul>
+		<li><i class="fa fa-check-square-o"></i> Records listed here are Transaction Codes that are still pending for completion.</li>
+		<li><i class="fa fa-check-square-o"></i> To create a new Transaction Code, use the Floor Scale form.</li>
+	</ul>
+</div>
+<div class="panel panel-default no-margin-bottom">
+	<div class="panel-body">
+		<table class="display compact nowrap" id="table-data">
+			<thead>
+				<tr>
+					<th class="text-left">ID</th>
+					<th class="text-left">Trans Code</th>
+					<th class="text-left">Date In</th>
+					<th class="text-left">Time In</th>
+					<th class="text-left">Weight In</th>
+					<th class="text-left">Unit</th>
+					<th class="text-left">User</th>
+					<th class="text-left">Docket No.</th>
+					<th class="text-left">cust_id</th>
+					<th class="text-left">cust_name</th>
+					<th class="text-left">address</th>
+					<th class="text-left">cat_id</th>
+					<th class="text-left">cat_name</th>
+					<th class="text-left">prod_id</th>
+					<th class="text-left">prod_name</th>
+					<th class="text-left">weight_out_reading</th>
+					<th class="text-left">net_weight</th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
+</div>
+<script type="text/javascript" src="js/stic-data.js"></script>
+<script>
+	$(function() {
+		loadEditData({
+			formId: '',
+			formSrc: '',
+			wsInsert: '',
+			wsUpdate: '',
+			objectId: '',
+			ds: DFLT_DS,
+			pkey: 'wr_id',
+			showAllBtns: false,
+			cd: CD_TRANS_CODE_LST,
+			wsList: WS_TRANS_CODE_LST,
+			wsDelete: WS_TRANS_CODE_DEL,
+			modTitle: 'Pending Items (Floor Scale)'
+		});
+	});
+</script>

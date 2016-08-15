@@ -593,7 +593,7 @@
 					modalBody.find('input[data-field="weight_in_unit"]')
 						.val($('#main-lcd .weight-unit').text());
 					modalBody.find('input[data-field="weight_in_reading"]')
-						.val(STIC.Report.FormatNumber($('#main-lcd .weight-reading').text().replace(/\+/g, '')));							
+						.val(STIC.Report.FormatNumber($('#main-lcd .weight-reading').text().replace(/\+/g, '')));
 					modalBody.find('input[data-field="weight_in_date"]')
 						.val($.formatDateTime('yy-mm-dd hh:ii:ss', new Date()));
 				},
@@ -749,12 +749,12 @@
 		$('#trans-code-modal #btnTransCodeOK').on('click', function() {
 			toggleFloorScaleFields({ status: 'START_WEIGHING' });
 			var rowData = dtFWT.row('.selected').data();
-			$.each(rowData, function(key, value) { 
+			$.each(rowData, function(key, value) {
 				var val = value;
-				if (key === 'weight_out_reading') {					
-					val = STIC.Report.FormatNumber(value); 
-				} 
-				$('#' + key).val(val);					
+				if (key === 'weight_out_reading') {
+					val = STIC.Report.FormatNumber(value);
+				}
+				$('#' + key).val(val);
 			});
 			dtWID.ajax.url(WS_WGHT_DTL_LST + 'wr_id=' + $('#wr_id').val()).load();
 			$('#trans-code-modal').modal('hide');
@@ -1060,7 +1060,7 @@
 								address: $('#address').val(),
 								prod_id: $('#prod_id').val(),
 								weight_unit: $('#weight-unit').text(),
-								user_id: STIC.User.ReadCookie('userid'),								
+								user_id: STIC.User.ReadCookie('userid'),
 								net_weight: $('#net_weight').val().replace(/,/g, ''),
 								weight_in_date: $.formatDateTime('yy-mm-dd hh:ii:ss', new Date()),
 								weight_out_reading: $('#weight_out_reading').val().replace(/,/g, ''),
