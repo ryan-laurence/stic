@@ -43,6 +43,12 @@
 	$(function () {
 		// Report Title
 		var reportTitle = 'Weighing Record';
+		
+		// Set Default Date
+		var today = new Date(),
+			defEnd = moment(today).format(DFLT_DATE_FRMT),
+			defStart = moment().startOf('month').format(DFLT_DATE_FRMT),
+			defWsURL = WS_SUMMARY_CUSTOM_DOCKET + 'dateFrom=' + defStart + '&dateTo=' + defEnd,
 
 		// DT Buttons > Copy
 		dtBtnCopy = {
@@ -123,7 +129,7 @@
 				columns: CD_SUMMARY_CUSTOM_DOCKET,
 				colReorder: { order: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14] },
 				ajax: {
-					url: WS_SUMMARY_CUSTOM_DOCKET,
+					url: defWsURL,
 					dataSrc: function (json) {
 						var ds = DFLT_DS_RPTS.split('.'),
 							rec = json[ds[0]][ds[1]][ds[2]];
@@ -151,10 +157,18 @@
 		$('div.dt-toolbar').html(
 			'<div class="btn-toolbar" role="toolbar">' +
 				'<div class="btn-group pull-left form-inline" role="group">' +
-					'<div class="input-group">' +
+					'<div class="input-group date" id="dp1">' +
+						'<span class="input-group-addon"><i class="fa fa-calendar"></i> <strong>Start</strong></span>' +
+						'<input type="text" class="form-control date-lookup" id="start-date" placeholder="Select Date">' +
+					'</div>' +
+					'<div class="input-group date" id="dp2">' +
+						'<span class="input-group-addon date-lookup-label"><i class="fa fa-calendar"></i> <strong>End</strong></span>' +
+						'<input type="text" class="form-control date-lookup" id="end-date" placeholder="Select Date">' +
+					'</div>' +
+					'<div class="input-group date">' +
 						'<span class="input-group-addon">' +
 							'<i class="fa fa-filter" aria-hidden="true"></i> ' +
-							'<strong>Filter By</strong>' +
+							'<strong>Filter</strong>' +
 						'</span>' +
 						'<select class="selectpicker form-control" id="report-filter" data-width="150px">' +
 							'<option value="docket_no" data-index="0" data-report-title="Docket Report" selected>Docket No.</option>' +
@@ -165,11 +179,11 @@
 							'<option value="user_name" data-index="5" data-report-title="User Report">User</option>' +
 						'</select>' +
 					'</div>' +
-				'</div>' +
-				'<div class="btn-group pull-left form-inline" role="group">' +
-					'<div class="input-group">' +
+					'<div class="input-group date1">' +
 						'<input type="text" class="form-control" id="report-query" placeholder="Enter Search Value" >' +
 					'</div>' +
+				'</div>' +
+				'<div class="btn-group pull-left form-inline" role="group">' +
 					'<button type="button" class="btn btn-primary" id="search-report" title="Search Report"><i class="fa fa-search"></i></button>' +
 					'<button type="button" class="btn btn-danger" id="reset-report" title="Reset Report"><i class="fa fa-ban"></i></button>' +
 				'</div>' +
@@ -192,17 +206,45 @@
 			dtSummary.colReorder.reset();
 			dtSummary.colReorder.order(ordering[idx]);
 		});
+		
+		var dp1 = $('#dp1'),
+		dp2 = $('#dp2'),
+		inEndDt = $('#end-date'),
+		inStartDt = $('#start-date');
+
+		// Date Picker Init
+		dp1.datetimepicker({
+			format: DFLT_DATE_FRMT
+		});
+		dp2.datetimepicker({
+			format: DFLT_DATE_FRMT
+		});
+
+		// Set Default Date
+		dp1.data('DateTimePicker').defaultDate(defStart);
+		dp2.data('DateTimePicker').defaultDate(defEnd);
+
+		// Set Min & Max dates
+		dp1.on('dp.change', function (e) {
+			dp2.data('DateTimePicker').minDate(e.date);
+		});
+		dp2.on('dp.change', function (e) {
+			dp1.data('DateTimePicker').maxDate(e.date);
+		});
 
 		// Search Report
 		$('#search-report').on('click', function () {
+			var wsURL = WS_SUMMARY_CUSTOM_DOCKET +
+			'dateFrom=' + inStartDt.val() +
+			'&dateTo=' + inEndDt.val();		
 			if ($('#report-query').val() == '') {
-				dtSummary.ajax.url(WS_SUMMARY_CUSTOM_DOCKET).load();
+				dtSummary.ajax.url(wsURL).load();
 				dtSummary.colReorder.reset();
 				$('#report-filter').selectpicker('refresh');
 				$('#report-filter').selectpicker('val', 'docket_no');
 			} else {
-				dtSummary.ajax.url(WS_SUMMARY_CUSTOM_DOCKET +
-					'fieldName=' + $('#report-filter').val() +
+				dtSummary.ajax.url(wsURL +
+					'&fieldName=' + $('#report-filter').val() +
 					'&fieldId=' + $('#report-query').val())
 				.load();
 			}
@@ -213,7 +255,9 @@
 			$('#report-query').val('');
 			$('#report-filter').val('docket_no');
 			$('#report-filter').selectpicker('refresh');
-			dtSummary.ajax.url(WS_SUMMARY_CUSTOM_DOCKET).load();
+			inEndDt.val(defEnd);
+			inStartDt.val(defStart);
+			dtSummary.ajax.url(defWsURL).load();
 		});
 
 		// Customize PDF Print Output

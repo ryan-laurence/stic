@@ -339,7 +339,7 @@ var STIC = {
 								netWeight = response['read-weight'].replace(/\s/g, '');
 							$('#weight-reading').text(netWeight.toString());
 							$('#weight-unit').text(response['read-unitType']);
-							$('#weight-status').text(response['read-status1']);							
+							$('#weight-status').text(response['read-status1']);
 							// 2nd Weighing
 							if ($('#wr_id').val() != '') {
 								$('#weight_out_reading').val(STIC.Report.FormatNumber(netWeight.replace(/[\s\+]/g, '')));
@@ -359,7 +359,7 @@ var STIC = {
 			}
 		}, SR_INTERVAL);
 	},
-	
+
 	// Floor Scale Read
 	readScale2: function() {
 		var isCompleted = true;
@@ -1526,24 +1526,26 @@ function loadSummaryReport(params) {
 	}
 
 	// Date Range Filter
+	$('div.dt-toolbar').css('float', 'left');
+	$('div.dt-toolbar').css('margin-right', '5px');
 	$('div.dt-toolbar').html(
 		'<div class="btn-toolbar" role="toolbar">' +
-			'<div class="btn-group pull-left no-padding-left form-inline" role="group" style="margin-bottom: 0px">'	+
+			'<div class="btn-group pull-left form-inline" role="group">'	+
 				'<div class="input-group date" id="dp1">' +
 					'<span class="input-group-addon"><i class="fa fa-calendar"></i> <strong>Start</strong></span>' +
 					'<input type="text" class="form-control date-lookup" id="start-date" placeholder="Select Date">' +
 				'</div>' +
-				'<div class="input-group date" id="dp2">' +
+				'<div class="input-group" id="dp2">' +
 					'<span class="input-group-addon date-lookup-label"><i class="fa fa-calendar"></i> <strong>End</strong></span>' +
 					'<input type="text" class="form-control date-lookup" id="end-date" placeholder="Select Date">' +
 				'</div>' +
+			'</div>' +
+			'<div class="btn-group pull-left form-inline" role="group">' +
 				'<button type="button" class="btn btn-primary" id="search-report" title="Search Report"><i class="fa fa-search"></i></button>' +
 				'<button type="button" class="btn btn-danger" id="reset-report" title="Reset Report"><i class="fa fa-ban"></i></button>' +
 			'</div>' +
 		'</div>'
-	);
-	$('div.dt-toolbar').css('float', 'left');
-	$('div.dt-toolbar').css('margin-right', '5px');
+	);	
 
 	// Report Filters
 	/*$('div.dt-filters').html(

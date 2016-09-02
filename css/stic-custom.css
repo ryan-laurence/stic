@@ -50,16 +50,25 @@
 	font-weight: bold;
 }
 
+.input-group.date {
+	margin-right: 5px;
+}
+
+.input-group.date1 .form-control {
+	border-radius: 4px;
+	margin-right: 5px;
+}
+
 .form-control.date-lookup {
 	width: 105px !important;
-	border-top-right-radius: 0px;
+	/*border-top-right-radius: 0px;
 	border-bottom-right-radius: 0px;
-	border-right-style: none;
+	border-right-style: none;*/
 }
 
 .input-group-addon.date-lookup-label {
-	border-top-left-radius: 0px;
-	border-bottom-left-radius: 0px;
+	/*border-top-left-radius: 0px;
+	border-bottom-left-radius: 0px;*/
 }
 
 #stclogo{
