@@ -95,6 +95,8 @@
 			extend: 'pdfHtml5',
 			title: reportTitle,
 			className: 'btn-primary',
+			pageSize: 'LEGAL',
+			orientation: 'landscape',
 			text: BTN_LABEL_EXPORT_PDF,
 			titleAttr: BTN_TITLE_EXPORT_PDF,
 			customize: dtPDFPrintCustom,
@@ -262,6 +264,7 @@
 
 		// Customize PDF Print Output
 		function dtPDFPrintCustom(doc) {
+			console.log(doc)
 			// Set Default Styles
 			var pdfDoc = STIC.Report.SetPDFStyles({
 				doc: doc,

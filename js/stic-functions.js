@@ -754,6 +754,7 @@ var STIC = {
 
 			// Default Styles
 			doc.defaultStyle.columnGap = 5;
+			doc.defaultStyle.fontSize = 10;
 
 			// Table Header Styles overrides
 			doc.styles.tableHeader.fillColor = '';
@@ -1357,6 +1358,8 @@ function loadSummaryReport(params) {
 		extend: 'pdfHtml5',
 		title: params.title,
 		className: 'btn-primary',
+		pageSize: 'LEGAL',
+		orientation: 'landscape',
 		text: BTN_LABEL_EXPORT_PDF,
 		titleAttr: BTN_TITLE_EXPORT_PDF,
 		customize: dtPDFPrintCustom,
@@ -1371,7 +1374,7 @@ function loadSummaryReport(params) {
 		extend: 'print',
 		enabled: false,
 		autoPrint: false,
-		title: params.title,
+		title: params.title,		
 		className: 'btn-primary',
 		text: BTN_LABEL_PRINT_RECORD,
 		titleAttr: BTN_TITLE_PRINT_RECORD,
